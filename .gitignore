@@ -1,0 +1,11 @@
+*.pro.user
+*.o
+Thumbs.db
+.DS_Store
+/debug
+/release
+/.qtc_clangd
+*.statsh
+Makefile
+*.Debug
+*.Release
