@@ -59,6 +59,27 @@
           </property>
          </widget>
         </item>
+        <item>
+         <layout class="QHBoxLayout" name="MoviesActionLayout">
+          <item>
+           <widget class="QPushButton" name="AddViewButton">
+            <property name="text">
+             <string>Ajouter un visionnage</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="ManageMovieViewsButton">
+            <property name="text">
+             <string>Gérer les visionnages</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="SortComboBox"/>
+          </item>
+         </layout>
+        </item>
        </layout>
       </item>
      </layout>
@@ -68,30 +89,30 @@
       <item>
        <layout class="QGridLayout" name="GeneralInfosLayout">
         <item row="2" column="0">
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="AverageYearLabel">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Année moyenne des films vus : </string>
           </property>
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="TotalViewLabel">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Nombre total de visionnages : </string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="AverageViewLabel">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Moyenne de visionnages : </string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QLabel" name="label_5">
+         <widget class="QLabel" name="ViewThisYear">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Films vus cette année : </string>
           </property>
          </widget>
         </item>
