@@ -36,14 +36,14 @@
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="FiltersLabel">
+         <widget class="QLabel" name="SortLabel">
           <property name="text">
-           <string>Filtrer par</string>
+           <string>Trier par</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QComboBox" name="FiltersComboBox"/>
+         <widget class="QComboBox" name="SortComboBox"/>
         </item>
        </layout>
       </item>
@@ -74,9 +74,6 @@
              <string>Gérer les visionnages</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="SortComboBox"/>
           </item>
          </layout>
         </item>
