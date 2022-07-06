@@ -30,4 +30,6 @@ void MainWindow::databaseConnection() {
 
     if(!movieViewsQuery.exec(databaseCreationString))
         qDebug()<<"Error creating table contact or table already existing";
+
+
 }

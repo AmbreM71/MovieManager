@@ -48,17 +48,63 @@
        </layout>
       </item>
       <item>
+       <widget class="QTableWidget" name="MoviesListWidget">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustToContents</enum>
+        </property>
+        <column>
+         <property name="text">
+          <string>Nom</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Année de sortie</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Nombre visonnages</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Premier Visionnage</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Dernier Visionnage</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Entrées en France</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Engagement</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Note</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item>
        <layout class="QVBoxLayout" name="MoviesListLayout">
-        <item>
-         <widget class="QListWidget" name="MoviesListWidget">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
         <item>
          <layout class="QHBoxLayout" name="MoviesActionLayout">
           <item>
