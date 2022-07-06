@@ -23,8 +23,10 @@ void MainWindow::databaseConnection() {
                                    "ID          MEDIUMINT,"
                                    "Name        VARCHAR(127),"
                                    "ReleaseYear SMALLINT,"
-                                   "viewDate    DATE"
-                                   "viewType    VARCHAR(255));";
+                                   "ViewDate    DATE,"
+                                   "EntriesFR   INT,"
+                                   "Grade       TINYINT(10),"
+                                   "ViewType    VARCHAR(63));";
 
     QSqlQuery movieViewsQuery;
 
