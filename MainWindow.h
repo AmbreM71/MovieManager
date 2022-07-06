@@ -22,6 +22,9 @@ class MainWindow : public QMainWindow {
         void databaseConnection();
         ~MainWindow();
 
+    public slots:
+        void addView();
+
 };
 
 #endif // MAINWINDOW_H

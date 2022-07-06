@@ -93,11 +93,6 @@
         </column>
         <column>
          <property name="text">
-          <string>Engagement</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
           <string>Note</string>
          </property>
         </column>
@@ -170,35 +165,35 @@
       <item>
        <layout class="QGridLayout" name="SelectionInfosLayout">
         <item row="5" column="0">
-         <widget class="QLabel" name="label_13">
+         <widget class="QLabel" name="MovieIMDBRateLabel">
           <property name="text">
            <string>Note IMDB</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_10">
+         <widget class="QLabel" name="MovieDirectorLabel">
           <property name="text">
            <string>Réalisation</string>
           </property>
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QLabel" name="label_12">
+         <widget class="QLabel" name="MovieCastLabel">
           <property name="text">
            <string>Casting</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_9">
+         <widget class="QLabel" name="MovieReleaseYearLabel">
           <property name="text">
            <string>Année de sortie</string>
           </property>
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_11">
+         <widget class="QLabel" name="MovieScreenplayLabel">
           <property name="text">
            <string>Scénario</string>
           </property>
