@@ -70,8 +70,14 @@
           </item>
           <item>
            <widget class="QPushButton" name="ManageMovieViewsButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Gérer les visionnages</string>
+            </property>
+            <property name="checkable">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
