@@ -5,7 +5,8 @@ SOURCES += \
 HEADERS += \
     MainWindow.h
 
-QT += widgets
+QT += widgets \
+      sql
 
 FORMS += \
     MainWindow.ui
