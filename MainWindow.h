@@ -6,6 +6,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <cmath>
+#include <ctime>
+#include <iostream>
 
 namespace Ui {
     class MainWindow;

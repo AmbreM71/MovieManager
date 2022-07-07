@@ -9,6 +9,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     loadDB();
     fillGlobalStats();
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
+    m_ui->MoviesListWidget->setCurrentCell(0,0);
 }
 
 MainWindow::~MainWindow() {
@@ -131,6 +132,9 @@ void MainWindow::addView() {
 
 void MainWindow::fillGlobalStats() {
 
+    std::time_t t = std::time(0);
+    std::tm* now = std::localtime(&t);
+
     QSqlQuery totalViewQuery;
     totalViewQuery.exec("SELECT COUNT(*) FROM movieViews;");
     totalViewQuery.first();
@@ -150,7 +154,7 @@ void MainWindow::fillGlobalStats() {
 
     QSqlQuery movieThisYearQuery;
     int movieThisYear=0;
-    movieThisYearQuery.exec("SELECT * FROM movieViews WHERE ViewDate BETWEEN '2022-01-01' AND '2022-12-31' GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+    movieThisYearQuery.exec("SELECT * FROM movieViews WHERE ViewDate BETWEEN '"+QString::number(now->tm_year + 1900)+"-01-01' AND '"+QString::number(now->tm_year + 1900)+"-12-31' GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
     while(movieThisYearQuery.next()) {
         movieThisYear++;
     }

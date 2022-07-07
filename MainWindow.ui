@@ -148,7 +148,7 @@
           <item>
            <widget class="QPushButton" name="ManageMovieViewsButton">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Gérer les visionnages</string>
