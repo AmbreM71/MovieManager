@@ -22,6 +22,10 @@ void AddViewDialog::FillMovieComboBox() {
     }
 }
 
+QString AddViewDialog::getComboboxSelectedItem() {
+    return m_ui->ExistingMoviesComboBox->currentText();
+}
+
 QString AddViewDialog::getName() {
     return m_ui->MovieNameInput->text();
 }

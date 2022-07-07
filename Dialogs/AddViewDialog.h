@@ -12,7 +12,7 @@ class AddViewDialog : public QDialog
 {
     Q_OBJECT
     private:
-        Ui::AddViewDialog *m_ui;
+        Ui::AddViewDialog* m_ui;
 
 
     public:
@@ -21,6 +21,7 @@ class AddViewDialog : public QDialog
 
         void FillMovieComboBox();
 
+        QString getComboboxSelectedItem();
         QString getName();
         int getReleaseYear();
         QString getViewType();

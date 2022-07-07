@@ -94,13 +94,33 @@ void MainWindow::addView() {
     AddViewDialog* window = new AddViewDialog();
     window->show();
     if(window->exec() == 1) {
+
         QSqlQuery query;
-        query.prepare("INSERT INTO movieViews (Name, ReleaseYear, ViewDate, ViewType, Rating) VALUES (?,?,?,?,?);");
-        query.addBindValue(window->getName());
-        query.addBindValue(window->getReleaseYear());
-        query.addBindValue(window->getViewDate());
-        query.addBindValue(window->getViewType());
-        query.addBindValue(window->getRating());
+        query.prepare("INSERT INTO movieViews (Name, ReleaseYear, ViewDate, ViewType, Rating, EntriesFR) VALUES (?,?,?,?,?,?);");
+
+        //If nothing is selected in the combobox
+        if(window->getComboboxSelectedItem() == "") {
+            query.bindValue(0, window->getName());
+            query.bindValue(1, window->getReleaseYear());
+            query.bindValue(4, window->getRating());
+            query.bindValue(5, 0);
+        }
+        else {
+            QString movieName = window->getComboboxSelectedItem().remove(window->getComboboxSelectedItem().length()-7, window->getComboboxSelectedItem().length());
+            QString movieYear = window->getComboboxSelectedItem().remove(0, window->getComboboxSelectedItem().length()-4);
+
+            QSqlQuery ratingQuery;
+            ratingQuery.exec("SELECT Rating, EntriesFR FROM movieViews WHERE Name='"+movieName+"' AND ReleaseYear='"+movieYear+"' GROUP BY Rating");
+            ratingQuery.first();
+
+            query.bindValue(0, movieName);
+            query.bindValue(1, movieYear);
+            query.bindValue(4, ratingQuery.value(0).toString());
+            query.bindValue(5, ratingQuery.value(1).toInt());
+        }
+
+        query.bindValue(2, window->getViewDate());
+        query.bindValue(3, window->getViewType());
 
         if(!query.exec()){
             qDebug() << "Error while adding a view to the database, see more below :";
