@@ -2,9 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "QSqlDatabase"
-#include "QSqlQuery"
-#include "QSqlError"
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 
 namespace Ui {
     class MainWindow;
