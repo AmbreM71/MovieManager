@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "QSqlDatabase"
 #include "QSqlQuery"
+#include "QSqlError"
 
 namespace Ui {
     class MainWindow;
@@ -20,6 +21,7 @@ class MainWindow : public QMainWindow {
     public:
         explicit MainWindow(QApplication* app, QWidget *parent = nullptr);
         void databaseConnection();
+        void loadDB();
         ~MainWindow();
 
     public slots:

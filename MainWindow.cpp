@@ -6,6 +6,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     m_ui = new Ui::MainWindow;
     m_ui->setupUi(this);
     databaseConnection();
+    //loadDB();
 
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
 }
@@ -23,23 +24,40 @@ void MainWindow::databaseConnection() {
     }
     //Grade and EntriesFR shouldn't be filled when user add a view, entriesFR should get value from jpbox-office.com and grade only if the movie isn't already in the list
     QString databaseCreationString = "CREATE TABLE movieViews ("
-                                   "ID          MEDIUMINT,"
                                    "Name        VARCHAR(127),"
                                    "ReleaseYear SMALLINT,"
                                    "ViewDate    DATE,"
                                    "EntriesFR   INT,"
-                                   "Grade       TINYINT(10),"
+                                   "Rating       TINYINT(10),"
                                    "ViewType    VARCHAR(63));";
 
     QSqlQuery movieViewsQuery;
 
     if(!movieViewsQuery.exec(databaseCreationString))
-        qDebug()<<"Error creating table contact or table already existing";
+        qDebug()<<"Error creating table or table already existing";
 
+
+}
+
+void MainWindow::loadDB() {
 
 }
 
 void MainWindow::addView() {
     AddViewDialog* window = new AddViewDialog();
     window->show();
+    if(window->exec() == 1) {
+        QSqlQuery query;
+        query.prepare("INSERT INTO movieViews (Name, ReleaseYear, ViewDate, ViewType, Rating) VALUES (?,?,?,?,?);");
+        query.addBindValue(window->getName());
+        query.addBindValue(window->getReleaseYear());
+        query.addBindValue(window->getViewDate());
+        query.addBindValue(window->getViewType());
+        query.addBindValue(window->getRating());
+
+        if(!query.exec()){
+            qDebug() << "Error while adding a view to the database, see more below :";
+            qDebug() << query.lastError().text();
+        }
+    }
 }
