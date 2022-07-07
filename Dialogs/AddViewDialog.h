@@ -27,6 +27,9 @@ class AddViewDialog : public QDialog
         QString getViewDate();
         int getRating();
 
+    public slots:
+        void comboboxChanged();
+
 
 };
 

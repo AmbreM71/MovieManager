@@ -5,6 +5,8 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::AddViewDialog;
     m_ui->setupUi(this);
     FillMovieComboBox();
+
+    QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
 }
 
 AddViewDialog::~AddViewDialog() {
@@ -34,4 +36,18 @@ QString AddViewDialog::getViewDate() {
 }
 int AddViewDialog::getRating() {
     return m_ui->MovieRatingInput->value();
+}
+
+void AddViewDialog::comboboxChanged() {
+    //If no movie is selected in combobox
+    if(m_ui->ExistingMoviesComboBox->currentText() == "") {
+        m_ui->MovieNameInput->setEnabled(true);
+        m_ui->MovieReleaseYearInput->setEnabled(true);
+        m_ui->MovieRatingInput->setEnabled(true);
+    }
+    else {
+        m_ui->MovieNameInput->setEnabled(false);
+        m_ui->MovieReleaseYearInput->setEnabled(false);
+        m_ui->MovieRatingInput->setEnabled(false);
+    }
 }
