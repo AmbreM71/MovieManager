@@ -6,7 +6,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     m_ui = new Ui::MainWindow;
     m_ui->setupUi(this);
     databaseConnection();
-    //loadDB();
+    loadDB();
 
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
 }
@@ -40,7 +40,57 @@ void MainWindow::databaseConnection() {
 }
 
 void MainWindow::loadDB() {
+    /*
+    QTableWidgetItem* movie = new QTableWidgetItem();
+    movie->setText("oui");
+    m_ui->MoviesListWidget->insertRow(m_ui->MoviesListWidget->rowCount());
+    m_ui->MoviesListWidget->setItem(0,0,movie);
+    */
 
+
+
+    QSqlQuery moviesQuery;
+    moviesQuery.exec("SELECT Name, ReleaseYear, EntriesFR, Rating FROM movieViews GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+    //query.first();
+    while(moviesQuery.next()) {
+        QTableWidgetItem* name = new QTableWidgetItem();
+        QTableWidgetItem* releaseYear = new QTableWidgetItem();
+        QTableWidgetItem* numberOfViews = new QTableWidgetItem();
+        QTableWidgetItem* firstSeen = new QTableWidgetItem();
+        QTableWidgetItem* lastSeen = new QTableWidgetItem();
+        QTableWidgetItem* entriesFR = new QTableWidgetItem();
+        QTableWidgetItem* rating = new QTableWidgetItem();
+
+        QSqlQuery viewsQuery;
+        viewsQuery.exec("SELECT COUNT(*) FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND EntriesFR='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"'");
+        viewsQuery.first();
+        numberOfViews->setText(viewsQuery.value(0).toString());
+
+        QSqlQuery firstViewQuery;
+        firstViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND EntriesFR='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' ORDER BY ViewDate ASC LIMIT 1");
+        firstViewQuery.first();
+        firstSeen->setText(firstViewQuery.value(0).toString());
+
+        QSqlQuery lastViewQuery;
+        lastViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND EntriesFR='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' ORDER BY ViewDate DESC LIMIT 1");
+        lastViewQuery.first();
+        lastSeen->setText(lastViewQuery.value(0).toString());
+
+        name->setText(moviesQuery.value(0).toString());
+        releaseYear->setText(moviesQuery.value(1).toString());
+        entriesFR->setText(moviesQuery.value(2).toString());
+        rating->setText(moviesQuery.value(3).toString());
+
+        m_ui->MoviesListWidget->insertRow(m_ui->MoviesListWidget->rowCount());
+
+        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 0, name);
+        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 1, releaseYear);
+        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 2, numberOfViews);
+        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 3, firstSeen);
+        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 4, lastSeen);
+        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 5, entriesFR);
+        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 6, rating);
+    }
 }
 
 void MainWindow::addView() {
