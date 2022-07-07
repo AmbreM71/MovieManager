@@ -7,7 +7,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     m_ui->setupUi(this);
     databaseConnection();
     loadDB();
-
+    fillGlobalStats();
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
 }
 
@@ -127,4 +127,38 @@ void MainWindow::addView() {
             qDebug() << query.lastError().text();
         }
     }
+}
+
+void MainWindow::fillGlobalStats() {
+
+    QSqlQuery totalViewQuery;
+    totalViewQuery.exec("SELECT COUNT(*) FROM movieViews;");
+    totalViewQuery.first();
+
+    QSqlQuery avgMovieYearQuery;
+    avgMovieYearQuery.exec("SELECT ReleaseYear FROM movieViews GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+    float avgMovieYear = 0;
+    float i=0;
+    while(avgMovieYearQuery.next()) {
+        avgMovieYear += (float)avgMovieYearQuery.value(0).toInt();
+        i++;
+    }
+    avgMovieYear /= i;
+
+    float avgViews = totalViewQuery.value(0).toFloat()/(float)m_ui->MoviesListWidget->rowCount();
+    avgViews = round(avgViews*100)/100;
+
+    QSqlQuery movieThisYearQuery;
+    int movieThisYear=0;
+    movieThisYearQuery.exec("SELECT * FROM movieViews WHERE ViewDate BETWEEN '2022-01-01' AND '2022-12-31' GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+    while(movieThisYearQuery.next()) {
+        movieThisYear++;
+    }
+
+
+    m_ui->TotalMoviesLabel->setText("Nombre de films vus : " + QString::number(m_ui->MoviesListWidget->rowCount()));
+    m_ui->TotalViewLabel->setText("Nombre total de visionnages : " + totalViewQuery.value(0).toString());
+    m_ui->AverageViewLabel->setText("Moyenne de visionnages : " + QString::number(avgViews));
+    m_ui->AverageYearLabel->setText("Année moyenne des films vus : " + QString::number(avgMovieYear));
+    m_ui->ViewThisYear->setText("Films vus cette année : " + QString::number(movieThisYear));
 }

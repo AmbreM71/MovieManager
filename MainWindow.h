@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <cmath>
 
 namespace Ui {
     class MainWindow;
@@ -22,6 +23,7 @@ class MainWindow : public QMainWindow {
         explicit MainWindow(QApplication* app, QWidget *parent = nullptr);
         void databaseConnection();
         void loadDB();
+        void fillGlobalStats();
         ~MainWindow();
 
     public slots:
