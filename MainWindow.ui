@@ -27,27 +27,6 @@
     <item>
      <layout class="QVBoxLayout" name="MoviesLayout">
       <item>
-       <layout class="QGridLayout" name="MoviesFilterLayout">
-        <item row="0" column="2">
-         <widget class="QPushButton" name="AdvancedSearchButton">
-          <property name="text">
-           <string>Filtrage avancé</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="SortLabel">
-          <property name="text">
-           <string>Trier par</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QComboBox" name="SortComboBox"/>
-        </item>
-       </layout>
-      </item>
-      <item>
        <widget class="QTableWidget" name="MoviesListWidget">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -176,6 +155,13 @@
             </property>
             <property name="checkable">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="AdvancedSearchButton">
+            <property name="text">
+             <string>Filtrage avancé</string>
             </property>
            </widget>
           </item>
