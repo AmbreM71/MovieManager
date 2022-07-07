@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "Dialogs/AddViewDialog.h"
+
 
 MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     m_ui = new Ui::MainWindow;
@@ -9,6 +9,8 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     loadDB();
     fillGlobalStats();
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
+    QObject::connect(m_ui->ManageMovieViewsButton, SIGNAL(clicked()), this, SLOT(editViews()));
+    QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
     m_ui->MoviesListWidget->setCurrentCell(0,0);
 }
 
@@ -129,6 +131,24 @@ void MainWindow::addView() {
         }
     }
 }
+
+void MainWindow::editViews() {
+    EditViewsDialog* window = new EditViewsDialog();
+    window->show();
+    if(window->exec() == 1) {
+
+    }
+}
+
+void MainWindow::openFilters() {
+    FiltersDialog* window = new FiltersDialog();
+    window->show();
+    if(window->exec() == 1) {
+
+    }
+}
+
+
 
 void MainWindow::fillGlobalStats() {
 

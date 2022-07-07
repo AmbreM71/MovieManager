@@ -8,6 +8,9 @@
 #include <cmath>
 #include <ctime>
 #include <iostream>
+#include "Dialogs/AddViewDialog.h"
+#include "Dialogs/EditViewsDialog.h"
+#include "Dialogs/FiltersDialog.h"
 
 namespace Ui {
     class MainWindow;
@@ -30,6 +33,8 @@ class MainWindow : public QMainWindow {
 
     public slots:
         void addView();
+        void editViews();
+        void openFilters();
 
 };
 
