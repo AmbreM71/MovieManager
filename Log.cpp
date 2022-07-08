@@ -1,6 +1,7 @@
 #include "Log.h"
 
 Log::Log() {
+
 }
 
 void Log::append(QString s) {

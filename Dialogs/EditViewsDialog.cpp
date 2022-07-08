@@ -35,7 +35,6 @@ EditViewsDialog::EditViewsDialog(QTableWidget* table, Log* log, QWidget *parent)
          m_ui->tableWidget->setItem(m_ui->tableWidget->rowCount()-1, 1, viewDate);
          m_ui->tableWidget->setItem(m_ui->tableWidget->rowCount()-1, 2, viewType);
     }
-
 }
 
 EditViewsDialog::~EditViewsDialog() {

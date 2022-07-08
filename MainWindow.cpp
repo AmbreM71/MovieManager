@@ -198,14 +198,20 @@ void MainWindow::fillGlobalStats() {
     totalViewQuery.first();
 
     QSqlQuery avgMovieYearQuery;
-    avgMovieYearQuery.exec("SELECT ReleaseYear FROM movieViews GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+    avgMovieYearQuery.exec("SELECT ReleaseYear, Rating FROM movieViews GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
     float avgMovieYear = 0;
+    float avgRating = 0;
     float i=0;
     while(avgMovieYearQuery.next()) {
         avgMovieYear += (float)avgMovieYearQuery.value(0).toInt();
+        avgRating += (float)avgMovieYearQuery.value(1).toInt();
         i++;
     }
+
     avgMovieYear /= i;
+    avgRating /= i;
+
+
 
     float avgViews = totalViewQuery.value(0).toFloat()/(float)m_ui->MoviesListWidget->rowCount();
     avgViews = round(avgViews*100)/100;
@@ -218,9 +224,11 @@ void MainWindow::fillGlobalStats() {
     }
 
 
+
     m_ui->TotalMoviesLabel->setText("Nombre de films vus : " + QString::number(m_ui->MoviesListWidget->rowCount()));
     m_ui->TotalViewLabel->setText("Nombre total de visionnages : " + totalViewQuery.value(0).toString());
     m_ui->AverageViewLabel->setText("Moyenne de visionnages : " + QString::number(avgViews));
     m_ui->AverageYearLabel->setText("Année moyenne des films vus : " + QString::number(avgMovieYear));
+    m_ui->AverageRatingLabel->setText("Note moyenne : " + QString::number(avgRating));
     m_ui->ViewThisYear->setText("Films vus cette année : " + QString::number(movieThisYear));
 }

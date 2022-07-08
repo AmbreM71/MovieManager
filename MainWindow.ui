@@ -181,7 +181,30 @@
      <layout class="QVBoxLayout" name="InfosLayout">
       <item>
        <layout class="QGridLayout" name="GeneralInfosLayout">
-        <item row="3" column="0">
+        <item row="6" column="0">
+         <widget class="QLabel" name="AverageRatingLabel">
+          <property name="text">
+           <string>Note moyenne : </string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="GlobalStatsLabel">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>STATISTIQUES GLOBALES</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
          <widget class="QLabel" name="AverageYearLabel">
           <property name="text">
            <string>Année moyenne des films vus : </string>
@@ -189,52 +212,98 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="TotalViewLabel">
-          <property name="text">
-           <string>Nombre total de visionnages : </string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="ViewThisYear">
-          <property name="text">
-           <string>Films vus cette année : </string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="AverageViewLabel">
-          <property name="text">
-           <string>Moyenne de visionnages : </string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
          <widget class="QLabel" name="TotalMoviesLabel">
           <property name="text">
            <string>Nombre de films vus : </string>
           </property>
          </widget>
         </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="AverageViewLabel">
+          <property name="text">
+           <string>Moyenne de visionnages : </string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="TotalViewLabel">
+          <property name="text">
+           <string>Nombre total de visionnages : </string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="ViewThisYear">
+          <property name="text">
+           <string>Films vus cette année : </string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Preferred</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
       </item>
       <item>
        <layout class="QGridLayout" name="SelectionInfosLayout">
-        <item row="5" column="0">
+        <item row="4" column="0">
+         <widget class="QLabel" name="MovieScreenplayLabel">
+          <property name="text">
+           <string>Scénario</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="0">
          <widget class="QLabel" name="MovieIMDBRateLabel">
           <property name="text">
            <string>Note IMDB</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
+        <item row="5" column="0">
+         <widget class="QLabel" name="MovieReleaseYearLabel">
+          <property name="text">
+           <string>Année de sortie</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
          <widget class="QLabel" name="MovieDirectorLabel">
           <property name="text">
            <string>Réalisation</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>À PROPOS DU FILM</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
          <widget class="QLabel" name="MovieCastLabel">
           <property name="text">
            <string>Casting</string>
@@ -242,16 +311,32 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="MovieReleaseYearLabel">
-          <property name="text">
-           <string>Année de sortie</string>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Preferred</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="MovieScreenplayLabel">
+        <item row="3" column="0">
+         <widget class="QCommandLinkButton" name="commandLinkButton">
           <property name="text">
-           <string>Scénario</string>
+           <string>CommandLinkButton</string>
           </property>
          </widget>
         </item>
