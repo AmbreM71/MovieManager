@@ -156,10 +156,12 @@ void MainWindow::openFilters() {
 }
 
 void MainWindow::openLog() {
-    LogDialog* window = new LogDialog(m_log, this);
-    window->show();
-    if(window->exec() == 1) {
-
+    if(LogDialog::instancesCount() == 0) {
+        LogDialog* window = new LogDialog(m_log, this);
+        window->show();
+        if(window->exec() == 0) {
+            delete window;
+        }
     }
 }
 
