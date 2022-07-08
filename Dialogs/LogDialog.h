@@ -26,7 +26,7 @@ class LogDialog : public QDialog
         static int instancesCount();
 
     public slots:
-        void refreshLog();
+        void refresh();
 
 
 };

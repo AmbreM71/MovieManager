@@ -15,6 +15,8 @@
 #include "Dialogs/EditViewsDialog.h"
 #include "Dialogs/FiltersDialog.h"
 #include "Dialogs/LogDialog.h"
+#include "Dialogs/AboutDialog.h"
+#include "Dialogs/OptionsDialog.h"
 
 namespace Ui {
     class MainWindow;
@@ -44,6 +46,8 @@ class MainWindow : public QMainWindow {
         void openFilters();
         void menuBarConnectors();
         void openLog();
+        void openAbout();
+        void openSettings();
 
 };
 

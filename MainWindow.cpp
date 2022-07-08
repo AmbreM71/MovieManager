@@ -165,17 +165,33 @@ void MainWindow::openLog() {
     }
 }
 
+void MainWindow::openAbout() {
+    if(AboutDialog::instancesCount() == 0) {
+        AboutDialog* window = new AboutDialog(this);
+        window->show();
+        if(window->exec() == 0) {
+            delete window;
+        }
+    }
+}
+
+void MainWindow::openSettings() {
+    OptionsDialog* window = new OptionsDialog();
+    window->show();
+    if(window->exec() == 1) {
+
+    }
+}
+
 void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->actionQuitter, SIGNAL(triggered()), m_app, SLOT(quit()));
     QObject::connect(m_ui->actionLog, SIGNAL(triggered()), this, SLOT(openLog()));
+    QObject::connect(m_ui->action_Propos, SIGNAL(triggered()), this, SLOT(openAbout()));
+    QObject::connect(m_ui->actionPr_f_rences, SIGNAL(triggered()), this, SLOT(openSettings()));
 
 }
 
-
-
 void MainWindow::fillGlobalStats() {
-
-
 
     QSqlQuery totalViewQuery;
     totalViewQuery.exec("SELECT COUNT(*) FROM movieViews;");

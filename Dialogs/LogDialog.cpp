@@ -9,7 +9,7 @@ LogDialog::LogDialog(Log* log, QWidget *parent) : QDialog(parent) {
     m_ui->setupUi(this);
     m_log = log;
     fillList();
-    QObject::connect(m_log, SIGNAL(logAppended()), this, SLOT(refreshLog()));
+    QObject::connect(m_log, SIGNAL(logAppended()), this, SLOT(refresh()));
 }
 
 LogDialog::~LogDialog() {
@@ -28,6 +28,6 @@ int LogDialog::instancesCount() {
     return instances;
 }
 
-void LogDialog::refreshLog() {
+void LogDialog::refresh() {
     this->fillList();
 }
