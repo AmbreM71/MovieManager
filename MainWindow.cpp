@@ -5,9 +5,11 @@
 MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     m_ui = new Ui::MainWindow;
     m_ui->setupUi(this);
+    m_app = app;
     databaseConnection();
     loadDB();
     fillGlobalStats();
+    menuBarConnectors();
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
     QObject::connect(m_ui->ManageMovieViewsButton, SIGNAL(clicked()), this, SLOT(editViews()));
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
@@ -146,6 +148,10 @@ void MainWindow::openFilters() {
     if(window->exec() == 1) {
 
     }
+}
+
+void MainWindow::menuBarConnectors() {
+QObject::connect(m_ui->actionQuitter, SIGNAL(triggered()), m_app, SLOT(quit()));
 }
 
 

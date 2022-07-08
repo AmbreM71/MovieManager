@@ -276,7 +276,6 @@
     </property>
     <addaction name="actionNouvelle_base_de_donn_e"/>
     <addaction name="actionOuvrir_une_base_de_donn_e"/>
-    <addaction name="actionEnregistrer_2"/>
     <addaction name="actionEnregistrer"/>
     <addaction name="actionQuitter"/>
    </widget>

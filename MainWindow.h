@@ -8,6 +8,9 @@
 #include <cmath>
 #include <ctime>
 #include <iostream>
+
+#include "Log.h"
+
 #include "Dialogs/AddViewDialog.h"
 #include "Dialogs/EditViewsDialog.h"
 #include "Dialogs/FiltersDialog.h"
@@ -35,6 +38,7 @@ class MainWindow : public QMainWindow {
         void addView();
         void editViews();
         void openFilters();
+        void menuBarConnectors();
 
 };
 
