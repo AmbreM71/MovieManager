@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>335</width>
-    <height>200</height>
+    <height>180</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>À Propos de Movie Manager</string>
@@ -18,26 +24,6 @@
     <widget class="QPushButton" name="GithubButton">
      <property name="text">
       <string>GitHub</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <spacer name="VerticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QLabel" name="QtVersionLabel">
-     <property name="text">
-      <string>Qt 6.3.1</string>
      </property>
     </widget>
    </item>
@@ -71,17 +57,34 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item row="2" column="0" colspan="2">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="QtVersionLabel">
+     <property name="text">
+      <string>Qt 6.3.1</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Développé par AlexM</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
     <widget class="QLabel" name="VersionLabel">
      <property name="text">
       <string>Version dev</string>
      </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Développé par AlexM</string>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

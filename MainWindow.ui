@@ -49,6 +49,9 @@
         <property name="autoScrollMargin">
          <number>16</number>
         </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
         <property name="showDropIndicator" stdset="0">
          <bool>false</bool>
         </property>
@@ -78,6 +81,9 @@
         </property>
         <property name="gridStyle">
          <enum>Qt::SolidLine</enum>
+        </property>
+        <property name="sortingEnabled">
+         <bool>true</bool>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
@@ -259,28 +265,28 @@
       </item>
       <item>
        <layout class="QGridLayout" name="SelectionInfosLayout">
-        <item row="4" column="0">
+        <item row="3" column="0">
          <widget class="QLabel" name="MovieScreenplayLabel">
           <property name="text">
            <string>Scénario</string>
           </property>
          </widget>
         </item>
-        <item row="9" column="0">
+        <item row="8" column="0">
          <widget class="QLabel" name="MovieIMDBRateLabel">
           <property name="text">
            <string>Note IMDB</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
+        <item row="4" column="0">
          <widget class="QLabel" name="MovieReleaseYearLabel">
           <property name="text">
            <string>Année de sortie</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="5" column="0">
          <widget class="QLabel" name="MovieDirectorLabel">
           <property name="text">
            <string>Réalisation</string>
@@ -303,7 +309,7 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+        <item row="7" column="0">
          <widget class="QLabel" name="MovieCastLabel">
           <property name="text">
            <string>Casting</string>
@@ -330,13 +336,6 @@
          <widget class="Line" name="line">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QCommandLinkButton" name="commandLinkButton">
-          <property name="text">
-           <string>CommandLinkButton</string>
           </property>
          </widget>
         </item>
