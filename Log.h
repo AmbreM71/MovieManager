@@ -2,12 +2,16 @@
 #define LOG_H
 
 #include <QList>
+#include <QObject>
 
 
-class Log {
+class Log : public QObject {
+
+    Q_OBJECT
 
     private:
        QList<QString> m_log;
+       std::tm* now;
 
     public:
         Log();
@@ -15,6 +19,11 @@ class Log {
         void clear();
         QString getLog(int i);
         int size();
+
+    signals:
+        void logAppended();
+
+
 };
 
 #endif // LOG_H

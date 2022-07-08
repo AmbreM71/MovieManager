@@ -14,6 +14,7 @@
 #include "Dialogs/AddViewDialog.h"
 #include "Dialogs/EditViewsDialog.h"
 #include "Dialogs/FiltersDialog.h"
+#include "Dialogs/LogDialog.h"
 
 namespace Ui {
     class MainWindow;
@@ -26,6 +27,9 @@ class MainWindow : public QMainWindow {
         Ui::MainWindow* m_ui;
         QApplication* m_app;
         QSqlDatabase m_db;
+        Log* m_log;
+        std::tm* now;
+
 
     public:
         explicit MainWindow(QApplication* app, QWidget *parent = nullptr);
@@ -39,6 +43,7 @@ class MainWindow : public QMainWindow {
         void editViews();
         void openFilters();
         void menuBarConnectors();
+        void openLog();
 
 };
 

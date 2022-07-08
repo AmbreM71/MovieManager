@@ -6,13 +6,19 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     m_ui = new Ui::MainWindow;
     m_ui->setupUi(this);
     m_app = app;
+    m_log = new Log();
+    std::time_t t = std::time(0);
+    now = std::localtime(&t);
+
     databaseConnection();
     loadDB();
     fillGlobalStats();
     menuBarConnectors();
+
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
     QObject::connect(m_ui->ManageMovieViewsButton, SIGNAL(clicked()), this, SLOT(editViews()));
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
+
     m_ui->MoviesListWidget->setCurrentCell(0,0);
 }
 
@@ -25,7 +31,7 @@ void MainWindow::databaseConnection() {
     m_db.setDatabaseName("movieDatabase.db");
 
     if(!m_db.open()) {
-        qDebug() << "Erreur lors de l'ouverture de la base de données";
+        m_log->append("Erreur lors de l'ouverture de la base de données");
     }
     //Grade and EntriesFR shouldn't be filled when user add a view, entriesFR should get value from jpbox-office.com and grade only if the movie isn't already in the list
     QString databaseCreationString = "CREATE TABLE movieViews ("
@@ -38,9 +44,9 @@ void MainWindow::databaseConnection() {
 
     QSqlQuery movieViewsQuery;
 
-    if(!movieViewsQuery.exec(databaseCreationString))
-        qDebug()<<"Error creating table or table already existing";
-
+    if(!movieViewsQuery.exec(databaseCreationString)) {
+        m_log->append("Erreur lors de la création de la base de données, elle existe peut-être déjà");
+    }
 
 }
 
@@ -128,8 +134,7 @@ void MainWindow::addView() {
         query.bindValue(3, window->getViewType());
 
         if(!query.exec()){
-            qDebug() << "Error while adding a view to the database, see more below :";
-            qDebug() << query.lastError().text();
+            m_log->append("Erreur lors de l'ajout dans la base de données, plus d'informations ci-dessous :\nCode d'erreur "+query.lastError().nativeErrorCode()+" : "+query.lastError().text());
         }
     }
 }
@@ -150,16 +155,25 @@ void MainWindow::openFilters() {
     }
 }
 
+void MainWindow::openLog() {
+    LogDialog* window = new LogDialog(m_log, this);
+    window->show();
+    if(window->exec() == 1) {
+
+    }
+}
+
 void MainWindow::menuBarConnectors() {
-QObject::connect(m_ui->actionQuitter, SIGNAL(triggered()), m_app, SLOT(quit()));
+    QObject::connect(m_ui->actionQuitter, SIGNAL(triggered()), m_app, SLOT(quit()));
+    QObject::connect(m_ui->actionLog, SIGNAL(triggered()), this, SLOT(openLog()));
+
 }
 
 
 
 void MainWindow::fillGlobalStats() {
 
-    std::time_t t = std::time(0);
-    std::tm* now = std::localtime(&t);
+
 
     QSqlQuery totalViewQuery;
     totalViewQuery.exec("SELECT COUNT(*) FROM movieViews;");
