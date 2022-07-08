@@ -18,6 +18,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
     QObject::connect(m_ui->ManageMovieViewsButton, SIGNAL(clicked()), this, SLOT(editViews()));
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
+    QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
 
     m_ui->MoviesListWidget->setCurrentCell(0,0);
 }
@@ -50,10 +51,31 @@ void MainWindow::databaseConnection() {
 
 }
 
-void MainWindow::loadDB() {
+void MainWindow::loadDB(bool isFiltered) {
+
+    m_ui->MoviesListWidget->sortItems(0);
+    //Clear the table
+    int movieListRowCount = m_ui->MoviesListWidget->rowCount();
+    for(int i=movieListRowCount ; i >= 0 ; i--) {
+        m_ui->MoviesListWidget->removeRow(i);
+    }
+
     //Fetch every unique movies
     QSqlQuery moviesQuery;
-    moviesQuery.exec("SELECT Name, ReleaseYear, EntriesFR, Rating FROM movieViews GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+
+    if(isFiltered) {
+
+        moviesQuery.exec("SELECT Name, ReleaseYear, EntriesFR, Rating FROM movieViews "
+                         "WHERE Name LIKE '%" + m_filter_name + "%'"
+                         "AND ReleaseYear BETWEEN '"+QString::number(m_filter_minYear)+"' AND '"+QString::number(m_filter_maxYear)+"'"
+                         "AND Rating BETWEEN '"+QString::number(m_filter_minRating)+"' AND '"+QString::number(m_filter_maxRating)+"'"
+                         "AND EntriesFR >= "+QString::number(m_filter_minEntries)+" "
+                         "GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+        m_ui->ResetFiltersButton->setEnabled(true);
+    }
+    else {
+        moviesQuery.exec("SELECT Name, ReleaseYear, EntriesFR, Rating FROM movieViews GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+    }
 
     while(moviesQuery.next()) {
         QTableWidgetItem* name = new QTableWidgetItem();
@@ -148,10 +170,11 @@ void MainWindow::editViews() {
 }
 
 void MainWindow::openFilters() {
-    FiltersDialog* window = new FiltersDialog();
+    FiltersDialog* window = new FiltersDialog(&m_filter_name, &m_filter_minYear, &m_filter_maxYear, &m_filter_minRating, &m_filter_maxRating, &m_filter_minEntries);
     window->show();
     if(window->exec() == 1) {
-
+        delete window;
+        loadDB(true);
     }
 }
 
@@ -181,6 +204,17 @@ void MainWindow::openSettings() {
     if(window->exec() == 1) {
 
     }
+}
+
+void MainWindow::resetFilters() {
+    m_ui->ResetFiltersButton->setEnabled(false);
+    m_filter_name = "";
+    m_filter_minYear = 0;
+    m_filter_maxYear = 0;
+    m_filter_minRating = 0;
+    m_filter_maxRating = 0;
+    m_filter_minEntries = 0;
+    loadDB();
 }
 
 void MainWindow::menuBarConnectors() {

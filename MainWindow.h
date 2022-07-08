@@ -32,12 +32,21 @@ class MainWindow : public QMainWindow {
         Log* m_log;
         std::tm* now;
 
+        //Filter variables
+        QString m_filter_name = "";
+        int m_filter_minYear = 0,
+            m_filter_maxYear = 0,
+            m_filter_minRating = 0,
+            m_filter_maxRating = 0,
+            m_filter_minEntries = 0;
+
 
     public:
         explicit MainWindow(QApplication* app, QWidget *parent = nullptr);
         void databaseConnection();
-        void loadDB();
+        void loadDB(bool isFiltered = false);
         void fillGlobalStats();
+        void filterTable();
         ~MainWindow();
 
     public slots:
@@ -48,6 +57,7 @@ class MainWindow : public QMainWindow {
         void openLog();
         void openAbout();
         void openSettings();
+        void resetFilters();
 
 };
 

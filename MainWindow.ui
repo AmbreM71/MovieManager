@@ -177,6 +177,16 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="ResetFiltersButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Réinitialiser les filtres</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
