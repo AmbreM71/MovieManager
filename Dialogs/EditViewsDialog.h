@@ -2,6 +2,11 @@
 #define EDITVIEWSDIALOG_H
 
 #include <QDialog>
+#include <QTableWidget>
+#include <QSqlQuery>
+#include <QSqlError>
+
+#include "Log.h"
 
 namespace Ui {
 class EditViewsDialog;
@@ -11,12 +16,16 @@ class EditViewsDialog : public QDialog
 {
     Q_OBJECT
 
-public:
-    explicit EditViewsDialog(QWidget *parent = nullptr);
-    ~EditViewsDialog();
+    private:
+        Ui::EditViewsDialog* m_ui;
+        QTableWidget* m_MainWindowTable;
+        Log* m_log;
 
-private:
-    Ui::EditViewsDialog *ui;
+    public:
+        explicit EditViewsDialog(QTableWidget* table, Log* log, QWidget *parent = nullptr);
+        ~EditViewsDialog();
+
+
 };
 
 #endif // EDITVIEWSDIALOG_H

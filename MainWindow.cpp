@@ -140,7 +140,7 @@ void MainWindow::addView() {
 }
 
 void MainWindow::editViews() {
-    EditViewsDialog* window = new EditViewsDialog();
+    EditViewsDialog* window = new EditViewsDialog(m_ui->MoviesListWidget, m_log);
     window->show();
     if(window->exec() == 1) {
 
