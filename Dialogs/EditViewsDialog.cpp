@@ -30,7 +30,7 @@ void EditViewsDialog::fillTable() {
     QString rating = m_MainWindowTable->item(m_MainWindowTable->currentRow(),6)->text();
 
     QSqlQuery query;
-    query.prepare("SELECT Name, ViewDate, ViewType FROM movieViews WHERE Name='"+name+"' AND ReleaseYear='"+releaseYear+"' AND EntriesFR='"+entriesFR+"' AND Rating='"+rating+"' ORDER BY ViewDate DESC;");
+    query.prepare("SELECT Name, ViewDate, ViewType FROM movieViews WHERE Name='"+name+"' AND ReleaseYear='"+releaseYear+"' AND Entries='"+entriesFR+"' AND Rating='"+rating+"' ORDER BY ViewDate DESC;");
 
     if(!query.exec()){
         m_log->append("Erreur lors de la récupération dans la base de données, plus d'informations ci-dessous :\nCode d'erreur "+query.lastError().nativeErrorCode()+" : "+query.lastError().text());
@@ -78,7 +78,7 @@ void EditViewsDialog::deleteView() {
     QString viewDate = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),1)->text();
     QString viewType = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),2)->text();
 
-    deleteQuery.exec("DELETE FROM movieViews WHERE Name='"+name+"' AND ReleaseYear='"+releaseYear+"' AND EntriesFR='"+entriesFR+"' AND Rating='"+rating+"' AND ViewDate='"+viewDate+"' AND ViewType='"+viewType+"';");
+    deleteQuery.exec("DELETE FROM movieViews WHERE Name='"+name+"' AND ReleaseYear='"+releaseYear+"' AND Entries='"+entriesFR+"' AND Rating='"+rating+"' AND ViewDate='"+viewDate+"' AND ViewType='"+viewType+"';");
     fillTable();
     m_edited = true;
 }

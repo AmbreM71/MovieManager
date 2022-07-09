@@ -47,12 +47,12 @@ void MainWindow::databaseConnection() {
     if(!m_db.open()) {
         m_log->append("Erreur lors de l'ouverture de la base de données");
     }
-    //Grade and EntriesFR shouldn't be filled when user add a view, entriesFR should get value from jpbox-office.com and grade only if the movie isn't already in the list
+    //Grade and Entries shouldn't be filled when user add a view, Entries should get value from jpbox-office.com and grade only if the movie isn't already in the list
     QString databaseCreationString = "CREATE TABLE movieViews ("
                                    "Name        VARCHAR(127),"
                                    "ReleaseYear SMALLINT,"
                                    "ViewDate    DATE,"
-                                   "EntriesFR   INT,"
+                                   "Entries   INT,"
                                    "Rating          TINYINT(10),"
                                    "ViewType    VARCHAR(63));";
 
@@ -79,16 +79,16 @@ void MainWindow::loadDB(bool isFiltered) {
 
     if(isFiltered) {
 
-        moviesQuery.exec("SELECT Name, ReleaseYear, EntriesFR, Rating FROM movieViews "
+        moviesQuery.exec("SELECT Name, ReleaseYear, Entries, Rating FROM movieViews "
                          "WHERE Name LIKE '%" + m_filter_name + "%'"
                          "AND ReleaseYear BETWEEN '"+QString::number(m_filter_minYear)+"' AND '"+QString::number(m_filter_maxYear)+"'"
                          "AND Rating BETWEEN '"+QString::number(m_filter_minRating)+"' AND '"+QString::number(m_filter_maxRating)+"'"
-                         "AND EntriesFR >= "+QString::number(m_filter_minEntries)+" "
-                         "GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+                         "AND Entries >= "+QString::number(m_filter_minEntries)+" "
+                         "GROUP BY Name, ReleaseYear, Entries, Rating;");
         m_ui->ResetFiltersButton->setEnabled(true);
     }
     else {
-        moviesQuery.exec("SELECT Name, ReleaseYear, EntriesFR, Rating FROM movieViews GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+        moviesQuery.exec("SELECT Name, ReleaseYear, Entries, Rating FROM movieViews GROUP BY Name, ReleaseYear, Entries, Rating;");
         m_ui->ResetFiltersButton->setEnabled(false);
         m_filter_name = "";
         m_filter_minYear = 0;
@@ -104,7 +104,7 @@ void MainWindow::loadDB(bool isFiltered) {
         QTableWidgetItem* numberOfViews = new QTableWidgetItem();
         QTableWidgetItem* firstSeen = new QTableWidgetItem();
         QTableWidgetItem* lastSeen = new QTableWidgetItem();
-        QTableWidgetItem* entriesFR = new QTableWidgetItem();
+        QTableWidgetItem* Entries = new QTableWidgetItem();
         QTableWidgetItem* rating = new QTableWidgetItem();
 
         releaseYear->setTextAlignment(Qt::AlignCenter);
@@ -114,25 +114,25 @@ void MainWindow::loadDB(bool isFiltered) {
 
         //Fetch the number of views of the current movie
         QSqlQuery viewsQuery;
-        viewsQuery.exec("SELECT COUNT(*) FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND EntriesFR='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"'");
+        viewsQuery.exec("SELECT COUNT(*) FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"'");
         viewsQuery.first();
         numberOfViews->setText(viewsQuery.value(0).toString());
 
         //Fetch the first view of the current movie
         QSqlQuery firstViewQuery;
-        firstViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND EntriesFR='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' ORDER BY ViewDate ASC LIMIT 1");
+        firstViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' ORDER BY ViewDate ASC LIMIT 1");
         firstViewQuery.first();
         firstSeen->setText(firstViewQuery.value(0).toString());
 
         //Fetch the last view of the current movie
         QSqlQuery lastViewQuery;
-        lastViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND EntriesFR='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' ORDER BY ViewDate DESC LIMIT 1");
+        lastViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' ORDER BY ViewDate DESC LIMIT 1");
         lastViewQuery.first();
         lastSeen->setText(lastViewQuery.value(0).toString());
 
         name->setText(moviesQuery.value(0).toString());
         releaseYear->setText(moviesQuery.value(1).toString());
-        entriesFR->setText(moviesQuery.value(2).toString());
+        Entries->setText(moviesQuery.value(2).toString());
         rating->setText(moviesQuery.value(3).toString());
 
         if((name->text() == "Matrix" || name->text() == "The Matrix") && m_matrixMode) {
@@ -148,7 +148,7 @@ void MainWindow::loadDB(bool isFiltered) {
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 2, numberOfViews);
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 3, firstSeen);
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 4, lastSeen);
-        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 5, entriesFR);
+        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 5, Entries);
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 6, rating);
     }
     m_ui->MoviesListWidget->setCurrentCell(0,0);
@@ -160,7 +160,7 @@ void MainWindow::addView() {
     if(window->exec() == 1) {
 
         QSqlQuery query;
-        query.prepare("INSERT INTO movieViews (Name, ReleaseYear, ViewDate, ViewType, Rating, EntriesFR) VALUES (?,?,?,?,?,?);");
+        query.prepare("INSERT INTO movieViews (Name, ReleaseYear, ViewDate, ViewType, Rating, Entries) VALUES (?,?,?,?,?,?);");
 
         //If nothing is selected in the combobox
         if(window->getComboboxSelectedItem() == "") {
@@ -174,7 +174,7 @@ void MainWindow::addView() {
             QString movieYear = window->getComboboxSelectedItem().remove(0, window->getComboboxSelectedItem().length()-4);
 
             QSqlQuery ratingQuery;
-            ratingQuery.exec("SELECT Rating, EntriesFR FROM movieViews WHERE Name='"+movieName+"' AND ReleaseYear='"+movieYear+"' GROUP BY Rating");
+            ratingQuery.exec("SELECT Rating, Entries FROM movieViews WHERE Name='"+movieName+"' AND ReleaseYear='"+movieYear+"' GROUP BY Rating");
             ratingQuery.first();
 
             query.bindValue(0, movieName);
@@ -275,7 +275,7 @@ void MainWindow::fillGlobalStats() {
     totalViewQuery.first();
 
     QSqlQuery avgMovieYearQuery;
-    avgMovieYearQuery.exec("SELECT ReleaseYear, Rating FROM movieViews GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+    avgMovieYearQuery.exec("SELECT ReleaseYear, Rating FROM movieViews GROUP BY Name, ReleaseYear, Entries, Rating;");
     float avgMovieYear = 0;
     float avgRating = 0;
     float i=0;
@@ -296,7 +296,7 @@ void MainWindow::fillGlobalStats() {
 
     QSqlQuery movieThisYearQuery;
     int movieThisYear=0;
-    movieThisYearQuery.exec("SELECT * FROM movieViews WHERE ViewDate BETWEEN '"+QString::number(m_now->tm_year + 1900)+"-01-01' AND '"+QString::number(m_now->tm_year + 1900)+"-12-31' GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+    movieThisYearQuery.exec("SELECT * FROM movieViews WHERE ViewDate BETWEEN '"+QString::number(m_now->tm_year + 1900)+"-01-01' AND '"+QString::number(m_now->tm_year + 1900)+"-12-31' GROUP BY Name, ReleaseYear, Entries, Rating;");
     while(movieThisYearQuery.next()) {
         movieThisYear++;
     }
