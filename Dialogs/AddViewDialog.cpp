@@ -4,6 +4,9 @@
 AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::AddViewDialog;
     m_ui->setupUi(this);
+
+    m_ui->MovieViewDateInput->setDate(QDate::currentDate());
+
     FillMovieComboBox();
 
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));

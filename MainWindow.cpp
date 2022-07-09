@@ -8,7 +8,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     m_app = app;
     m_log = new Log();
     std::time_t t = std::time(0);
-    now = std::localtime(&t);
+    m_now = std::localtime(&t);
 
     m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << "Nom du film" << "Année\nde sortie" << "Nombre de\nvisionnages" << "Premier\nvisionnage" << "Dernier\nvisionnage" << "Entrées\nen France" << "Note");
 
@@ -275,7 +275,7 @@ void MainWindow::fillGlobalStats() {
 
     QSqlQuery movieThisYearQuery;
     int movieThisYear=0;
-    movieThisYearQuery.exec("SELECT * FROM movieViews WHERE ViewDate BETWEEN '"+QString::number(now->tm_year + 1900)+"-01-01' AND '"+QString::number(now->tm_year + 1900)+"-12-31' GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+    movieThisYearQuery.exec("SELECT * FROM movieViews WHERE ViewDate BETWEEN '"+QString::number(m_now->tm_year + 1900)+"-01-01' AND '"+QString::number(m_now->tm_year + 1900)+"-12-31' GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
     while(movieThisYearQuery.next()) {
         movieThisYear++;
     }

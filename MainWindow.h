@@ -30,7 +30,7 @@ class MainWindow : public QMainWindow {
         QApplication* m_app;
         QSqlDatabase m_db;
         Log* m_log;
-        std::tm* now;
+        std::tm* m_now;
 
         //Filter variables
         QString m_filter_name = "";
