@@ -387,9 +387,6 @@
     <property name="title">
      <string>Fichier</string>
     </property>
-    <addaction name="actionNouvelle_base_de_donn_e"/>
-    <addaction name="actionOuvrir_une_base_de_donn_e"/>
-    <addaction name="actionEnregistrer"/>
     <addaction name="actionQuitter"/>
    </widget>
    <widget class="QMenu" name="menuAide">
