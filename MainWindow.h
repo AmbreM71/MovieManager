@@ -26,13 +26,29 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
     private:
+
+        enum Theme {
+            Classic = 0,
+            Dark = 1,
+            AMOLED = 2,
+            MidnightPurple = 3,
+        };
+
+        enum Language {
+            French = 0,
+            English = 1,
+        };
+
         Ui::MainWindow* m_ui;
         QApplication* m_app;
         QSqlDatabase m_db;
         Log* m_log;
         std::tm* m_now;
 
-        bool m_matrixMode = false;
+        //Setting variables
+        bool m_matrixMode;
+        int m_language;
+        int m_theme;
 
         //Filter variables
         QString m_filter_name = "";
@@ -49,6 +65,7 @@ class MainWindow : public QMainWindow {
         void loadDB(bool isFiltered = false);
         void fillGlobalStats();
         void filterTable();
+        void setSettings();
         ~MainWindow();
 
     public slots:

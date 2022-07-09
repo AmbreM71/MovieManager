@@ -18,7 +18,18 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="1">
-    <widget class="QComboBox" name="LanguageCombobox"/>
+    <widget class="QComboBox" name="LanguageCombobox">
+     <item>
+      <property name="text">
+       <string>Français</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>English</string>
+      </property>
+     </item>
+    </widget>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="LanguageLabel">
@@ -66,17 +77,17 @@
      </item>
      <item>
       <property name="text">
+       <string>Sombre</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Amoled</string>
       </property>
      </item>
      <item>
       <property name="text">
        <string>Midnight Purple</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Sombre</string>
       </property>
      </item>
     </widget>

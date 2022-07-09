@@ -12,11 +12,11 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
 
     m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << "Nom du film" << "Année\nde sortie" << "Nombre de\nvisionnages" << "Premier\nvisionnage" << "Dernier\nvisionnage" << "Entrées\nen France" << "Note");
 
+    setSettings();
     databaseConnection();
     loadDB();
     fillGlobalStats();
     menuBarConnectors();
-
 
 
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -227,7 +227,7 @@ void MainWindow::openAbout() {
 }
 
 void MainWindow::openSettings() {
-    OptionsDialog* window = new OptionsDialog(&m_matrixMode);
+    OptionsDialog* window = new OptionsDialog(&m_matrixMode, &m_language, &m_theme);
     window->show();
     if(window->exec() == 1) {
         delete window;
@@ -252,6 +252,12 @@ void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->action_Propos, SIGNAL(triggered()), this, SLOT(openAbout()));
     QObject::connect(m_ui->actionPr_f_rences, SIGNAL(triggered()), this, SLOT(openSettings()));
 
+}
+
+void MainWindow::setSettings() {
+    m_matrixMode = false;
+    m_theme = Theme::MidnightPurple;
+    m_language = Language::French;
 }
 
 void MainWindow::fillGlobalStats() {
