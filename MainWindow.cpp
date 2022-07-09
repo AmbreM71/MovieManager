@@ -10,19 +10,14 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     std::time_t t = std::time(0);
     now = std::localtime(&t);
 
+    m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << "Nom du film" << "Année\nde sortie" << "Nombre de\nvisionnages" << "Premier\nvisionnage" << "Dernier\nvisionnage" << "Entrées\nen France" << "Note");
+
     databaseConnection();
     loadDB();
     fillGlobalStats();
     menuBarConnectors();
 
-    QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
-    QObject::connect(m_ui->ManageMovieViewsButton, SIGNAL(clicked()), this, SLOT(editViews()));
-    QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
-    QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
 
-    m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << "Nom du film" << "Année\nde sortie" << "Nombre de\nvisionnages" << "Premier\nvisionnage" << "Dernier\nvisionnage" << "Entrées\nen France" << "Note");
-
-    m_ui->MoviesListWidget->setCurrentCell(0,0);
 
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -33,6 +28,12 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     m_ui->MoviesListWidget->setColumnWidth(4,100);
     m_ui->MoviesListWidget->setColumnWidth(5,100);
     m_ui->MoviesListWidget->setColumnWidth(6,70);
+
+
+    QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
+    QObject::connect(m_ui->ManageMovieViewsButton, SIGNAL(clicked()), this, SLOT(editViews()));
+    QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
+    QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
 }
 
 MainWindow::~MainWindow() {
@@ -138,6 +139,7 @@ void MainWindow::loadDB(bool isFiltered) {
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 5, entriesFR);
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 6, rating);
     }
+    m_ui->MoviesListWidget->setCurrentCell(0,0);
 }
 
 void MainWindow::addView() {
