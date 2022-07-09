@@ -20,7 +20,19 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
     QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
 
+    m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << "Nom du film" << "Année\nde sortie" << "Nombre de\nvisionnages" << "Premier\nvisionnage" << "Dernier\nvisionnage" << "Entrées\nen France" << "Note");
+
     m_ui->MoviesListWidget->setCurrentCell(0,0);
+
+    m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+
+    m_ui->MoviesListWidget->setColumnWidth(1,90);
+    m_ui->MoviesListWidget->setColumnWidth(2,90);
+    m_ui->MoviesListWidget->setColumnWidth(3,90);
+    m_ui->MoviesListWidget->setColumnWidth(4,90);
+    m_ui->MoviesListWidget->setColumnWidth(5,90);
+    m_ui->MoviesListWidget->setColumnWidth(6,60);
 }
 
 MainWindow::~MainWindow() {
@@ -85,6 +97,11 @@ void MainWindow::loadDB(bool isFiltered) {
         QTableWidgetItem* lastSeen = new QTableWidgetItem();
         QTableWidgetItem* entriesFR = new QTableWidgetItem();
         QTableWidgetItem* rating = new QTableWidgetItem();
+
+        releaseYear->setTextAlignment(Qt::AlignCenter);
+        firstSeen->setTextAlignment(Qt::AlignCenter);
+        lastSeen->setTextAlignment(Qt::AlignCenter);
+
 
         //Fetch the number of views of the current movie
         QSqlQuery viewsQuery;
