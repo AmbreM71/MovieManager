@@ -182,7 +182,9 @@ void MainWindow::editViews() {
     EditViewsDialog* window = new EditViewsDialog(m_ui->MoviesListWidget, m_log);
     window->show();
     if(window->exec() == 1) {
-
+        if (window->edited()) {
+            loadDB();
+        }
     }
 }
 

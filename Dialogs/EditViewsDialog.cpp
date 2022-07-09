@@ -7,6 +7,23 @@ EditViewsDialog::EditViewsDialog(QTableWidget* table, Log* log, QWidget *parent)
     m_MainWindowTable = table;
     m_log = log;
 
+    QObject::connect(m_ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customMenuRequested(QPoint)));
+
+    fillTable();
+
+}
+
+EditViewsDialog::~EditViewsDialog() {
+    delete m_ui;
+}
+
+void EditViewsDialog::fillTable() {
+
+    int movieListRowCount = m_ui->tableWidget->rowCount();
+    for(int i=movieListRowCount ; i >= 0 ; i--) {
+        m_ui->tableWidget->removeRow(i);
+    }
+
     QString name = m_MainWindowTable->item(m_MainWindowTable->currentRow(),0)->text();
     QString releaseYear = m_MainWindowTable->item(m_MainWindowTable->currentRow(),1)->text();
     QString entriesFR = m_MainWindowTable->item(m_MainWindowTable->currentRow(),5)->text();
@@ -37,6 +54,31 @@ EditViewsDialog::EditViewsDialog(QTableWidget* table, Log* log, QWidget *parent)
     }
 }
 
-EditViewsDialog::~EditViewsDialog() {
-    delete m_ui;
+
+void EditViewsDialog::customMenuRequested(QPoint pos) {
+    QMenu *menu = new QMenu(this);
+    QAction* deleteAction = new QAction("Supprimer", this);
+    deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
+    menu->addAction(deleteAction);
+    QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteView()));
+    menu->popup(m_ui->tableWidget->viewport()->mapToGlobal(pos));
+}
+
+bool EditViewsDialog::edited() {
+    return m_edited;
+}
+
+void EditViewsDialog::deleteView() {
+    QSqlQuery deleteQuery;
+
+    QString name = m_MainWindowTable->item(m_MainWindowTable->currentRow(),0)->text();
+    QString releaseYear = m_MainWindowTable->item(m_MainWindowTable->currentRow(),1)->text();
+    QString entriesFR = m_MainWindowTable->item(m_MainWindowTable->currentRow(),5)->text();
+    QString rating = m_MainWindowTable->item(m_MainWindowTable->currentRow(),6)->text();
+    QString viewDate = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),1)->text();
+    QString viewType = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),2)->text();
+
+    deleteQuery.exec("DELETE FROM movieViews WHERE Name='"+name+"' AND ReleaseYear='"+releaseYear+"' AND EntriesFR='"+entriesFR+"' AND Rating='"+rating+"' AND ViewDate='"+viewDate+"' AND ViewType='"+viewType+"';");
+    fillTable();
+    m_edited = true;
 }

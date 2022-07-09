@@ -30,3 +30,6 @@ FORMS += \
     Dialogs/LogDialog.ui \
     Dialogs/OptionsDialog.ui \
     MainWindow.ui
+
+RESOURCES += \
+    MovieManager.qrc
