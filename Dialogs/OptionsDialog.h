@@ -11,12 +11,15 @@ class OptionsDialog : public QDialog
 {
     Q_OBJECT
 
-public:
-    explicit OptionsDialog(QWidget *parent = nullptr);
-    ~OptionsDialog();
+    private:
+        Ui::OptionsDialog* m_ui;
+        bool* m_matrixMode;
 
-private:
-    Ui::OptionsDialog *ui;
+    public:
+        explicit OptionsDialog(bool* matrixMode, QWidget *parent = nullptr);
+        ~OptionsDialog();
+
+
 };
 
 #endif // OPTIONSDIALOG_H

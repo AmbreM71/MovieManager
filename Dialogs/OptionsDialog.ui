@@ -18,17 +18,17 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="1">
-    <widget class="QComboBox" name="comboBox"/>
+    <widget class="QComboBox" name="LanguageCombobox"/>
    </item>
    <item row="0" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="LanguageLabel">
      <property name="text">
       <string>Langue</string>
      </property>
     </widget>
    </item>
    <item row="3" column="0" colspan="2">
-    <spacer name="verticalSpacer">
+    <spacer name="VerticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -41,14 +41,14 @@
     </spacer>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="ThemeLabel">
      <property name="text">
       <string>Thème</string>
      </property>
     </widget>
    </item>
    <item row="4" column="0" colspan="2">
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="QDialogButtonBox" name="ButtonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -58,7 +58,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QComboBox" name="comboBox_2">
+    <widget class="QComboBox" name="ThemeCombobox">
      <item>
       <property name="text">
        <string>Classique</string>
@@ -82,7 +82,7 @@
     </widget>
    </item>
    <item row="2" column="0" colspan="2">
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="MatrixModeCheckbox">
      <property name="toolTip">
       <string>La cuillère n’existe pas.</string>
      </property>
@@ -96,7 +96,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>ButtonBox</sender>
    <signal>accepted()</signal>
    <receiver>OptionsDialog</receiver>
    <slot>accept()</slot>
@@ -112,7 +112,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>ButtonBox</sender>
    <signal>rejected()</signal>
    <receiver>OptionsDialog</receiver>
    <slot>reject()</slot>

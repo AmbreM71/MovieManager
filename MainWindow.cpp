@@ -127,6 +127,10 @@ void MainWindow::loadDB(bool isFiltered) {
         entriesFR->setText(moviesQuery.value(2).toString());
         rating->setText(moviesQuery.value(3).toString());
 
+        if((name->text() == "Matrix" || name->text() == "The Matrix") && m_matrixMode) {
+            name->setForeground(QBrush(QColor(0,150,0)));
+        }
+
         //Creates a new row on the table
         m_ui->MoviesListWidget->insertRow(m_ui->MoviesListWidget->rowCount());
 
@@ -223,10 +227,11 @@ void MainWindow::openAbout() {
 }
 
 void MainWindow::openSettings() {
-    OptionsDialog* window = new OptionsDialog();
+    OptionsDialog* window = new OptionsDialog(&m_matrixMode);
     window->show();
     if(window->exec() == 1) {
-
+        delete window;
+        loadDB();
     }
 }
 

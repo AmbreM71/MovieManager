@@ -32,6 +32,8 @@ class MainWindow : public QMainWindow {
         Log* m_log;
         std::tm* m_now;
 
+        bool m_matrixMode = false;
+
         //Filter variables
         QString m_filter_name = "";
         int m_filter_minYear = 0,
