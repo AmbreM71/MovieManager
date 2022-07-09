@@ -177,6 +177,7 @@ void MainWindow::addView() {
         if(!query.exec()){
             m_log->append("Erreur lors de l'ajout dans la base de données, plus d'informations ci-dessous :\nCode d'erreur "+query.lastError().nativeErrorCode()+" : "+query.lastError().text());
         }
+        fillGlobalStats();
         loadDB();
     }
 }
@@ -187,6 +188,7 @@ void MainWindow::editViews() {
     if(window->exec() == 1) {
         if (window->edited()) {
             loadDB();
+            fillGlobalStats();
         }
     }
 }
