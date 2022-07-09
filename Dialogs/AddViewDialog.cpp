@@ -44,6 +44,9 @@ QString AddViewDialog::getViewDate() {
 int AddViewDialog::getRating() {
     return m_ui->MovieRatingInput->value();
 }
+int AddViewDialog::getEntries() {
+    return m_ui->EntriesInput->value();
+}
 
 void AddViewDialog::comboboxChanged() {
     //If no movie is selected in combobox
@@ -51,10 +54,12 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieNameInput->setEnabled(true);
         m_ui->MovieReleaseYearInput->setEnabled(true);
         m_ui->MovieRatingInput->setEnabled(true);
+        m_ui->EntriesInput->setEnabled(true);
     }
     else {
         m_ui->MovieNameInput->setEnabled(false);
         m_ui->MovieReleaseYearInput->setEnabled(false);
         m_ui->MovieRatingInput->setEnabled(false);
+        m_ui->EntriesInput->setEnabled(false);
     }
 }

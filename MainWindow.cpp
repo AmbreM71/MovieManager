@@ -53,7 +53,7 @@ void MainWindow::databaseConnection() {
                                    "ReleaseYear SMALLINT,"
                                    "ViewDate    DATE,"
                                    "EntriesFR   INT,"
-                                   "Rating       TINYINT(10),"
+                                   "Rating          TINYINT(10),"
                                    "ViewType    VARCHAR(63));";
 
     QSqlQuery movieViewsQuery;
@@ -73,6 +73,7 @@ void MainWindow::loadDB(bool isFiltered) {
         m_ui->MoviesListWidget->removeRow(i);
     }
 
+
     //Fetch every unique movies
     QSqlQuery moviesQuery;
 
@@ -88,6 +89,13 @@ void MainWindow::loadDB(bool isFiltered) {
     }
     else {
         moviesQuery.exec("SELECT Name, ReleaseYear, EntriesFR, Rating FROM movieViews GROUP BY Name, ReleaseYear, EntriesFR, Rating;");
+        m_ui->ResetFiltersButton->setEnabled(false);
+        m_filter_name = "";
+        m_filter_minYear = 0;
+        m_filter_maxYear = 0;
+        m_filter_minRating = 0;
+        m_filter_maxRating = 0;
+        m_filter_minEntries = 0;
     }
 
     while(moviesQuery.next()) {
@@ -159,7 +167,7 @@ void MainWindow::addView() {
             query.bindValue(0, window->getName());
             query.bindValue(1, window->getReleaseYear());
             query.bindValue(4, window->getRating());
-            query.bindValue(5, 0);
+            query.bindValue(5, window->getEntries());
         }
         else {
             QString movieName = window->getComboboxSelectedItem().remove(window->getComboboxSelectedItem().length()-7, window->getComboboxSelectedItem().length());
