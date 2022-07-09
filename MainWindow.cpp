@@ -27,12 +27,12 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
-    m_ui->MoviesListWidget->setColumnWidth(1,90);
-    m_ui->MoviesListWidget->setColumnWidth(2,90);
-    m_ui->MoviesListWidget->setColumnWidth(3,90);
-    m_ui->MoviesListWidget->setColumnWidth(4,90);
-    m_ui->MoviesListWidget->setColumnWidth(5,90);
-    m_ui->MoviesListWidget->setColumnWidth(6,60);
+    m_ui->MoviesListWidget->setColumnWidth(1,100);
+    m_ui->MoviesListWidget->setColumnWidth(2,100);
+    m_ui->MoviesListWidget->setColumnWidth(3,100);
+    m_ui->MoviesListWidget->setColumnWidth(4,100);
+    m_ui->MoviesListWidget->setColumnWidth(5,100);
+    m_ui->MoviesListWidget->setColumnWidth(6,70);
 }
 
 MainWindow::~MainWindow() {
@@ -266,6 +266,7 @@ void MainWindow::fillGlobalStats() {
 
     float avgViews = totalViewQuery.value(0).toFloat()/(float)m_ui->MoviesListWidget->rowCount();
     avgViews = round(avgViews*100)/100;
+    avgRating = round(avgRating*100)/100;
 
     QSqlQuery movieThisYearQuery;
     int movieThisYear=0;
