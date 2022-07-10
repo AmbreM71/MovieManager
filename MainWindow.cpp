@@ -120,15 +120,23 @@ void MainWindow::loadDB(bool isFiltered) {
 
         //Fetch the first view of the current movie
         QSqlQuery firstViewQuery;
-        firstViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' ORDER BY ViewDate ASC LIMIT 1");
+        firstViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
         firstViewQuery.first();
         firstSeen->setText(firstViewQuery.value(0).toString());
 
         //Fetch the last view of the current movie
         QSqlQuery lastViewQuery;
-        lastViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' ORDER BY ViewDate DESC LIMIT 1");
+        lastViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
         lastViewQuery.first();
         lastSeen->setText(lastViewQuery.value(0).toString());
+
+        QSqlQuery hasUnknownView;
+        hasUnknownView.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' AND ViewDate='?'");
+        hasUnknownView.first();
+
+        if(hasUnknownView.value(0).toString() == "?") {
+            firstSeen->setForeground(QBrush(QColor(255,0,0)));
+        }
 
         name->setText(moviesQuery.value(0).toString());
         releaseYear->setText(moviesQuery.value(1).toString());
@@ -183,8 +191,14 @@ void MainWindow::addView() {
             query.bindValue(5, ratingQuery.value(1).toInt());
         }
 
-        query.bindValue(2, window->getViewDate());
-        query.bindValue(3, window->getViewType());
+        if(window->isDateUnknown()) {
+            query.bindValue(2, "?");
+            query.bindValue(3, "?");
+        }
+        else {
+            query.bindValue(2, window->getViewDate());
+            query.bindValue(3, window->getViewType());
+        }
 
         if(!query.exec()){
             m_log->append("Erreur lors de l'ajout dans la base de données, plus d'informations ci-dessous :\nCode d'erreur "+query.lastError().nativeErrorCode()+" : "+query.lastError().text());

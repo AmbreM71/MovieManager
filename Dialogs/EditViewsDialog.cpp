@@ -7,7 +7,7 @@ EditViewsDialog::EditViewsDialog(QTableWidget* table, Log* log, QWidget *parent)
     m_MainWindowTable = table;
     m_log = log;
 
-    QObject::connect(m_ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customMenuRequested(QPoint)));
+    QObject::connect(m_ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
 
     fillTable();
 

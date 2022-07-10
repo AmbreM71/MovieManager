@@ -10,6 +10,7 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     FillMovieComboBox();
 
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
+    QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
 }
 
 AddViewDialog::~AddViewDialog() {
@@ -62,4 +63,19 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieRatingInput->setEnabled(false);
         m_ui->EntriesInput->setEnabled(false);
     }
+}
+
+void AddViewDialog::toggleViewDateInput(int state) {
+    if(state == 2) {
+        m_ui->MovieViewDateInput->setEnabled(false);
+        m_ui->ViewTypeComboBox->setEnabled(false);
+    }
+    else {
+        m_ui->MovieViewDateInput->setEnabled(true);
+        m_ui->ViewTypeComboBox->setEnabled(true);
+    }
+}
+
+bool AddViewDialog::isDateUnknown() {
+    return m_ui->UnknownViewDateCheckbox->isChecked();
 }

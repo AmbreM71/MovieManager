@@ -28,9 +28,11 @@ class AddViewDialog : public QDialog
         QString getViewDate();
         int getRating();
         int getEntries();
+        bool isDateUnknown();
 
     public slots:
         void comboboxChanged();
+        void toggleViewDateInput(int state);
 
 
 };
