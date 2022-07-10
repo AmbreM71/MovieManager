@@ -4,6 +4,10 @@
 FiltersDialog::FiltersDialog(QString* name, int* minYear, int* maxYear, int* minRating, int* maxRating, int* minEntries, QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::FiltersDialog;
     m_ui->setupUi(this);
+
+    m_ui->MaxYearInput->setValue(QDate::currentDate().year());
+    m_ui->MaxYearInput->setMaximum(QDate::currentDate().year());
+
     m_name = name;
     m_minYear = minYear;
     m_maxYear = maxYear;

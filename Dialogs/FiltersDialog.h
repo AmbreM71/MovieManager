@@ -2,6 +2,7 @@
 #define FILTERSDIALOG_H
 
 #include <QDialog>
+#include <QDate>
 
 namespace Ui {
 class FiltersDialog;
