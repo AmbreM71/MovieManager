@@ -141,9 +141,6 @@
    <item row="3" column="1" colspan="3">
     <widget class="QLineEdit" name="MovieNameInput"/>
    </item>
-   <item row="4" column="1" colspan="3">
-    <widget class="QLineEdit" name="MovieReleaseYearInput"/>
-   </item>
    <item row="5" column="1" colspan="3">
     <widget class="QSpinBox" name="MovieRatingInput">
      <property name="maximum">
@@ -238,6 +235,19 @@
        <string>Autre support physique</string>
       </property>
      </item>
+    </widget>
+   </item>
+   <item row="4" column="1" colspan="3">
+    <widget class="QSpinBox" name="MovieReleaseYearInput">
+     <property name="minimum">
+      <number>1870</number>
+     </property>
+     <property name="maximum">
+      <number>2000</number>
+     </property>
+     <property name="value">
+      <number>1900</number>
+     </property>
     </widget>
    </item>
   </layout>
