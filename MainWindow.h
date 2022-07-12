@@ -43,7 +43,6 @@ class MainWindow : public QMainWindow {
         QApplication* m_app;
         QSqlDatabase m_db;
         Log* m_log;
-        std::tm* m_now;
 
         //Setting variables
         bool m_matrixMode;

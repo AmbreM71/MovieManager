@@ -3,6 +3,8 @@
 
 #include <QList>
 #include <QObject>
+#include <QDate>
+#include <QTime>
 
 
 class Log : public QObject {
@@ -11,7 +13,6 @@ class Log : public QObject {
 
     private:
        QList<QString> m_log;
-       std::tm* now;
 
     public:
         Log();

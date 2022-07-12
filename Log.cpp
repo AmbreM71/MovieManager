@@ -5,9 +5,7 @@ Log::Log() {
 }
 
 void Log::append(QString s) {
-    std::time_t t = std::time(0);
-    now = std::localtime(&t);
-    QString datetime = QString::number(now->tm_year+1900) + "-" + QString::number(now->tm_mon+1) + "-" + QString::number(now->tm_mday) + " " + QString::number(now->tm_hour) + ":" + QString::number(now->tm_min) + ":" + QString::number(now->tm_sec);
+    QString datetime = QString::number(QDate::currentDate().year()) + "-" + QString::number(QDate::currentDate().month()) + "-" + QString::number(QDate::currentDate().day()) + " " + QString::number(QTime::currentTime().hour()) + ":" + QString::number(QTime::currentTime().minute()) + ":" + QString::number(QTime::currentTime().second());
     m_log.append(datetime + " : " + s);
     emit logAppended();
 }
