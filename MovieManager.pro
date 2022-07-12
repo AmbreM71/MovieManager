@@ -33,3 +33,6 @@ FORMS += \
 
 RESOURCES += \
     MovieManager.qrc
+
+TRANSLATIONS += Localisation/MovieManager_fr_FR.ts \
+                Localisation/MovieManager_en_US.ts

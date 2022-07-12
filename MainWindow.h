@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QTranslator>
 #include <cmath>
 #include <ctime>
 #include <iostream>
@@ -43,6 +44,7 @@ class MainWindow : public QMainWindow {
         QApplication* m_app;
         QSqlDatabase m_db;
         Log* m_log;
+        QTranslator m_translator;
 
         //Setting variables
         bool m_matrixMode;
@@ -65,6 +67,7 @@ class MainWindow : public QMainWindow {
         void fillGlobalStats();
         void filterTable();
         void setSettings();
+        void refreshLanguage();
         ~MainWindow();
 
     public slots:

@@ -132,21 +132,21 @@
         <item row="3" column="0">
          <widget class="QLabel" name="MovieScreenplayLabel">
           <property name="text">
-           <string>Scénario</string>
+           <string>Scénario :</string>
           </property>
          </widget>
         </item>
         <item row="8" column="0">
          <widget class="QLabel" name="MovieIMDBRateLabel">
           <property name="text">
-           <string>Note IMDB</string>
+           <string>Note IMDb :</string>
           </property>
          </widget>
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="MovieReleaseYearLabel">
           <property name="text">
-           <string>Année de sortie</string>
+           <string>Année de sortie :</string>
           </property>
          </widget>
         </item>
@@ -169,7 +169,7 @@
         <item row="7" column="0">
          <widget class="QLabel" name="MovieCastLabel">
           <property name="text">
-           <string>Casting</string>
+           <string>Casting :</string>
           </property>
          </widget>
         </item>
@@ -192,7 +192,7 @@
         <item row="5" column="0">
          <widget class="QLabel" name="MovieDirectorLabel">
           <property name="text">
-           <string>Réalisation</string>
+           <string>Réalisation :</string>
           </property>
          </widget>
         </item>
@@ -368,7 +368,7 @@
           <item>
            <widget class="QPushButton" name="AdvancedSearchButton">
             <property name="text">
-             <string>Filtrage avancé</string>
+             <string>Filtrer</string>
             </property>
            </widget>
           </item>

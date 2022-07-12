@@ -3,19 +3,21 @@
 
 
 MainWindow::MainWindow(QApplication* app, QWidget *parent) {
-    m_ui = new Ui::MainWindow;
-    m_ui->setupUi(this);
+
     m_app = app;
+    m_ui = new Ui::MainWindow;
     m_log = new Log();
+    m_ui->setupUi(this);
+
+    setSettings();
+    refreshLanguage();
 
     m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << "Nom du film" << "Année\nde sortie" << "Nombre de\nvisionnages" << "Premier\nvisionnage" << "Dernier\nvisionnage" << "Entrées\nen France" << "Note");
 
-    setSettings();
     databaseConnection();
     loadDB();
     fillGlobalStats();
     menuBarConnectors();
-
 
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -251,6 +253,7 @@ void MainWindow::openSettings() {
     window->show();
     if(window->exec() == 1) {
         delete window;
+        refreshLanguage();
         loadDB();
     }
 }
@@ -277,7 +280,28 @@ void MainWindow::menuBarConnectors() {
 void MainWindow::setSettings() {
     m_matrixMode = false;
     m_theme = Theme::MidnightPurple;
-    m_language = Language::French;
+    m_language = Language::English;
+}
+
+void MainWindow::refreshLanguage() {
+    bool successLoad = false;
+
+    if(m_language == Language::English) {
+        if(m_translator.load(":/localisations/Localisation/MovieManager_en_US.qm")) {
+            m_app->installTranslator(&m_translator);
+            successLoad = true;
+        }
+    }
+    else if(m_language == Language::French) {
+        if(m_translator.load(":/localisations/Localisation/MovieManager_fr_FR.qm")) {
+            m_app->installTranslator(&m_translator);
+            successLoad = true;
+        }
+    }
+    if(!successLoad) {
+        m_log->append("Failed to load translation file");
+    }
+    m_ui->retranslateUi(this);
 }
 
 void MainWindow::fillGlobalStats() {

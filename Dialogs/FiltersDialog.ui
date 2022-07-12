@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Filtrage avancé</string>
+   <string>Filtrage</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -87,7 +87,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="NameLabel">
      <property name="text">
-      <string>Nom : </string>
+      <string>Nom</string>
      </property>
     </widget>
    </item>
