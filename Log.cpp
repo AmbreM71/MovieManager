@@ -6,7 +6,7 @@ Log::Log() {
 
 void Log::append(QString s) {
     QString datetime = QString::number(QDate::currentDate().year()) + "-" + QString::number(QDate::currentDate().month()) + "-" + QString::number(QDate::currentDate().day()) + " " + QString::number(QTime::currentTime().hour()) + ":" + QString::number(QTime::currentTime().minute()) + ":" + QString::number(QTime::currentTime().second());
-    m_log.append(datetime + " : " + s);
+    m_log.append(datetime + tr(" : ") + s);
     emit logAppended();
 }
 

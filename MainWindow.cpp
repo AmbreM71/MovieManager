@@ -12,7 +12,7 @@ MainWindow::MainWindow(QApplication* app, QWidget *parent) {
     setSettings();
     refreshLanguage();
 
-    m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << "Nom du film" << "Année\nde sortie" << "Nombre de\nvisionnages" << "Premier\nvisionnage" << "Dernier\nvisionnage" << "Entrées\nen France" << "Note");
+    m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << tr("Nom du film") << tr("Année\nde sortie") << tr("Nombre de\nvisionnages") << tr("Premier\nvisionnage") << tr("Dernier\nvisionnage") << tr("Entrées") << tr("Note"));
 
     databaseConnection();
     loadDB();
@@ -45,7 +45,7 @@ void MainWindow::databaseConnection() {
     m_db.setDatabaseName("movieDatabase.db");
 
     if(!m_db.open()) {
-        m_log->append("Erreur lors de l'ouverture de la base de données");
+        m_log->append(tr("Erreur lors de l'ouverture de la base de données"));
     }
     //Grade and Entries shouldn't be filled when user add a view, Entries should get value from jpbox-office.com and grade only if the movie isn't already in the list
     QString databaseCreationString = "CREATE TABLE movieViews ("
@@ -59,7 +59,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery movieViewsQuery;
 
     if(!movieViewsQuery.exec(databaseCreationString)) {
-        m_log->append("Erreur lors de la création de la base de données, elle existe peut-être déjà");
+        m_log->append(tr("Erreur lors de la création de la base de données, elle existe peut-être déjà"));
     }
 
 }
@@ -201,7 +201,7 @@ void MainWindow::addView() {
         }
 
         if(!query.exec()){
-            m_log->append("Erreur lors de l'ajout dans la base de données, plus d'informations ci-dessous :\nCode d'erreur "+query.lastError().nativeErrorCode()+" : "+query.lastError().text());
+            m_log->append(tr("Erreur lors de l'ajout dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
         }
         fillGlobalStats();
         loadDB();
@@ -285,21 +285,24 @@ void MainWindow::setSettings() {
 
 void MainWindow::refreshLanguage() {
     bool successLoad = false;
+    QString path;
 
-    if(m_language == Language::English) {
-        if(m_translator.load(":/localisations/Localisation/MovieManager_en_US.qm")) {
-            m_app->installTranslator(&m_translator);
-            successLoad = true;
-        }
+    switch(m_language) {
+        case Language::English :
+            path = ":/localisations/Localisation/MovieManager_en_US.qm";
+            break;
+        case Language::French :
+            path = ":/localisations/Localisation/MovieManager_fr_FR.qm";
+            break;
     }
-    else if(m_language == Language::French) {
-        if(m_translator.load(":/localisations/Localisation/MovieManager_fr_FR.qm")) {
-            m_app->installTranslator(&m_translator);
-            successLoad = true;
-        }
+
+    if(m_translator.load(path)) {
+        m_app->installTranslator(&m_translator);
+        successLoad = true;
     }
+
     if(!successLoad) {
-        m_log->append("Failed to load translation file");
+        m_log->append(tr("Impossible de charger le fichier de langage"));
     }
     m_ui->retranslateUi(this);
 }
@@ -339,10 +342,10 @@ void MainWindow::fillGlobalStats() {
 
 
 
-    m_ui->TotalMoviesLabel->setText("Nombre de films vus : " + QString::number(m_ui->MoviesListWidget->rowCount()));
-    m_ui->TotalViewLabel->setText("Nombre total de visionnages : " + totalViewQuery.value(0).toString());
-    m_ui->AverageViewLabel->setText("Moyenne de visionnages : " + QString::number(avgViews));
-    m_ui->AverageYearLabel->setText("Année moyenne des films vus : " + QString::number(avgMovieYear));
-    m_ui->AverageRatingLabel->setText("Note moyenne : " + QString::number(avgRating));
-    m_ui->ViewThisYear->setText("Films vus cette année : " + QString::number(movieThisYear));
+    m_ui->TotalMoviesLabel->setText(tr("Nombre de films vus : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
+    m_ui->TotalViewLabel->setText(tr("Nombre total de visionnages : ") + totalViewQuery.value(0).toString());
+    m_ui->AverageViewLabel->setText(tr("Moyenne de visionnages : ") + QString::number(avgViews));
+    m_ui->AverageYearLabel->setText(tr("Année moyenne des films vus : ") + QString::number(avgMovieYear));
+    m_ui->AverageRatingLabel->setText(tr("Note moyenne : ") + QString::number(avgRating));
+    m_ui->ViewThisYear->setText(tr("Films vus cette année : ") + QString::number(movieThisYear));
 }

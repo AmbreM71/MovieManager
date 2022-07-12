@@ -33,7 +33,7 @@ void EditViewsDialog::fillTable() {
     query.prepare("SELECT Name, ViewDate, ViewType FROM movieViews WHERE Name='"+name+"' AND ReleaseYear='"+releaseYear+"' AND Entries='"+entriesFR+"' AND Rating='"+rating+"' ORDER BY ViewDate DESC;");
 
     if(!query.exec()){
-        m_log->append("Erreur lors de la récupération dans la base de données, plus d'informations ci-dessous :\nCode d'erreur "+query.lastError().nativeErrorCode()+" : "+query.lastError().text());
+        m_log->append(tr("Erreur lors de la récupération dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
     }
 
     while(query.next()) {
@@ -57,7 +57,7 @@ void EditViewsDialog::fillTable() {
 
 void EditViewsDialog::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
-    QAction* deleteAction = new QAction("Supprimer", this);
+    QAction* deleteAction = new QAction(tr("Supprimer"), this);
     deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
     menu->addAction(deleteAction);
     QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteView()));
