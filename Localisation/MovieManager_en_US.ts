@@ -244,7 +244,7 @@ Error code </translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="34"/>
-        <location filename="../MainWindow.cpp" line="342"/>
+        <location filename="../MainWindow.cpp" line="344"/>
         <source>Nombre de films vus : </source>
         <translation>Number of viewed movies: </translation>
     </message>
@@ -255,31 +255,31 @@ Error code </translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="57"/>
-        <location filename="../MainWindow.cpp" line="344"/>
+        <location filename="../MainWindow.cpp" line="346"/>
         <source>Moyenne de visionnages : </source>
         <translation>Average views: </translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="64"/>
-        <location filename="../MainWindow.cpp" line="346"/>
+        <location filename="../MainWindow.cpp" line="348"/>
         <source>Note moyenne : </source>
         <translation>Average rating: </translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="71"/>
-        <location filename="../MainWindow.cpp" line="343"/>
+        <location filename="../MainWindow.cpp" line="345"/>
         <source>Nombre total de visionnages : </source>
         <translation>Total views: </translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="78"/>
-        <location filename="../MainWindow.cpp" line="345"/>
+        <location filename="../MainWindow.cpp" line="347"/>
         <source>Année moyenne des films vus : </source>
         <translation>Average year of viewed movies: </translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="85"/>
-        <location filename="../MainWindow.cpp" line="347"/>
+        <location filename="../MainWindow.cpp" line="349"/>
         <source>Films vus cette année : </source>
         <translation>Viewed movies this year: </translation>
     </message>
@@ -534,19 +534,19 @@ en France</source>
         <translation>Error while database creation, it may already exists</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="204"/>
+        <location filename="../MainWindow.cpp" line="203"/>
         <source>Erreur lors de l&apos;ajout dans la base de données, plus d&apos;informations ci-dessous :
 Code d&apos;erreur </source>
         <translation>Error while adding to the database, see more below:
 Error code </translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="204"/>
+        <location filename="../MainWindow.cpp" line="203"/>
         <source> : </source>
         <translation>: </translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="302"/>
+        <location filename="../MainWindow.cpp" line="304"/>
         <source>Impossible de charger le fichier de langage</source>
         <translation>Unable to load translation file</translation>
     </message>
@@ -590,8 +590,12 @@ Error code </translation>
     </message>
     <message>
         <location filename="../Dialogs/OptionsDialog.ui" line="85"/>
+        <source>OLED</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Amoled</source>
-        <translation>OLED</translation>
+        <translation type="vanished">OLED</translation>
     </message>
     <message>
         <location filename="../Dialogs/OptionsDialog.ui" line="90"/>

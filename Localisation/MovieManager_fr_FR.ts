@@ -235,7 +235,7 @@ Code d&apos;erreur </source>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="34"/>
-        <location filename="../MainWindow.cpp" line="342"/>
+        <location filename="../MainWindow.cpp" line="344"/>
         <source>Nombre de films vus : </source>
         <translation></translation>
     </message>
@@ -246,31 +246,31 @@ Code d&apos;erreur </source>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="57"/>
-        <location filename="../MainWindow.cpp" line="344"/>
+        <location filename="../MainWindow.cpp" line="346"/>
         <source>Moyenne de visionnages : </source>
         <translation></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="64"/>
-        <location filename="../MainWindow.cpp" line="346"/>
+        <location filename="../MainWindow.cpp" line="348"/>
         <source>Note moyenne : </source>
         <translation></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="71"/>
-        <location filename="../MainWindow.cpp" line="343"/>
+        <location filename="../MainWindow.cpp" line="345"/>
         <source>Nombre total de visionnages : </source>
         <translation></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="78"/>
-        <location filename="../MainWindow.cpp" line="345"/>
+        <location filename="../MainWindow.cpp" line="347"/>
         <source>Année moyenne des films vus : </source>
         <translation></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="85"/>
-        <location filename="../MainWindow.cpp" line="347"/>
+        <location filename="../MainWindow.cpp" line="349"/>
         <source>Films vus cette année : </source>
         <translation></translation>
     </message>
@@ -494,18 +494,18 @@ visionnage</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="204"/>
+        <location filename="../MainWindow.cpp" line="203"/>
         <source>Erreur lors de l&apos;ajout dans la base de données, plus d&apos;informations ci-dessous :
 Code d&apos;erreur </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="204"/>
+        <location filename="../MainWindow.cpp" line="203"/>
         <source> : </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="302"/>
+        <location filename="../MainWindow.cpp" line="304"/>
         <source>Impossible de charger le fichier de langage</source>
         <translation></translation>
     </message>
@@ -549,7 +549,7 @@ Code d&apos;erreur </source>
     </message>
     <message>
         <location filename="../Dialogs/OptionsDialog.ui" line="85"/>
-        <source>Amoled</source>
+        <source>OLED</source>
         <translation></translation>
     </message>
     <message>

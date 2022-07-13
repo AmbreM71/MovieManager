@@ -31,7 +31,7 @@ class MainWindow : public QMainWindow {
         enum Theme {
             Classic = 0,
             Dark = 1,
-            AMOLED = 2,
+            OLED = 2,
             MidnightPurple = 3,
         };
 
@@ -61,7 +61,7 @@ class MainWindow : public QMainWindow {
 
 
     public:
-        explicit MainWindow(QApplication* app, QWidget *parent = nullptr);
+        explicit MainWindow(QApplication* app, QWidget* parent = nullptr);
         void databaseConnection();
         void loadDB(bool isFiltered = false);
         void fillGlobalStats();

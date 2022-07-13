@@ -2,7 +2,7 @@
 #include "ui_MainWindow.h"
 
 
-MainWindow::MainWindow(QApplication* app, QWidget *parent) {
+MainWindow::MainWindow(QApplication* app, QWidget* parent) {
 
     m_app = app;
     m_ui = new Ui::MainWindow;
@@ -133,8 +133,7 @@ void MainWindow::loadDB(bool isFiltered) {
         QSqlQuery hasUnknownView;
         hasUnknownView.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' AND ViewDate='?'");
         hasUnknownView.first();
-
-        if(hasUnknownView.value(0).toString() == "?") {
+        if(!hasUnknownView.isNull(0)) {
             firstSeen->setForeground(QBrush(QColor(255,0,0)));
         }
 
