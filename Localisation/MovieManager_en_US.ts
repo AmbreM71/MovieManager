@@ -316,22 +316,22 @@ Error code </translation>
     <message>
         <location filename="../MainWindow.ui" line="314"/>
         <source>ReleaseYear</source>
-        <translation>Release Year</translation>
+        <translation>Release year</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="319"/>
         <source>Views Count</source>
-        <translation></translation>
+        <translation>Views count</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="324"/>
         <source>1st view</source>
-        <translation></translation>
+        <translation>First view</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="329"/>
         <source>last view</source>
-        <translation></translation>
+        <translation>Last view</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="339"/>
@@ -493,8 +493,7 @@ year</translation>
         <location filename="../MainWindow.cpp" line="15"/>
         <source>Nombre de
 visionnages</source>
-        <translation>Number of
-views</translation>
+        <translation>Views count</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="15"/>

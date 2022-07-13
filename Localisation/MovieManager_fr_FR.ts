@@ -282,32 +282,36 @@ Code d&apos;erreur </source>
     <message>
         <location filename="../MainWindow.ui" line="309"/>
         <source>Name</source>
-        <translation></translation>
+        <translation>Nom du film</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="314"/>
         <source>ReleaseYear</source>
-        <translation></translation>
+        <translation>Année
+de sortie</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="319"/>
         <source>Views Count</source>
-        <translation></translation>
+        <translation>Nombre de
+visionnages</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="324"/>
         <source>1st view</source>
-        <translation></translation>
+        <translation>Premier
+visionnage</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="329"/>
         <source>last view</source>
-        <translation></translation>
+        <translation>Dernier
+visionnage</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="339"/>
         <source>Rating</source>
-        <translation></translation>
+        <translation>Note</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="351"/>
