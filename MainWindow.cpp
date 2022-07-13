@@ -9,8 +9,11 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     m_log = new Log();
     m_ui->setupUi(this);
 
+
+
     setSettings();
     refreshLanguage();
+    refreshTheme();
 
     m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << tr("Nom du film") << tr("Année\nde sortie") << tr("Nombre de\nvisionnages") << tr("Premier\nvisionnage") << tr("Dernier\nvisionnage") << tr("Entrées") << tr("Note"));
 
@@ -28,7 +31,6 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     m_ui->MoviesListWidget->setColumnWidth(4,100);
     m_ui->MoviesListWidget->setColumnWidth(5,100);
     m_ui->MoviesListWidget->setColumnWidth(6,70);
-
 
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
     QObject::connect(m_ui->ManageMovieViewsButton, SIGNAL(clicked()), this, SLOT(editViews()));
@@ -253,6 +255,7 @@ void MainWindow::openSettings() {
     if(window->exec() == 1) {
         delete window;
         refreshLanguage();
+        refreshTheme();
         loadDB();
     }
 }
@@ -304,6 +307,30 @@ void MainWindow::refreshLanguage() {
         m_log->append(tr("Impossible de charger le fichier de langage"));
     }
     m_ui->retranslateUi(this);
+}
+
+void MainWindow::refreshTheme() {
+    QString path;
+
+    switch(m_theme) {
+        case Theme::Classic :
+            path = ":/styles/Styles/classic.qss";
+            break;
+        case Theme::Dark :
+            path = ":/styles/Styles/dark.qss";
+            break;
+        case Theme::MidnightPurple :
+            path = ":/styles/Styles/midnightPurple.qss";
+            break;
+        case Theme::OLED :
+            path = ":/styles/Styles/OLED.qss";
+            break;
+    }
+
+    QFile qss(path);
+    qss.open(QFile::ReadOnly);
+    qApp->setStyleSheet(qss.readAll());
+    qss.close();
 }
 
 void MainWindow::fillGlobalStats() {

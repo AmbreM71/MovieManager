@@ -6,6 +6,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QTranslator>
+#include <QFile>
 #include <cmath>
 #include <ctime>
 #include <iostream>
@@ -68,6 +69,7 @@ class MainWindow : public QMainWindow {
         void filterTable();
         void setSettings();
         void refreshLanguage();
+        void refreshTheme();
         ~MainWindow();
 
     public slots:

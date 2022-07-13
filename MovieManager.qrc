@@ -6,4 +6,7 @@
         <file>Localisation/MovieManager_en_US.qm</file>
         <file>Localisation/MovieManager_fr_FR.qm</file>
     </qresource>
+    <qresource prefix="/styles">
+        <file>Styles/dark.qss</file>
+    </qresource>
 </RCC>
