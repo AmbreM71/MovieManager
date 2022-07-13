@@ -323,7 +323,7 @@ void MainWindow::refreshTheme() {
             path = ":/styles/Styles/midnightPurple.qss";
             break;
         case Theme::OLED :
-            path = ":/styles/Styles/OLED.qss";
+            path = ":/styles/Styles/oled.qss";
             break;
     }
 

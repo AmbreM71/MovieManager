@@ -8,5 +8,8 @@
     </qresource>
     <qresource prefix="/styles">
         <file>Styles/dark.qss</file>
+        <file>Styles/midnightPurple.qss</file>
+        <file>Styles/classic.qss</file>
+        <file>Styles/oled.qss</file>
     </qresource>
 </RCC>
