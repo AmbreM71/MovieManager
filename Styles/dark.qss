@@ -150,12 +150,12 @@ QComboBox::selected {
         padding-bottom: 0.125em;
 }
 
-QComboBox QAbstractItemView::item, QListWidget::item{
+QComboBox QAbstractItemView::item {
     border: 1px solid transparent;
     background-color:#222;
 }
 
-QComboBox QAbstractItemView::item:hover, QListWidget::item:hover{
+QComboBox QAbstractItemView::item:hover {
     border: 1px solid #713a7a;
     background-color:#333;
 }
