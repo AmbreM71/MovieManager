@@ -307,6 +307,7 @@ void MainWindow::refreshLanguage() {
         m_log->append(tr("Impossible de charger le fichier de langage"));
     }
     m_ui->retranslateUi(this);
+    fillGlobalStats();
 }
 
 void MainWindow::refreshTheme() {
