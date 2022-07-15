@@ -281,7 +281,7 @@ void MainWindow::menuBarConnectors() {
 
 void MainWindow::setSettings() {
     m_matrixMode = false;
-    m_theme = Theme::Classic;
+    m_theme = Theme::Dark;
     m_language = Language::English;
 }
 
