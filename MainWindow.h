@@ -14,6 +14,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "Log.h"
 
@@ -88,6 +89,8 @@ class MainWindow : public QMainWindow {
         void openAbout();
         void openSettings();
         void resetFilters();
+        void importDB();
+        void exportDB();
 
 };
 

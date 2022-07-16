@@ -175,6 +175,43 @@ void MainWindow::loadDB(bool isFiltered) {
     }
 }
 
+void MainWindow::importDB() {
+
+}
+
+void MainWindow::exportDB() {
+    QString file = QFileDialog::getSaveFileName(this, tr("Exporter"), QString(), "JSON (*.json)");  //Get the save link
+    //Creates a QFile with the fetched path
+    QFile jsonFile(file);
+    //Test if the file is correctly opened
+    if (!jsonFile.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, tr("Erreur"), jsonFile.errorString());
+    }
+
+    QJsonObject moviesObject;
+
+    QSqlQuery moviesQuery;
+    moviesQuery.exec("SELECT Name, ReleaseYear, ViewDate, Entries, Rating, ViewType FROM movieViews GROUP BY Name, ReleaseYear, Entries, Rating;");
+    int i=0;
+    while(moviesQuery.next()) {
+        i++;
+        qDebug() << moviesQuery.value(0).toString();
+
+        QJsonObject movieObject;
+
+        movieObject.insert("Name",QJsonValue::fromVariant(moviesQuery.value(0).toString()));
+        movieObject.insert("ReleaseYear",QJsonValue::fromVariant(moviesQuery.value(1).toString()));
+        movieObject.insert("ViewDate",QJsonValue::fromVariant(moviesQuery.value(2).toString()));
+        movieObject.insert("Entries",QJsonValue::fromVariant(moviesQuery.value(3).toString()));
+        movieObject.insert("Rating",QJsonValue::fromVariant(moviesQuery.value(4).toString()));
+        movieObject.insert("ViewType",QJsonValue::fromVariant(moviesQuery.value(5).toString()));
+
+        moviesObject.insert("movie" + QString::fromStdString(std::to_string(i)), movieObject);
+    }
+    jsonFile.write(QJsonDocument(moviesObject).toJson(QJsonDocument::Indented));
+    jsonFile.close();
+}
+
 void MainWindow::addView() {
     AddViewDialog* window = new AddViewDialog();
     window->show();
@@ -289,6 +326,9 @@ void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->actionLog, SIGNAL(triggered()), this, SLOT(openLog()));
     QObject::connect(m_ui->action_Propos, SIGNAL(triggered()), this, SLOT(openAbout()));
     QObject::connect(m_ui->actionPr_f_rences, SIGNAL(triggered()), this, SLOT(openSettings()));
+    QObject::connect(m_ui->actionImporter, SIGNAL(triggered()), this, SLOT(importDB()));
+    QObject::connect(m_ui->actionExporter, SIGNAL(triggered()), this, SLOT(exportDB()));
+
 
 }
 
