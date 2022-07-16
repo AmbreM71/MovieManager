@@ -82,7 +82,7 @@ void MainWindow::loadDB(bool isFiltered) {
     if(isFiltered) {
 
         moviesQuery.exec("SELECT Name, ReleaseYear, Entries, Rating FROM movieViews "
-                         "WHERE Name LIKE '%" + m_filter_name + "%'"
+                         "WHERE Name LIKE \"%" + m_filter_name + "%\""
                          "AND ReleaseYear BETWEEN '"+QString::number(m_filter_minYear)+"' AND '"+QString::number(m_filter_maxYear)+"'"
                          "AND Rating BETWEEN '"+QString::number(m_filter_minRating)+"' AND '"+QString::number(m_filter_maxRating)+"'"
                          "AND Entries >= "+QString::number(m_filter_minEntries)+" "
@@ -113,27 +113,26 @@ void MainWindow::loadDB(bool isFiltered) {
         firstSeen->setTextAlignment(Qt::AlignCenter);
         lastSeen->setTextAlignment(Qt::AlignCenter);
 
-
         //Fetch the number of views of the current movie
         QSqlQuery viewsQuery;
-        viewsQuery.exec("SELECT COUNT(*) FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"'");
+        viewsQuery.exec("SELECT COUNT(*) FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"'");
         viewsQuery.first();
         numberOfViews->setText(viewsQuery.value(0).toString());
 
         //Fetch the first view of the current movie
         QSqlQuery firstViewQuery;
-        firstViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
+        firstViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear="+moviesQuery.value(1).toString()+" AND Entries="+moviesQuery.value(2).toString()+" AND Rating="+moviesQuery.value(3).toString()+" AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
         firstViewQuery.first();
         firstSeen->setText(firstViewQuery.value(0).toString());
 
         //Fetch the last view of the current movie
         QSqlQuery lastViewQuery;
-        lastViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
+        lastViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear="+moviesQuery.value(1).toString()+" AND Entries="+moviesQuery.value(2).toString()+" AND Rating="+moviesQuery.value(3).toString()+" AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
         lastViewQuery.first();
         lastSeen->setText(lastViewQuery.value(0).toString());
 
         QSqlQuery hasUnknownView;
-        hasUnknownView.exec("SELECT ViewDate FROM movieViews WHERE Name='"+moviesQuery.value(0).toString()+"' AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"' AND ViewDate='?'");
+        hasUnknownView.exec("SELECT ViewDate FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear="+moviesQuery.value(1).toString()+" AND Entries="+moviesQuery.value(2).toString()+" AND Rating="+moviesQuery.value(3).toString()+" AND ViewDate='?'");
         hasUnknownView.first();
         if(!hasUnknownView.isNull(0)) {
             firstSeen->setForeground(QBrush(QColor(255,0,0)));
@@ -183,7 +182,7 @@ void MainWindow::addView() {
             QString movieYear = window->getComboboxSelectedItem().remove(0, window->getComboboxSelectedItem().length()-4);
 
             QSqlQuery ratingQuery;
-            ratingQuery.exec("SELECT Rating, Entries FROM movieViews WHERE Name='"+movieName+"' AND ReleaseYear='"+movieYear+"' GROUP BY Rating");
+            ratingQuery.exec("SELECT Rating, Entries FROM movieViews WHERE Name=\""+movieName+"\" AND ReleaseYear=\""+movieYear+"\" GROUP BY Rating");
             ratingQuery.first();
 
             query.bindValue(0, movieName);
