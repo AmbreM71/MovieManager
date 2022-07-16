@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QSqlQuery>
+#include <QPushButton>
 
 namespace Ui {
 class AddViewDialog;
@@ -33,6 +34,7 @@ class AddViewDialog : public QDialog
     public slots:
         void comboboxChanged();
         void toggleViewDateInput(int state);
+        void checkValid();
 
 
 };

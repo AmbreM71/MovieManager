@@ -12,8 +12,14 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
 
     FillMovieComboBox();
 
+    m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
+
+    //Connectors to check if input are filled to enable Ok button
+    QObject::connect(m_ui->MovieNameInput, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
+    QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(checkValid()));
 }
 
 AddViewDialog::~AddViewDialog() {
@@ -81,4 +87,19 @@ void AddViewDialog::toggleViewDateInput(int state) {
 
 bool AddViewDialog::isDateUnknown() {
     return m_ui->UnknownViewDateCheckbox->isChecked();
+}
+
+void AddViewDialog::checkValid() {
+    //If movie isn't selected in combobox
+    if(m_ui->ExistingMoviesComboBox->currentIndex() == 0) {
+        if(m_ui->MovieNameInput->text() == "") {
+            m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+        }
+        else {
+            m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+        }
+    }
+    else {
+        m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    }
 }
