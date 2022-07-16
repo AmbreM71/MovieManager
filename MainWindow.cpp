@@ -176,7 +176,27 @@ void MainWindow::loadDB(bool isFiltered) {
 }
 
 void MainWindow::importDB() {
-
+    QString file = QFileDialog::getOpenFileName(this, tr("Exporter"), QString(), "JSON (*.json)");
+    QFile jsonFile(file);
+    //Test if the file is correctly opened
+    if (!jsonFile.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, tr("Erreur"), jsonFile.errorString());
+    }
+    else {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle(tr("Importer"));
+        msgBox.setText(tr("Souhaitez vous remplacer le contenu actuel ou ajouter au contenu actuel ?"));
+        QAbstractButton* appendButton = msgBox.addButton(tr("Ajouter"), QMessageBox::YesRole);
+        QAbstractButton* replaceButton = msgBox.addButton(tr("Remplacer"), QMessageBox::YesRole);
+        msgBox.addButton(tr("Annuler"), QMessageBox::NoRole);
+        msgBox.exec();
+        if (msgBox.clickedButton()==replaceButton) {
+            qDebug() << "Remplacement";
+        }
+        else if (msgBox.clickedButton()==appendButton) {
+            qDebug() << "Ajout";
+        }
+    }
 }
 
 void MainWindow::exportDB() {
@@ -195,7 +215,6 @@ void MainWindow::exportDB() {
     int i=0;
     while(moviesQuery.next()) {
         i++;
-        qDebug() << moviesQuery.value(0).toString();
 
         QJsonObject movieObject;
 
@@ -305,8 +324,8 @@ void MainWindow::openSettings() {
         delete window;
         refreshLanguage();
         refreshTheme();
-        loadDB();
         saveSettings();
+        loadDB();
     }
 }
 
