@@ -160,6 +160,14 @@ void MainWindow::loadDB(bool isFiltered) {
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 6, rating);
     }
     m_ui->MoviesListWidget->setCurrentCell(0,0);
+
+    //Disable Manage views button if no movie the list is empty
+    if(m_ui->MoviesListWidget->currentRow() == -1) {
+        m_ui->ManageMovieViewsButton->setEnabled(false);
+    }
+    else {
+        m_ui->ManageMovieViewsButton->setEnabled(true);
+    }
 }
 
 void MainWindow::addView() {
