@@ -166,12 +166,14 @@ void MainWindow::loadDB(bool isFiltered) {
     }
     m_ui->MoviesListWidget->setCurrentCell(0,0);
 
-    //Disable Manage views button if no movie the list is empty
+    //Disable Manage views and filters button if no movie the list is empty
     if(m_ui->MoviesListWidget->currentRow() == -1) {
         m_ui->ManageMovieViewsButton->setEnabled(false);
+        m_ui->AdvancedSearchButton->setEnabled(false);
     }
     else {
         m_ui->ManageMovieViewsButton->setEnabled(true);
+        m_ui->AdvancedSearchButton->setEnabled(true);
     }
 }
 
@@ -179,7 +181,7 @@ void MainWindow::importDB() {
     QString file = QFileDialog::getOpenFileName(this, tr("Exporter"), QString(), "JSON (*.json)");
     QFile jsonFile(file);
     //Test if the file is correctly opened
-    if (!jsonFile.open(QIODevice::WriteOnly)) {
+    if (!jsonFile.open(QIODevice::ReadOnly)) {
         QMessageBox::critical(this, tr("Erreur"), jsonFile.errorString());
     }
     else {
@@ -190,13 +192,49 @@ void MainWindow::importDB() {
         QAbstractButton* replaceButton = msgBox.addButton(tr("Remplacer"), QMessageBox::YesRole);
         msgBox.addButton(tr("Annuler"), QMessageBox::NoRole);
         msgBox.exec();
-        if (msgBox.clickedButton()==replaceButton) {
-            qDebug() << "Remplacement";
-        }
-        else if (msgBox.clickedButton()==appendButton) {
-            qDebug() << "Ajout";
+        if (msgBox.clickedButton()==replaceButton || msgBox.clickedButton()==appendButton) {
+            bool add = true;
+            if (msgBox.clickedButton()==replaceButton) {
+                QMessageBox confirmReplaceBox;
+                confirmReplaceBox.setText(tr("Cette opération va supprimer tous vos visionnages actuels, voulez-vous continuer ?"));
+                QAbstractButton* yesButton = confirmReplaceBox.addButton(QMessageBox::Yes);
+                confirmReplaceBox.addButton(QMessageBox::No);
+                confirmReplaceBox.exec();
+                if(confirmReplaceBox.clickedButton()==yesButton) {
+                    QSqlQuery deleteQuery;
+                    deleteQuery.exec("DELETE FROM movieViews");
+                }
+                else {
+                    add = false;
+                }
+            }
+            if(add) {
+                QString val = jsonFile.readAll();
+                jsonFile.close();
+                QJsonObject movies = QJsonDocument::fromJson(val.toUtf8()).object();
+                foreach(const QString& key, movies.keys()) {
+                    QJsonObject movie = movies.value(key).toObject();
+
+                    QSqlQuery query;
+                    query.prepare("INSERT INTO movieViews (Name, ReleaseYear, ViewDate, ViewType, Rating, Entries) VALUES (?,?,?,?,?,?);");
+                    query.bindValue(0, movie["Name"].toString());
+                    query.bindValue(1, movie["ReleaseYear"].toInt());
+                    query.bindValue(2, movie["ViewDate"].toString());
+                    query.bindValue(3, movie["ViewType"].toString());
+                    query.bindValue(4, movie["Rating"].toInt());
+                    query.bindValue(5, movie["Entries"].toInt());
+
+                    if(!query.exec()){
+                        m_log->append(tr("aaErreur lors de l'ajout dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
+                    }
+
+                }
+
+            }
         }
     }
+    fillGlobalStats();
+    loadDB();
 }
 
 void MainWindow::exportDB() {
@@ -219,10 +257,10 @@ void MainWindow::exportDB() {
         QJsonObject movieObject;
 
         movieObject.insert("Name",QJsonValue::fromVariant(moviesQuery.value(0).toString()));
-        movieObject.insert("ReleaseYear",QJsonValue::fromVariant(moviesQuery.value(1).toString()));
+        movieObject.insert("ReleaseYear",QJsonValue::fromVariant(moviesQuery.value(1).toInt()));
         movieObject.insert("ViewDate",QJsonValue::fromVariant(moviesQuery.value(2).toString()));
-        movieObject.insert("Entries",QJsonValue::fromVariant(moviesQuery.value(3).toString()));
-        movieObject.insert("Rating",QJsonValue::fromVariant(moviesQuery.value(4).toString()));
+        movieObject.insert("Entries",QJsonValue::fromVariant(moviesQuery.value(3).toInt()));
+        movieObject.insert("Rating",QJsonValue::fromVariant(moviesQuery.value(4).toInt()));
         movieObject.insert("ViewType",QJsonValue::fromVariant(moviesQuery.value(5).toString()));
 
         moviesObject.insert("movie" + QString::fromStdString(std::to_string(i)), movieObject);
