@@ -1,15 +1,20 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include <ShlObj.h>
+
 
 MainWindow::MainWindow(QApplication* app, QWidget* parent) {
+
+    PWSTR path;
+    SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
+    std::wstring wfile(path);
+    m_savepath = QString::fromStdWString(wfile) + "\\MovieManager";
 
     m_app = app;
     m_ui = new Ui::MainWindow;
     m_log = new Log();
     m_ui->setupUi(this);
-
-
 
     setSettings();
     refreshLanguage();
@@ -264,6 +269,7 @@ void MainWindow::openSettings() {
         refreshLanguage();
         refreshTheme();
         loadDB();
+        saveSettings();
     }
 }
 
@@ -287,9 +293,46 @@ void MainWindow::menuBarConnectors() {
 }
 
 void MainWindow::setSettings() {
-    m_matrixMode = false;
-    m_theme = Theme::Dark;
-    m_language = Language::English;
+    QFile file(m_savepath+"/settings.json");
+
+    if(!file.open(QIODevice::ReadOnly)) {
+        m_matrixMode = false;
+        m_theme = Theme::Classic;
+        m_language = Language::English;
+        saveSettings();
+    }
+    else {
+        QString val = file.readAll();
+        file.close();
+        QJsonObject settings = QJsonDocument::fromJson(val.toUtf8()).object();
+
+        m_language = settings["language"].toInt();
+        m_theme = settings["theme"].toInt();
+        m_matrixMode = settings["matrixMode"].toBool();
+    }
+
+}
+
+void MainWindow::saveSettings() {
+    QDir dir(m_savepath);
+    if (!dir.exists())
+        dir.mkpath(".");
+
+    //Creates a QFile with the fetched path
+    QFile jsonFile(m_savepath + "/settings.json");
+    //Test if the file is correctly opened
+    if (!jsonFile.open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(this, tr("Erreur"), jsonFile.errorString());
+    }
+
+    QJsonObject settings;
+
+    settings.insert("language", QJsonValue::fromVariant(m_language));
+    settings.insert("theme", QJsonValue::fromVariant(m_theme));
+    settings.insert("matrixMode", QJsonValue::fromVariant(m_matrixMode));
+
+    jsonFile.write(QJsonDocument(settings).toJson(QJsonDocument::Indented));
+    jsonFile.close();
 }
 
 void MainWindow::refreshLanguage() {

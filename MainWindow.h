@@ -10,6 +10,10 @@
 #include <cmath>
 #include <ctime>
 #include <iostream>
+#include <QDir>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QMessageBox>
 
 #include "Log.h"
 
@@ -47,6 +51,8 @@ class MainWindow : public QMainWindow {
         Log* m_log;
         QTranslator m_translator;
 
+        QString m_savepath = "";
+
         //Setting variables
         bool m_matrixMode;
         int m_language;
@@ -70,6 +76,7 @@ class MainWindow : public QMainWindow {
         void setSettings();
         void refreshLanguage();
         void refreshTheme();
+        void saveSettings();
         ~MainWindow();
 
     public slots:
