@@ -29,9 +29,9 @@
       <item>
        <layout class="QGridLayout" name="GeneralInfosLayout">
         <item row="1" column="0">
-         <widget class="QLabel" name="TotalMoviesLabel">
+         <widget class="QLabel" name="TotalUniqueViewsLabel">
           <property name="text">
-           <string>Nombre de films vus : </string>
+           <string>Nombre de vues uniques : </string>
           </property>
          </widget>
         </item>
@@ -82,7 +82,7 @@
         <item row="5" column="0">
          <widget class="QLabel" name="ViewThisYear">
           <property name="text">
-           <string>Films vus cette année : </string>
+           <string>Vues cette année : </string>
           </property>
          </widget>
         </item>
@@ -408,43 +408,43 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFichier">
+   <widget class="QMenu" name="FileMenu">
     <property name="title">
      <string>Fichier</string>
     </property>
-    <addaction name="actionImporter"/>
-    <addaction name="actionExporter"/>
-    <addaction name="actionQuitter"/>
+    <addaction name="ImportAct"/>
+    <addaction name="ExportAct"/>
+    <addaction name="QuitAct"/>
    </widget>
-   <widget class="QMenu" name="menuAide">
+   <widget class="QMenu" name="HelpMenu">
     <property name="title">
      <string>Aide</string>
     </property>
-    <addaction name="action_Propos"/>
+    <addaction name="AboutAct"/>
    </widget>
-   <widget class="QMenu" name="menuAffichage">
+   <widget class="QMenu" name="ViewMenu">
     <property name="title">
      <string>Affichage</string>
     </property>
-    <addaction name="actionLog"/>
+    <addaction name="LogAct"/>
    </widget>
-   <widget class="QMenu" name="menu_dition">
+   <widget class="QMenu" name="EditMenu">
     <property name="title">
      <string>Édition</string>
     </property>
-    <addaction name="actionPr_f_rences"/>
+    <addaction name="OptionsAct"/>
    </widget>
-   <addaction name="menuFichier"/>
-   <addaction name="menu_dition"/>
-   <addaction name="menuAffichage"/>
-   <addaction name="menuAide"/>
+   <addaction name="FileMenu"/>
+   <addaction name="EditMenu"/>
+   <addaction name="ViewMenu"/>
+   <addaction name="HelpMenu"/>
   </widget>
   <action name="actionEnregistrer">
    <property name="text">
     <string>Enregistrer sous...</string>
    </property>
   </action>
-  <action name="actionQuitter">
+  <action name="QuitAct">
    <property name="text">
     <string>Quitter</string>
    </property>
@@ -460,7 +460,7 @@
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="actionPr_f_rences">
+  <action name="OptionsAct">
    <property name="text">
     <string>Options...</string>
    </property>
@@ -481,7 +481,7 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionLog">
+  <action name="LogAct">
    <property name="text">
     <string>Log</string>
    </property>
@@ -489,17 +489,17 @@
     <string>Alt+L</string>
    </property>
   </action>
-  <action name="action_Propos">
+  <action name="AboutAct">
    <property name="text">
     <string>À Propos</string>
    </property>
   </action>
-  <action name="actionImporter">
+  <action name="ImportAct">
    <property name="text">
     <string>Importer</string>
    </property>
   </action>
-  <action name="actionExporter">
+  <action name="ExportAct">
    <property name="text">
     <string>Exporter</string>
    </property>

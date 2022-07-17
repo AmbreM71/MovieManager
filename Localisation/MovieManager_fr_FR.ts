@@ -9,32 +9,32 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="26"/>
+        <location filename="../Dialogs/AboutDialog.ui" line="77"/>
         <source>GitHub</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="39"/>
+        <location filename="../Dialogs/AboutDialog.ui" line="63"/>
         <source>MovieManager</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="56"/>
+        <location filename="../Dialogs/AboutDialog.ui" line="70"/>
         <source>Un gestionnaire des films que vous avez vus</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="70"/>
+        <location filename="../Dialogs/AboutDialog.ui" line="26"/>
         <source>Qt 6.3.1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="77"/>
+        <location filename="../Dialogs/AboutDialog.ui" line="50"/>
         <source>Développé par AlexM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="84"/>
+        <location filename="../Dialogs/AboutDialog.ui" line="33"/>
         <source>Version dev</source>
         <translation></translation>
     </message>
@@ -87,47 +87,47 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="134"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="138"/>
         <source>Selectionnez un film déjà vu</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="194"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="198"/>
         <source>yyyy-MM-dd</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="205"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="209"/>
         <source>Blu-Ray</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="210"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="214"/>
         <source>Cinéma</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="215"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="219"/>
         <source>DVD</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="220"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="224"/>
         <source>Streaming</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="225"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="229"/>
         <source>Téléchargement</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="230"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="234"/>
         <source>VHS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="235"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="239"/>
         <source>Autre support physique</source>
         <translation></translation>
     </message>
@@ -140,17 +140,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/EditViewsDialog.ui" line="66"/>
+        <location filename="../Dialogs/EditViewsDialog.ui" line="69"/>
         <source>Nom du film</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/EditViewsDialog.ui" line="71"/>
+        <location filename="../Dialogs/EditViewsDialog.ui" line="74"/>
         <source>Visionnage</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Dialogs/EditViewsDialog.ui" line="76"/>
+        <location filename="../Dialogs/EditViewsDialog.ui" line="79"/>
         <source>Type</source>
         <translation></translation>
     </message>
@@ -234,44 +234,32 @@ Code d&apos;erreur </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="34"/>
-        <location filename="../MainWindow.cpp" line="371"/>
-        <source>Nombre de films vus : </source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../MainWindow.ui" line="47"/>
         <source>STATISTIQUES GLOBALES</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="57"/>
-        <location filename="../MainWindow.cpp" line="373"/>
+        <location filename="../MainWindow.cpp" line="493"/>
         <source>Moyenne de visionnages : </source>
         <translation></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="64"/>
-        <location filename="../MainWindow.cpp" line="375"/>
+        <location filename="../MainWindow.cpp" line="496"/>
         <source>Note moyenne : </source>
         <translation></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="71"/>
-        <location filename="../MainWindow.cpp" line="372"/>
+        <location filename="../MainWindow.cpp" line="492"/>
         <source>Nombre total de visionnages : </source>
         <translation></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="78"/>
-        <location filename="../MainWindow.cpp" line="374"/>
+        <location filename="../MainWindow.cpp" line="494"/>
         <source>Année moyenne des films vus : </source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../MainWindow.ui" line="85"/>
-        <location filename="../MainWindow.cpp" line="376"/>
-        <source>Films vus cette année : </source>
         <translation></translation>
     </message>
     <message>
@@ -280,52 +268,64 @@ Code d&apos;erreur </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="312"/>
+        <location filename="../MainWindow.ui" line="318"/>
         <source>Name</source>
         <translation>Nom du film</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="317"/>
+        <location filename="../MainWindow.ui" line="323"/>
         <source>ReleaseYear</source>
         <translation>Année
 de sortie</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="322"/>
+        <location filename="../MainWindow.ui" line="328"/>
         <source>Views Count</source>
         <translation>Nombre de
 visionnages</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="327"/>
+        <location filename="../MainWindow.ui" line="333"/>
         <source>1st view</source>
         <translation>Premier
 visionnage</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="332"/>
+        <location filename="../MainWindow.ui" line="338"/>
         <source>last view</source>
         <translation>Dernier
 visionnage</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="342"/>
+        <location filename="../MainWindow.ui" line="348"/>
         <source>Rating</source>
         <translation>Note</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="354"/>
+        <location filename="../MainWindow.ui" line="360"/>
         <source>Ajouter un visionnage</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="364"/>
+        <location filename="../MainWindow.ui" line="370"/>
         <source>Gérer les visionnages</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="135"/>
         <source>Scénario :</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.ui" line="34"/>
+        <location filename="../MainWindow.cpp" line="491"/>
+        <source>Nombre de vues uniques : </source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.ui" line="85"/>
+        <location filename="../MainWindow.cpp" line="495"/>
+        <source>Vues cette année : </source>
         <translation></translation>
     </message>
     <message>
@@ -349,167 +349,213 @@ visionnage</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="337"/>
+        <location filename="../MainWindow.ui" line="343"/>
         <source>Entries</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="374"/>
+        <location filename="../MainWindow.ui" line="380"/>
         <source>Filtrer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="384"/>
+        <location filename="../MainWindow.ui" line="390"/>
         <source>Réinitialiser les filtres</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="407"/>
+        <location filename="../MainWindow.ui" line="413"/>
         <source>Fichier</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="413"/>
+        <location filename="../MainWindow.ui" line="421"/>
         <source>Aide</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="419"/>
+        <location filename="../MainWindow.ui" line="427"/>
         <source>Affichage</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="425"/>
+        <location filename="../MainWindow.ui" line="433"/>
         <source>Édition</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="436"/>
+        <location filename="../MainWindow.ui" line="444"/>
         <source>Enregistrer sous...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="441"/>
+        <location filename="../MainWindow.ui" line="449"/>
         <source>Quitter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="444"/>
+        <location filename="../MainWindow.ui" line="452"/>
         <source>Ctrl+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="449"/>
+        <location filename="../MainWindow.ui" line="457"/>
         <source>Nouvelle Base de Données...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="452"/>
+        <location filename="../MainWindow.ui" line="460"/>
         <source>Ctrl+N</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="457"/>
+        <location filename="../MainWindow.ui" line="465"/>
         <source>Options...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="462"/>
+        <location filename="../MainWindow.ui" line="470"/>
         <source>Ouvrir une base de donnée...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="465"/>
+        <location filename="../MainWindow.ui" line="473"/>
         <source>Ctrl+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="470"/>
+        <location filename="../MainWindow.ui" line="478"/>
         <source>Enregistrer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="473"/>
+        <location filename="../MainWindow.ui" line="481"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="478"/>
+        <location filename="../MainWindow.ui" line="486"/>
         <source>Log</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="481"/>
+        <location filename="../MainWindow.ui" line="489"/>
         <source>Alt+L</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="486"/>
+        <location filename="../MainWindow.ui" line="494"/>
         <source>À Propos</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="18"/>
+        <location filename="../MainWindow.ui" line="499"/>
+        <location filename="../MainWindow.cpp" line="192"/>
+        <source>Importer</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.ui" line="504"/>
+        <location filename="../MainWindow.cpp" line="184"/>
+        <location filename="../MainWindow.cpp" line="244"/>
+        <source>Exporter</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="26"/>
         <source>Nom du film</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="18"/>
+        <location filename="../MainWindow.cpp" line="26"/>
         <source>Année
 de sortie</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="18"/>
+        <location filename="../MainWindow.cpp" line="26"/>
         <source>Nombre de
 visionnages</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="18"/>
+        <location filename="../MainWindow.cpp" line="26"/>
         <source>Premier
 visionnage</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="18"/>
+        <location filename="../MainWindow.cpp" line="26"/>
         <source>Dernier
 visionnage</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="18"/>
+        <location filename="../MainWindow.cpp" line="26"/>
         <source>Note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="18"/>
+        <location filename="../MainWindow.cpp" line="26"/>
         <source>Entrées</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="50"/>
+        <location filename="../MainWindow.cpp" line="58"/>
         <source>Erreur lors de l&apos;ouverture de la base de données</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="64"/>
+        <location filename="../MainWindow.cpp" line="72"/>
         <source>Erreur lors de la création de la base de données, elle existe peut-être déjà</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="205"/>
+        <location filename="../MainWindow.cpp" line="188"/>
+        <location filename="../MainWindow.cpp" line="249"/>
+        <source>Erreur</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="193"/>
+        <source>Souhaitez vous remplacer le contenu actuel ou ajouter au contenu actuel ?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="194"/>
+        <source>Ajouter</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="195"/>
+        <source>Remplacer</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="196"/>
+        <source>Annuler</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="202"/>
+        <source>Cette opération va supprimer tous vos visionnages actuels, voulez-vous continuer ?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="231"/>
+        <location filename="../MainWindow.cpp" line="314"/>
         <source>Erreur lors de l&apos;ajout dans la base de données, plus d&apos;informations ci-dessous :
 Code d&apos;erreur </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="205"/>
+        <location filename="../MainWindow.cpp" line="231"/>
+        <location filename="../MainWindow.cpp" line="314"/>
         <source> : </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="307"/>
+        <location filename="../MainWindow.cpp" line="426"/>
         <source>Impossible de charger le fichier de langage</source>
         <translation></translation>
     </message>

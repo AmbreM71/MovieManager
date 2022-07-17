@@ -228,7 +228,7 @@ void MainWindow::importDB() {
                     query.bindValue(5, movie["Entries"].toInt());
 
                     if(!query.exec()){
-                        m_log->append(tr("aaErreur lors de l'ajout dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
+                        m_log->append(tr("Erreur lors de l'ajout dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
                     }
 
                 }
@@ -382,12 +382,12 @@ void MainWindow::resetFilters() {
 }
 
 void MainWindow::menuBarConnectors() {
-    QObject::connect(m_ui->actionQuitter, SIGNAL(triggered()), m_app, SLOT(quit()));
-    QObject::connect(m_ui->actionLog, SIGNAL(triggered()), this, SLOT(openLog()));
-    QObject::connect(m_ui->action_Propos, SIGNAL(triggered()), this, SLOT(openAbout()));
-    QObject::connect(m_ui->actionPr_f_rences, SIGNAL(triggered()), this, SLOT(openSettings()));
-    QObject::connect(m_ui->actionImporter, SIGNAL(triggered()), this, SLOT(importDB()));
-    QObject::connect(m_ui->actionExporter, SIGNAL(triggered()), this, SLOT(exportDB()));
+    QObject::connect(m_ui->QuitAct, SIGNAL(triggered()), m_app, SLOT(quit()));
+    QObject::connect(m_ui->LogAct, SIGNAL(triggered()), this, SLOT(openLog()));
+    QObject::connect(m_ui->AboutAct, SIGNAL(triggered()), this, SLOT(openAbout()));
+    QObject::connect(m_ui->OptionsAct, SIGNAL(triggered()), this, SLOT(openSettings()));
+    QObject::connect(m_ui->ImportAct, SIGNAL(triggered()), this, SLOT(importDB()));
+    QObject::connect(m_ui->ExportAct, SIGNAL(triggered()), this, SLOT(exportDB()));
 
 
 }
@@ -488,10 +488,10 @@ void MainWindow::fillGlobalStats() {
 
 
 
-    m_ui->TotalMoviesLabel->setText(tr("Nombre de films vus : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
+    m_ui->TotalUniqueViewsLabel->setText(tr("Nombre de vues uniques : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
     m_ui->TotalViewLabel->setText(tr("Nombre total de visionnages : ") + totalViewQuery.value(0).toString());
     m_ui->AverageViewLabel->setText(tr("Moyenne de visionnages : ") + QString::number(avgViews));
     m_ui->AverageYearLabel->setText(tr("Année moyenne des films vus : ") + QString::number(avgMovieYear));
+    m_ui->ViewThisYear->setText(tr("Vues cette année : ") + QString::number(movieThisYear));
     m_ui->AverageRatingLabel->setText(tr("Note moyenne : ") + QString::number(avgRating));
-    m_ui->ViewThisYear->setText(tr("Films vus cette année : ") + QString::number(movieThisYear));
 }
