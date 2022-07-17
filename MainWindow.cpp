@@ -14,6 +14,7 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     m_app = app;
     m_ui = new Ui::MainWindow;
     m_log = new Log();
+    m_settings = new QSettings("MovieManager", "MovieManager");
     m_ui->setupUi(this);
 
     m_app->setWindowIcon(QIcon(":/icons/Icons/logo.png"));
@@ -392,46 +393,15 @@ void MainWindow::menuBarConnectors() {
 }
 
 void MainWindow::setSettings() {
-    QFile file(m_savepath+"/settings.json");
-
-    if(!file.open(QIODevice::ReadOnly)) {
-        m_matrixMode = false;
-        m_theme = Theme::Classic;
-        m_language = Language::English;
-        saveSettings();
-    }
-    else {
-        QString val = file.readAll();
-        file.close();
-        QJsonObject settings = QJsonDocument::fromJson(val.toUtf8()).object();
-
-        m_language = settings["language"].toInt();
-        m_theme = settings["theme"].toInt();
-        m_matrixMode = settings["matrixMode"].toBool();
-    }
-
+    m_language = m_settings->value("language").toInt();
+    m_theme = m_settings->value("theme").toInt();
+    m_matrixMode = m_settings->value("matrixMode").toBool();
 }
 
 void MainWindow::saveSettings() {
-    QDir dir(m_savepath);
-    if (!dir.exists())
-        dir.mkpath(".");
-
-    //Creates a QFile with the fetched path
-    QFile jsonFile(m_savepath + "/settings.json");
-    //Test if the file is correctly opened
-    if (!jsonFile.open(QIODevice::WriteOnly)) {
-        QMessageBox::warning(this, tr("Erreur"), jsonFile.errorString());
-    }
-
-    QJsonObject settings;
-
-    settings.insert("language", QJsonValue::fromVariant(m_language));
-    settings.insert("theme", QJsonValue::fromVariant(m_theme));
-    settings.insert("matrixMode", QJsonValue::fromVariant(m_matrixMode));
-
-    jsonFile.write(QJsonDocument(settings).toJson(QJsonDocument::Indented));
-    jsonFile.close();
+    m_settings->setValue("language", m_language);
+    m_settings->setValue("theme", m_theme);
+    m_settings->setValue("matrixMode", m_matrixMode);
 }
 
 void MainWindow::refreshLanguage() {

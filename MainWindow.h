@@ -7,14 +7,16 @@
 #include <QSqlError>
 #include <QTranslator>
 #include <QFile>
-#include <cmath>
-#include <ctime>
-#include <iostream>
 #include <QDir>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QSettings>
+
+#include <cmath>
+#include <ctime>
+#include <iostream>
 
 #include "Log.h"
 
@@ -58,6 +60,7 @@ class MainWindow : public QMainWindow {
         bool m_matrixMode;
         int m_language;
         int m_theme;
+        QSettings* m_settings;
 
         //Filter variables
         QString m_filter_name = "";
