@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/icons">
         <file>Icons/remove.png</file>
+        <file>Icons/logo.png</file>
     </qresource>
     <qresource prefix="/localisations">
         <file>Localisation/MovieManager_en_US.qm</file>

@@ -16,6 +16,8 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     m_log = new Log();
     m_ui->setupUi(this);
 
+    m_app->setWindowIcon(QIcon(":/icons/Icons/logo.png"));
+
     setSettings();
     refreshLanguage();
     refreshTheme();
