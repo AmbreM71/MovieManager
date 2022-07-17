@@ -1,3 +1,6 @@
+<p align="center">
+  <img width="128" align="center" src="Icons/logo.png">
+</p>
 <h1 align="center">
     MovieManager
 </h1>
