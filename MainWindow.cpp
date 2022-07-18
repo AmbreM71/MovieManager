@@ -252,7 +252,7 @@ void MainWindow::exportDB() {
     QJsonObject moviesObject;
 
     QSqlQuery moviesQuery;
-    moviesQuery.exec("SELECT Name, ReleaseYear, ViewDate, Entries, Rating, ViewType FROM movieViews GROUP BY Name, ReleaseYear, Entries, Rating;");
+    moviesQuery.exec("SELECT Name, ReleaseYear, ViewDate, Entries, Rating, ViewType FROM movieViews;");
     int i=0;
     while(moviesQuery.next()) {
         i++;
