@@ -94,6 +94,9 @@ class MainWindow : public QMainWindow {
         void resetFilters();
         void importDB();
         void exportDB();
+        void customMenuRequested(QPoint pos);
+        void deleteMovie();
+        void editMovie();
 
 };
 

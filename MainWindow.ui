@@ -230,7 +230,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="contextMenuPolicy">
-         <enum>Qt::ActionsContextMenu</enum>
+         <enum>Qt::CustomContextMenu</enum>
         </property>
         <property name="styleSheet">
          <string notr="true"/>

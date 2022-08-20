@@ -39,6 +39,7 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     QObject::connect(m_ui->ManageMovieViewsButton, SIGNAL(clicked()), this, SLOT(editViews()));
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
     QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
+    QObject::connect(m_ui->MoviesListWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
 }
 
 MainWindow::~MainWindow() {
@@ -374,6 +375,44 @@ void MainWindow::resetFilters() {
     m_filter_maxRating = 0;
     m_filter_minEntries = 0;
     loadDB();
+}
+
+void MainWindow::customMenuRequested(QPoint pos) {
+    QMenu *menu = new QMenu(this);
+
+    QAction* deleteAction = new QAction(tr("Supprimer"), this);
+    deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
+
+    QAction* editAction = new QAction(tr("Modifier"), this);
+    editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
+
+    menu->addAction(deleteAction);
+    menu->addAction(editAction);
+
+    QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteMovie()));
+    QObject::connect(editAction, SIGNAL(triggered()), this, SLOT(editMovie()));
+    menu->popup(m_ui->MoviesListWidget->viewport()->mapToGlobal(pos));
+}
+
+void MainWindow::editMovie() {
+
+}
+
+void MainWindow::deleteMovie() {
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, tr("Supprimer le film"), tr("Êtes-vous sûr de vouloir supprimer le film ? Les visionnages associés seront effacés."));
+    if(reply == QMessageBox::Yes) {
+        QSqlQuery deleteMovieQuery;
+        QString name = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),0)->text();
+        QString releaseYear = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),1)->text();
+        QString entriesFR = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),5)->text();
+        QString rating = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),6)->text();
+
+        deleteMovieQuery.exec("DELETE FROM movieViews WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\";");
+
+        resetFilters();
+        fillGlobalStats();
+    }
 }
 
 void MainWindow::menuBarConnectors() {
