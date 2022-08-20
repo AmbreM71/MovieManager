@@ -6,11 +6,6 @@
 
 MainWindow::MainWindow(QApplication* app, QWidget* parent) {
 
-    PWSTR path;
-    SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
-    std::wstring wfile(path);
-    m_savepath = QString::fromStdWString(wfile) + "\\MovieManager";
-
     m_app = app;
     m_ui = new Ui::MainWindow;
     m_log = new Log();
