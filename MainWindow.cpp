@@ -315,7 +315,7 @@ void MainWindow::addView() {
 }
 
 void MainWindow::editViews() {
-    EditViewsDialog* window = new EditViewsDialog(m_ui->MoviesListWidget, m_log);
+    EditViewsDialog* window = new EditViewsDialog(m_ui->MoviesListWidget, m_log, &m_theme);
     window->show();
     if(window->exec() == 1) {
         if (window->edited()) {
@@ -381,10 +381,20 @@ void MainWindow::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
 
     QAction* deleteAction = new QAction(tr("Supprimer"), this);
-    deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
+    if(m_theme == Theme::Classic) {
+        deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
+    }
+    else {
+        deleteAction->setIcon(QIcon(":/icons/Icons/remove light.png"));
+    }
 
     QAction* editAction = new QAction(tr("Modifier"), this);
-    editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
+    if(m_theme == Theme::Classic) {
+        editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
+    }
+    else {
+        editAction->setIcon(QIcon(":/icons/Icons/edit light.png"));
+    }
 
     menu->addAction(editAction);
     menu->addAction(deleteAction);

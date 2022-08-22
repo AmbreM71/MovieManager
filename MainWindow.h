@@ -19,6 +19,7 @@
 #include <iostream>
 
 #include "Log.h"
+#include "Enums.h"
 
 #include "Dialogs/AddViewDialog.h"
 #include "Dialogs/EditViewsDialog.h"
@@ -36,18 +37,6 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
     private:
-
-        enum Theme {
-            Classic = 0,
-            Dark = 1,
-            OLED = 2,
-            MidnightPurple = 3,
-        };
-
-        enum Language {
-            French = 0,
-            English = 1,
-        };
 
         Ui::MainWindow* m_ui;
         QApplication* m_app;
@@ -73,6 +62,7 @@ class MainWindow : public QMainWindow {
 
 
     public:
+
         explicit MainWindow(QApplication* app, QWidget* parent = nullptr);
         void databaseConnection();
         void loadDB(bool isFiltered = false);

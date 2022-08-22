@@ -9,6 +9,7 @@
 #include <QMenu>
 
 #include "Log.h"
+#include "Enums.h"
 
 namespace Ui {
 class EditViewsDialog;
@@ -23,9 +24,10 @@ class EditViewsDialog : public QDialog
         QTableWidget* m_MainWindowTable;
         Log* m_log;
         bool m_edited = false;
+        int* m_theme;
 
     public:
-        explicit EditViewsDialog(QTableWidget* table, Log* log, QWidget *parent = nullptr);
+        explicit EditViewsDialog(QTableWidget* table, Log* log, int* theme, QWidget *parent = nullptr);
         ~EditViewsDialog();
 
         void fillTable();

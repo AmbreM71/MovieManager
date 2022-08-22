@@ -1,11 +1,12 @@
 #include "EditViewsDialog.h"
 #include "ui_EditViewsDialog.h"
 
-EditViewsDialog::EditViewsDialog(QTableWidget* table, Log* log, QWidget *parent) : QDialog(parent) {
+EditViewsDialog::EditViewsDialog(QTableWidget* table, Log* log, int* theme, QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::EditViewsDialog;
     m_ui->setupUi(this);
     m_MainWindowTable = table;
     m_log = log;
+    m_theme = theme;
 
     QObject::connect(m_ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
 
@@ -58,7 +59,12 @@ void EditViewsDialog::fillTable() {
 void EditViewsDialog::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
     QAction* deleteAction = new QAction(tr("Supprimer"), this);
-    deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
+    if(*m_theme == Theme::Classic) {
+        deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
+    }
+    else {
+        deleteAction->setIcon(QIcon(":/icons/Icons/remove light.png"));
+    }
     menu->addAction(deleteAction);
     QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteView()));
     menu->popup(m_ui->tableWidget->viewport()->mapToGlobal(pos));

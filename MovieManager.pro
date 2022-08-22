@@ -18,6 +18,7 @@ HEADERS += \
     Dialogs/FiltersDialog.h \
     Dialogs/LogDialog.h \
     Dialogs/OptionsDialog.h \
+    Enums.h \
     Log.h \
     MainWindow.h
 
