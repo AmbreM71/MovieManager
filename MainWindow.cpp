@@ -396,6 +396,19 @@ void MainWindow::customMenuRequested(QPoint pos) {
 
 void MainWindow::editMovie() {
 
+    QString name = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),0)->text();
+    QString releaseYear = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),1)->text();
+    QString entriesFR = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),5)->text();
+    QString rating = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),6)->text();
+
+    EditMovieDialog* window = new EditMovieDialog(m_ui->MoviesListWidget);
+    window->show();
+    if(window->exec() == 1) {
+        QSqlQuery editMovieQuery;
+        editMovieQuery.exec("UPDATE movieViews SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+"\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+"\" WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\";");
+        qDebug() << "oui";
+        loadDB(false);
+    }
 }
 
 void MainWindow::deleteMovie() {

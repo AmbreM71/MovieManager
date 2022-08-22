@@ -26,6 +26,7 @@
 #include "Dialogs/LogDialog.h"
 #include "Dialogs/AboutDialog.h"
 #include "Dialogs/OptionsDialog.h"
+#include "Dialogs/EditMovieDialog.h"
 
 namespace Ui {
     class MainWindow;
