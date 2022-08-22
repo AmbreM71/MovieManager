@@ -386,8 +386,8 @@ void MainWindow::customMenuRequested(QPoint pos) {
     QAction* editAction = new QAction(tr("Modifier"), this);
     editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
 
-    menu->addAction(deleteAction);
     menu->addAction(editAction);
+    menu->addAction(deleteAction);
 
     QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteMovie()));
     QObject::connect(editAction, SIGNAL(triggered()), this, SLOT(editMovie()));
