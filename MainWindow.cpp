@@ -416,7 +416,6 @@ void MainWindow::editMovie() {
     if(window->exec() == 1) {
         QSqlQuery editMovieQuery;
         editMovieQuery.exec("UPDATE movieViews SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+"\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+"\" WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\";");
-        qDebug() << "oui";
         loadDB(false);
     }
 }

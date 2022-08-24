@@ -10,6 +10,7 @@
 
 #include "Log.h"
 #include "Enums.h"
+#include "EditViewDialog.h"
 
 namespace Ui {
 class EditViewsDialog;
@@ -36,6 +37,7 @@ class EditViewsDialog : public QDialog
     public slots:
         void customMenuRequested(QPoint pos);
         void deleteView();
+        void editView();
 
 
 };

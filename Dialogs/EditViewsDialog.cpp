@@ -1,7 +1,7 @@
 #include "EditViewsDialog.h"
 #include "ui_EditViewsDialog.h"
 
-EditViewsDialog::EditViewsDialog(QTableWidget* table, Log* log, int* theme, QWidget *parent) : QDialog(parent) {
+EditViewsDialog::EditViewsDialog(QTableWidget* table, Log* log, int* theme, QWidget* parent) : QDialog(parent) {
     m_ui = new Ui::EditViewsDialog;
     m_ui->setupUi(this);
     m_MainWindowTable = table;
@@ -59,14 +59,23 @@ void EditViewsDialog::fillTable() {
 void EditViewsDialog::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
     QAction* deleteAction = new QAction(tr("Supprimer"), this);
+    QAction* editAction = new QAction(tr("Modifier"), this);
+
+
     if(*m_theme == Theme::Classic) {
         deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
+        editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
     }
     else {
         deleteAction->setIcon(QIcon(":/icons/Icons/remove light.png"));
+        editAction->setIcon(QIcon(":/icons/Icons/edit light.png"));
     }
+
+    menu->addAction(editAction);
     menu->addAction(deleteAction);
+
     QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteView()));
+    QObject::connect(editAction, SIGNAL(triggered()), this, SLOT(editView()));
     menu->popup(m_ui->tableWidget->viewport()->mapToGlobal(pos));
 }
 
@@ -87,4 +96,18 @@ void EditViewsDialog::deleteView() {
     deleteQuery.exec("DELETE FROM movieViews WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\" AND ViewDate=\""+viewDate+"\" AND ViewType=\""+viewType+"\";");
     fillTable();
     m_edited = true;
+}
+
+void EditViewsDialog::editView() {
+
+    QString viewDate = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),1)->text();
+    QString viewType = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),2)->text();
+
+    EditViewDialog* window = new EditViewDialog(m_ui->tableWidget, this);
+    window->show();
+    if(window->exec() == 1) {
+        QSqlQuery editMovieQuery;
+        //editMovieQuery.exec("UPDATE movieViews SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+"\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+"\" WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\";");
+        fillTable();
+    }
 }
