@@ -19,6 +19,9 @@ class EditViewDialog : public QDialog {
         explicit EditViewDialog(QTableWidget* table, QWidget* parent = nullptr);
         ~EditViewDialog();
 
+        QString getViewDate();
+        QString getViewType();
+
    public slots:
         void toggleViewDateInput(int state);
 

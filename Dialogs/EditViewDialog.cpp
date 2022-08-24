@@ -24,9 +24,29 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(p
 
 }
 
-EditViewDialog::~EditViewDialog()
-{
+EditViewDialog::~EditViewDialog() {
     delete m_ui;
+}
+
+QString EditViewDialog::getViewDate() {
+    QString year = QString::number(m_ui->ViewDateInput->date().year());
+    QString month = QString::number(m_ui->ViewDateInput->date().month());
+    QString day = QString::number(m_ui->ViewDateInput->date().day());
+
+    QString s = year+"-";
+    if(month.length()==1) {
+        s.append("0");
+    }
+    s.append(month+"-");
+    if(day.length()==1) {
+        s.append("0");
+    }
+    s.append(day);
+    return s;
+}
+
+QString EditViewDialog::getViewType() {
+    return m_ui->SupportInput->currentText();
 }
 
 void EditViewDialog::toggleViewDateInput(int state) {
