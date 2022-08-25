@@ -112,7 +112,12 @@ void EditViewsDialog::editView() {
     window->show();
     if(window->exec() == 1) {
         QSqlQuery editMovieQuery;
-        editMovieQuery.exec("UPDATE movieViews SET ViewDate=\""+window->getViewDate()+"\", ViewType=\""+window->getViewType()+"\" WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\" AND ViewDate=\""+viewDate+"\" AND ViewType=\""+viewType+"\";");
+        if(window->isDateUnknown()) {
+            editMovieQuery.exec("UPDATE movieViews SET ViewDate=\"?\", ViewType=\""+window->getViewType()+"\" WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\" AND ViewDate=\""+viewDate+"\" AND ViewType=\""+viewType+"\";");
+        }
+        else {
+            editMovieQuery.exec("UPDATE movieViews SET ViewDate=\""+window->getViewDate()+"\", ViewType=\""+window->getViewType()+"\" WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\" AND ViewDate=\""+viewDate+"\" AND ViewType=\""+viewType+"\";");
+        }
         fillTable();
         m_edited = true;
     }

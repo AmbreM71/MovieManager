@@ -21,6 +21,7 @@ class EditViewDialog : public QDialog {
 
         QString getViewDate();
         QString getViewType();
+        bool isDateUnknown();
 
    public slots:
         void toggleViewDateInput(int state);

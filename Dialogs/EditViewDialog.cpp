@@ -49,6 +49,10 @@ QString EditViewDialog::getViewType() {
     return m_ui->SupportInput->currentText();
 }
 
+bool EditViewDialog::isDateUnknown() {
+    return m_ui->UnknownViewDateInput->isChecked();
+}
+
 void EditViewDialog::toggleViewDateInput(int state) {
     if(m_ui->UnknownViewDateInput->isChecked()) {
         m_ui->ViewDateInput->setEnabled(false);

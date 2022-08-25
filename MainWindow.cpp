@@ -127,19 +127,31 @@ void MainWindow::loadDB(bool isFiltered) {
         QSqlQuery firstViewQuery;
         firstViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear="+moviesQuery.value(1).toString()+" AND Entries="+moviesQuery.value(2).toString()+" AND Rating="+moviesQuery.value(3).toString()+" AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
         firstViewQuery.first();
-        firstSeen->setText(firstViewQuery.value(0).toString());
+        if(firstViewQuery.value(0).toString()=="") {
+            firstSeen->setText("?");
+        }
+        else {
+            firstSeen->setText(firstViewQuery.value(0).toString());
+        }
 
         //Fetch the last view of the current movie
         QSqlQuery lastViewQuery;
         lastViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear="+moviesQuery.value(1).toString()+" AND Entries="+moviesQuery.value(2).toString()+" AND Rating="+moviesQuery.value(3).toString()+" AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
         lastViewQuery.first();
-        lastSeen->setText(lastViewQuery.value(0).toString());
+        if(lastViewQuery.value(0).toString()=="") {
+            lastSeen->setText("?");
+        }
+        else {
+            lastSeen->setText(lastViewQuery.value(0).toString());
+        }
 
         QSqlQuery hasUnknownView;
         hasUnknownView.exec("SELECT ViewDate FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear="+moviesQuery.value(1).toString()+" AND Entries="+moviesQuery.value(2).toString()+" AND Rating="+moviesQuery.value(3).toString()+" AND ViewDate='?'");
         hasUnknownView.first();
         if(!hasUnknownView.isNull(0)) {
-            firstSeen->setForeground(QBrush(QColor(255,0,0)));
+            if(firstSeen->text()!="?") {
+                firstSeen->setForeground(QBrush(QColor(255,0,0)));
+            }
         }
 
         name->setText(moviesQuery.value(0).toString());
