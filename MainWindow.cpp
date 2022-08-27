@@ -181,11 +181,9 @@ void MainWindow::loadDB(bool isFiltered) {
     //Disable Manage views and filters button if no movie the list is empty
     if(m_ui->MoviesListWidget->currentRow() == -1) {
         m_ui->ManageMovieViewsButton->setEnabled(false);
-        m_ui->AdvancedSearchButton->setEnabled(false);
     }
     else {
         m_ui->ManageMovieViewsButton->setEnabled(true);
-        m_ui->AdvancedSearchButton->setEnabled(true);
     }
 }
 
