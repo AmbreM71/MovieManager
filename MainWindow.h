@@ -28,6 +28,7 @@
 #include "Dialogs/AboutDialog.h"
 #include "Dialogs/OptionsDialog.h"
 #include "Dialogs/EditMovieDialog.h"
+#include "Dialogs/ChartsDialog.h"
 
 namespace Ui {
     class MainWindow;
@@ -82,6 +83,7 @@ class MainWindow : public QMainWindow {
         void openLog();
         void openAbout();
         void openSettings();
+        void openCharts();
         void resetFilters();
         void importDB();
         void exportDB();

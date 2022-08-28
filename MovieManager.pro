@@ -1,6 +1,7 @@
 SOURCES += \
     Dialogs/AboutDialog.cpp \
     Dialogs/AddViewDialog.cpp \
+    Dialogs/ChartsDialog.cpp \
     Dialogs/EditMovieDialog.cpp \
     Dialogs/EditViewDialog.cpp \
     Dialogs/EditViewsDialog.cpp \
@@ -14,6 +15,7 @@ SOURCES += \
 HEADERS += \
     Dialogs/AboutDialog.h \
     Dialogs/AddViewDialog.h \
+    Dialogs/ChartsDialog.h \
     Dialogs/EditMovieDialog.h \
     Dialogs/EditViewDialog.h \
     Dialogs/EditViewsDialog.h \
@@ -25,11 +27,13 @@ HEADERS += \
     MainWindow.h
 
 QT += widgets \
-      sql
+      sql \
+      charts
 
 FORMS += \
     Dialogs/AboutDialog.ui \
     Dialogs/AddViewDialog.ui \
+    Dialogs/ChartsDialog.ui \
     Dialogs/EditMovieDialog.ui \
     Dialogs/EditViewDialog.ui \
     Dialogs/EditViewsDialog.ui \

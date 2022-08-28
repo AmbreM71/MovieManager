@@ -459,8 +459,7 @@ void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->OptionsAct, SIGNAL(triggered()), this, SLOT(openSettings()));
     QObject::connect(m_ui->ImportAct, SIGNAL(triggered()), this, SLOT(importDB()));
     QObject::connect(m_ui->ExportAct, SIGNAL(triggered()), this, SLOT(exportDB()));
-
-
+    QObject::connect(m_ui->ChartAct, SIGNAL(triggered()), this, SLOT(openCharts()));
 }
 
 void MainWindow::setSettings() {
@@ -565,4 +564,14 @@ void MainWindow::fillGlobalStats() {
     m_ui->AverageYearLabel->setText(tr("Année moyenne des films vus : ") + QString::number(avgMovieYear));
     m_ui->ViewThisYear->setText(tr("Vues cette année : ") + QString::number(movieThisYear));
     m_ui->AverageRatingLabel->setText(tr("Note moyenne : ") + QString::number(avgRating));
+}
+
+void MainWindow::openCharts() {
+    if(ChartsDialog::instancesCount() == 0) {
+        ChartsDialog* window = new ChartsDialog(this);
+        window->show();
+        if(window->exec() == 0) {
+            delete window;
+        }
+    }
 }
