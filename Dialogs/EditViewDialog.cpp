@@ -6,10 +6,12 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(p
     m_ui = new Ui::EditViewDialog;
     m_ui->setupUi(this);
 
+    m_ui->ViewDateInput->setDate(QDate::currentDate());
+
     QObject::connect(m_ui->UnknownViewDateInput, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
+    QObject::connect(m_ui->UnknownViewTypeInput, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
 
     QString viewDate = table->item(table->currentRow(),1)->text();
-    QString support = table->item(table->currentRow(),2)->text();
     if(viewDate == "?") {
         m_ui->UnknownViewDateInput->setChecked(true);
     }
@@ -20,7 +22,13 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(p
         m_ui->ViewDateInput->setDate(QDate(year, month, day));
     }
 
-    m_ui->SupportInput->setCurrentText(support);
+    QString viewType = table->item(table->currentRow(),2)->text();
+    if(viewType == "?") {
+        m_ui->UnknownViewTypeInput->setChecked(true);
+    }
+    else {
+        m_ui->ViewTypeInput->setCurrentText(viewType);
+    }
 
 }
 
@@ -46,7 +54,7 @@ QString EditViewDialog::getViewDate() {
 }
 
 QString EditViewDialog::getViewType() {
-    return m_ui->SupportInput->currentText();
+    return m_ui->ViewTypeInput->currentText();
 }
 
 bool EditViewDialog::isDateUnknown() {
@@ -59,5 +67,14 @@ void EditViewDialog::toggleViewDateInput(int state) {
     }
     else {
         m_ui->ViewDateInput->setEnabled(true);
+    }
+}
+
+void EditViewDialog::toggleViewTypeInput(int state) {
+    if(m_ui->UnknownViewTypeInput->isChecked()) {
+        m_ui->ViewTypeInput->setEnabled(false);
+    }
+    else {
+        m_ui->ViewTypeInput->setEnabled(true);
     }
 }

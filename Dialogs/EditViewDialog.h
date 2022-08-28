@@ -25,6 +25,7 @@ class EditViewDialog : public QDialog {
 
    public slots:
         void toggleViewDateInput(int state);
+        void toggleViewTypeInput(int state);
 
 };
 

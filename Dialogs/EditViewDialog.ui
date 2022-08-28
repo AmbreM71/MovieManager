@@ -14,34 +14,13 @@
    <string>Modifier le visionnage</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QLabel" name="SupportLabel">
-     <property name="text">
-      <string>Support</string>
+   <item row="4" column="0" colspan="3">
+    <widget class="QDialogButtonBox" name="ButtonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="ViewDateLabel">
-     <property name="text">
-      <string>Date de visionnage</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QDateEdit" name="ViewDateInput">
-     <property name="minimumDateTime">
-      <datetime>
-       <hour>0</hour>
-       <minute>0</minute>
-       <second>0</second>
-       <year>1899</year>
-       <month>12</month>
-       <day>29</day>
-      </datetime>
-     </property>
-     <property name="displayFormat">
-      <string>yyyy-MM-dd</string>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -52,8 +31,49 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1" colspan="2">
-    <widget class="QComboBox" name="SupportInput">
+   <item row="0" column="1">
+    <widget class="QDateEdit" name="ViewDateInput">
+     <property name="dateTime">
+      <datetime>
+       <hour>0</hour>
+       <minute>0</minute>
+       <second>0</second>
+       <year>2022</year>
+       <month>1</month>
+       <day>1</day>
+      </datetime>
+     </property>
+     <property name="minimumDateTime">
+      <datetime>
+       <hour>0</hour>
+       <minute>0</minute>
+       <second>0</second>
+       <year>1899</year>
+       <month>12</month>
+       <day>28</day>
+      </datetime>
+     </property>
+     <property name="displayFormat">
+      <string>yyyy-MM-dd</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="ViewDateLabel">
+     <property name="text">
+      <string>Date de visionnage</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QCheckBox" name="UnknownViewTypeInput">
+     <property name="text">
+      <string>inconnu</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="ViewTypeInput">
      <item>
       <property name="text">
        <string>Blu-Ray</string>
@@ -91,13 +111,10 @@
      </item>
     </widget>
    </item>
-   <item row="2" column="0" colspan="3">
-    <widget class="QDialogButtonBox" name="ButtonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   <item row="1" column="0">
+    <widget class="QLabel" name="ViewTypeLabel">
+     <property name="text">
+      <string>Support</string>
      </property>
     </widget>
    </item>

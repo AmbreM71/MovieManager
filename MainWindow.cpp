@@ -310,10 +310,14 @@ void MainWindow::addView() {
 
         if(window->isDateUnknown()) {
             query.bindValue(2, "?");
-            query.bindValue(3, "?");
         }
         else {
             query.bindValue(2, window->getViewDate());
+        }
+        if(window->isTypeUnknown()) {
+            query.bindValue(3, "?");
+        }
+        else {
             query.bindValue(3, window->getViewType());
         }
 

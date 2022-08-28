@@ -30,10 +30,12 @@ class AddViewDialog : public QDialog
         int getRating();
         int getEntries();
         bool isDateUnknown();
+        bool isTypeUnknown();
 
     public slots:
         void comboboxChanged();
         void toggleViewDateInput(int state);
+        void toggleViewTypeInput(int state);
         void checkValid();
 
 
