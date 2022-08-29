@@ -243,8 +243,8 @@ void MainWindow::importDB() {
             }
         }
     }
-    fillGlobalStats();
     loadDB();
+    fillGlobalStats();
 }
 
 void MainWindow::exportDB() {
