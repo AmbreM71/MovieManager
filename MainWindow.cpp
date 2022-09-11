@@ -54,20 +54,33 @@ void MainWindow::databaseConnection() {
     if(!m_db.open()) {
         m_log->append(tr("Erreur lors de l'ouverture de la base de données"));
     }
-    //Grade and Entries shouldn't be filled when user add a view, Entries should get value from jpbox-office.com and grade only if the movie isn't already in the list
-    QString databaseCreationString = "CREATE TABLE movieViews ("
+
+    QString movieDatabaseCreationString = "CREATE TABLE movies ("
+                                   "ID          INTEGER PRIMARY KEY AUTOINCREMENT,"
                                    "Name        VARCHAR(127),"
                                    "ReleaseYear SMALLINT,"
-                                   "ViewDate    DATE,"
                                    "Entries   INT,"
-                                   "Rating          TINYINT(10),"
+                                   "Rating          TINYINT(10));";
+
+    QSqlQuery movieDBQuery;
+
+    if(!movieDBQuery.exec(movieDatabaseCreationString)) {
+        m_log->append(tr("Erreur lors de la création de la table movies, elle existe peut-être déjà"));
+    }
+
+
+    QString ViewsDatabaseCreationString = "CREATE TABLE views ("
+                                   "ID          INTEGER PRIMARY KEY AUTOINCREMENT,"
+                                   "ID_Movie    INTEGER,"
+                                   "ViewDate    DATE,"
                                    "ViewType    VARCHAR(63));";
 
-    QSqlQuery movieViewsQuery;
+    QSqlQuery viewsBDQuery;
 
-    if(!movieViewsQuery.exec(databaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la base de données, elle existe peut-être déjà"));
+    if(!viewsBDQuery.exec(ViewsDatabaseCreationString)) {
+        m_log->append(tr("Erreur lors de la création de la table views, elle existe peut-être déjà"));
     }
+
 
 }
 
@@ -86,7 +99,7 @@ void MainWindow::loadDB(bool isFiltered) {
 
     if(isFiltered) {
 
-        moviesQuery.exec("SELECT Name, ReleaseYear, Entries, Rating FROM movieViews "
+        moviesQuery.exec("SELECT ID, Name, ReleaseYear, Entries, Rating FROM movies "
                          "WHERE Name LIKE \"%" + m_filter_name + "%\""
                          "AND ReleaseYear BETWEEN '"+QString::number(m_filter_minYear)+"' AND '"+QString::number(m_filter_maxYear)+"'"
                          "AND Rating BETWEEN '"+QString::number(m_filter_minRating)+"' AND '"+QString::number(m_filter_maxRating)+"'"
@@ -95,7 +108,7 @@ void MainWindow::loadDB(bool isFiltered) {
         m_ui->ResetFiltersButton->setEnabled(true);
     }
     else {
-        moviesQuery.exec("SELECT Name, ReleaseYear, Entries, Rating FROM movieViews GROUP BY Name, ReleaseYear, Entries, Rating;");
+        moviesQuery.exec("SELECT ID, Name, ReleaseYear, Entries, Rating FROM movies;");
         m_ui->ResetFiltersButton->setEnabled(false);
         m_filter_name = "";
         m_filter_minYear = 0;
@@ -120,13 +133,13 @@ void MainWindow::loadDB(bool isFiltered) {
 
         //Fetch the number of views of the current movie
         QSqlQuery viewsQuery;
-        viewsQuery.exec("SELECT COUNT(*) FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear='"+moviesQuery.value(1).toString()+"' AND Entries='"+moviesQuery.value(2).toString()+"' AND Rating='"+moviesQuery.value(3).toString()+"'");
+        viewsQuery.exec("SELECT COUNT(*) FROM views WHERE ID_Movie='"+moviesQuery.value(0).toString()+"'");
         viewsQuery.first();
         numberOfViews->setText(viewsQuery.value(0).toString());
 
         //Fetch the first view of the current movie
         QSqlQuery firstViewQuery;
-        firstViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear="+moviesQuery.value(1).toString()+" AND Entries="+moviesQuery.value(2).toString()+" AND Rating="+moviesQuery.value(3).toString()+" AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
+        firstViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+moviesQuery.value(0).toString()+"' AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
         firstViewQuery.first();
         if(firstViewQuery.value(0).toString()=="") {
             firstSeen->setText("?");
@@ -137,7 +150,7 @@ void MainWindow::loadDB(bool isFiltered) {
 
         //Fetch the last view of the current movie
         QSqlQuery lastViewQuery;
-        lastViewQuery.exec("SELECT ViewDate FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear="+moviesQuery.value(1).toString()+" AND Entries="+moviesQuery.value(2).toString()+" AND Rating="+moviesQuery.value(3).toString()+" AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
+        lastViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+moviesQuery.value(0).toString()+"' AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
         lastViewQuery.first();
         if(lastViewQuery.value(0).toString()=="") {
             lastSeen->setText("?");
@@ -147,7 +160,7 @@ void MainWindow::loadDB(bool isFiltered) {
         }
 
         QSqlQuery hasUnknownView;
-        hasUnknownView.exec("SELECT ViewDate FROM movieViews WHERE Name=\""+moviesQuery.value(0).toString()+"\" AND ReleaseYear="+moviesQuery.value(1).toString()+" AND Entries="+moviesQuery.value(2).toString()+" AND Rating="+moviesQuery.value(3).toString()+" AND ViewDate='?'");
+        hasUnknownView.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+moviesQuery.value(0).toString()+"' AND ViewDate='?'");
         hasUnknownView.first();
         if(!hasUnknownView.isNull(0)) {
             if(firstSeen->text()!="?") {
@@ -155,10 +168,10 @@ void MainWindow::loadDB(bool isFiltered) {
             }
         }
 
-        name->setText(moviesQuery.value(0).toString());
-        releaseYear->setText(moviesQuery.value(1).toString());
-        Entries->setText(moviesQuery.value(2).toString());
-        rating->setText(moviesQuery.value(3).toString());
+        name->setText(moviesQuery.value(1).toString());
+        releaseYear->setText(moviesQuery.value(2).toString());
+        Entries->setText(moviesQuery.value(3).toString());
+        rating->setText(moviesQuery.value(4).toString());
 
         if((name->text() == "Matrix" || name->text() == "The Matrix") && m_matrixMode) {
             name->setForeground(QBrush(QColor(0,150,0)));
