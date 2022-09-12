@@ -22,13 +22,13 @@ class EditViewsDialog : public QDialog
 
     private:
         Ui::EditViewsDialog* m_ui;
-        QTableWidget* m_MainWindowTable;
+        int* m_ID;
         Log* m_log;
         bool m_edited = false;
         int* m_theme;
 
     public:
-        explicit EditViewsDialog(QTableWidget* table, Log* log, int* theme, QWidget *parent = nullptr);
+        explicit EditViewsDialog(int* ID, Log* log, int* theme, QWidget *parent = nullptr);
         ~EditViewsDialog();
 
         void fillTable();

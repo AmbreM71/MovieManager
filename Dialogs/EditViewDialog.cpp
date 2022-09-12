@@ -61,6 +61,10 @@ bool EditViewDialog::isDateUnknown() {
     return m_ui->UnknownViewDateInput->isChecked();
 }
 
+bool EditViewDialog::isTypeUnknown() {
+    return m_ui->UnknownViewTypeInput->isChecked();
+}
+
 void EditViewDialog::toggleViewDateInput(int state) {
     if(m_ui->UnknownViewDateInput->isChecked()) {
         m_ui->ViewDateInput->setEnabled(false);

@@ -367,7 +367,8 @@ void MainWindow::addView() {
 }
 
 void MainWindow::editViews() {
-    EditViewsDialog* window = new EditViewsDialog(m_ui->MoviesListWidget, m_log, &m_theme);
+    int ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),7)->text().toInt();
+    EditViewsDialog* window = new EditViewsDialog(&ID, m_log, &m_theme);
     window->show();
     if(window->exec() == 1) {
         if (window->edited()) {

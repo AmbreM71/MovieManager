@@ -1,12 +1,14 @@
 #include "EditViewsDialog.h"
 #include "ui_EditViewsDialog.h"
 
-EditViewsDialog::EditViewsDialog(QTableWidget* table, Log* log, int* theme, QWidget* parent) : QDialog(parent) {
+EditViewsDialog::EditViewsDialog(int* ID, Log* log, int* theme, QWidget* parent) : QDialog(parent) {
     m_ui = new Ui::EditViewsDialog;
     m_ui->setupUi(this);
-    m_MainWindowTable = table;
+    m_ID = ID;
     m_log = log;
     m_theme = theme;
+
+    //m_ui->tableWidget->setColumnHidden(0, true);
 
     QObject::connect(m_ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
 
@@ -25,13 +27,8 @@ void EditViewsDialog::fillTable() {
         m_ui->tableWidget->removeRow(i);
     }
 
-    QString name = m_MainWindowTable->item(m_MainWindowTable->currentRow(),0)->text();
-    QString releaseYear = m_MainWindowTable->item(m_MainWindowTable->currentRow(),1)->text();
-    QString entriesFR = m_MainWindowTable->item(m_MainWindowTable->currentRow(),5)->text();
-    QString rating = m_MainWindowTable->item(m_MainWindowTable->currentRow(),6)->text();
-
     QSqlQuery query;
-    query.prepare("SELECT Name, ViewDate, ViewType FROM movieViews WHERE Name=\""+name+"\" AND ReleaseYear="+releaseYear+" AND Entries="+entriesFR+" AND Rating="+rating+" ORDER BY ViewDate DESC;");
+    query.prepare("SELECT ID, ViewDate, ViewType FROM views WHERE ID_Movie="+QString::number(*m_ID)+" ORDER BY ViewDate DESC;");
 
     if(!query.exec()){
         m_log->append(tr("Erreur lors de la récupération dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
@@ -39,17 +36,17 @@ void EditViewsDialog::fillTable() {
 
     while(query.next()) {
 
-         QTableWidgetItem* name = new QTableWidgetItem();
+         QTableWidgetItem* ID = new QTableWidgetItem();
          QTableWidgetItem* viewDate = new QTableWidgetItem();
          QTableWidgetItem* viewType = new QTableWidgetItem();
 
-         name->setText(query.value(0).toString());
+         ID->setText(query.value(0).toString());
          viewDate->setText(query.value(1).toString());
          viewType->setText(query.value(2).toString());
 
          m_ui->tableWidget->insertRow(m_ui->tableWidget->rowCount());
 
-         m_ui->tableWidget->setItem(m_ui->tableWidget->rowCount()-1, 0, name);
+         m_ui->tableWidget->setItem(m_ui->tableWidget->rowCount()-1, 0, ID);
          m_ui->tableWidget->setItem(m_ui->tableWidget->rowCount()-1, 1, viewDate);
          m_ui->tableWidget->setItem(m_ui->tableWidget->rowCount()-1, 2, viewType);
     }
@@ -85,39 +82,35 @@ bool EditViewsDialog::edited() {
 
 void EditViewsDialog::deleteView() {
     QSqlQuery deleteQuery;
+    QString viewID = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),0)->text();
 
-    QString name = m_MainWindowTable->item(m_MainWindowTable->currentRow(),0)->text();
-    QString releaseYear = m_MainWindowTable->item(m_MainWindowTable->currentRow(),1)->text();
-    QString entriesFR = m_MainWindowTable->item(m_MainWindowTable->currentRow(),5)->text();
-    QString rating = m_MainWindowTable->item(m_MainWindowTable->currentRow(),6)->text();
-    QString viewDate = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),1)->text();
-    QString viewType = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),2)->text();
-
-    deleteQuery.exec("DELETE FROM movieViews WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\" AND ViewDate=\""+viewDate+"\" AND ViewType=\""+viewType+"\";");
+    deleteQuery.exec("DELETE FROM views WHERE ID=\""+viewID+"\";");
     fillTable();
     m_edited = true;
 }
 
 void EditViewsDialog::editView() {
 
-    QString viewDate = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),1)->text();
-    QString viewType = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),2)->text();
-
-    QString name = m_MainWindowTable->item(m_MainWindowTable->currentRow(),0)->text();
-    QString releaseYear = m_MainWindowTable->item(m_MainWindowTable->currentRow(),1)->text();
-    QString entriesFR = m_MainWindowTable->item(m_MainWindowTable->currentRow(),5)->text();
-    QString rating = m_MainWindowTable->item(m_MainWindowTable->currentRow(),6)->text();
+    QString viewDate;
+    QString viewType;
+    QString viewID = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),0)->text();
 
     EditViewDialog* window = new EditViewDialog(m_ui->tableWidget, this);
     window->show();
     if(window->exec() == 1) {
         QSqlQuery editMovieQuery;
+
+        viewType = window->getViewType();
+        viewDate = window->getViewDate();
+
         if(window->isDateUnknown()) {
-            editMovieQuery.exec("UPDATE movieViews SET ViewDate=\"?\", ViewType=\""+window->getViewType()+"\" WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\" AND ViewDate=\""+viewDate+"\" AND ViewType=\""+viewType+"\";");
+            viewDate = "?";
         }
-        else {
-            editMovieQuery.exec("UPDATE movieViews SET ViewDate=\""+window->getViewDate()+"\", ViewType=\""+window->getViewType()+"\" WHERE Name=\""+name+"\" AND ReleaseYear=\""+releaseYear+"\" AND Entries=\""+entriesFR+"\" AND Rating=\""+rating+"\" AND ViewDate=\""+viewDate+"\" AND ViewType=\""+viewType+"\";");
+        if(window->isTypeUnknown()) {
+            viewType = "?";
         }
+        editMovieQuery.exec("UPDATE views SET ViewDate=\""+viewDate+"\", ViewType=\""+viewType+"\" WHERE ID=\""+viewID+"\";");
+
         fillTable();
         m_edited = true;
     }
