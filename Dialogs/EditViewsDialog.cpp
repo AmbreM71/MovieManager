@@ -8,7 +8,13 @@ EditViewsDialog::EditViewsDialog(int* ID, Log* log, int* theme, QWidget* parent)
     m_log = log;
     m_theme = theme;
 
-    //m_ui->tableWidget->setColumnHidden(0, true);
+    m_ui->tableWidget->setColumnHidden(0, true);
+
+    QSqlQuery titleQuery;
+
+    titleQuery.exec("SELECT Name FROM movies WHERE ID="+QString::number(*m_ID)+";");
+    titleQuery.first();
+    this->setWindowTitle(tr("Vues - ")+titleQuery.value(0).toString());
 
     QObject::connect(m_ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
 
