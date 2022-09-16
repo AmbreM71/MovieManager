@@ -6,8 +6,10 @@ EditMovieDialog::EditMovieDialog(QTableWidget* table, QWidget *parent) : QDialog
     m_ui->setupUi(this);
     m_table = table;
 
+    m_ui->ReleaseYearInput->setMaximum(QDate::currentDate().year());
+
     m_ui->NameInput->setText(table->item(table->currentRow(),0)->text());
-    m_ui->ReleaseYearInput->setText(table->item(table->currentRow(),1)->text());
+    m_ui->ReleaseYearInput->setValue(table->item(table->currentRow(),1)->text().toInt());
     m_ui->EntriesInput->setValue(table->item(table->currentRow(),5)->text().toInt());
     m_ui->RatingInput->setValue(table->item(table->currentRow(),6)->text().toInt());
 }

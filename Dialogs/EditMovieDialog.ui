@@ -48,9 +48,6 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="ReleaseYearInput"/>
-   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="ReleaseYearLabel">
      <property name="text">
@@ -69,6 +66,16 @@
     <widget class="QLabel" name="RatingLabel">
      <property name="text">
       <string>Note</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QSpinBox" name="ReleaseYearInput">
+     <property name="minimum">
+      <number>1870</number>
+     </property>
+     <property name="maximum">
+      <number>2000</number>
      </property>
     </widget>
    </item>

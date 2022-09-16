@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QTableWidget>
+#include <QDate>
 
 namespace Ui {
 class EditMovieDialog;
