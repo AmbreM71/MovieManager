@@ -228,6 +228,7 @@ void MainWindow::importDB() {
                 if(confirmReplaceBox.clickedButton()==yesButton) {
                     QSqlQuery deleteQuery;
                     deleteQuery.exec("DELETE FROM movies");
+                    deleteQuery.exec("DELETE FROM views");
                 }
                 else {
                     add = false;
@@ -236,24 +237,41 @@ void MainWindow::importDB() {
             if(add) {
                 QString val = jsonFile.readAll();
                 jsonFile.close();
-                QJsonObject movies = QJsonDocument::fromJson(val.toUtf8()).object();
+                QJsonObject main = QJsonDocument::fromJson(val.toUtf8()).object();
+                foreach(const QString& mainKey, main.keys()) {
+                    if(mainKey == "movies") {
+                        QJsonObject movies = main.value(mainKey).toObject();
+                        foreach(const QString& movieKey, movies.keys()) {
+                            QJsonObject movie = movies.value(movieKey).toObject();
+                            QSqlQuery query;
+                            query.prepare("INSERT INTO movies (ID, Name, ReleaseYear, Entries, Rating) VALUES (?,?,?,?,?);");
+                            query.bindValue(0, movie["ID"].toInt());
+                            query.bindValue(1, movie["Name"].toString());
+                            query.bindValue(2, movie["ReleaseYear"].toInt());
+                            query.bindValue(3, movie["Entries"].toInt());
+                            query.bindValue(4, movie["Rating"].toInt());
 
-                foreach(const QString& key, movies.keys()) {
-                    QJsonObject movie = movies.value(key).toObject();
-                    QSqlQuery query;
-                    query.prepare("INSERT INTO movies (ID, Name, ReleaseYear, Entries, R"
-                                  "ating) VALUES (?,?,?,?,?);");
-                    query.bindValue(0, movie["ID"].toInt());
-                    query.bindValue(1, movie["Name"].toString());
-                    query.bindValue(2, movie["ReleaseYear"].toInt());
-                    query.bindValue(3, movie["Entries"].toInt());
-                    query.bindValue(4, movie["Rating"].toInt());
-                    qDebug() << movie["Name"].toString();
-
-                    if(!query.exec()){
-                        m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
+                            if(!query.exec()){
+                                m_log->append(tr("Erreur lors de l'import dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
+                            }
+                        }
                     }
+                    else if(mainKey == "views") {
+                        QJsonObject views = main.value(mainKey).toObject();
+                        foreach(const QString& viewKey, views.keys()) {
+                            QJsonObject view = views.value(viewKey).toObject();
+                            QSqlQuery query;
+                            query.prepare("INSERT INTO views (ID, ID_Movie, ViewDate, ViewType) VALUES (?,?,?,?);");
+                            query.bindValue(0, view["ID"].toInt());
+                            query.bindValue(1, view["ID_Movie"].toInt());
+                            query.bindValue(2, view["ViewDate"].toString());
+                            query.bindValue(3, view["ViewType"].toString());
 
+                            if(!query.exec()){
+                                m_log->append(tr("Erreur lors de l'import dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -270,6 +288,8 @@ void MainWindow::exportDB() {
     if (!jsonFile.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(this, tr("Erreur"), jsonFile.errorString());
     }
+
+    QJsonObject mainObject;
 
     //Writes movies to JSON
     QJsonObject moviesObject;
@@ -289,7 +309,7 @@ void MainWindow::exportDB() {
 
         moviesObject.insert("movie" + QString::fromStdString(std::to_string(i)), movieObject);
     }
-    jsonFile.write(QJsonDocument(moviesObject).toJson(QJsonDocument::Indented));
+    mainObject.insert("movies", moviesObject);
 
     //Writes views to JSON
     QJsonObject viewsObject;
@@ -308,7 +328,9 @@ void MainWindow::exportDB() {
 
         viewsObject.insert("view" + QString::fromStdString(std::to_string(j)), viewObject);
     }
-    jsonFile.write(QJsonDocument(viewsObject).toJson(QJsonDocument::Indented));
+    mainObject.insert("views", viewsObject);
+
+    jsonFile.write(QJsonDocument(mainObject).toJson(QJsonDocument::Indented));
 
     jsonFile.close();
 }
