@@ -6,6 +6,8 @@ EditMovieDialog::EditMovieDialog(QTableWidget* table, QWidget *parent) : QDialog
     m_ui->setupUi(this);
     m_table = table;
 
+    this->setWindowTitle(tr("Modifier - ")+table->item(table->currentRow(),0)->text());
+
     m_ui->ReleaseYearInput->setMaximum(QDate::currentDate().year());
 
     m_ui->NameInput->setText(table->item(table->currentRow(),0)->text());
