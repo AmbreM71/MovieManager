@@ -3,6 +3,7 @@
 
 AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::AddViewDialog;
+    m_tags = new QList<QString>;
     m_ui->setupUi(this);
 
     m_ui->MovieViewDateInput->setDate(QDate::currentDate());
@@ -17,6 +18,8 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
+    QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
+
 
     //Connectors to check if input are filled to enable Ok button
     QObject::connect(m_ui->MovieNameInput, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
@@ -114,4 +117,15 @@ void AddViewDialog::checkValid() {
     else {
         m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
+}
+
+void AddViewDialog::addTag() {
+    m_tags->append(m_ui->TagsInput->text());
+    QPushButton* tag = new QPushButton(m_ui->TagsInput->text());
+    m_ui->TagsLayout->addWidget(tag,0,m_tags->size(), Qt::AlignLeft);
+    m_ui->TagsInput->clear();
+}
+
+QList<QString>* AddViewDialog::getTags() {
+    return m_tags;
 }
