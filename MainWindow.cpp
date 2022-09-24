@@ -21,7 +21,7 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << tr("Nom du film") << tr("Année\nde sortie") << tr("Nombre de\nvisionnages") << tr("Premier\nvisionnage") << tr("Dernier\nvisionnage") << tr("Entrées") << tr("Note"));
 
     databaseConnection();
-    loadDB();
+    fillTable();
     fillGlobalStats();
     menuBarConnectors();
 
@@ -29,19 +29,17 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
     m_ui->MoviesListWidget->setColumnWidth(1,100);
-    m_ui->MoviesListWidget->setColumnWidth(2,100);
-    m_ui->MoviesListWidget->setColumnWidth(3,100);
-    m_ui->MoviesListWidget->setColumnWidth(4,100);
-    m_ui->MoviesListWidget->setColumnWidth(5,100);
-    m_ui->MoviesListWidget->setColumnWidth(6,70);
-    m_ui->MoviesListWidget->setColumnHidden(7, true);
+    m_ui->MoviesListWidget->setColumnHidden(2, true);
 
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
     QObject::connect(m_ui->ManageMovieViewsButton, SIGNAL(clicked()), this, SLOT(editViews()));
     QObject::connect(m_ui->MoviesListWidget, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(editViews()));
+    QObject::connect(m_ui->MoviesListWidget, SIGNAL(cellClicked(int,int)), this, SLOT(fillMovieInfos()));
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
     QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
     QObject::connect(m_ui->MoviesListWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
+
+
 }
 
 MainWindow::~MainWindow() {
@@ -85,7 +83,7 @@ void MainWindow::databaseConnection() {
 
 }
 
-void MainWindow::loadDB(bool isFiltered) {
+void MainWindow::fillTable(bool isFiltered) {
 
     //Clear the table
     int movieListRowCount = m_ui->MoviesListWidget->rowCount();
@@ -93,13 +91,11 @@ void MainWindow::loadDB(bool isFiltered) {
         m_ui->MoviesListWidget->removeRow(i);
     }
 
-
     //Fetch every unique movies
     QSqlQuery moviesQuery;
 
     if(isFiltered) {
-
-        moviesQuery.exec("SELECT ID, Name, ReleaseYear, Entries, Rating FROM movies "
+        moviesQuery.exec("SELECT ID, Name, ReleaseYear FROM movies "
                          "WHERE Name LIKE \"%" + m_filter_name + "%\""
                          "AND ReleaseYear BETWEEN '"+QString::number(m_filter_minYear)+"' AND '"+QString::number(m_filter_maxYear)+"'"
                          "AND Rating BETWEEN '"+QString::number(m_filter_minRating)+"' AND '"+QString::number(m_filter_maxRating)+"'"
@@ -108,7 +104,7 @@ void MainWindow::loadDB(bool isFiltered) {
         m_ui->ResetFiltersButton->setEnabled(true);
     }
     else {
-        moviesQuery.exec("SELECT ID, Name, ReleaseYear, Entries, Rating FROM movies;");
+        moviesQuery.exec("SELECT ID, Name, ReleaseYear FROM movies;");
         m_ui->ResetFiltersButton->setEnabled(false);
         m_filter_name = "";
         m_filter_minYear = 0;
@@ -121,58 +117,13 @@ void MainWindow::loadDB(bool isFiltered) {
     while(moviesQuery.next()) {
         QTableWidgetItem* name = new QTableWidgetItem();
         QTableWidgetItem* releaseYear = new QTableWidgetItem();
-        QTableWidgetItem* numberOfViews = new QTableWidgetItem();
-        QTableWidgetItem* firstSeen = new QTableWidgetItem();
-        QTableWidgetItem* lastSeen = new QTableWidgetItem();
-        QTableWidgetItem* Entries = new QTableWidgetItem();
-        QTableWidgetItem* rating = new QTableWidgetItem();
         QTableWidgetItem* ID = new QTableWidgetItem();
 
         releaseYear->setTextAlignment(Qt::AlignCenter);
-        firstSeen->setTextAlignment(Qt::AlignCenter);
-        lastSeen->setTextAlignment(Qt::AlignCenter);
 
-        //Fetch the number of views of the current movie
-        QSqlQuery viewsQuery;
-        viewsQuery.exec("SELECT COUNT(*) FROM views WHERE ID_Movie='"+moviesQuery.value(0).toString()+"'");
-        viewsQuery.first();
-        numberOfViews->setText(viewsQuery.value(0).toString());
-
-        //Fetch the first view of the current movie
-        QSqlQuery firstViewQuery;
-        firstViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+moviesQuery.value(0).toString()+"' AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
-        firstViewQuery.first();
-        if(firstViewQuery.value(0).toString()=="") {
-            firstSeen->setText("?");
-        }
-        else {
-            firstSeen->setText(firstViewQuery.value(0).toString());
-        }
-
-        //Fetch the last view of the current movie
-        QSqlQuery lastViewQuery;
-        lastViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+moviesQuery.value(0).toString()+"' AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
-        lastViewQuery.first();
-        if(lastViewQuery.value(0).toString()=="") {
-            lastSeen->setText("?");
-        }
-        else {
-            lastSeen->setText(lastViewQuery.value(0).toString());
-        }
-
-        QSqlQuery hasUnknownView;
-        hasUnknownView.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+moviesQuery.value(0).toString()+"' AND ViewDate='?'");
-        hasUnknownView.first();
-        if(!hasUnknownView.isNull(0)) {
-            if(firstSeen->text()!="?") {
-                firstSeen->setForeground(QBrush(QColor(255,0,0)));
-            }
-        }
         ID->setText(moviesQuery.value(0).toString());
         name->setText(moviesQuery.value(1).toString());
         releaseYear->setText(moviesQuery.value(2).toString());
-        Entries->setText(moviesQuery.value(3).toString());
-        rating->setText(moviesQuery.value(4).toString());
 
         if((name->text() == "Matrix" || name->text() == "The Matrix") && m_matrixMode) {
             name->setForeground(QBrush(QColor(0,150,0)));
@@ -184,12 +135,7 @@ void MainWindow::loadDB(bool isFiltered) {
         //Insert QTableWidgetItem in the table
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 0, name);
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 1, releaseYear);
-        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 2, numberOfViews);
-        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 3, firstSeen);
-        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 4, lastSeen);
-        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 5, Entries);
-        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 6, rating);
-        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 7, ID);
+        m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 2, ID);
     }
     m_ui->MoviesListWidget->setCurrentCell(0,0);
 
@@ -200,6 +146,61 @@ void MainWindow::loadDB(bool isFiltered) {
     else {
         m_ui->ManageMovieViewsButton->setEnabled(true);
     }
+
+}
+
+void MainWindow::fillMovieInfos() {
+
+
+    m_ui->MovieTitleLabel->setText(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),0)->text());
+
+    QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+
+
+
+        //Fetch the number of views of the current movie
+        QSqlQuery viewsQuery;
+        viewsQuery.exec("SELECT COUNT(*) FROM views WHERE ID_Movie='"+ID+"'");
+        viewsQuery.first();
+        m_ui->viewsLabel->setText(tr("vus ")+viewsQuery.value(0).toString()+tr(" fois"));
+
+
+        //Fetch the first view of the current movie
+        QSqlQuery firstViewQuery;
+        firstViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
+        firstViewQuery.first();
+        if(firstViewQuery.value(0).toString()=="") {
+            m_ui->FirstViewLabel->setText(tr("Premier visionnage : ?"));
+        }
+        else {
+            m_ui->FirstViewLabel->setText(tr("Premier visionnage : ")+firstViewQuery.value(0).toString());
+        }
+
+        //Fetch the last view of the current movie
+        QSqlQuery lastViewQuery;
+        lastViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
+        lastViewQuery.first();
+        if(lastViewQuery.value(0).toString()=="") {
+            m_ui->LastViewLabel->setText(tr("Dernier visionnage : ?"));
+        }
+        else {
+            m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+firstViewQuery.value(0).toString());
+        }
+
+        QSqlQuery hasUnknownView;
+        hasUnknownView.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND ViewDate='?'");
+        hasUnknownView.first();
+        if(!hasUnknownView.isNull(0)) {
+            //if(m_ui->FirstViewLabel->text()!="?") {
+                m_ui->FirstViewLabel->setStyleSheet("color:red;");
+            //}
+        }
+
+        QSqlQuery q;
+        q.exec("SELECT Entries, Rating FROM movies WHERE ID='"+ID+"'");
+        q.first();
+        m_ui->EntriesLabel->setText(q.value(0).toString() + tr(" entrées"));
+        m_ui->RatingLabel->setText(tr("Note : ") + q.value(1).toString());
 }
 
 void MainWindow::importDB() {
@@ -276,7 +277,7 @@ void MainWindow::importDB() {
             }
         }
     }
-    loadDB();
+    fillTable();
     fillGlobalStats();
 }
 
@@ -403,17 +404,17 @@ void MainWindow::addView() {
         }
 
         fillGlobalStats();
-        loadDB();
+        fillTable();
     }
 }
 
 void MainWindow::editViews() {
-    int ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),7)->text().toInt();
+    int ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt();
     EditViewsDialog* window = new EditViewsDialog(&ID, m_log, &m_theme);
     window->show();
     if(window->exec() == 1) {
         if (window->edited()) {
-            loadDB();
+            fillTable();
             fillGlobalStats();
         }
     }
@@ -424,7 +425,7 @@ void MainWindow::openFilters() {
     window->show();
     if(window->exec() == 1) {
         delete window;
-        loadDB(true);
+        fillTable(true);
     }
 }
 
@@ -456,7 +457,7 @@ void MainWindow::openSettings() {
         refreshLanguage();
         refreshTheme();
         saveSettings();
-        loadDB();
+        fillTable();
     }
 }
 
@@ -468,7 +469,7 @@ void MainWindow::resetFilters() {
     m_filter_minRating = 0;
     m_filter_maxRating = 0;
     m_filter_minEntries = 0;
-    loadDB();
+    fillTable();
 }
 
 void MainWindow::customMenuRequested(QPoint pos) {
@@ -503,13 +504,13 @@ void MainWindow::editMovie() {
     window->show();
     if(window->exec() == 1) {
 
-        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),7)->text();
+        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
 
         QSqlQuery editMovieQuery;
         if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+"\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+"\" WHERE ID=\""+ID+"\";")) {
             m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text());
         }
-        loadDB();
+        fillTable();
     }
 }
 
@@ -519,7 +520,7 @@ void MainWindow::deleteMovie() {
     if(reply == QMessageBox::Yes) {
         QSqlQuery deleteMovieQuery;
         QSqlQuery deleteAssociatedViewsQuery;
-        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),7)->text();
+        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
 
         if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
             m_log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text());
