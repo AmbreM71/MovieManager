@@ -17,6 +17,7 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
+    QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
 
     //Connectors to check if input are filled to enable Ok button
     QObject::connect(m_ui->MovieNameInput, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
@@ -114,4 +115,9 @@ void AddViewDialog::checkValid() {
     else {
         m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
+}
+
+void AddViewDialog::loadPoster() {
+    QString filepath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg)");
+    QFile poster(filepath);
 }

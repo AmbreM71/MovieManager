@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSettings>
+#include <QPixmap>
 
 #include <cmath>
 #include <ctime>

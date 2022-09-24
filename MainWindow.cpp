@@ -22,6 +22,7 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
 
     databaseConnection();
     fillTable();
+    fillMovieInfos();
     fillGlobalStats();
     menuBarConnectors();
 
@@ -58,8 +59,9 @@ void MainWindow::databaseConnection() {
                                    "ID          INTEGER PRIMARY KEY AUTOINCREMENT,"
                                    "Name        VARCHAR(127),"
                                    "ReleaseYear SMALLINT,"
-                                   "Entries   INT,"
-                                   "Rating          TINYINT(10));";
+                                   "Entries     INT,"
+                                   "Rating      TINYINT(10),"
+                                   "Poster      VARCHAR(127));";
 
     QSqlQuery movieDBQuery;
 
@@ -151,9 +153,17 @@ void MainWindow::fillTable(bool isFiltered) {
 
 void MainWindow::fillMovieInfos() {
 
+    if(m_ui->MoviesListWidget->rowCount() == 0) {
+        return;
+    }
+
+
+    QPixmap* pixmap = new QPixmap("2.jpg");
+    QPixmap pm;
+    pm = pixmap->scaledToHeight(400, Qt::SmoothTransformation);
+    m_ui->PosterLabel->setPixmap(pm);
 
     m_ui->MovieTitleLabel->setText(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),0)->text());
-
     QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
 
 
@@ -162,7 +172,7 @@ void MainWindow::fillMovieInfos() {
         QSqlQuery viewsQuery;
         viewsQuery.exec("SELECT COUNT(*) FROM views WHERE ID_Movie='"+ID+"'");
         viewsQuery.first();
-        m_ui->viewsLabel->setText(tr("vus ")+viewsQuery.value(0).toString()+tr(" fois"));
+        m_ui->ViewsLabel->setText(tr("vus ")+viewsQuery.value(0).toString()+tr(" fois"));
 
 
         //Fetch the first view of the current movie
@@ -191,9 +201,10 @@ void MainWindow::fillMovieInfos() {
         hasUnknownView.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND ViewDate='?'");
         hasUnknownView.first();
         if(!hasUnknownView.isNull(0)) {
-            //if(m_ui->FirstViewLabel->text()!="?") {
-                m_ui->FirstViewLabel->setStyleSheet("color:red;");
-            //}
+            m_ui->FirstViewLabel->setStyleSheet("color:red;");
+        }
+        else {
+            m_ui->FirstViewLabel->setStyleSheet("");
         }
 
         QSqlQuery q;
@@ -458,6 +469,7 @@ void MainWindow::openSettings() {
         refreshTheme();
         saveSettings();
         fillTable();
+        fillMovieInfos();
     }
 }
 

@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QSqlQuery>
 #include <QPushButton>
+#include <QFileDialog>
 
 namespace Ui {
 class AddViewDialog;
@@ -37,6 +38,7 @@ class AddViewDialog : public QDialog
         void toggleViewDateInput(int state);
         void toggleViewTypeInput(int state);
         void checkValid();
+        void loadPoster();
 
 
 };
