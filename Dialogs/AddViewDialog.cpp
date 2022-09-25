@@ -4,6 +4,7 @@
 AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::AddViewDialog;
     m_ui->setupUi(this);
+    this->setFixedSize(600,351);
 
     m_ui->MovieViewDateInput->setDate(QDate::currentDate());
 
@@ -52,6 +53,9 @@ QString AddViewDialog::getViewType() {
 }
 QString AddViewDialog::getViewDate() {
     return m_ui->MovieViewDateInput->text();
+}
+QString AddViewDialog::getPosterPath() {
+    return m_posterPath;
 }
 int AddViewDialog::getRating() {
     return m_ui->MovieRatingInput->value();
@@ -118,6 +122,12 @@ void AddViewDialog::checkValid() {
 }
 
 void AddViewDialog::loadPoster() {
-    QString filepath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg)");
-    QFile poster(filepath);
+    m_posterPath = "";
+    m_posterPath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg)");
+    if(m_posterPath != "") {
+        QPixmap* pixmap = new QPixmap(m_posterPath);
+        QPixmap pm;
+        pm = pixmap->scaledToHeight(230, Qt::SmoothTransformation);
+        m_ui->PosterLabel->setPixmap(pm);
+    }
 }

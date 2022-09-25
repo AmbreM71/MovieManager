@@ -15,6 +15,7 @@ class AddViewDialog : public QDialog
     Q_OBJECT
     private:
         Ui::AddViewDialog* m_ui;
+        QString m_posterPath;
 
 
     public:
@@ -28,6 +29,7 @@ class AddViewDialog : public QDialog
         int getReleaseYear();
         QString getViewType();
         QString getViewDate();
+        QString getPosterPath();
         int getRating();
         int getEntries();
         bool isDateUnknown();

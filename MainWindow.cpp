@@ -157,61 +157,64 @@ void MainWindow::fillMovieInfos() {
         return;
     }
 
-
-    QPixmap* pixmap = new QPixmap("2.jpg");
-    QPixmap pm;
-    pm = pixmap->scaledToHeight(400, Qt::SmoothTransformation);
-    m_ui->PosterLabel->setPixmap(pm);
-
-    m_ui->MovieTitleLabel->setText(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),0)->text());
     QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
 
+    m_ui->MovieTitleLabel->setText(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),0)->text());
+
+    //Fetch the number of views of the current movie
+    QSqlQuery posterQuery;
+    posterQuery.exec("SELECT Poster FROM movies WHERE ID='"+ID+"'");
+    posterQuery.first();
+    qDebug() << posterQuery.value(0).toString();
+    QPixmap* pixmap = new QPixmap(posterQuery.value(0).toString());
+    m_ui->PosterLabel->setPixmap(pixmap->scaledToHeight(400, Qt::SmoothTransformation));
 
 
-        //Fetch the number of views of the current movie
-        QSqlQuery viewsQuery;
-        viewsQuery.exec("SELECT COUNT(*) FROM views WHERE ID_Movie='"+ID+"'");
-        viewsQuery.first();
-        m_ui->ViewsLabel->setText(tr("vus ")+viewsQuery.value(0).toString()+tr(" fois"));
+
+    //Fetch the number of views of the current movie
+    QSqlQuery viewsQuery;
+    viewsQuery.exec("SELECT COUNT(*) FROM views WHERE ID_Movie='"+ID+"'");
+    viewsQuery.first();
+    m_ui->ViewsLabel->setText(tr("vu ")+viewsQuery.value(0).toString()+tr(" fois"));
 
 
-        //Fetch the first view of the current movie
-        QSqlQuery firstViewQuery;
-        firstViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
-        firstViewQuery.first();
-        if(firstViewQuery.value(0).toString()=="") {
-            m_ui->FirstViewLabel->setText(tr("Premier visionnage : ?"));
-        }
-        else {
-            m_ui->FirstViewLabel->setText(tr("Premier visionnage : ")+firstViewQuery.value(0).toString());
-        }
+    //Fetch the first view of the current movie
+    QSqlQuery firstViewQuery;
+    firstViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1");
+    firstViewQuery.first();
+    if(firstViewQuery.value(0).toString()=="") {
+        m_ui->FirstViewLabel->setText(tr("Premier visionnage : ?"));
+    }
+    else {
+        m_ui->FirstViewLabel->setText(tr("Premier visionnage : ")+firstViewQuery.value(0).toString());
+    }
 
-        //Fetch the last view of the current movie
-        QSqlQuery lastViewQuery;
-        lastViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
-        lastViewQuery.first();
-        if(lastViewQuery.value(0).toString()=="") {
-            m_ui->LastViewLabel->setText(tr("Dernier visionnage : ?"));
-        }
-        else {
-            m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+firstViewQuery.value(0).toString());
-        }
+    //Fetch the last view of the current movie
+    QSqlQuery lastViewQuery;
+    lastViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1");
+    lastViewQuery.first();
+    if(lastViewQuery.value(0).toString()=="") {
+        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ?"));
+    }
+    else {
+        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+firstViewQuery.value(0).toString());
+    }
 
-        QSqlQuery hasUnknownView;
-        hasUnknownView.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND ViewDate='?'");
-        hasUnknownView.first();
-        if(!hasUnknownView.isNull(0)) {
-            m_ui->FirstViewLabel->setStyleSheet("color:red;");
-        }
-        else {
-            m_ui->FirstViewLabel->setStyleSheet("");
-        }
+    QSqlQuery hasUnknownView;
+    hasUnknownView.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND ViewDate='?'");
+    hasUnknownView.first();
+    if(!hasUnknownView.isNull(0)) {
+        m_ui->FirstViewLabel->setStyleSheet("color:red;");
+    }
+    else {
+        m_ui->FirstViewLabel->setStyleSheet("");
+    }
 
-        QSqlQuery q;
-        q.exec("SELECT Entries, Rating FROM movies WHERE ID='"+ID+"'");
-        q.first();
-        m_ui->EntriesLabel->setText(q.value(0).toString() + tr(" entrées"));
-        m_ui->RatingLabel->setText(tr("Note : ") + q.value(1).toString());
+    QSqlQuery q;
+    q.exec("SELECT Entries, Rating FROM movies WHERE ID='"+ID+"'");
+    q.first();
+    m_ui->EntriesLabel->setText(q.value(0).toString() + tr(" entrées"));
+    m_ui->RatingLabel->setText(tr("Note : ") + q.value(1).toString());
 }
 
 void MainWindow::importDB() {
@@ -352,29 +355,32 @@ void MainWindow::addView() {
     window->show();
     if(window->exec() == 1) {
 
-        //Add the new movie to the movies table
-        QSqlQuery insertIntoMoviesQuery;
-        insertIntoMoviesQuery.prepare("INSERT INTO movies (Name, ReleaseYear, Entries, Rating) VALUES (?,?,?,?);");
-
         QString movieName;
         QString movieYear;
 
+        //Add the new movie to the movies table
         if(window->getComboboxSelectedItem() == "") {
+            QSqlQuery insertIntoMoviesQuery;
+            insertIntoMoviesQuery.prepare("INSERT INTO movies (Name, ReleaseYear, Entries, Rating, Poster) VALUES (?,?,?,?,?);");
+
+
+
             insertIntoMoviesQuery.bindValue(0, window->getName());
             insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
             insertIntoMoviesQuery.bindValue(2, window->getEntries());
             insertIntoMoviesQuery.bindValue(3, window->getRating());
+            insertIntoMoviesQuery.bindValue(4, window->getPosterPath());
 
             movieName = window->getName();
             movieYear = QString::number(window->getReleaseYear());
+
+            if(!insertIntoMoviesQuery.exec()){
+                m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoMoviesQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoMoviesQuery.lastError().text());
+            }
         }
         else {
             movieName = window->getComboboxSelectedItem().remove(window->getComboboxSelectedItem().length()-7, window->getComboboxSelectedItem().length());
             movieYear = window->getComboboxSelectedItem().remove(0, window->getComboboxSelectedItem().length()-4);
-        }
-
-        if(!insertIntoMoviesQuery.exec()){
-            m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoMoviesQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoMoviesQuery.lastError().text());
         }
 
         //Add the view to the views table
