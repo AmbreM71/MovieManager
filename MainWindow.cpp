@@ -56,7 +56,7 @@ void MainWindow::databaseConnection() {
         m_log->append(tr("Erreur lors de l'ouverture de la base de données"));
     }
 
-    QString movieDatabaseCreationString = "CREATE TABLE movies ("
+    QString movieDatabaseCreationString = "CREATE TABLE IF NOT EXISTS movies ("
                                    "ID          INTEGER PRIMARY KEY AUTOINCREMENT,"
                                    "Name        VARCHAR(127),"
                                    "ReleaseYear SMALLINT,"
@@ -66,11 +66,11 @@ void MainWindow::databaseConnection() {
     QSqlQuery movieDBQuery;
 
     if(!movieDBQuery.exec(movieDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table movies, elle existe peut-être déjà"));
+        m_log->append(tr("Erreur lors de la création de la table movies"));
     }
 
 
-    QString ViewsDatabaseCreationString = "CREATE TABLE views ("
+    QString ViewsDatabaseCreationString = "CREATE TABLE IF NOT EXISTS views ("
                                    "ID          INTEGER PRIMARY KEY AUTOINCREMENT,"
                                    "ID_Movie    INTEGER,"
                                    "ViewDate    DATE,"
@@ -79,7 +79,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery viewsBDQuery;
 
     if(!viewsBDQuery.exec(ViewsDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table views, elle existe peut-être déjà"));
+        m_log->append(tr("Erreur lors de la création de la table views"));
     }
 
 
