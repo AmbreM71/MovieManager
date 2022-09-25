@@ -165,7 +165,6 @@ void MainWindow::fillMovieInfos() {
     QSqlQuery posterQuery;
     posterQuery.exec("SELECT Poster FROM movies WHERE ID='"+ID+"'");
     posterQuery.first();
-    qDebug() << posterQuery.value(0).toString();
     QPixmap* pixmap = new QPixmap(posterQuery.value(0).toString());
     m_ui->PosterLabel->setPixmap(pixmap->scaledToHeight(400, Qt::SmoothTransformation));
 
@@ -360,6 +359,23 @@ void MainWindow::addView() {
 
         //Add the new movie to the movies table
         if(window->getComboboxSelectedItem() == "") {
+
+            //Processing poster moving and renaming
+            PWSTR path;
+            SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
+            std::wstring wfile(path);
+            m_savepath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
+
+            QDir dir(m_savepath);
+            if (!dir.exists())
+                dir.mkpath(".");
+
+            QString ext = window->getPosterPath().remove(0, window->getPosterPath().length()-3);
+            QString GUID = QString::number(QRandomGenerator::global()->generate());
+            if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == true) {
+                m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext);
+            }
+
             QSqlQuery insertIntoMoviesQuery;
             insertIntoMoviesQuery.prepare("INSERT INTO movies (Name, ReleaseYear, Entries, Rating, Poster) VALUES (?,?,?,?,?);");
 

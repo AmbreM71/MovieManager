@@ -14,6 +14,7 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QPixmap>
+#include <QRandomGenerator>
 
 #include <cmath>
 #include <ctime>
