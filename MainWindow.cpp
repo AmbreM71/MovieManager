@@ -6,6 +6,15 @@
 
 MainWindow::MainWindow(QApplication* app, QWidget* parent) {
 
+    PWSTR path;
+    SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
+    std::wstring wfile(path);
+    m_savepath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
+
+    QDir dir(m_savepath);
+    if (!dir.exists())
+        dir.mkpath(".");
+
     m_app = app;
     m_ui = new Ui::MainWindow;
     m_log = new Log();
@@ -367,15 +376,6 @@ void MainWindow::addView() {
         if(window->getComboboxSelectedItem() == "") {
 
             //Processing poster moving and renaming
-            PWSTR path;
-            SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
-            std::wstring wfile(path);
-            m_savepath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
-
-            QDir dir(m_savepath);
-            if (!dir.exists())
-                dir.mkpath(".");
-
             QString ext = window->getPosterPath().remove(0, window->getPosterPath().length()-3);
             QString GUID = QString::number(QRandomGenerator::global()->generate());
             if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
@@ -540,14 +540,25 @@ void MainWindow::customMenuRequested(QPoint pos) {
 }
 
 void MainWindow::editMovie() {
-    EditMovieDialog* window = new EditMovieDialog(m_ui->MoviesListWidget);
+    EditMovieDialog* window = new EditMovieDialog(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text());
     window->show();
     if(window->exec() == 1) {
 
         QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+        QString GUID = "";
+        QString ext = "";
 
+        if(window->newPoster()) {
+            ext = window->getPosterPath().remove(0, window->getPosterPath().length()-3);
+            GUID = QString::number(QRandomGenerator::global()->generate());
+            if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
+                m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext);
+            }
+        }
         QSqlQuery editMovieQuery;
-        if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+"\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+"\" WHERE ID=\""+ID+"\";")) {
+        if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
+                                "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
+                                "\", Poster=\""+GUID+"."+ext+"\" WHERE ID=\""+ID+"\";")) {
             m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text());
         }
         fillTable();
