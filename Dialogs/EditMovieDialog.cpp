@@ -4,6 +4,7 @@
 EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::EditMovieDialog;
     m_ui->setupUi(this);
+    this->setFixedSize(400,200);
     m_ID = &ID;
 
     QSqlQuery movieQuery;

@@ -571,7 +571,14 @@ void MainWindow::deleteMovie() {
     if(reply == QMessageBox::Yes) {
         QSqlQuery deleteMovieQuery;
         QSqlQuery deleteAssociatedViewsQuery;
+        QSqlQuery posterQuery;
+
         QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+
+        posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";");
+        posterQuery.first();
+
+        QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
 
         if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
             m_log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text());
