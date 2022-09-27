@@ -71,12 +71,29 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieReleaseYearInput->setEnabled(true);
         m_ui->MovieRatingInput->setEnabled(true);
         m_ui->EntriesInput->setEnabled(true);
+        m_ui->PosterButton->setEnabled(true);
+        m_ui->PosterLabel->setText(tr("Affiche"));
+
     }
     else {
         m_ui->MovieNameInput->setEnabled(false);
         m_ui->MovieReleaseYearInput->setEnabled(false);
         m_ui->MovieRatingInput->setEnabled(false);
         m_ui->EntriesInput->setEnabled(false);
+        m_ui->PosterButton->setEnabled(false);
+
+        QString movieName = m_ui->ExistingMoviesComboBox->currentText().remove(m_ui->ExistingMoviesComboBox->currentText().length()-7, m_ui->ExistingMoviesComboBox->currentText().length());
+        QString movieYear = m_ui->ExistingMoviesComboBox->currentText().remove(0, m_ui->ExistingMoviesComboBox->currentText().length()-4);
+
+        QSqlQuery posterQuery;
+        posterQuery.exec("SELECT Poster FROM movies WHERE Name='"+movieName+"' AND ReleaseYear='"+movieYear+"'");
+        posterQuery.first();
+
+        PWSTR path;
+        SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
+        std::wstring wfile(path);
+        QString posterpath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
+        loadPoster(posterpath+"\\"+posterQuery.value(0).toString());
     }
 }
 
@@ -121,9 +138,12 @@ void AddViewDialog::checkValid() {
     }
 }
 
-void AddViewDialog::loadPoster() {
-    m_posterPath = "";
-    m_posterPath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg)");
+void AddViewDialog::loadPoster(QString path) {
+    if (path == "")
+        m_posterPath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg)");
+    else
+        m_posterPath = path;
+
     if(m_posterPath != "") {
         QPixmap* pixmap = new QPixmap(m_posterPath);
         QPixmap pm;

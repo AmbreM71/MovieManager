@@ -6,6 +6,8 @@
 #include <QPushButton>
 #include <QFileDialog>
 
+#include <ShlObj.h>
+
 namespace Ui {
 class AddViewDialog;
 }
@@ -40,7 +42,7 @@ class AddViewDialog : public QDialog
         void toggleViewDateInput(int state);
         void toggleViewTypeInput(int state);
         void checkValid();
-        void loadPoster();
+        void loadPoster(QString path = "");
 
 
 };
