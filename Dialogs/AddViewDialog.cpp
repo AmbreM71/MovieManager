@@ -72,7 +72,12 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieRatingInput->setEnabled(true);
         m_ui->EntriesInput->setEnabled(true);
         m_ui->PosterButton->setEnabled(true);
-        m_ui->PosterLabel->setText(tr("Affiche"));
+        if (m_ui->PosterLabel->text() == tr("Affiche"))
+            loadPoster(m_posterPath);
+        else {
+            m_ui->PosterLabel->setText(tr("Affiche"));
+            m_posterPath = "";
+        }
 
     }
     else {
