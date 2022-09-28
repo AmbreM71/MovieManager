@@ -589,6 +589,7 @@ void MainWindow::deleteMovie() {
         }
 
         resetFilters();
+        fillMovieInfos();
         fillGlobalStats();
     }
 }
