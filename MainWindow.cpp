@@ -540,7 +540,7 @@ void MainWindow::customMenuRequested(QPoint pos) {
 }
 
 void MainWindow::editMovie() {
-    EditMovieDialog* window = new EditMovieDialog(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text());
+    EditMovieDialog* window = new EditMovieDialog(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text(), this);
     window->show();
     if(window->exec() == 1) {
 
