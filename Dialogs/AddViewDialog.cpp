@@ -144,8 +144,20 @@ void AddViewDialog::checkValid() {
 }
 
 void AddViewDialog::loadPoster(QString path) {
-    if (path == "")
-        m_posterPath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg)");
+    if (path == "") {
+        bool extOK;
+        do {
+            extOK = true;
+            m_posterPath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.webp)");
+            QString ext = m_posterPath;
+            ext = ext.remove(0, m_posterPath.lastIndexOf(".")+1);
+            // Test if file is a jpg or a png
+            if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "webp") != 0) {
+                QMessageBox::critical(this, tr("Format incorrect"), tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou webm"));
+                extOK = false;
+            }
+        } while (extOK == false);
+    }
     else
         m_posterPath = path;
 

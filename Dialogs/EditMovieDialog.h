@@ -5,6 +5,7 @@
 #include <QSqlQuery>
 #include <QDate>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include <ShlObj.h>
 

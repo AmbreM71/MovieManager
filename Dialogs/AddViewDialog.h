@@ -5,6 +5,7 @@
 #include <QSqlQuery>
 #include <QPushButton>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include <ShlObj.h>
 

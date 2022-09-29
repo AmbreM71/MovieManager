@@ -65,12 +65,25 @@ int EditMovieDialog::getEntries() {
 
 void EditMovieDialog::loadPoster() {
     m_posterPath = "";
-    m_posterPath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg)");
+
+    bool extOK;
+    do {
+        extOK = true;
+        m_posterPath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.webp)");
+        QString ext = m_posterPath;
+        ext = ext.remove(0, m_posterPath.lastIndexOf(".")+1);
+        // Test if file is a jpg or a png
+        if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "webp") != 0) {
+            QMessageBox::critical(this, tr("Format incorrect"), tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou webm"));
+            extOK = false;
+        }
+    } while (extOK == false);
+
     if(m_posterPath != "") {
         m_newPoster = true;
         QPixmap* pixmap = new QPixmap(m_posterPath);
         QPixmap pm;
-        pm = pixmap->scaledToHeight(150, Qt::SmoothTransformation);
+        pm = pixmap->scaledToHeight(230, Qt::SmoothTransformation);
         m_ui->PosterLabel->setPixmap(pm);
     }
 }

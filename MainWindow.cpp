@@ -376,7 +376,7 @@ void MainWindow::addView() {
         if(window->getComboboxSelectedItem() == "") {
 
             //Processing poster moving and renaming
-            QString ext = window->getPosterPath().remove(0, window->getPosterPath().length()-3);
+            QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
             QString GUID = QString::number(QRandomGenerator::global()->generate());
             if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
                 m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext);
@@ -549,7 +549,16 @@ void MainWindow::editMovie() {
         QString ext = "";
 
         if(window->newPoster()) {
-            ext = window->getPosterPath().remove(0, window->getPosterPath().length()-3);
+
+            //Delete old poster
+            QSqlQuery posterQuery;
+            QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+            posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";");
+            posterQuery.first();
+            QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
+
+            ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
+
             GUID = QString::number(QRandomGenerator::global()->generate());
             if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
                 m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext);
@@ -562,6 +571,8 @@ void MainWindow::editMovie() {
             m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text());
         }
         fillTable();
+        fillMovieInfos();
+
     }
 }
 
