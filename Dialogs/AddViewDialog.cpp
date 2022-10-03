@@ -147,14 +147,22 @@ void AddViewDialog::loadPoster(QString path) {
     if (path == "") {
         bool extOK;
         do {
+            QString temp = "";
             extOK = true;
-            m_posterPath = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.webp)");
-            QString ext = m_posterPath;
-            ext = ext.remove(0, m_posterPath.lastIndexOf(".")+1);
+            temp = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.webp)");
+
+            QString ext = temp;
+            ext = ext.remove(0, temp.lastIndexOf(".")+1);
             // Test if file is a jpg or a png
-            if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "webp") != 0) {
+            if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "webp") != 0 && temp.size() > 0) {
                 QMessageBox::critical(this, tr("Format incorrect"), tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou webm"));
                 extOK = false;
+            }
+            else {
+                //This is to avoid spamming file selection dialog when closing dialog without selecting a file
+                if(temp.size() > 0) {
+                    m_posterPath = temp;
+                }
             }
         } while (extOK == false);
     }

@@ -563,12 +563,20 @@ void MainWindow::editMovie() {
             if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
                 m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext);
             }
+            QSqlQuery editMovieQuery;
+            if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
+                                    "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
+                                    "\", Poster=\""+GUID+"."+ext+"\" WHERE ID=\""+ID+"\";")) {
+                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text());
+            }
         }
-        QSqlQuery editMovieQuery;
-        if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
-                                "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
-                                "\", Poster=\""+GUID+"."+ext+"\" WHERE ID=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text());
+        else {
+            QSqlQuery editMovieQuery;
+            if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
+                                    "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
+                                    "\" WHERE ID=\""+ID+"\";")) {
+                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text());
+            }
         }
         fillTable();
         fillMovieInfos();
