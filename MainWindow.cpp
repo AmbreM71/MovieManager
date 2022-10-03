@@ -444,6 +444,7 @@ void MainWindow::addView() {
 
         fillGlobalStats();
         fillTable();
+        fillMovieInfos();
     }
 }
 

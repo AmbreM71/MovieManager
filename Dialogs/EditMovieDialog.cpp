@@ -90,7 +90,7 @@ void EditMovieDialog::loadPoster() {
         m_newPoster = true;
         QPixmap* pixmap = new QPixmap(m_posterPath);
         QPixmap pm;
-        pm = pixmap->scaledToHeight(230, Qt::SmoothTransformation);
+        pm = pixmap->scaledToHeight(150, Qt::SmoothTransformation);
         m_ui->PosterLabel->setPixmap(pm);
     }
 }
