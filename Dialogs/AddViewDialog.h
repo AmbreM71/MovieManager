@@ -4,6 +4,10 @@
 #include <QDialog>
 #include <QSqlQuery>
 #include <QPushButton>
+#include <QFileDialog>
+#include <QMessageBox>
+
+#include <ShlObj.h>
 
 namespace Ui {
 class AddViewDialog;
@@ -14,6 +18,7 @@ class AddViewDialog : public QDialog
     Q_OBJECT
     private:
         Ui::AddViewDialog* m_ui;
+        QString m_posterPath;
 
 
     public:
@@ -27,6 +32,7 @@ class AddViewDialog : public QDialog
         int getReleaseYear();
         QString getViewType();
         QString getViewDate();
+        QString getPosterPath();
         int getRating();
         int getEntries();
         bool isDateUnknown();
@@ -37,6 +43,7 @@ class AddViewDialog : public QDialog
         void toggleViewDateInput(int state);
         void toggleViewTypeInput(int state);
         void checkValid();
+        void loadPoster(QString path = "");
 
 
 };

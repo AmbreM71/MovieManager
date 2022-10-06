@@ -2,8 +2,12 @@
 #define EDITMOVIEDIALOG_H
 
 #include <QDialog>
-#include <QTableWidget>
+#include <QSqlQuery>
 #include <QDate>
+#include <QFileDialog>
+#include <QMessageBox>
+
+#include <ShlObj.h>
 
 namespace Ui {
 class EditMovieDialog;
@@ -15,18 +19,25 @@ class EditMovieDialog : public QDialog
 
     private:
         Ui::EditMovieDialog* m_ui;
-        QTableWidget* m_table;
+        QString* m_ID;
         bool m_edited = false;
+        bool m_newPoster = false;
+        QString m_posterPath;
 
     public:
-        explicit EditMovieDialog(QTableWidget* table, QWidget *parent = nullptr);
+        explicit EditMovieDialog(QString ID, QWidget *parent = nullptr);
         ~EditMovieDialog();
 
         bool edited();
+        bool newPoster();
         QString getMovieName();
         QString getReleaseYear();
+        QString getPosterPath();
         int getRating();
         int getEntries();
+
+    public slots:
+        void loadPoster();
 
 
 };

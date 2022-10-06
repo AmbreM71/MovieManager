@@ -5,6 +5,7 @@
         <file>Icons/edit.png</file>
         <file>Icons/edit light.png</file>
         <file>Icons/remove light.png</file>
+        <file>Icons/nocover.png</file>
     </qresource>
     <qresource prefix="/localisations">
         <file>Localisation/MovieManager_en_US.qm</file>

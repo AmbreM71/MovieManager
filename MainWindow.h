@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSettings>
+#include <QPixmap>
+#include <QRandomGenerator>
 
 #include <cmath>
 #include <ctime>
@@ -66,7 +68,7 @@ class MainWindow : public QMainWindow {
 
         explicit MainWindow(QApplication* app, QWidget* parent = nullptr);
         void databaseConnection();
-        void loadDB(bool isFiltered = false);
+        void fillTable(bool isFiltered = false);
         void fillGlobalStats();
         void filterTable();
         void setSettings();
@@ -90,6 +92,7 @@ class MainWindow : public QMainWindow {
         void customMenuRequested(QPoint pos);
         void deleteMovie();
         void editMovie();
+        void fillMovieInfos();
 
 };
 
