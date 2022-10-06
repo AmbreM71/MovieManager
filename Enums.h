@@ -2,15 +2,21 @@
 #define ENUMS_H
 
 enum Theme {
-    Classic = 0,
-    Dark = 1,
-    OLED = 2,
-    MidnightPurple = 3,
+    Classic,
+    Dark,
+    OLED,
+    MidnightPurple,
 };
 
 enum Language {
-    French = 0,
-    English = 1,
+    French,
+    English,
+};
+
+enum LogCriticity {
+    Notice,
+    Warning,
+    Error,
 };
 
 #endif // ENUMS_H

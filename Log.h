@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QDate>
 #include <QTime>
+#include <Structures.h>
 
 
 class Log : public QObject {
@@ -12,13 +13,13 @@ class Log : public QObject {
     Q_OBJECT
 
     private:
-       QList<QString> m_log;
+       QList<LogElement> m_log;
 
     public:
         Log();
-        void append(QString s);
+        void append(QString s, enum LogCriticity criticity);
         void clear();
-        QString getLog(int i);
+        LogElement getLog(int i);
         int size();
 
     signals:

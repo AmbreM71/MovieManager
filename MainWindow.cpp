@@ -61,7 +61,10 @@ void MainWindow::databaseConnection() {
     m_db.setDatabaseName("movieDatabase.db");
 
     if(!m_db.open()) {
-        m_log->append(tr("Erreur lors de l'ouverture de la base de données"));
+        m_log->append(tr("Erreur lors de l'ouverture de la base de données"), Error);
+    }
+    else {
+        m_log->append(tr("Base de donnée ouverte avec succès"), Notice);
     }
 
     QString movieDatabaseCreationString = "CREATE TABLE IF NOT EXISTS movies ("
@@ -75,7 +78,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery movieDBQuery;
 
     if(!movieDBQuery.exec(movieDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table movies"));
+        m_log->append(tr("Erreur lors de la création de la table movies"), Error);
     }
 
 
@@ -88,7 +91,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery viewsBDQuery;
 
     if(!viewsBDQuery.exec(ViewsDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table views"));
+        m_log->append(tr("Erreur lors de la création de la table views"), Error);
     }
 
 
@@ -180,7 +183,6 @@ void MainWindow::fillMovieInfos() {
     std::wstring wfile(path);
     QString posterpath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
 
-    qDebug() << posterQuery.value(0).toString();
     QPixmap* pixmap;
     if(posterQuery.value(0).toString() == "") {
         pixmap = new QPixmap(":/icons/Icons/nocover.png");
@@ -289,7 +291,7 @@ void MainWindow::importDB() {
                             query.bindValue(4, movie["Rating"].toInt());
 
                             if(!query.exec()){
-                                m_log->append(tr("Erreur lors de l'import dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
+                                m_log->append(tr("Erreur lors de l'import dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), Error);
                             }
                         }
                     }
@@ -305,7 +307,7 @@ void MainWindow::importDB() {
                             query.bindValue(3, view["ViewType"].toString());
 
                             if(!query.exec()){
-                                m_log->append(tr("Erreur lors de l'import dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text());
+                                m_log->append(tr("Erreur lors de l'import dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), Error);
                             }
                         }
                     }
@@ -388,7 +390,7 @@ void MainWindow::addView() {
                 QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
                 QString GUID = QString::number(QRandomGenerator::global()->generate());
                 if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
-                    m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext);
+                    m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, Error);
                 }
                 posterPath = GUID+"."+ext;
             }
@@ -408,7 +410,7 @@ void MainWindow::addView() {
             movieYear = QString::number(window->getReleaseYear());
 
             if(!insertIntoMoviesQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoMoviesQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoMoviesQuery.lastError().text());
+                m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoMoviesQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoMoviesQuery.lastError().text(), Error);
             }
         }
         else {
@@ -450,7 +452,7 @@ void MainWindow::addView() {
         insertIntoViewsQuery.bindValue(2, ViewType);
 
         if(!insertIntoViewsQuery.exec()){
-            m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoViewsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoViewsQuery.lastError().text());
+            m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoViewsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoViewsQuery.lastError().text(), Error);
         }
 
         fillGlobalStats();
@@ -573,13 +575,13 @@ void MainWindow::editMovie() {
 
             GUID = QString::number(QRandomGenerator::global()->generate());
             if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
-                m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext);
+                m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, Error);
             }
             QSqlQuery editMovieQuery;
             if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
                                     "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
                                     "\", Poster=\""+GUID+"."+ext+"\" WHERE ID=\""+ID+"\";")) {
-                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text());
+                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), Error);
             }
         }
         else {
@@ -587,7 +589,7 @@ void MainWindow::editMovie() {
             if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
                                     "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
                                     "\" WHERE ID=\""+ID+"\";")) {
-                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text());
+                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), Error);
             }
         }
         fillTable();
@@ -612,11 +614,11 @@ void MainWindow::deleteMovie() {
         QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
 
         if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text());
+            m_log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text(), Error);
         }
 
         if(!deleteAssociatedViewsQuery.exec("DELETE FROM views WHERE ID_Movie=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text());
+            m_log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text(), Error);
         }
 
         resetFilters();
@@ -666,7 +668,7 @@ void MainWindow::refreshLanguage() {
     }
 
     if(!successLoad) {
-        m_log->append(tr("Impossible de charger le fichier de langage"));
+        m_log->append(tr("Impossible de charger le fichier de langage"), Error);
     }
     m_ui->retranslateUi(this);
     fillGlobalStats();

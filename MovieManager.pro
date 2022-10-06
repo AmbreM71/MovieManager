@@ -24,7 +24,8 @@ HEADERS += \
     Dialogs/OptionsDialog.h \
     Enums.h \
     Log.h \
-    MainWindow.h
+    MainWindow.h \
+    Structures.h
 
 QT += widgets \
       sql \
