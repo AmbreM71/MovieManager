@@ -180,7 +180,15 @@ void MainWindow::fillMovieInfos() {
     std::wstring wfile(path);
     QString posterpath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
 
-    QPixmap* pixmap = new QPixmap(posterpath+"\\"+posterQuery.value(0).toString());
+    qDebug() << posterQuery.value(0).toString();
+    QPixmap* pixmap;
+    if(posterQuery.value(0).toString() == "") {
+        pixmap = new QPixmap(":/icons/Icons/nocover.png");
+    }
+    else {
+        pixmap = new QPixmap(posterpath+"\\"+posterQuery.value(0).toString());
+    }
+
     m_ui->PosterLabel->setPixmap(pixmap->scaledToHeight(400, Qt::SmoothTransformation));
 
 
@@ -374,12 +382,15 @@ void MainWindow::addView() {
 
         //Add the new movie to the movies table
         if(window->getComboboxSelectedItem() == "") {
-
-            //Processing poster moving and renaming
-            QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
-            QString GUID = QString::number(QRandomGenerator::global()->generate());
-            if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
-                m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext);
+            QString posterPath = "";
+            if(window->getPosterPath() != "") {
+                //Processing poster moving and renaming
+                QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
+                QString GUID = QString::number(QRandomGenerator::global()->generate());
+                if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
+                    m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext);
+                }
+                posterPath = GUID+"."+ext;
             }
 
             QSqlQuery insertIntoMoviesQuery;
@@ -391,7 +402,7 @@ void MainWindow::addView() {
             insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
             insertIntoMoviesQuery.bindValue(2, window->getEntries());
             insertIntoMoviesQuery.bindValue(3, window->getRating());
-            insertIntoMoviesQuery.bindValue(4, GUID+"."+ext);
+            insertIntoMoviesQuery.bindValue(4, posterPath);
 
             movieName = window->getName();
             movieYear = QString::number(window->getReleaseYear());

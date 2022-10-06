@@ -16,7 +16,14 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
     std::wstring wfile(path);
     QString posterpath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
-    QPixmap* pixmap = new QPixmap(posterpath+"\\"+movieQuery.value(4).toString());
+    QPixmap* pixmap;
+    if(movieQuery.value(4).toString() != "") {
+        pixmap = new QPixmap(posterpath+"\\"+movieQuery.value(4).toString());
+    }
+    else {
+        pixmap = new QPixmap(":/icons/Icons/nocover.png");
+    }
+
     m_ui->PosterLabel->setPixmap(pixmap->scaledToHeight(150, Qt::SmoothTransformation));
 
     this->setWindowTitle(tr("Modifier - ") + movieQuery.value(0).toString());
