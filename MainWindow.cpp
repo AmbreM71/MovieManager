@@ -184,7 +184,19 @@ void MainWindow::fillMovieInfos() {
         pixmap = new QPixmap(m_savepath+"\\"+posterQuery.value(0).toString());
     }
 
-    m_ui->PosterLabel->setPixmap(pixmap->scaledToHeight(400, Qt::SmoothTransformation));
+    int posterHeight = 400;
+    float safeRatio = 1;
+    QPixmap pm;
+
+    //If picture is too wide, poster is scaled to width to fit in UI (safe until 4:3)
+    if((float)pixmap->height()/(float)pixmap->width() < safeRatio) {
+        pm = pixmap->scaledToWidth(posterHeight/safeRatio, Qt::SmoothTransformation);
+    }
+    else {
+        pm = pixmap->scaledToHeight(posterHeight, Qt::SmoothTransformation);
+    }
+
+    m_ui->PosterLabel->setPixmap(pm);
 
 
 

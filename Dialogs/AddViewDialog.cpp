@@ -172,7 +172,17 @@ void AddViewDialog::loadPoster(QString path) {
     if(m_posterPath != "") {
         QPixmap* pixmap = new QPixmap(m_posterPath);
         QPixmap pm;
-        pm = pixmap->scaledToHeight(260, Qt::SmoothTransformation);
+
+        int posterHeight = 260;
+        float safeRatio = 1.33;
+
+        //If picture is too wide, poster is scaled to width to fit in UI (safe until 4:3)
+        if((float)pixmap->height()/(float)pixmap->width() < safeRatio) {
+            pm = pixmap->scaledToWidth(posterHeight/safeRatio, Qt::SmoothTransformation);
+        }
+        else {
+            pm = pixmap->scaledToHeight(posterHeight, Qt::SmoothTransformation);
+        }
         m_ui->PosterLabel->setPixmap(pm);
     }
 }
