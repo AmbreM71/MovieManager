@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 
+#include <Common.h>
+
 namespace Ui {
 class AddViewDialog;
 }
@@ -17,9 +19,8 @@ class AddViewDialog : public QDialog
     Q_OBJECT
     private:
         Ui::AddViewDialog* m_ui;
-        QString m_posterPath;
         QList<QString>* m_tags;
-
+        QString m_posterPath;
 
     public:
         explicit AddViewDialog(QWidget *parent = nullptr);

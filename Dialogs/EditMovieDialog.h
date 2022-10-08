@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 
+#include <Common.h>
+
 namespace Ui {
 class EditMovieDialog;
 }
@@ -36,7 +38,7 @@ class EditMovieDialog : public QDialog
         int getEntries();
 
     public slots:
-        void loadPoster();
+        void loadPoster(QString path = "");
 
 
 };

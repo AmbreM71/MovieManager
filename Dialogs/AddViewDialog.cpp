@@ -74,13 +74,8 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieRatingInput->setEnabled(true);
         m_ui->EntriesInput->setEnabled(true);
         m_ui->PosterButton->setEnabled(true);
-        if (m_ui->PosterLabel->text() == tr("Affiche"))
-            loadPoster(m_posterPath);
-        else {
-            m_ui->PosterLabel->setText(tr("Affiche"));
-            m_posterPath = "";
-        }
-
+        m_ui->PosterLabel->setText(tr("Affiche"));
+        m_posterPath = "";
     }
     else {
         m_ui->MovieNameInput->setEnabled(false);
@@ -144,47 +139,7 @@ void AddViewDialog::checkValid() {
 }
 
 void AddViewDialog::loadPoster(QString path) {
-    if (path == "") {
-        bool extOK;
-        do {
-            QString temp = "";
-            extOK = true;
-            temp = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.webp)");
-
-            QString ext = temp;
-            ext = ext.remove(0, temp.lastIndexOf(".")+1);
-            // Test if file is a jpg or a png
-            if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "webp") != 0 && temp.size() > 0) {
-                QMessageBox::critical(this, tr("Format incorrect"), tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou webm"));
-                extOK = false;
-            }
-            else {
-                //This is to avoid spamming file selection dialog when closing dialog without selecting a file
-                if(temp.size() > 0) {
-                    m_posterPath = temp;
-                }
-            }
-        } while (extOK == false);
-    }
-    else
-        m_posterPath = path;
-
-    if(m_posterPath != "") {
-        QPixmap* pixmap = new QPixmap(m_posterPath);
-        QPixmap pm;
-
-        int posterHeight = 260;
-        float safeRatio = 1.33;
-
-        //If picture is too wide, poster is scaled to width to fit in UI (safe until 4:3)
-        if((float)pixmap->height()/(float)pixmap->width() < safeRatio) {
-            pm = pixmap->scaledToWidth(posterHeight/safeRatio, Qt::SmoothTransformation);
-        }
-        else {
-            pm = pixmap->scaledToHeight(posterHeight, Qt::SmoothTransformation);
-        }
-        m_ui->PosterLabel->setPixmap(pm);
-    }
+    Common::loadPoster(this, m_ui->PosterLabel, 260, 1.33, path, &m_posterPath);
 }
 
 void AddViewDialog::addTag() {

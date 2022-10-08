@@ -176,29 +176,7 @@ void MainWindow::fillMovieInfos() {
     posterQuery.exec("SELECT Poster FROM movies WHERE ID='"+ID+"'");
     posterQuery.first();
 
-    QPixmap* pixmap;
-    if(posterQuery.value(0).toString() == "") {
-        pixmap = new QPixmap(":/icons/Icons/nocover.png");
-    }
-    else {
-        pixmap = new QPixmap(m_savepath+"\\"+posterQuery.value(0).toString());
-    }
-
-    int posterHeight = 400;
-    float safeRatio = 1;
-    QPixmap pm;
-
-    //If picture is too wide, poster is scaled to width to fit in UI (safe until 4:3)
-    if((float)pixmap->height()/(float)pixmap->width() < safeRatio) {
-        pm = pixmap->scaledToWidth(posterHeight/safeRatio, Qt::SmoothTransformation);
-    }
-    else {
-        pm = pixmap->scaledToHeight(posterHeight, Qt::SmoothTransformation);
-    }
-
-    m_ui->PosterLabel->setPixmap(pm);
-
-
+    Common::loadPoster(this, m_ui->PosterLabel, 400, 1, m_savepath+"\\"+posterQuery.value(0).toString());
 
     //Fetch the number of views of the current movie
     QSqlQuery viewsQuery;
@@ -383,7 +361,6 @@ void MainWindow::addView() {
     AddViewDialog* window = new AddViewDialog();
     window->show();
     if(window->exec() == 1) {
-
         QString tags = "";
         for(int i=0 ; i<window->getTags()->size() ; i++) {
             tags += window->getTags()->at(i);
@@ -467,7 +444,7 @@ void MainWindow::addView() {
         insertIntoViewsQuery.bindValue(2, ViewType);
 
         if(!insertIntoViewsQuery.exec()){
-            m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoViewsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoViewsQuery.lastError().text(), Error);
+            m_log->append(tr("Erreur lors de l'ajout dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoViewsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoViewsQuery.lastError().text(), Error);
         }
 
         fillGlobalStats();

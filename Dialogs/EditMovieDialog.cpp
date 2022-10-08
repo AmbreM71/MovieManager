@@ -11,15 +11,8 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     movieQuery.exec("SELECT Name, ReleaseYear, Entries, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'");
     movieQuery.first();
 
-    QPixmap* pixmap;
-    if(movieQuery.value(4).toString() != "") {
-        pixmap = new QPixmap(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+movieQuery.value(4).toString());
-    }
-    else {
-        pixmap = new QPixmap(":/icons/Icons/nocover.png");
-    }
-
-    m_ui->PosterLabel->setPixmap(pixmap->scaledToHeight(150, Qt::SmoothTransformation));
+    m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+movieQuery.value(4).toString();
+    loadPoster(m_posterPath);
 
     this->setWindowTitle(tr("Modifier - ") + movieQuery.value(0).toString());
 
@@ -65,44 +58,10 @@ int EditMovieDialog::getEntries() {
     return m_ui->EntriesInput->value();
 }
 
-void EditMovieDialog::loadPoster() {
-
-    bool extOK;
-    do {
-        QString temp = "";
-        extOK = true;
-        temp = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.webp)");
-
-        QString ext = temp;
-        ext = ext.remove(0, temp.lastIndexOf(".")+1);
-        // Test if file is a jpg or a png
-        if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "webp") != 0 && temp.size() > 0) {
-            QMessageBox::critical(this, tr("Format incorrect"), tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou webm"));
-            extOK = false;
-        }
-        else {
-            //This is to avoid spamming file selection dialog when closing dialog without selecting a file
-            if(temp.size() > 0) {
-                m_posterPath = temp;
-            }
-        }
-    } while (extOK == false);
-
-    if(m_posterPath != "") {
+void EditMovieDialog::loadPoster(QString path) {
+    QString tmp = m_posterPath;
+    Common::loadPoster(this, m_ui->PosterLabel, 150, 1.33, path, &m_posterPath);
+    if (QString::compare(tmp, m_posterPath) != 0) {
         m_newPoster = true;
-        QPixmap* pixmap = new QPixmap(m_posterPath);
-        QPixmap pm;
-
-        int posterHeight = 150;
-        float safeRatio = 1.33;
-
-        //If picture is too wide, poster is scaled to width to fit in UI (safe until 4:3)
-        if((float)pixmap->height()/(float)pixmap->width() < safeRatio) {
-            pm = pixmap->scaledToWidth(posterHeight/safeRatio, Qt::SmoothTransformation);
-        }
-        else {
-            pm = pixmap->scaledToHeight(posterHeight, Qt::SmoothTransformation);
-        }
-        m_ui->PosterLabel->setPixmap(pm);
     }
 }

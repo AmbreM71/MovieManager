@@ -1,4 +1,5 @@
 SOURCES += \
+    Common.cpp \
     Dialogs/AboutDialog.cpp \
     Dialogs/AddViewDialog.cpp \
     Dialogs/ChartsDialog.cpp \
@@ -13,6 +14,7 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    Common.h \
     Dialogs/AboutDialog.h \
     Dialogs/AddViewDialog.h \
     Dialogs/ChartsDialog.h \

@@ -23,6 +23,7 @@
 
 #include "Log.h"
 #include "Enums.h"
+#include "Common.h"
 
 #include "Dialogs/AddViewDialog.h"
 #include "Dialogs/EditViewsDialog.h"
