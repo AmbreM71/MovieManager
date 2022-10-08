@@ -3,9 +3,7 @@
 
 AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::AddViewDialog;
-    m_tags = new QList<QString>;
     m_ui->setupUi(this);
-    this->setFixedSize(600,351);
 
     m_ui->MovieViewDateInput->setDate(QDate::currentDate());
 
@@ -19,8 +17,6 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
-    QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
-    QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
 
     //Connectors to check if input are filled to enable Ok button
     QObject::connect(m_ui->MovieNameInput, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
@@ -56,9 +52,6 @@ QString AddViewDialog::getViewType() {
 QString AddViewDialog::getViewDate() {
     return m_ui->MovieViewDateInput->text();
 }
-QString AddViewDialog::getPosterPath() {
-    return m_posterPath;
-}
 int AddViewDialog::getRating() {
     return m_ui->MovieRatingInput->value();
 }
@@ -73,32 +66,12 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieReleaseYearInput->setEnabled(true);
         m_ui->MovieRatingInput->setEnabled(true);
         m_ui->EntriesInput->setEnabled(true);
-        m_ui->PosterButton->setEnabled(true);
-        if (m_ui->PosterLabel->text() == tr("Affiche"))
-            loadPoster(m_posterPath);
-        else {
-            m_ui->PosterLabel->setText(tr("Affiche"));
-            m_posterPath = "";
-        }
-
     }
     else {
         m_ui->MovieNameInput->setEnabled(false);
         m_ui->MovieReleaseYearInput->setEnabled(false);
         m_ui->MovieRatingInput->setEnabled(false);
         m_ui->EntriesInput->setEnabled(false);
-        m_ui->PosterButton->setEnabled(false);
-
-        QString movieName = m_ui->ExistingMoviesComboBox->currentText().remove(m_ui->ExistingMoviesComboBox->currentText().length()-7, m_ui->ExistingMoviesComboBox->currentText().length());
-        QString movieYear = m_ui->ExistingMoviesComboBox->currentText().remove(0, m_ui->ExistingMoviesComboBox->currentText().length()-4);
-
-        QSqlQuery posterQuery;
-        posterQuery.exec("SELECT Poster FROM movies WHERE Name='"+movieName+"' AND ReleaseYear='"+movieYear+"'");
-        posterQuery.first();
-
-
-
-        loadPoster(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+posterQuery.value(0).toString());
     }
 }
 
@@ -141,49 +114,4 @@ void AddViewDialog::checkValid() {
     else {
         m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
-}
-
-void AddViewDialog::loadPoster(QString path) {
-    if (path == "") {
-        bool extOK;
-        do {
-            QString temp = "";
-            extOK = true;
-            temp = QFileDialog::getOpenFileName(this, tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.webp)");
-
-            QString ext = temp;
-            ext = ext.remove(0, temp.lastIndexOf(".")+1);
-            // Test if file is a jpg or a png
-            if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "webp") != 0 && temp.size() > 0) {
-                QMessageBox::critical(this, tr("Format incorrect"), tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou webm"));
-                extOK = false;
-            }
-            else {
-                //This is to avoid spamming file selection dialog when closing dialog without selecting a file
-                if(temp.size() > 0) {
-                    m_posterPath = temp;
-                }
-            }
-        } while (extOK == false);
-    }
-    else
-        m_posterPath = path;
-
-    if(m_posterPath != "") {
-        QPixmap* pixmap = new QPixmap(m_posterPath);
-        QPixmap pm;
-        pm = pixmap->scaledToHeight(260, Qt::SmoothTransformation);
-        m_ui->PosterLabel->setPixmap(pm);
-    }
-}
-
-void AddViewDialog::addTag() {
-    m_tags->append(m_ui->TagsInput->text());
-    QPushButton* tag = new QPushButton(m_ui->TagsInput->text());
-    m_ui->TagsLayout->addWidget(tag,0,m_tags->size(), Qt::AlignLeft);
-    m_ui->TagsInput->clear();
-}
-
-QList<QString>* AddViewDialog::getTags() {
-    return m_tags;
 }

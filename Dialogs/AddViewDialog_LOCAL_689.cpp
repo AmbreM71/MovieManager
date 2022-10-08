@@ -3,7 +3,6 @@
 
 AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::AddViewDialog;
-    m_tags = new QList<QString>;
     m_ui->setupUi(this);
     this->setFixedSize(600,351);
 
@@ -20,7 +19,6 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
     QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
-    QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
 
     //Connectors to check if input are filled to enable Ok button
     QObject::connect(m_ui->MovieNameInput, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
@@ -172,18 +170,7 @@ void AddViewDialog::loadPoster(QString path) {
     if(m_posterPath != "") {
         QPixmap* pixmap = new QPixmap(m_posterPath);
         QPixmap pm;
-        pm = pixmap->scaledToHeight(260, Qt::SmoothTransformation);
+        pm = pixmap->scaledToHeight(230, Qt::SmoothTransformation);
         m_ui->PosterLabel->setPixmap(pm);
     }
-}
-
-void AddViewDialog::addTag() {
-    m_tags->append(m_ui->TagsInput->text());
-    QPushButton* tag = new QPushButton(m_ui->TagsInput->text());
-    m_ui->TagsLayout->addWidget(tag,0,m_tags->size(), Qt::AlignLeft);
-    m_ui->TagsInput->clear();
-}
-
-QList<QString>* AddViewDialog::getTags() {
-    return m_tags;
 }
