@@ -27,17 +27,22 @@ void LogDialog::fillList() {
         m_ui->listWidget->addItem(m_log->getLog(i).string);
         switch (m_log->getLog(i).criticity) {
             case Error:
-                color->setRgb(200,20,20);
+                color->setRgb(251,42,42);
                 brush->setColor(*color);
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
             case Warning:
-                color->setRgb(240,120,20);
+                color->setRgb(251,183,42);
+                brush->setColor(*color);
+                m_ui->listWidget->item(i)->setForeground(*brush);
+                break;
+            case Success:
+                color->setRgb(82,206,0);
                 brush->setColor(*color);
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
             case Notice:
-                color->setRgb(0,180,250);
+                color->setRgb(255,255,255);
                 brush->setColor(*color);
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;

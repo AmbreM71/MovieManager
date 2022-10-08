@@ -5,18 +5,19 @@ enum Theme {
     Classic,
     Dark,
     OLED,
-    MidnightPurple,
+    MidnightPurple
 };
 
 enum Language {
     French,
-    English,
+    English
 };
 
 enum LogCriticity {
     Notice,
+    Success,
     Warning,
-    Error,
+    Error
 };
 
 #endif // ENUMS_H

@@ -43,8 +43,6 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
     QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
     QObject::connect(m_ui->MoviesListWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
-
-
 }
 
 MainWindow::~MainWindow() {
@@ -59,7 +57,7 @@ void MainWindow::databaseConnection() {
         m_log->append(tr("Erreur lors de l'ouverture de la base de données"), Error);
     }
     else {
-        m_log->append(tr("Base de donnée ouverte avec succès"), Notice);
+        m_log->append(tr("Base de donnée ouverte avec succès"), Success);
     }
 
     QString movieDatabaseCreationString = "CREATE TABLE IF NOT EXISTS movies ("
@@ -123,6 +121,7 @@ void MainWindow::fillTable(bool isFiltered) {
         m_filter_minEntries = 0;
     }
 
+    int numberOfParsedMovies = 0;
     while(moviesQuery.next()) {
         QTableWidgetItem* name = new QTableWidgetItem();
         QTableWidgetItem* releaseYear = new QTableWidgetItem();
@@ -145,7 +144,10 @@ void MainWindow::fillTable(bool isFiltered) {
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 0, name);
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 1, releaseYear);
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 2, ID);
+
+        numberOfParsedMovies++;
     }
+    m_log->append(tr("Nombre de films lus depuis la base de donnée : ")+QString::number(numberOfParsedMovies), Notice);
     m_ui->MoviesListWidget->setCurrentCell(0,0);
 
     //Disable Manage views and filters button if no movie the list is empty
@@ -480,6 +482,9 @@ void MainWindow::openLog() {
             delete window;
         }
     }
+    else {
+        m_log->append(tr("Log déjà ouvert"), Warning);
+    }
 }
 
 void MainWindow::openAbout() {
@@ -489,6 +494,9 @@ void MainWindow::openAbout() {
         if(window->exec() == 0) {
             delete window;
         }
+    }
+    else {
+        m_log->append(tr("Fenêtre 'A Propos' déjà ouverte"), Warning);
     }
 }
 
