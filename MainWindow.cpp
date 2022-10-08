@@ -1,15 +1,10 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include <ShlObj.h>
-
 
 MainWindow::MainWindow(QApplication* app, QWidget* parent) {
 
-    PWSTR path;
-    SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
-    std::wstring wfile(path);
-    m_savepath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
+    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters";
 
     QDir dir(m_savepath);
     if (!dir.exists())
@@ -178,17 +173,12 @@ void MainWindow::fillMovieInfos() {
     posterQuery.exec("SELECT Poster FROM movies WHERE ID='"+ID+"'");
     posterQuery.first();
 
-    PWSTR path;
-    SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
-    std::wstring wfile(path);
-    QString posterpath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
-
     QPixmap* pixmap;
     if(posterQuery.value(0).toString() == "") {
         pixmap = new QPixmap(":/icons/Icons/nocover.png");
     }
     else {
-        pixmap = new QPixmap(posterpath+"\\"+posterQuery.value(0).toString());
+        pixmap = new QPixmap(m_savepath+"\\"+posterQuery.value(0).toString());
     }
 
     m_ui->PosterLabel->setPixmap(pixmap->scaledToHeight(400, Qt::SmoothTransformation));

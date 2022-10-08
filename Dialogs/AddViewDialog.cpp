@@ -94,11 +94,9 @@ void AddViewDialog::comboboxChanged() {
         posterQuery.exec("SELECT Poster FROM movies WHERE Name='"+movieName+"' AND ReleaseYear='"+movieYear+"'");
         posterQuery.first();
 
-        PWSTR path;
-        SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
-        std::wstring wfile(path);
-        QString posterpath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
-        loadPoster(posterpath+"\\"+posterQuery.value(0).toString());
+
+
+        loadPoster(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+posterQuery.value(0).toString());
     }
 }
 

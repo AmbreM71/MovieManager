@@ -11,14 +11,9 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     movieQuery.exec("SELECT Name, ReleaseYear, Entries, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'");
     movieQuery.first();
 
-
-    PWSTR path;
-    SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_DEFAULT, NULL, &path);
-    std::wstring wfile(path);
-    QString posterpath = QString::fromStdWString(wfile) + "\\MovieManager\\Posters";
     QPixmap* pixmap;
     if(movieQuery.value(4).toString() != "") {
-        pixmap = new QPixmap(posterpath+"\\"+movieQuery.value(4).toString());
+        pixmap = new QPixmap(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+movieQuery.value(4).toString());
     }
     else {
         pixmap = new QPixmap(":/icons/Icons/nocover.png");

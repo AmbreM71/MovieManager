@@ -6,8 +6,7 @@
 #include <QDate>
 #include <QFileDialog>
 #include <QMessageBox>
-
-#include <ShlObj.h>
+#include <QStandardPaths>
 
 namespace Ui {
 class EditMovieDialog;
