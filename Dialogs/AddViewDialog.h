@@ -18,6 +18,7 @@ class AddViewDialog : public QDialog
     private:
         Ui::AddViewDialog* m_ui;
         QString m_posterPath;
+        QList<QString>* m_tags;
 
 
     public:
@@ -36,6 +37,7 @@ class AddViewDialog : public QDialog
         int getEntries();
         bool isDateUnknown();
         bool isTypeUnknown();
+        QList<QString>* getTags();
 
     public slots:
         void comboboxChanged();
@@ -43,6 +45,7 @@ class AddViewDialog : public QDialog
         void toggleViewTypeInput(int state);
         void checkValid();
         void loadPoster(QString path = "");
+        void addTag();
 
 
 };

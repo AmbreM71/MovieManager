@@ -66,7 +66,11 @@ void MainWindow::databaseConnection() {
                                    "ReleaseYear SMALLINT,"
                                    "Entries     INT,"
                                    "Rating      TINYINT(10),"
+<<<<<<< HEAD
                                    "Poster      VARCHAR(127));";
+=======
+                                   "Tags        VARCHAR(127));";
+>>>>>>> tags
 
     QSqlQuery movieDBQuery;
 
@@ -371,6 +375,21 @@ void MainWindow::addView() {
     window->show();
     if(window->exec() == 1) {
 
+<<<<<<< HEAD
+=======
+        QString tags = "";
+        for(int i=0 ; i<window->getTags()->size() ; i++) {
+            tags += window->getTags()->at(i);
+            tags += "|";
+        }
+        //To remove le last |
+        tags = tags.left(tags.length()-1);
+
+        //Add the new movie to the movies table
+        QSqlQuery insertIntoMoviesQuery;
+        insertIntoMoviesQuery.prepare("INSERT INTO movies (Name, ReleaseYear, Entries, Rating, Tags) VALUES (?,?,?,?,?);");
+
+>>>>>>> tags
         QString movieName;
         QString movieYear;
 
@@ -396,7 +415,11 @@ void MainWindow::addView() {
             insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
             insertIntoMoviesQuery.bindValue(2, window->getEntries());
             insertIntoMoviesQuery.bindValue(3, window->getRating());
+<<<<<<< HEAD
             insertIntoMoviesQuery.bindValue(4, posterPath);
+=======
+            insertIntoMoviesQuery.bindValue(4, tags);
+>>>>>>> tags
 
             movieName = window->getName();
             movieYear = QString::number(window->getReleaseYear());
