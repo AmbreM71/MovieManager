@@ -74,6 +74,13 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieRatingInput->setEnabled(true);
         m_ui->EntriesInput->setEnabled(true);
         m_ui->PosterButton->setEnabled(true);
+        m_ui->TagsAddButton->setEnabled(true);
+        m_ui->TagsInput->setEnabled(true);
+        for(int i = 0 ; i < m_ui->TagsLayout->count() ; i++) {
+            QWidget* tag = m_ui->TagsLayout->itemAt(i)->widget();
+            tag->setEnabled(true);
+        }
+
         m_ui->PosterLabel->setText(tr("Affiche"));
         m_posterPath = "";
     }
@@ -83,6 +90,12 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieRatingInput->setEnabled(false);
         m_ui->EntriesInput->setEnabled(false);
         m_ui->PosterButton->setEnabled(false);
+        m_ui->TagsAddButton->setEnabled(false);
+        m_ui->TagsInput->setEnabled(false);
+        for(int i = 0 ; i < m_ui->TagsLayout->count() ; i++) {
+            QWidget* tag = m_ui->TagsLayout->itemAt(i)->widget();
+            tag->setEnabled(false);
+        }
 
         QString movieName = m_ui->ExistingMoviesComboBox->currentText().remove(m_ui->ExistingMoviesComboBox->currentText().length()-7, m_ui->ExistingMoviesComboBox->currentText().length());
         QString movieYear = m_ui->ExistingMoviesComboBox->currentText().remove(0, m_ui->ExistingMoviesComboBox->currentText().length()-4);
@@ -139,7 +152,7 @@ void AddViewDialog::checkValid() {
 }
 
 void AddViewDialog::loadPoster(QString path) {
-    Common::loadPoster(this, m_ui->PosterLabel, 260, 1.33, path, &m_posterPath);
+    Common::loadPoster(this, m_ui->PosterLabel, 260, 1.4, path, &m_posterPath);
 }
 
 void AddViewDialog::addTag() {
