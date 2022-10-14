@@ -76,8 +76,9 @@ void AddViewDialog::comboboxChanged() {
         m_ui->PosterButton->setEnabled(true);
         m_ui->TagsAddButton->setEnabled(true);
         m_ui->TagsInput->setEnabled(true);
-        for(int i = 0 ; i < m_ui->TagsLayout->count() ; i++) {
-            QWidget* tag = m_ui->TagsLayout->itemAt(i)->widget();
+
+        for(int i = 0 ; i < m_ui->TagsLayout->count()-1 ; i++) {
+            QLabel* tag = (QLabel*)m_ui->TagsLayout->itemAt(i)->widget();
             tag->setEnabled(true);
         }
 
@@ -92,8 +93,9 @@ void AddViewDialog::comboboxChanged() {
         m_ui->PosterButton->setEnabled(false);
         m_ui->TagsAddButton->setEnabled(false);
         m_ui->TagsInput->setEnabled(false);
-        for(int i = 0 ; i < m_ui->TagsLayout->count() ; i++) {
-            QWidget* tag = m_ui->TagsLayout->itemAt(i)->widget();
+
+        for(int i = 0 ; i < m_ui->TagsLayout->count()-1 ; i++) {
+            QLabel* tag = (QLabel*)m_ui->TagsLayout->itemAt(i)->widget();
             tag->setEnabled(false);
         }
 
@@ -156,10 +158,20 @@ void AddViewDialog::loadPoster(QString path) {
 }
 
 void AddViewDialog::addTag() {
-    m_tags->append(m_ui->TagsInput->text());
-    QPushButton* tag = new QPushButton(m_ui->TagsInput->text());
-    m_ui->TagsLayout->addWidget(tag,0,m_tags->size(), Qt::AlignLeft);
-    m_ui->TagsInput->clear();
+    if(m_ui->TagsInput->text().length() != 0) {
+        m_tags->append(m_ui->TagsInput->text());
+        QLabel* tag = new QLabel(m_ui->TagsInput->text());
+        tag->setStyleSheet(
+                    "QLabel { "
+                    "   background-color : #653133;"
+                    "   color : #d17579;"
+                    "   padding : 1px 5px 3px 5px;"
+                    "   border-radius:12px;"
+                    "   border: 2px solid #653133;"
+                    "}");
+        m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
+        m_ui->TagsInput->clear();
+    }
 }
 
 QList<QString>* AddViewDialog::getTags() {
