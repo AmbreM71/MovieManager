@@ -244,6 +244,43 @@ void MainWindow::fillMovieInfos() {
     m_ui->RatingLabel->setText(tr("Note : ") + q.value(1).toString());
 }
 
+void MainWindow::removeUnusedTags() {
+    QString removedTags;
+
+    QSqlQuery tagLinksQuery;
+    tagLinksQuery.exec("SELECT Tag FROM taglinks");
+
+    QSqlQuery tagsQuery;
+    tagsQuery.exec("SELECT Tag FROM tags");
+
+    bool found;
+
+    //Foreach tag
+    while(tagsQuery.next()) {
+        QSqlQuery deleteTagQuery;
+        found = false;
+        tagLinksQuery.first();
+        tagLinksQuery.previous();
+        //Foreach links between Tag and movie
+        while(tagLinksQuery.next()) {
+            //If tag exist in link table
+            if(QString::compare(tagLinksQuery.value(0).toString(),tagsQuery.value(0).toString()) == 0) {
+                found = true;
+                break;
+            }
+        }
+        if(found == false) {
+            if(!deleteTagQuery.exec("DELETE FROM tags WHERE Tag=\""+tagsQuery.value(0).toString()+"\";")) {
+                m_log->append(tr("Erreur lors de la suppression dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+deleteTagQuery.lastError().nativeErrorCode()+tr(" : ")+deleteTagQuery.lastError().text(), Error);
+            }
+            removedTags.append(tagsQuery.value(0).toString() + ", ");
+        }
+    }
+    removedTags.remove(removedTags.length()-2, removedTags.length());
+    m_log->append(tr("Les tags suivants ne sont plus utilisés, ils sont supprimés : ") + removedTags, Notice);
+
+}
+
 void MainWindow::importDB() {
     QString file = QFileDialog::getOpenFileName(this, tr("Exporter"), QString(), "JSON (*.json)");
     QFile jsonFile(file);
@@ -507,6 +544,86 @@ void MainWindow::editViews() {
     }
 }
 
+void MainWindow::editMovie() {
+    EditMovieDialog* window = new EditMovieDialog(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text(), this);
+    window->show();
+    if(window->exec() == 1) {
+
+        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+        QString GUID = "";
+        QString ext = "";
+
+        if(window->newPoster()) {
+
+            //Delete old poster
+            QSqlQuery posterQuery;
+            QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+            posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";");
+            posterQuery.first();
+            QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
+
+            ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
+
+            GUID = QString::number(QRandomGenerator::global()->generate());
+            if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
+                m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, Error);
+            }
+            QSqlQuery editMovieQuery;
+            if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
+                                    "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
+                                    "\", Poster=\""+GUID+"."+ext+"\" WHERE ID=\""+ID+"\";")) {
+                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), Error);
+            }
+        }
+        else {
+            QSqlQuery editMovieQuery;
+            if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
+                                    "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
+                                    "\" WHERE ID=\""+ID+"\";")) {
+                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), Error);
+            }
+        }
+        fillTable();
+        fillMovieInfos();
+
+    }
+}
+
+void MainWindow::deleteMovie() {
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, tr("Supprimer le film"), tr("Êtes-vous sûr de vouloir supprimer le film ? Les visionnages associés seront effacés."));
+    if(reply == QMessageBox::Yes) {
+        QSqlQuery deleteMovieQuery;
+        QSqlQuery deleteAssociatedViewsQuery;
+        QSqlQuery deleteAssociatedTagsQuery;
+        QSqlQuery posterQuery;
+
+        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+
+        posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";");
+        posterQuery.first();
+
+        QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
+
+        if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
+            m_log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text(), Error);
+        }
+
+        if(!deleteAssociatedViewsQuery.exec("DELETE FROM views WHERE ID_Movie=\""+ID+"\";")) {
+            m_log->append(tr("Erreur lors de la suppression dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedViewsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedViewsQuery.lastError().text(), Error);
+        }
+
+        if(!deleteAssociatedTagsQuery.exec("DELETE FROM taglinks WHERE ID_Movie=\""+ID+"\";")) {
+            m_log->append(tr("Erreur lors de la suppression dans la table taglinks, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedTagsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedTagsQuery.lastError().text(), Error);
+        }
+
+        removeUnusedTags();
+        resetFilters();
+        fillMovieInfos();
+        fillGlobalStats();
+    }
+}
+
 void MainWindow::openFilters() {
     FiltersDialog* window = new FiltersDialog(&m_filter_name, &m_filter_minYear, &m_filter_maxYear, &m_filter_minRating, &m_filter_maxRating, &m_filter_minEntries);
     window->show();
@@ -591,85 +708,6 @@ void MainWindow::customMenuRequested(QPoint pos) {
     QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteMovie()));
     QObject::connect(editAction, SIGNAL(triggered()), this, SLOT(editMovie()));
     menu->popup(m_ui->MoviesListWidget->viewport()->mapToGlobal(pos));
-}
-
-void MainWindow::editMovie() {
-    EditMovieDialog* window = new EditMovieDialog(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text(), this);
-    window->show();
-    if(window->exec() == 1) {
-
-        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
-        QString GUID = "";
-        QString ext = "";
-
-        if(window->newPoster()) {
-
-            //Delete old poster
-            QSqlQuery posterQuery;
-            QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
-            posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";");
-            posterQuery.first();
-            QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
-
-            ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
-
-            GUID = QString::number(QRandomGenerator::global()->generate());
-            if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
-                m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, Error);
-            }
-            QSqlQuery editMovieQuery;
-            if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
-                                    "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
-                                    "\", Poster=\""+GUID+"."+ext+"\" WHERE ID=\""+ID+"\";")) {
-                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), Error);
-            }
-        }
-        else {
-            QSqlQuery editMovieQuery;
-            if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
-                                    "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
-                                    "\" WHERE ID=\""+ID+"\";")) {
-                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), Error);
-            }
-        }
-        fillTable();
-        fillMovieInfos();
-
-    }
-}
-
-void MainWindow::deleteMovie() {
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, tr("Supprimer le film"), tr("Êtes-vous sûr de vouloir supprimer le film ? Les visionnages associés seront effacés."));
-    if(reply == QMessageBox::Yes) {
-        QSqlQuery deleteMovieQuery;
-        QSqlQuery deleteAssociatedViewsQuery;
-        QSqlQuery deleteAssociatedTagsQuery;
-        QSqlQuery posterQuery;
-
-        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
-
-        posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";");
-        posterQuery.first();
-
-        QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
-
-        if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text(), Error);
-        }
-
-        if(!deleteAssociatedViewsQuery.exec("DELETE FROM views WHERE ID_Movie=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de la suppression dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedViewsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedViewsQuery.lastError().text(), Error);
-        }
-
-        if(!deleteAssociatedTagsQuery.exec("DELETE FROM taglinks WHERE ID_Movie=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de la suppression dans la table taglinks, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedTagsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedTagsQuery.lastError().text(), Error);
-        }
-
-        resetFilters();
-        fillMovieInfos();
-        fillGlobalStats();
-    }
 }
 
 void MainWindow::menuBarConnectors() {

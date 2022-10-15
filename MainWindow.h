@@ -73,6 +73,7 @@ class MainWindow : public QMainWindow {
         void fillTable(bool isFiltered = false);
         void fillGlobalStats();
         void filterTable();
+        void removeUnusedTags();
         void setSettings();
         void refreshLanguage();
         void refreshTheme();
