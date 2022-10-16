@@ -242,6 +242,28 @@ void MainWindow::fillMovieInfos() {
     q.first();
     m_ui->EntriesLabel->setText(q.value(0).toString() + tr(" entrées"));
     m_ui->RatingLabel->setText(tr("Note : ") + q.value(1).toString());
+
+    QSqlQuery tagsQuery;
+    tagsQuery.exec("SELECT Tag FROM taglinks WHERE ID_Movie='"+ID+"'");
+
+    // Clear tags from layout
+    for(int i = m_ui->TagsLayout->count()-1 ; i >= 0 ; i--) {
+        QLabel* tag = (QLabel*)m_ui->TagsLayout->itemAt(i)->widget();
+        delete tag;
+    }
+
+    while(tagsQuery.next()) {
+        QLabel* tag = new QLabel(tagsQuery.value(0).toString());
+        tag->setStyleSheet(
+                    "QLabel { "
+                    "   background-color : #653133;"
+                    "   color : #d17579;"
+                    "   padding : 1px 5px 3px 5px;"
+                    "   border-radius:12px;"
+                    "   border: 2px solid #653133;"
+                    "}");
+        m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
+    }
 }
 
 void MainWindow::removeUnusedTags() {
