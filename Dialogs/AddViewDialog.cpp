@@ -79,7 +79,14 @@ void AddViewDialog::comboboxChanged() {
 
         for(int i = 0 ; i < m_ui->TagsLayout->count()-1 ; i++) {
             QLabel* tag = (QLabel*)m_ui->TagsLayout->itemAt(i)->widget();
-            tag->setEnabled(true);
+            tag->setStyleSheet(
+                        "QLabel { "
+                        "   background-color : #653133;"
+                        "   color : #d17579;"
+                        "   padding : 1px 5px 3px 5px;"
+                        "   border-radius:12px;"
+                        "   border: 2px solid #653133;"
+                        "}");
         }
 
         m_ui->PosterLabel->setText(tr("Affiche"));
@@ -96,7 +103,14 @@ void AddViewDialog::comboboxChanged() {
 
         for(int i = 0 ; i < m_ui->TagsLayout->count()-1 ; i++) {
             QLabel* tag = (QLabel*)m_ui->TagsLayout->itemAt(i)->widget();
-            tag->setEnabled(false);
+            tag->setStyleSheet(
+                        "QLabel { "
+                        "   background-color : #444444;"
+                        "   color : #bbbbbb;"
+                        "   padding : 1px 5px 3px 5px;"
+                        "   border-radius:12px;"
+                        "   border: 2px solid #444444;"
+                        "}");
         }
 
         QString movieName = m_ui->ExistingMoviesComboBox->currentText().remove(m_ui->ExistingMoviesComboBox->currentText().length()-7, m_ui->ExistingMoviesComboBox->currentText().length());
