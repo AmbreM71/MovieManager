@@ -448,6 +448,12 @@ void MainWindow::addView() {
         if(window->getComboboxSelectedItem() == "") {
             QString posterPath = "";
             if(window->getPosterPath() != "") {
+                QImage poster(window->getPosterPath());
+                if(poster.height() > 1200 || poster.width() > 1200) {
+                    m_log->append(tr("Image trop grande (") + QString::number(poster.width()) + "x" + QString::number(poster.height()) +
+                                  "). Des latences peuvent apparaître.", Warning);
+                }
+
                 //Processing poster moving and renaming
                 QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
                 QString GUID = QString::number(QRandomGenerator::global()->generate());

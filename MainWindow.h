@@ -16,6 +16,7 @@
 #include <QPixmap>
 #include <QRandomGenerator>
 #include <QStandardPaths>
+#include <QImage>
 
 #include <cmath>
 #include <ctime>
