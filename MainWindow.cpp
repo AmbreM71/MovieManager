@@ -611,6 +611,37 @@ void MainWindow::editMovie() {
                 m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), Error);
             }
         }
+
+        for(int i=0 ; i<window->getTags()->size() ; i++) {
+            QString hexcolor = "";
+            for(int j = 0 ; j<6 ; j++) {
+                hexcolor.append(QString::number(rand() % 9));
+            }
+
+            QSqlQuery insertIntoTagsQuery;
+
+            insertIntoTagsQuery.prepare("INSERT INTO tags (Tag, Color) VALUES (?,?);");
+            insertIntoTagsQuery.bindValue(0, window->getTags()->at(i));
+            insertIntoTagsQuery.bindValue(1, hexcolor);
+
+            if(!insertIntoTagsQuery.exec()){
+                m_log->append(tr("Erreur lors de l'ajout dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), Error);
+                continue;
+            }
+
+            QSqlQuery insertIntoTagLinksQuery;
+
+            insertIntoTagLinksQuery.prepare("INSERT INTO taglinks (ID_Movie, Tag) VALUES (?,?);");
+            insertIntoTagLinksQuery.bindValue(0, ID);
+            insertIntoTagLinksQuery.bindValue(1, window->getTags()->at(i));
+
+            if(!insertIntoTagLinksQuery.exec()){
+                m_log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagLinksQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagLinksQuery.lastError().text(), Error);
+                continue;
+            }
+
+        }
+
         fillTable();
         fillMovieInfos();
 
