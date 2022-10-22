@@ -11,6 +11,7 @@ SOURCES += \
     Dialogs/OptionsDialog.cpp \
     Log.cpp \
     MainWindow.cpp \
+    Tag.cpp \
     main.cpp
 
 HEADERS += \
@@ -27,7 +28,8 @@ HEADERS += \
     Enums.h \
     Log.h \
     MainWindow.h \
-    Structures.h
+    Structures.h \
+    Tag.h
 
 QT += widgets \
       sql \

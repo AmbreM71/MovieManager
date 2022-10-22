@@ -253,15 +253,16 @@ void MainWindow::fillMovieInfos() {
     }
 
     while(tagsQuery.next()) {
-        QLabel* tag = new QLabel(tagsQuery.value(0).toString());
+        Tag* tag = new Tag(tagsQuery.value(0).toString());
         tag->setStyleSheet(
-                    "QLabel { "
                     "   background-color : #653133;"
                     "   color : #d17579;"
                     "   padding : 1px 5px 3px 5px;"
                     "   border-radius:12px;"
-                    "   border: 2px solid #653133;"
-                    "}");
+                    "   border: 2px solid #653133;");
+        QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));
+        QObject::connect(tag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
+        QObject::connect(tag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
         m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
     }
 }
@@ -612,6 +613,13 @@ void MainWindow::editMovie() {
             }
         }
 
+        QSqlQuery removeMovieTagsQuery;
+        if(!removeMovieTagsQuery.exec("DELETE FROM taglinks WHERE ID_Movie="+ID)){
+            m_log->append(tr("Erreur lors de la suppression des tags du film, plus d'informations ci-dessous :\nCode d'erreur ")+removeMovieTagsQuery.lastError().nativeErrorCode()+tr(" : ")+removeMovieTagsQuery.lastError().text(), Error);
+        }
+
+        removeUnusedTags();
+
         for(int i=0 ; i<window->getTags()->size() ; i++) {
             QString hexcolor = "";
             for(int j = 0 ; j<6 ; j++) {
@@ -641,6 +649,7 @@ void MainWindow::editMovie() {
             }
 
         }
+
 
         fillTable();
         fillMovieInfos();
@@ -895,4 +904,26 @@ void MainWindow::openCharts() {
             delete window;
         }
     }
+}
+
+void MainWindow::clickedTag(Tag* tag) {
+
+}
+
+void MainWindow::mouseEnteredTag(Tag* tag) {
+    tag->setStyleSheet(
+                "   background-color : #744547;"
+                "   color : #d58286;"
+                "   padding : 1px 5px 3px 5px;"
+                "   border-radius:12px;"
+                "   border: 2px solid #744547;");
+}
+
+void MainWindow::mouseLeftTag(Tag* tag) {
+    tag->setStyleSheet(
+                "   background-color : #653133;"
+                "   color : #d58286;"
+                "   padding : 1px 5px 3px 5px;"
+                "   border-radius:12px;"
+                "   border: 2px solid #653133;");
 }

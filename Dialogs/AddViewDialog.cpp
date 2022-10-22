@@ -78,15 +78,13 @@ void AddViewDialog::comboboxChanged() {
         m_ui->TagsInput->setEnabled(true);
 
         for(int i = 0 ; i < m_ui->TagsLayout->count()-1 ; i++) {
-            QLabel* tag = (QLabel*)m_ui->TagsLayout->itemAt(i)->widget();
+            Tag* tag = (Tag*)m_ui->TagsLayout->itemAt(i)->widget();
             tag->setStyleSheet(
-                        "QLabel { "
                         "   background-color : #653133;"
                         "   color : #d17579;"
                         "   padding : 1px 5px 3px 5px;"
                         "   border-radius:12px;"
-                        "   border: 2px solid #653133;"
-                        "}");
+                        "   border: 2px solid #653133;");
         }
 
         m_ui->PosterLabel->setText(tr("Affiche"));
@@ -102,15 +100,13 @@ void AddViewDialog::comboboxChanged() {
         m_ui->TagsInput->setEnabled(false);
 
         for(int i = 0 ; i < m_ui->TagsLayout->count()-1 ; i++) {
-            QLabel* tag = (QLabel*)m_ui->TagsLayout->itemAt(i)->widget();
+            Tag* tag = (Tag*)m_ui->TagsLayout->itemAt(i)->widget();
             tag->setStyleSheet(
-                        "QLabel { "
                         "   background-color : #444444;"
                         "   color : #bbbbbb;"
                         "   padding : 1px 5px 3px 5px;"
                         "   border-radius:12px;"
-                        "   border: 2px solid #444444;"
-                        "}");
+                        "   border: 2px solid #444444;");
         }
 
         QString movieName = m_ui->ExistingMoviesComboBox->currentText().remove(m_ui->ExistingMoviesComboBox->currentText().length()-7, m_ui->ExistingMoviesComboBox->currentText().length());
@@ -174,20 +170,50 @@ void AddViewDialog::loadPoster(QString path) {
 void AddViewDialog::addTag() {
     if(m_ui->TagsInput->text().length() != 0) {
         m_tags->append(m_ui->TagsInput->text());
-        QLabel* tag = new QLabel(m_ui->TagsInput->text());
+        Tag* tag = new Tag(m_ui->TagsInput->text());
+
+        tag->setAlignment(Qt::AlignHCenter);
+        tag->setMinimumWidth(25);
+
         tag->setStyleSheet(
-                    "QLabel { "
                     "   background-color : #653133;"
                     "   color : #d17579;"
                     "   padding : 1px 5px 3px 5px;"
                     "   border-radius:12px;"
                     "   border: 2px solid #653133;"
-                    "}");
+        );
+
         m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
         m_ui->TagsInput->clear();
+
+        QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));
+        QObject::connect(tag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
+        QObject::connect(tag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
     }
 }
 
 QList<QString>* AddViewDialog::getTags() {
     return m_tags;
+}
+
+void AddViewDialog::clickedTag(Tag* tag) {
+    for(int i = 0 ; i < m_tags->length() ; i++) {
+        if(QString::compare(tag->getSavedTag(), m_tags->at(i)) == 0) {
+            m_tags->removeAt(i);
+        }
+    }
+
+    delete tag;
+}
+
+void AddViewDialog::mouseEnteredTag(Tag* tag) {
+    int width = tag->width();
+    tag->setSavedTag(tag->text());
+    tag->setText("X");
+    tag->setMinimumWidth(width);
+}
+
+void AddViewDialog::mouseLeftTag(Tag* tag) {
+    tag->setMinimumWidth(25);
+    tag->setText(tag->getSavedTag());
 }

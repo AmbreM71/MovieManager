@@ -25,6 +25,7 @@
 #include "Log.h"
 #include "Enums.h"
 #include "Common.h"
+#include "Tag.h"
 
 #include "Dialogs/AddViewDialog.h"
 #include "Dialogs/EditViewsDialog.h"
@@ -97,6 +98,10 @@ class MainWindow : public QMainWindow {
         void deleteMovie();
         void editMovie();
         void fillMovieInfos();
+
+        void clickedTag(Tag* tag);
+        void mouseEnteredTag(Tag* tag);
+        void mouseLeftTag(Tag* tag);
 
 };
 

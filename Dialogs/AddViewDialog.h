@@ -9,6 +9,7 @@
 #include <QStandardPaths>
 
 #include <Common.h>
+#include <Tag.h>
 
 namespace Ui {
 class AddViewDialog;
@@ -48,6 +49,9 @@ class AddViewDialog : public QDialog
         void loadPoster(QString path = "");
         void addTag();
 
+        void clickedTag(Tag* tag);
+        void mouseEnteredTag(Tag* tag);
+        void mouseLeftTag(Tag* tag);
 
 };
 

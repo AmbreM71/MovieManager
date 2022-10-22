@@ -9,6 +9,7 @@
 #include <QStandardPaths>
 
 #include <Common.h>
+#include <Tag.h>
 
 namespace Ui {
 class EditMovieDialog;
@@ -42,6 +43,10 @@ class EditMovieDialog : public QDialog
     public slots:
         void loadPoster(QString path = "");
         void addTag();
+
+        void clickedTag(Tag* tag);
+        void mouseEnteredTag(Tag* tag);
+        void mouseLeftTag(Tag* tag);
 
 
 };
