@@ -61,7 +61,6 @@ QMenu::item {
 }
 
 QMenu::item:selected {
-        background: #191919;
         color: #fff ;
         border-left: 2px solid #65346d;
 }
