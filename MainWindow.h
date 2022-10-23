@@ -100,6 +100,7 @@ class MainWindow : public QMainWindow {
         void fillMovieInfos();
 
         void clickedTag(Tag* tag);
+        void clickedFilterTag(Tag* tag);
         void mouseEnteredTag(Tag* tag);
         void mouseLeftTag(Tag* tag);
 

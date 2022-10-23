@@ -172,17 +172,6 @@ void AddViewDialog::addTag() {
         m_tags->append(m_ui->TagsInput->text());
         Tag* tag = new Tag(m_ui->TagsInput->text());
 
-        tag->setAlignment(Qt::AlignHCenter);
-        tag->setMinimumWidth(31);
-
-        tag->setStyleSheet(
-                    "   background-color : #653133;"
-                    "   color : #d17579;"
-                    "   padding : 1px 5px 3px 5px;"
-                    "   border-radius:12px;"
-                    "   border: 2px solid #653133;"
-        );
-
         m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
         m_ui->TagsInput->clear();
 

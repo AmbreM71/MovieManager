@@ -23,7 +23,7 @@
    <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="0,100,0,0">
     <item row="0" column="3">
      <layout class="QVBoxLayout" name="InfosLayout">
       <item>
@@ -123,7 +123,24 @@
      </layout>
     </item>
     <item row="0" column="0">
-     <layout class="QVBoxLayout" name="MoviesLayout">
+     <layout class="QVBoxLayout" name="MoviesLayout" stretch="0,100,0">
+      <item>
+       <layout class="QHBoxLayout" name="SelectedTagsLayout">
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
       <item>
        <widget class="QTableWidget" name="MoviesListWidget">
         <property name="sizePolicy">

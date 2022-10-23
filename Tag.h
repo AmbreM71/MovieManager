@@ -12,6 +12,7 @@ class Tag : public QLabel{
 
     public:
         Tag(QString label);
+        Tag(Tag* tag);
 
         QString getSavedTag();
         void setSavedTag(QString tag);

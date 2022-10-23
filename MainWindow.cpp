@@ -128,7 +128,7 @@ void MainWindow::fillTable(bool isFiltered) {
                          "AND ReleaseYear BETWEEN '"+QString::number(m_filter_minYear)+"' AND '"+QString::number(m_filter_maxYear)+"'"
                          "AND Rating BETWEEN '"+QString::number(m_filter_minRating)+"' AND '"+QString::number(m_filter_maxRating)+"'"
                          "AND Entries >= "+QString::number(m_filter_minEntries)+" "
-                         "GROUP BY Name, ReleaseYear, Entries, Rating;");
+        );
         m_ui->ResetFiltersButton->setEnabled(true);
     }
     else {
@@ -254,12 +254,7 @@ void MainWindow::fillMovieInfos() {
 
     while(tagsQuery.next()) {
         Tag* tag = new Tag(tagsQuery.value(0).toString());
-        tag->setStyleSheet(
-                    "   background-color : #653133;"
-                    "   color : #d17579;"
-                    "   padding : 1px 5px 3px 5px;"
-                    "   border-radius:12px;"
-                    "   border: 2px solid #653133;");
+
         QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));
         QObject::connect(tag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
         QObject::connect(tag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
@@ -907,7 +902,28 @@ void MainWindow::openCharts() {
 }
 
 void MainWindow::clickedTag(Tag* tag) {
+    bool isTagInLayout = false;
+    for(int i = 0 ; i < m_ui->SelectedTagsLayout->count() - 1 ; i++) {
+        Tag* t = (Tag*)m_ui->SelectedTagsLayout->itemAt(i)->widget();
+        if(QString::compare(t->text(), tag->text()) == 0) {
+            isTagInLayout = true;
+            break;
+        }
+    }
 
+    if(!isTagInLayout) {
+        Tag* copiedTag = new Tag(tag);
+
+        QObject::connect(copiedTag, SIGNAL(clicked(Tag*)), this, SLOT(clickedFilterTag(Tag*)));
+        QObject::connect(copiedTag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
+        QObject::connect(copiedTag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
+
+        m_ui->SelectedTagsLayout->insertWidget(m_ui->SelectedTagsLayout->count()-1, copiedTag);
+    }
+}
+
+void MainWindow::clickedFilterTag(Tag* tag) {
+    delete tag;
 }
 
 void MainWindow::mouseEnteredTag(Tag* tag) {
