@@ -135,7 +135,7 @@ void EditMovieDialog::clickedTag(Tag* tag) {
 void EditMovieDialog::mouseEnteredTag(Tag* tag) {
     int width = tag->width();
     tag->setSavedTag(tag->text());
-    tag->setText("X");
+    tag->setText("❌");
     tag->setMinimumWidth(width);
 }
 
