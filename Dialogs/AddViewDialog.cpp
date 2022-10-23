@@ -173,7 +173,7 @@ void AddViewDialog::addTag() {
         Tag* tag = new Tag(m_ui->TagsInput->text());
 
         tag->setAlignment(Qt::AlignHCenter);
-        tag->setMinimumWidth(25);
+        tag->setMinimumWidth(31);
 
         tag->setStyleSheet(
                     "   background-color : #653133;"
@@ -214,6 +214,6 @@ void AddViewDialog::mouseEnteredTag(Tag* tag) {
 }
 
 void AddViewDialog::mouseLeftTag(Tag* tag) {
-    tag->setMinimumWidth(25);
+    tag->setMinimumWidth(31);
     tag->setText(tag->getSavedTag());
 }

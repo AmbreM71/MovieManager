@@ -22,7 +22,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
         Tag* tag = new Tag(tagsQuery.value(0).toString());
 
         tag->setAlignment(Qt::AlignHCenter);
-        tag->setMinimumWidth(25);
+        tag->setMinimumWidth(31);
 
         tag->setStyleSheet(
                     "   background-color : #653133;"
@@ -98,7 +98,7 @@ void EditMovieDialog::addTag() {
         Tag* tag = new Tag(m_ui->TagsInput->text());
 
         tag->setAlignment(Qt::AlignHCenter);
-        tag->setMinimumWidth(25);
+        tag->setMinimumWidth(31);
 
         tag->setStyleSheet(
                     "   background-color : #653133;"
@@ -140,6 +140,6 @@ void EditMovieDialog::mouseEnteredTag(Tag* tag) {
 }
 
 void EditMovieDialog::mouseLeftTag(Tag* tag) {
-    tag->setMinimumWidth(25);
+    tag->setMinimumWidth(31);
     tag->setText(tag->getSavedTag());
 }
