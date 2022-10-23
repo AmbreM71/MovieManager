@@ -3,11 +3,12 @@
 
 int LogDialog::instances = 0;
 
-LogDialog::LogDialog(Log* log, QWidget *parent) : QDialog(parent) {
+LogDialog::LogDialog(Log* log,  int* theme, QWidget *parent) : QDialog(parent) {
     instances++;
     m_ui = new Ui::LogDialog;
     m_ui->setupUi(this);
     m_log = log;
+    m_theme = theme;
     fillList();
     QObject::connect(m_log, SIGNAL(logAppended()), this, SLOT(refresh()));
 }
@@ -20,7 +21,7 @@ LogDialog::~LogDialog() {
 void LogDialog::fillList() {
     m_ui->listWidget->clear();
 
-    QColor* color = new QColor(250,68,195);
+    QColor* color = new QColor();
     QBrush* brush = new QBrush(*color);
 
     for(int i = 0 ; i < m_log->size() ; i++) {
@@ -42,12 +43,18 @@ void LogDialog::fillList() {
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
             case Notice:
-                color->setRgb(255,255,255);
+                if (*m_theme == Theme::Classic) {
+                    color->setRgb(0,0,0);
+                }
+                else {
+                    color->setRgb(255,255,255);
+                }
                 brush->setColor(*color);
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
         }
     }
+
     delete color;
     delete brush;
 }

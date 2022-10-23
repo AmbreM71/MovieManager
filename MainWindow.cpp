@@ -703,7 +703,7 @@ void MainWindow::openFilters() {
 
 void MainWindow::openLog() {
     if(LogDialog::instancesCount() == 0) {
-        LogDialog* window = new LogDialog(m_log, this);
+        LogDialog* window = new LogDialog(m_log, &m_theme, this);
         window->show();
         if(window->exec() == 0) {
             delete window;
