@@ -98,6 +98,7 @@ class MainWindow : public QMainWindow {
         void deleteMovie();
         void editMovie();
         void fillMovieInfos();
+        void on_QuickSearchLineEdit_textChanged(const QString &text);
 
         void clickedTag(Tag* tag);
         void clickedFilterTag(Tag* tag);
