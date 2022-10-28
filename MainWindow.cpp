@@ -527,7 +527,6 @@ void MainWindow::addView() {
 
             if(!insertIntoTagsInfoQuery.exec()){
                 m_log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), Error);
-                continue;
             }
 
             QSqlQuery insertIntoTagsQuery;
@@ -537,8 +536,7 @@ void MainWindow::addView() {
             insertIntoTagsQuery.bindValue(1, window->getTags()->at(i));
 
             if(!insertIntoTagsQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), Error);
-                continue;
+                m_log->append(tr("Erreur lors de l'ajout dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), Error);
             }
 
         }
@@ -623,7 +621,6 @@ void MainWindow::editMovie() {
 
             if(!insertIntoTagsInfoQuery.exec()){
                 m_log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), Error);
-                continue;
             }
 
             QSqlQuery insertIntoTagsQuery;
@@ -634,7 +631,6 @@ void MainWindow::editMovie() {
 
             if(!insertIntoTagsQuery.exec()){
                 m_log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), Error);
-                continue;
             }
 
         }
