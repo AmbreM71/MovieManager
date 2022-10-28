@@ -16,7 +16,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     loadPoster(m_posterPath);
 
     QSqlQuery tagsQuery;
-    tagsQuery.exec("SELECT Tag FROM taglinks WHERE ID_Movie='"+*m_ID+"'");
+    tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+*m_ID+"'");
     while(tagsQuery.next()) {
         m_tags->append(tagsQuery.value(0).toString());
         Tag* tag = new Tag(tagsQuery.value(0).toString());

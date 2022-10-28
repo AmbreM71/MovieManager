@@ -90,26 +90,26 @@ void MainWindow::databaseConnection() {
         m_log->append(tr("Erreur lors de la création de la table views"), Error);
     }
 
-    //Tags Table
-    QString TagsDatabaseCreationString = "CREATE TABLE IF NOT EXISTS tags ("
+    //TagsInfo Table
+    QString TagsInfoDatabaseCreationString = "CREATE TABLE IF NOT EXISTS tagsInfo ("
                                    "Tag         VARCHAR(63) PRIMARY KEY ,"
                                    "Color       VARCHAR(6));";
 
-    QSqlQuery tagsBDQuery;
+    QSqlQuery tagsInfoBDQuery;
 
-    if(!tagsBDQuery.exec(TagsDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table tags"), Error);
+    if(!tagsInfoBDQuery.exec(TagsInfoDatabaseCreationString)) {
+        m_log->append(tr("Erreur lors de la création de la table tagsInfo"), Error);
     }
 
-    //Taglinks Table
-    QString TagLinksDatabaseCreationString = "CREATE TABLE IF NOT EXISTS taglinks ("
+    //Tags Table
+    QString TagsDatabaseCreationString = "CREATE TABLE IF NOT EXISTS tags ("
                                    "ID_Movie    INTEGER,"
                                    "Tag         VARCHAR(63));";
 
-    QSqlQuery TagLinksBDQuery;
+    QSqlQuery TagsBDQuery;
 
-    if(!TagLinksBDQuery.exec(TagLinksDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table taglinks"), Error);
+    if(!TagsBDQuery.exec(TagsDatabaseCreationString)) {
+        m_log->append(tr("Erreur lors de la création de la table tags"), Error);
     }
 }
 
@@ -237,7 +237,7 @@ void MainWindow::fillMovieInfos() {
     m_ui->RatingLabel->setText(tr("Note : ") + q.value(1).toString());
 
     QSqlQuery tagsQuery;
-    tagsQuery.exec("SELECT Tag FROM taglinks WHERE ID_Movie='"+ID+"'");
+    tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+ID+"'");
 
     // Clear tags from layout
     for(int i = m_ui->TagsLayout->count()-1 ; i >= 0 ; i--) {
@@ -258,33 +258,33 @@ void MainWindow::fillMovieInfos() {
 void MainWindow::removeUnusedTags() {
     QString removedTags;
 
-    QSqlQuery tagLinksQuery;
-    tagLinksQuery.exec("SELECT Tag FROM taglinks");
-
     QSqlQuery tagsQuery;
     tagsQuery.exec("SELECT Tag FROM tags");
+
+    QSqlQuery tagsInfoQuery;
+    tagsInfoQuery.exec("SELECT Tag FROM tagsInfo");
 
     bool found;
 
     //Foreach tag
-    while(tagsQuery.next()) {
+    while(tagsInfoQuery.next()) {
         QSqlQuery deleteTagQuery;
         found = false;
-        tagLinksQuery.first();
-        tagLinksQuery.previous();
+        tagsQuery.first();
+        tagsQuery.previous();
         //Foreach links between Tag and movie
-        while(tagLinksQuery.next()) {
+        while(tagsQuery.next()) {
             //If tag exist in link table
-            if(QString::compare(tagLinksQuery.value(0).toString(),tagsQuery.value(0).toString()) == 0) {
+            if(QString::compare(tagsQuery.value(0).toString(),tagsInfoQuery.value(0).toString()) == 0) {
                 found = true;
                 break;
             }
         }
         if(found == false) {
-            if(!deleteTagQuery.exec("DELETE FROM tags WHERE Tag=\""+tagsQuery.value(0).toString()+"\";")) {
-                m_log->append(tr("Erreur lors de la suppression dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+deleteTagQuery.lastError().nativeErrorCode()+tr(" : ")+deleteTagQuery.lastError().text(), Error);
+            if(!deleteTagQuery.exec("DELETE FROM tagsInfo WHERE Tag=\""+tagsInfoQuery.value(0).toString()+"\";")) {
+                m_log->append(tr("Erreur lors de la suppression dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+deleteTagQuery.lastError().nativeErrorCode()+tr(" : ")+deleteTagQuery.lastError().text(), Error);
             }
-            removedTags.append(tagsQuery.value(0).toString() + ", ");
+            removedTags.append(tagsInfoQuery.value(0).toString() + ", ");
         }
     }
     removedTags.remove(removedTags.length()-2, removedTags.length());
@@ -519,25 +519,25 @@ void MainWindow::addView() {
                 hexcolor.append(QString::number(rand() % 9));
             }
 
-            QSqlQuery insertIntoTagsQuery;
+            QSqlQuery insertIntoTagsInfoQuery;
 
-            insertIntoTagsQuery.prepare("INSERT INTO tags (Tag, Color) VALUES (?,?);");
-            insertIntoTagsQuery.bindValue(0, window->getTags()->at(i));
-            insertIntoTagsQuery.bindValue(1, hexcolor);
+            insertIntoTagsInfoQuery.prepare("INSERT INTO tagsInfo (Tag, Color) VALUES (?,?);");
+            insertIntoTagsInfoQuery.bindValue(0, window->getTags()->at(i));
+            insertIntoTagsInfoQuery.bindValue(1, hexcolor);
 
-            if(!insertIntoTagsQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), Error);
+            if(!insertIntoTagsInfoQuery.exec()){
+                m_log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), Error);
                 continue;
             }
 
-            QSqlQuery insertIntoTagLinksQuery;
+            QSqlQuery insertIntoTagsQuery;
 
-            insertIntoTagLinksQuery.prepare("INSERT INTO taglinks (ID_Movie, Tag) VALUES (?,?);");
-            insertIntoTagLinksQuery.bindValue(0, viewedMovieID);
-            insertIntoTagLinksQuery.bindValue(1, window->getTags()->at(i));
+            insertIntoTagsQuery.prepare("INSERT INTO tags (ID_Movie, Tag) VALUES (?,?);");
+            insertIntoTagsQuery.bindValue(0, viewedMovieID);
+            insertIntoTagsQuery.bindValue(1, window->getTags()->at(i));
 
-            if(!insertIntoTagLinksQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagLinksQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagLinksQuery.lastError().text(), Error);
+            if(!insertIntoTagsQuery.exec()){
+                m_log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), Error);
                 continue;
             }
 
@@ -603,7 +603,7 @@ void MainWindow::editMovie() {
         }
 
         QSqlQuery removeMovieTagsQuery;
-        if(!removeMovieTagsQuery.exec("DELETE FROM taglinks WHERE ID_Movie="+ID)){
+        if(!removeMovieTagsQuery.exec("DELETE FROM tags WHERE ID_Movie="+ID)){
             m_log->append(tr("Erreur lors de la suppression des tags du film, plus d'informations ci-dessous :\nCode d'erreur ")+removeMovieTagsQuery.lastError().nativeErrorCode()+tr(" : ")+removeMovieTagsQuery.lastError().text(), Error);
         }
 
@@ -615,25 +615,25 @@ void MainWindow::editMovie() {
                 hexcolor.append(QString::number(rand() % 9));
             }
 
-            QSqlQuery insertIntoTagsQuery;
+            QSqlQuery insertIntoTagsInfoQuery;
 
-            insertIntoTagsQuery.prepare("INSERT INTO tags (Tag, Color) VALUES (?,?);");
-            insertIntoTagsQuery.bindValue(0, window->getTags()->at(i));
-            insertIntoTagsQuery.bindValue(1, hexcolor);
+            insertIntoTagsInfoQuery.prepare("INSERT INTO tagsInfo (Tag, Color) VALUES (?,?);");
+            insertIntoTagsInfoQuery.bindValue(0, window->getTags()->at(i));
+            insertIntoTagsInfoQuery.bindValue(1, hexcolor);
 
-            if(!insertIntoTagsQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), Error);
+            if(!insertIntoTagsInfoQuery.exec()){
+                m_log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), Error);
                 continue;
             }
 
-            QSqlQuery insertIntoTagLinksQuery;
+            QSqlQuery insertIntoTagsQuery;
 
-            insertIntoTagLinksQuery.prepare("INSERT INTO taglinks (ID_Movie, Tag) VALUES (?,?);");
-            insertIntoTagLinksQuery.bindValue(0, ID);
-            insertIntoTagLinksQuery.bindValue(1, window->getTags()->at(i));
+            insertIntoTagsQuery.prepare("INSERT INTO tags (ID_Movie, Tag) VALUES (?,?);");
+            insertIntoTagsQuery.bindValue(0, ID);
+            insertIntoTagsQuery.bindValue(1, window->getTags()->at(i));
 
-            if(!insertIntoTagLinksQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagLinksQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagLinksQuery.lastError().text(), Error);
+            if(!insertIntoTagsQuery.exec()){
+                m_log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), Error);
                 continue;
             }
 
@@ -671,8 +671,8 @@ void MainWindow::deleteMovie() {
             m_log->append(tr("Erreur lors de la suppression dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedViewsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedViewsQuery.lastError().text(), Error);
         }
 
-        if(!deleteAssociatedTagsQuery.exec("DELETE FROM taglinks WHERE ID_Movie=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de la suppression dans la table taglinks, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedTagsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedTagsQuery.lastError().text(), Error);
+        if(!deleteAssociatedTagsQuery.exec("DELETE FROM tags WHERE ID_Movie=\""+ID+"\";")) {
+            m_log->append(tr("Erreur lors de la suppression dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedTagsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedTagsQuery.lastError().text(), Error);
         }
 
         removeUnusedTags();
@@ -1005,7 +1005,6 @@ void MainWindow::on_QuickSearchLineEdit_textChanged(const QString &text) {
 
 void MainWindow::selectedMovieChanged() {
     //Disable Manage views and filters button if the list is empty
-    qDebug() << m_ui->MoviesListWidget->currentRow();
     if(m_ui->MoviesListWidget->currentRow() == -1) {
         m_ui->ManageMovieViewsButton->setEnabled(false);
     }
