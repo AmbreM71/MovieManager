@@ -80,6 +80,8 @@ class MainWindow : public QMainWindow {
         void refreshLanguage();
         void refreshTheme();
         void saveSettings();
+        void setMatrixMode(bool state);
+        int getIndexOfMovie(int ID);
         ~MainWindow();
 
     public slots:
@@ -99,6 +101,7 @@ class MainWindow : public QMainWindow {
         void editMovie();
         void fillMovieInfos();
         void on_QuickSearchLineEdit_textChanged(const QString &text);
+        void selectedMovieChanged();
 
         void clickedTag(Tag* tag);
         void clickedFilterTag(Tag* tag);

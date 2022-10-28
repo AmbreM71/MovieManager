@@ -26,6 +26,7 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
 
     databaseConnection();
     fillTable();
+    m_ui->MoviesListWidget->setCurrentCell(0,0);
     fillMovieInfos();
     fillGlobalStats();
     menuBarConnectors();
@@ -43,6 +44,7 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
     QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
     QObject::connect(m_ui->MoviesListWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
+    QObject::connect(m_ui->MoviesListWidget, SIGNAL(itemSelectionChanged()), this, SLOT(selectedMovieChanged()));
 }
 
 MainWindow::~MainWindow() {
@@ -118,7 +120,7 @@ void MainWindow::fillTable(bool isFiltered) {
     for(int i=movieListRowCount ; i >= 0 ; i--) {
         m_ui->MoviesListWidget->removeRow(i);
     }
-
+    m_ui->MoviesListWidget->setSortingEnabled(false);
     //Fetch every unique movies
     QSqlQuery moviesQuery;
 
@@ -127,12 +129,12 @@ void MainWindow::fillTable(bool isFiltered) {
                          "WHERE Name LIKE \"%" + m_filter_name + "%\""
                          "AND ReleaseYear BETWEEN '"+QString::number(m_filter_minYear)+"' AND '"+QString::number(m_filter_maxYear)+"'"
                          "AND Rating BETWEEN '"+QString::number(m_filter_minRating)+"' AND '"+QString::number(m_filter_maxRating)+"'"
-                         "AND Entries >= "+QString::number(m_filter_minEntries)+" "
+                         "AND Entries >= "+QString::number(m_filter_minEntries)+" ORDER BY ID"
         );
         m_ui->ResetFiltersButton->setEnabled(true);
     }
     else {
-        moviesQuery.exec("SELECT ID, Name, ReleaseYear FROM movies;");
+        moviesQuery.exec("SELECT ID, Name, ReleaseYear FROM movies ORDER BY ID;");
         m_ui->ResetFiltersButton->setEnabled(false);
         m_filter_name = "";
         m_filter_minYear = 0;
@@ -154,10 +156,6 @@ void MainWindow::fillTable(bool isFiltered) {
         name->setText(moviesQuery.value(1).toString());
         releaseYear->setText(moviesQuery.value(2).toString());
 
-        if((name->text() == "Matrix" || name->text() == "The Matrix") && m_matrixMode) {
-            name->setForeground(QBrush(QColor(0,150,0)));
-        }
-
         //Creates a new row on the table
         m_ui->MoviesListWidget->insertRow(m_ui->MoviesListWidget->rowCount());
 
@@ -168,17 +166,13 @@ void MainWindow::fillTable(bool isFiltered) {
 
         numberOfParsedMovies++;
     }
+
+    if(m_matrixMode)
+        setMatrixMode(true);
+
+    m_ui->MoviesListWidget->setSortingEnabled(true);
+
     m_log->append(tr("Nombre de films lus depuis la base de donnée : ")+QString::number(numberOfParsedMovies), Notice);
-    m_ui->MoviesListWidget->setCurrentCell(0,0);
-
-    //Disable Manage views and filters button if no movie the list is empty
-    if(m_ui->MoviesListWidget->currentRow() == -1) {
-        m_ui->ManageMovieViewsButton->setEnabled(false);
-    }
-    else {
-        m_ui->ManageMovieViewsButton->setEnabled(true);
-    }
-
 }
 
 void MainWindow::fillMovieInfos() {
@@ -188,7 +182,6 @@ void MainWindow::fillMovieInfos() {
     }
 
     QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
-
     m_ui->MovieTitleLabel->setText(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),0)->text());
 
     //Fetch the number of views of the current movie
@@ -552,6 +545,7 @@ void MainWindow::addView() {
 
         fillGlobalStats();
         fillTable();
+        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(viewedMovieID), 0);
         fillMovieInfos();
     }
 }
@@ -647,6 +641,7 @@ void MainWindow::editMovie() {
 
 
         fillTable();
+        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(ID.toInt()), 0);
         fillMovieInfos();
 
     }
@@ -682,6 +677,7 @@ void MainWindow::deleteMovie() {
 
         removeUnusedTags();
         resetFilters();
+        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(ID.toInt()), 0);
         fillMovieInfos();
         fillGlobalStats();
     }
@@ -730,8 +726,12 @@ void MainWindow::openSettings() {
         refreshLanguage();
         refreshTheme();
         saveSettings();
-        fillTable();
-        fillMovieInfos();
+        if(m_matrixMode) {
+            setMatrixMode(true);
+        }
+        else {
+            setMatrixMode(false);
+        }
     }
 }
 
@@ -747,6 +747,9 @@ void MainWindow::resetFilters() {
 }
 
 void MainWindow::customMenuRequested(QPoint pos) {
+    if(m_ui->MoviesListWidget->currentRow() == -1)
+        return;
+
     QMenu *menu = new QMenu(this);
 
     QAction* deleteAction = new QAction(tr("Supprimer"), this);
@@ -793,6 +796,26 @@ void MainWindow::saveSettings() {
     m_settings->setValue("language", m_language);
     m_settings->setValue("theme", m_theme);
     m_settings->setValue("matrixMode", m_matrixMode);
+}
+
+void MainWindow::setMatrixMode(bool state) {
+
+    QString cellText;
+
+    for(int i = 0 ; i < m_ui->MoviesListWidget->rowCount() ; i++) {
+        cellText = m_ui->MoviesListWidget->item(i,0)->text();
+        if(cellText == "Matrix" || cellText == "The Matrix") {
+            if(state == true) {
+                m_ui->MoviesListWidget->item(i,0)->setForeground(QBrush(QColor(0,150,0)));
+            }
+            else {
+                QTableWidgetItem* name = new QTableWidgetItem(cellText);
+                m_ui->MoviesListWidget->removeCellWidget(i,0);
+                m_ui->MoviesListWidget->setItem(i, 0, name);
+            }
+            break;
+        }
+    }
 }
 
 void MainWindow::refreshLanguage() {
@@ -901,6 +924,16 @@ void MainWindow::openCharts() {
     }
 }
 
+int MainWindow::getIndexOfMovie(int ID) {
+    int row;
+    for(row = 0 ; row < m_ui->MoviesListWidget->rowCount() ; row++) {
+        if(ID == m_ui->MoviesListWidget->item(row,2)->text().toInt()) {
+            return row;
+        }
+    }
+    return 0;
+}
+
 void MainWindow::clickedTag(Tag* tag) {
     bool isTagInLayout = false;
     for(int i = 0 ; i < m_ui->SelectedTagsLayout->count() - 1 ; i++) {
@@ -968,4 +1001,15 @@ void MainWindow::on_QuickSearchLineEdit_textChanged(const QString &text) {
         }
     }
     delete filter;
+}
+
+void MainWindow::selectedMovieChanged() {
+    //Disable Manage views and filters button if the list is empty
+    qDebug() << m_ui->MoviesListWidget->currentRow();
+    if(m_ui->MoviesListWidget->currentRow() == -1) {
+        m_ui->ManageMovieViewsButton->setEnabled(false);
+    }
+    else {
+        m_ui->ManageMovieViewsButton->setEnabled(true);
+    }
 }
