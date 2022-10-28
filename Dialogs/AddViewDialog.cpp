@@ -34,7 +34,7 @@ AddViewDialog::~AddViewDialog() {
 void AddViewDialog::FillMovieComboBox() {
     m_ui->ExistingMoviesComboBox->addItem("");
     QSqlQuery moviesQuery;
-    moviesQuery.exec("SELECT Name, ReleaseYear FROM movies ASC;");
+    moviesQuery.exec("SELECT Name, ReleaseYear FROM movies ORDER BY Name ASC;");
     while(moviesQuery.next()) {
         m_ui->ExistingMoviesComboBox->addItem(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString());
     }
