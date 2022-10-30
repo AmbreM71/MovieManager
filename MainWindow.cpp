@@ -948,11 +948,14 @@ void MainWindow::clickedTag(Tag* tag) {
         QObject::connect(copiedTag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
 
         m_ui->SelectedTagsLayout->insertWidget(m_ui->SelectedTagsLayout->count()-1, copiedTag);
+
+        on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
     }
 }
 
 void MainWindow::clickedFilterTag(Tag* tag) {
     delete tag;
+    on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
 }
 
 void MainWindow::mouseEnteredTag(Tag* tag) {
@@ -977,6 +980,9 @@ void MainWindow::on_QuickSearchLineEdit_textChanged(const QString &text) {
 
     fillTable();
 
+    QSqlQuery tagQuery;
+    tagQuery.exec("SELECT * FROM tags;");
+
     QString* filter = new QString(text);
     for(int row = 0 ; row < m_ui->MoviesListWidget->rowCount() ; row++) {
         int cellsNotCorrespondingToFilter = 0;
@@ -994,6 +1000,32 @@ void MainWindow::on_QuickSearchLineEdit_textChanged(const QString &text) {
             m_ui->MoviesListWidget->removeRow(row);
             //Because deleting row moves all next rows, the value is decremented
             row--;
+        }
+        //If cell correspond to the quick search, check if tags filter correspond
+        else {
+            int ID = m_ui->MoviesListWidget->item(row, 2)->text().toInt();
+            bool hasMovieAllFilterTags = true;
+            for(int filterTag = 0 ; filterTag < m_ui->SelectedTagsLayout->count()-1 ; filterTag++) {
+                Tag* tag = (Tag*)m_ui->SelectedTagsLayout->itemAt(filterTag)->widget();
+                bool hasMovieFilterTag = false;
+                tagQuery.first();
+                tagQuery.previous();
+                while(tagQuery.next()) {
+                    if(tagQuery.value(0).toInt() == ID && QString::compare(tagQuery.value(1).toString(), tag->text()) == 0) {
+                        hasMovieFilterTag = true;
+                        break;
+                    }
+                }
+                if(hasMovieFilterTag == false) {
+                    hasMovieAllFilterTags = false;
+                    break;
+                }
+            }
+            if(hasMovieAllFilterTags == false) {
+                m_ui->MoviesListWidget->removeRow(row);
+                //Because deleting row moves all next rows, the value is decremented
+                row--;
+            }
         }
     }
     delete filter;
