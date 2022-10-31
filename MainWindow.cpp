@@ -25,7 +25,7 @@ MainWindow::MainWindow(QApplication* app, QWidget* parent) {
     m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << tr("Nom du film") << tr("Année\nde sortie") << tr("Nombre de\nvisionnages") << tr("Premier\nvisionnage") << tr("Dernier\nvisionnage") << tr("Entrées") << tr("Note"));
 
     databaseConnection();
-    fillTable();
+    on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
     m_ui->MoviesListWidget->setCurrentCell(0,0);
     fillMovieInfos();
     fillGlobalStats();
@@ -113,7 +113,7 @@ void MainWindow::databaseConnection() {
     }
 }
 
-void MainWindow::fillTable(bool isFiltered) {
+void MainWindow::fillTable() {
 
     //Clear the table
     int movieListRowCount = m_ui->MoviesListWidget->rowCount();
@@ -124,7 +124,8 @@ void MainWindow::fillTable(bool isFiltered) {
     //Fetch every unique movies
     QSqlQuery moviesQuery;
 
-    if(isFiltered) {
+    if(m_isFiltered) {
+        m_log->append(tr("Recupération filtrée depuis la base de donnée"), Notice);
         moviesQuery.exec("SELECT ID, Name, ReleaseYear FROM movies "
                          "WHERE Name LIKE \"%" + m_filter_name + "%\""
                          "AND ReleaseYear BETWEEN '"+QString::number(m_filter_minYear)+"' AND '"+QString::number(m_filter_maxYear)+"'"
@@ -178,6 +179,17 @@ void MainWindow::fillTable(bool isFiltered) {
 void MainWindow::fillMovieInfos() {
 
     if(m_ui->MoviesListWidget->rowCount() == 0) {
+        return;
+    }
+    if(m_ui->MoviesListWidget->currentRow() == -1) {
+        m_ui->ViewsLabel->setText(tr("Sélectionnez un film pour voir les information sur ce dernier"));
+        m_ui->FirstViewLabel->setText("");
+        m_ui->LastViewLabel->setText("");
+        m_ui->EntriesLabel->setText("");
+        m_ui->RatingLabel->setText("");
+        for(int i = 0 ; i < m_ui->TagsLayout->count() ; i++) {
+            delete m_ui->TagsLayout->itemAt(i);
+        }
         return;
     }
 
@@ -366,7 +378,7 @@ void MainWindow::importDB() {
             }
         }
     }
-    fillTable();
+    on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
     fillGlobalStats();
 }
 
@@ -480,14 +492,12 @@ void MainWindow::addView() {
         QSqlQuery insertIntoViewsQuery;
         insertIntoViewsQuery.prepare("INSERT INTO views (ID_Movie, ViewDate, ViewType) VALUES (?,?,?);");
 
-        int viewedMovieID = -1;
-
 
         QSqlQuery viewedMovieIDQuery;
         viewedMovieIDQuery.exec("SELECT ID FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear=\""+movieYear+"\"");
         viewedMovieIDQuery.first();
 
-        viewedMovieID = viewedMovieIDQuery.value(0).toInt();
+        m_selectedMovieID = viewedMovieIDQuery.value(0).toInt();
 
         QString ViewDate, ViewType;
 
@@ -505,7 +515,7 @@ void MainWindow::addView() {
             ViewType = window->getViewType();
         }
 
-        insertIntoViewsQuery.bindValue(0, viewedMovieID);
+        insertIntoViewsQuery.bindValue(0, m_selectedMovieID);
         insertIntoViewsQuery.bindValue(1, ViewDate);
         insertIntoViewsQuery.bindValue(2, ViewType);
 
@@ -532,7 +542,7 @@ void MainWindow::addView() {
             QSqlQuery insertIntoTagsQuery;
 
             insertIntoTagsQuery.prepare("INSERT INTO tags (ID_Movie, Tag) VALUES (?,?);");
-            insertIntoTagsQuery.bindValue(0, viewedMovieID);
+            insertIntoTagsQuery.bindValue(0, m_selectedMovieID);
             insertIntoTagsQuery.bindValue(1, window->getTags()->at(i));
 
             if(!insertIntoTagsQuery.exec()){
@@ -540,32 +550,31 @@ void MainWindow::addView() {
             }
 
         }
-
         fillGlobalStats();
-        fillTable();
-        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(viewedMovieID), 0);
+        on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_selectedMovieID), 0);
         fillMovieInfos();
     }
 }
 
 void MainWindow::editViews() {
-    int ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt();
+    int ID = m_selectedMovieID;
     EditViewsDialog* window = new EditViewsDialog(&ID, m_log, &m_theme);
     window->show();
     if(window->exec() == 1) {
         if (window->edited()) {
-            fillTable();
+            on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
             fillGlobalStats();
         }
     }
 }
 
 void MainWindow::editMovie() {
-    EditMovieDialog* window = new EditMovieDialog(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text(), this);
+    EditMovieDialog* window = new EditMovieDialog(QString::number(m_selectedMovieID), this);
     window->show();
     if(window->exec() == 1) {
 
-        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+        QString ID = QString::number(m_selectedMovieID);
         QString GUID = "";
         QString ext = "";
 
@@ -573,7 +582,6 @@ void MainWindow::editMovie() {
 
             //Delete old poster
             QSqlQuery posterQuery;
-            QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
             posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";");
             posterQuery.first();
             QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
@@ -636,8 +644,8 @@ void MainWindow::editMovie() {
         }
 
 
-        fillTable();
-        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(ID.toInt()), 0);
+        on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_selectedMovieID), 0);
         fillMovieInfos();
 
     }
@@ -652,7 +660,7 @@ void MainWindow::deleteMovie() {
         QSqlQuery deleteAssociatedTagsQuery;
         QSqlQuery posterQuery;
 
-        QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+        QString ID = QString::number(m_selectedMovieID);
 
         posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";");
         posterQuery.first();
@@ -673,7 +681,7 @@ void MainWindow::deleteMovie() {
 
         removeUnusedTags();
         resetFilters();
-        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(ID.toInt()), 0);
+        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_selectedMovieID), 0);
         fillMovieInfos();
         fillGlobalStats();
     }
@@ -684,7 +692,8 @@ void MainWindow::openFilters() {
     window->show();
     if(window->exec() == 1) {
         delete window;
-        fillTable(true);
+        m_isFiltered = true;
+        on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
     }
 }
 
@@ -739,7 +748,8 @@ void MainWindow::resetFilters() {
     m_filter_minRating = 0;
     m_filter_maxRating = 0;
     m_filter_minEntries = 0;
-    fillTable();
+    m_isFiltered = false;
+    on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
 }
 
 void MainWindow::customMenuRequested(QPoint pos) {
@@ -948,13 +958,14 @@ void MainWindow::clickedTag(Tag* tag) {
         QObject::connect(copiedTag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
 
         m_ui->SelectedTagsLayout->insertWidget(m_ui->SelectedTagsLayout->count()-1, copiedTag);
-
+        m_selectedMovieID = m_ui->MoviesListWidget->currentRow();
         on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
     }
 }
 
 void MainWindow::clickedFilterTag(Tag* tag) {
     delete tag;
+    m_selectedMovieID = m_ui->MoviesListWidget->currentRow();
     on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
 }
 
@@ -1029,6 +1040,9 @@ void MainWindow::on_QuickSearchLineEdit_textChanged(const QString &text) {
         }
     }
     delete filter;
+    m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_selectedMovieID), 0);
+    fillMovieInfos();
+
 }
 
 void MainWindow::selectedMovieChanged() {

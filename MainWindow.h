@@ -50,7 +50,7 @@ class MainWindow : public QMainWindow {
         QSqlDatabase m_db;
         Log* m_log;
         QTranslator m_translator;
-
+        int m_selectedMovieID = -1;
         QString m_savepath = "";
 
         //Setting variables
@@ -60,6 +60,7 @@ class MainWindow : public QMainWindow {
         QSettings* m_settings;
 
         //Filter variables
+        bool m_isFiltered = false;
         QString m_filter_name = "";
         int m_filter_minYear = 0,
             m_filter_maxYear = 0,
@@ -72,7 +73,7 @@ class MainWindow : public QMainWindow {
 
         explicit MainWindow(QApplication* app, QWidget* parent = nullptr);
         void databaseConnection();
-        void fillTable(bool isFiltered = false);
+        void fillTable();
         void fillGlobalStats();
         void filterTable();
         void removeUnusedTags();

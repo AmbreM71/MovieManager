@@ -1,5 +1,4 @@
 ## Bugs
-* Some movie names (such a lower first letter or multiple upper letters) will break cells filling
 * When editing movie's tags, log always say tag is no longer used
 
 ## Todo
