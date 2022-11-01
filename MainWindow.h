@@ -35,6 +35,7 @@
 #include "Dialogs/OptionsDialog.h"
 #include "Dialogs/EditMovieDialog.h"
 #include "Dialogs/ChartsDialog.h"
+#include "Dialogs/ChangelogDialog.h"
 
 namespace Ui {
     class MainWindow;
@@ -103,6 +104,7 @@ class MainWindow : public QMainWindow {
         void fillMovieInfos();
         void on_QuickSearchLineEdit_textChanged(const QString &text);
         void selectedMovieChanged();
+        void on_whatsnewAct_triggered();
 
         void clickedTag(Tag* tag);
         void clickedFilterTag(Tag* tag);

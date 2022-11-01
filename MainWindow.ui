@@ -449,6 +449,7 @@
     <property name="title">
      <string>Aide</string>
     </property>
+    <addaction name="whatsnewAct"/>
     <addaction name="AboutAct"/>
    </widget>
    <widget class="QMenu" name="ViewMenu">
@@ -537,6 +538,11 @@
   <action name="ChartAct">
    <property name="text">
     <string>Graphique</string>
+   </property>
+  </action>
+  <action name="whatsnewAct">
+   <property name="text">
+    <string>Nouveautés</string>
    </property>
   </action>
  </widget>
