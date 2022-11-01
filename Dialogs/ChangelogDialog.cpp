@@ -1,8 +1,6 @@
 #include "ChangelogDialog.h"
 #include "ui_ChangelogDialog.h"
 
-#include <QDomDocument>
-
 int ChangelogDialog::m_instances = 0;
 
 ChangelogDialog::ChangelogDialog(QWidget *parent) : QDialog(parent) {
@@ -24,8 +22,6 @@ int ChangelogDialog::instancesCount() {
     return m_instances;
 }
 
-#include <QFile>
-#include <QLabel>
 void ChangelogDialog::loadHTML() {
 
     //Workaround until solution found

@@ -172,7 +172,7 @@ void MainWindow::fillTable() {
         setMatrixMode(true);
 
     m_ui->MoviesListWidget->setSortingEnabled(true);
-
+    m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_selectedMovieID),0);
     m_log->append(tr("Nombre de films lus depuis la base de donnée : ")+QString::number(numberOfParsedMovies), Notice);
 }
 
@@ -193,7 +193,7 @@ void MainWindow::fillMovieInfos() {
         return;
     }
 
-    QString ID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text();
+    QString ID = QString::number(m_selectedMovieID);
     m_ui->MovieTitleLabel->setText(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),0)->text());
 
     //Fetch the number of views of the current movie
@@ -645,7 +645,6 @@ void MainWindow::editMovie() {
 
 
         on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
-        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_selectedMovieID), 0);
         fillMovieInfos();
 
     }
@@ -681,6 +680,7 @@ void MainWindow::deleteMovie() {
 
         removeUnusedTags();
         resetFilters();
+
         m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_selectedMovieID), 0);
         fillMovieInfos();
         fillGlobalStats();
@@ -720,6 +720,19 @@ void MainWindow::openAbout() {
     }
     else {
         m_log->append(tr("Fenêtre 'A Propos' déjà ouverte"), Warning);
+    }
+}
+
+void MainWindow::on_whatsnewAct_triggered() {
+    if(ChangelogDialog::instancesCount() == 0) {
+        ChangelogDialog* window = new ChangelogDialog(this);
+        window->show();
+        if(window->exec() == 0) {
+            delete window;
+        }
+    }
+    else {
+        m_log->append(tr("Fenêtre 'Nouveautés' déjà ouverte"), Warning);
     }
 }
 
@@ -958,14 +971,12 @@ void MainWindow::clickedTag(Tag* tag) {
         QObject::connect(copiedTag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
 
         m_ui->SelectedTagsLayout->insertWidget(m_ui->SelectedTagsLayout->count()-1, copiedTag);
-        m_selectedMovieID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(), 2)->text().toInt();
         on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
     }
 }
 
 void MainWindow::clickedFilterTag(Tag* tag) {
     delete tag;
-    m_selectedMovieID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(), 2)->text().toInt();
     on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
 }
 
@@ -1046,22 +1057,12 @@ void MainWindow::on_QuickSearchLineEdit_textChanged(const QString &text) {
 }
 
 void MainWindow::selectedMovieChanged() {
-    m_selectedMovieID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(), 2)->text().toInt();
     //Disable Manage views and filters button if the list is empty
     if(m_ui->MoviesListWidget->currentRow() == -1) {
         m_ui->ManageMovieViewsButton->setEnabled(false);
     }
     else {
+        m_selectedMovieID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(), 2)->text().toInt();
         m_ui->ManageMovieViewsButton->setEnabled(true);
-    }
-}
-
-void MainWindow::on_whatsnewAct_triggered() {
-    if(ChangelogDialog::instancesCount() == 0) {
-        ChangelogDialog* window = new ChangelogDialog(this);
-        window->show();
-        if(window->exec() == 0) {
-            delete window;
-        }
     }
 }

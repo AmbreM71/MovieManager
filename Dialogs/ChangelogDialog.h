@@ -2,8 +2,8 @@
 #define CHANGELOGDIALOG_H
 
 #include <QDialog>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+#include <QFile>
+#include <QLabel>
 
 namespace Ui {
     class ChangelogDialog;
@@ -16,8 +16,6 @@ class ChangelogDialog : public QDialog
     private:
         Ui::ChangelogDialog* m_ui;
         static int m_instances;
-        QNetworkAccessManager manager;
-        QNetworkReply* response;
 
     public:
         explicit ChangelogDialog(QWidget *parent = nullptr);
