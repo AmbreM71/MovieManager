@@ -652,14 +652,18 @@ void MainWindow::editMovie() {
 
 void MainWindow::deleteMovie() {
     QMessageBox::StandardButton reply;
+    int savedRow = 0;
+
     reply = QMessageBox::question(this, tr("Supprimer le film"), tr("Êtes-vous sûr de vouloir supprimer le film ? Les visionnages associés seront effacés."));
     if(reply == QMessageBox::Yes) {
+
         QSqlQuery deleteMovieQuery;
         QSqlQuery deleteAssociatedViewsQuery;
         QSqlQuery deleteAssociatedTagsQuery;
         QSqlQuery posterQuery;
 
         QString ID = QString::number(m_selectedMovieID);
+        savedRow = m_ui->MoviesListWidget->currentRow();
 
         posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";");
         posterQuery.first();
@@ -680,8 +684,9 @@ void MainWindow::deleteMovie() {
 
         removeUnusedTags();
         resetFilters();
-
-        m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_selectedMovieID), 0);
+        if(savedRow+1 >= m_ui->MoviesListWidget->rowCount())
+            savedRow--;
+        m_ui->MoviesListWidget->setCurrentCell(savedRow, 0);
         fillMovieInfos();
         fillGlobalStats();
     }
