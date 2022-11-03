@@ -25,9 +25,12 @@ MainWindow::MainWindow(QApplication* app) {
     m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << tr("Nom du film") << tr("Année\nde sortie") << tr("Nombre de\nvisionnages") << tr("Premier\nvisionnage") << tr("Dernier\nvisionnage") << tr("Entrées") << tr("Note"));
 
     databaseConnection();
-    on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+    fillTable();
     m_ui->MoviesListWidget->setCurrentCell(0,0);
-    fillMovieInfos();
+    if(m_ui->MoviesListWidget->rowCount() > 0) {
+        m_selectedMovieID = m_ui->MoviesListWidget->item(0,2)->text().toInt();
+        fillMovieInfos();
+    }
     fillGlobalStats();
     menuBarConnectors();
 
