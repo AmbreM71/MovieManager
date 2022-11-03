@@ -72,7 +72,7 @@ class MainWindow : public QMainWindow {
 
     public:
 
-        explicit MainWindow(QApplication* app, QWidget* parent = nullptr);
+        explicit MainWindow(QApplication* app);
         void databaseConnection();
         void fillTable();
         void fillGlobalStats();

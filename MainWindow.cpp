@@ -2,7 +2,7 @@
 #include "ui_MainWindow.h"
 
 
-MainWindow::MainWindow(QApplication* app, QWidget* parent) {
+MainWindow::MainWindow(QApplication* app) {
 
     m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters";
 
