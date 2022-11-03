@@ -113,7 +113,7 @@ void AddViewDialog::comboboxChanged() {
         QString movieYear = m_ui->ExistingMoviesComboBox->currentText().remove(0, m_ui->ExistingMoviesComboBox->currentText().length()-4);
 
         QSqlQuery posterQuery;
-        posterQuery.exec("SELECT Poster FROM movies WHERE Name='"+movieName+"' AND ReleaseYear='"+movieYear+"'");
+        posterQuery.exec("SELECT Poster FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear='"+movieYear+"'");
         posterQuery.first();
 
 
