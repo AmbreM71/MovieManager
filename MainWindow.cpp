@@ -766,6 +766,8 @@ void MainWindow::resetFilters() {
 }
 
 void MainWindow::customMenuRequested(QPoint pos) {
+    m_selectedMovieID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt();
+    fillMovieInfos();
     if(m_ui->MoviesListWidget->currentRow() == -1)
         return;
 
