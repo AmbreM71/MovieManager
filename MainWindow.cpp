@@ -514,40 +514,53 @@ void MainWindow::addView() {
 
         //Add the new movie to the movies table
         if(window->getComboboxSelectedItem() == "") {
-            QString posterPath = "";
-            if(window->getPosterPath() != "") {
-                QImage poster(window->getPosterPath());
-                if(poster.height() > 1200 || poster.width() > 1200) {
-                    m_log->append(tr("Image trop grande (") + QString::number(poster.width()) + "x" + QString::number(poster.height()) +
-                                  "). Des latences peuvent apparaître.", Warning);
-                }
-
-                //Processing poster moving and renaming
-                QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
-                QString GUID = QString::number(QRandomGenerator::global()->generate());
-                if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
-                    m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, Error);
-                }
-                posterPath = GUID+"."+ext;
-            }
-
-            QSqlQuery insertIntoMoviesQuery;
-            insertIntoMoviesQuery.prepare("INSERT INTO movies (Name, ReleaseYear, Entries, Rating, Poster) VALUES (?,?,?,?,?);");
-
-
-
-            insertIntoMoviesQuery.bindValue(0, window->getName());
-            insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
-            insertIntoMoviesQuery.bindValue(2, window->getEntries());
-            insertIntoMoviesQuery.bindValue(3, window->getRating());
-            insertIntoMoviesQuery.bindValue(4, posterPath);
 
             movieName = window->getName();
             movieYear = QString::number(window->getReleaseYear());
 
-            if(!insertIntoMoviesQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoMoviesQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoMoviesQuery.lastError().text(), Error);
-                return;
+            bool movieAlreadyExist = false;
+            QSqlQuery existingMoviesQuery;
+            existingMoviesQuery.exec("SELECT Name, ReleaseYear FROM movies");
+            while(existingMoviesQuery.next()) {
+                if(QString::compare(movieName, existingMoviesQuery.value(0).toString()) == 0 && QString::compare(movieYear, existingMoviesQuery.value(1).toString()) == 0) {
+                    movieAlreadyExist = true;
+                    QMessageBox::information(this, tr("Film déjà présent"), tr("Un film correspond déjà à ce nom et cette date de sortie, la vue sera ajouté à ce dernier"));
+                    break;
+                }
+            }
+            if(!movieAlreadyExist) {
+                QString posterPath = "";
+                if(window->getPosterPath() != "") {
+                    QImage poster(window->getPosterPath());
+                    if(poster.height() > 1200 || poster.width() > 1200) {
+                        m_log->append(tr("Image trop grande (") + QString::number(poster.width()) + "x" + QString::number(poster.height()) +
+                                      "). Des latences peuvent apparaître.", Warning);
+                    }
+
+                    //Processing poster moving and renaming
+                    QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
+                    QString GUID = QString::number(QRandomGenerator::global()->generate());
+                    if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
+                        m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, Error);
+                    }
+                    posterPath = GUID+"."+ext;
+                }
+
+                QSqlQuery insertIntoMoviesQuery;
+                insertIntoMoviesQuery.prepare("INSERT INTO movies (Name, ReleaseYear, Entries, Rating, Poster) VALUES (?,?,?,?,?);");
+
+
+
+                insertIntoMoviesQuery.bindValue(0, window->getName());
+                insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
+                insertIntoMoviesQuery.bindValue(2, window->getEntries());
+                insertIntoMoviesQuery.bindValue(3, window->getRating());
+                insertIntoMoviesQuery.bindValue(4, posterPath);
+
+                if(!insertIntoMoviesQuery.exec()){
+                    m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoMoviesQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoMoviesQuery.lastError().text(), Error);
+                    return;
+                }
             }
         }
         else {
