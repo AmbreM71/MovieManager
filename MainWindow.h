@@ -74,7 +74,6 @@ class MainWindow : public QMainWindow {
 
         explicit MainWindow(QApplication* app);
         void databaseConnection();
-        void fillTable();
         void fillGlobalStats();
         void filterTable();
         void removeUnusedTags();
@@ -87,6 +86,7 @@ class MainWindow : public QMainWindow {
         ~MainWindow();
 
     public slots:
+        void fillTable(const QString &text);
         void addView();
         void editViews();
         void openFilters();
@@ -102,7 +102,6 @@ class MainWindow : public QMainWindow {
         void deleteMovie();
         void editMovie();
         void fillMovieInfos();
-        void on_QuickSearchLineEdit_textChanged(const QString &text);
         void selectedMovieChanged();
         void on_whatsnewAct_triggered();
 

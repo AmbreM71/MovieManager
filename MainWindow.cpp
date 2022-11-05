@@ -25,7 +25,7 @@ MainWindow::MainWindow(QApplication* app) {
     m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << tr("Nom du film") << tr("Année\nde sortie") << tr("Nombre de\nvisionnages") << tr("Premier\nvisionnage") << tr("Dernier\nvisionnage") << tr("Entrées") << tr("Note"));
 
     databaseConnection();
-    on_QuickSearchLineEdit_textChanged("");
+    fillTable("");
     if(m_ui->MoviesListWidget->rowCount() > 0) {
         m_savedMovieID = m_ui->MoviesListWidget->item(0,2)->text().toInt();
         fillMovieInfos();
@@ -47,6 +47,7 @@ MainWindow::MainWindow(QApplication* app) {
     QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
     QObject::connect(m_ui->MoviesListWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
     QObject::connect(m_ui->MoviesListWidget, SIGNAL(itemSelectionChanged()), this, SLOT(selectedMovieChanged()));
+    QObject::connect(m_ui->QuickSearchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(fillTable(QString)));
 }
 
 MainWindow::~MainWindow() {
@@ -115,7 +116,7 @@ void MainWindow::databaseConnection() {
     }
 }
 
-void MainWindow::fillTable() {
+void MainWindow::fillTable(const QString &text) {
 
     //Clear the table
     int movieListRowCount = m_ui->MoviesListWidget->rowCount();
@@ -175,6 +176,61 @@ void MainWindow::fillTable() {
 
     m_ui->MoviesListWidget->setSortingEnabled(true);
     m_log->append(tr("Nombre de films lus depuis la base de donnée : ")+QString::number(numberOfParsedMovies), Notice);
+
+    /* QUICK FILTER PART*/
+
+    QSqlQuery tagQuery;
+    tagQuery.exec("SELECT * FROM tags;");
+
+    QString* filter = new QString(text);
+    for(int row = 0 ; row < m_ui->MoviesListWidget->rowCount() ; row++) {
+        int cellsNotCorrespondingToFilter = 0;
+        for(int column = 0 ; column < m_ui->MoviesListWidget->columnCount() ; column++) {
+            QString cellText = m_ui->MoviesListWidget->item(row, column)->text();
+            for(int filterIndex = 0 ; filterIndex < filter->length() ; filterIndex++) {
+                if(cellText.at(filterIndex) != filter->at(filterIndex)) {
+                    cellsNotCorrespondingToFilter++;
+                    break;
+                }
+            }
+        }
+        //If no cell in the line corresponds to the search
+        if(cellsNotCorrespondingToFilter == m_ui->MoviesListWidget->columnCount()) {
+            m_ui->MoviesListWidget->removeRow(row);
+            //Because deleting row moves all next rows, the value is decremented
+            row--;
+        }
+        //If cell correspond to the quick search, check if tags filter correspond
+        else {
+            int ID = m_ui->MoviesListWidget->item(row, 2)->text().toInt();
+            bool hasMovieAllFilterTags = true;
+            for(int filterTag = 0 ; filterTag < m_ui->SelectedTagsLayout->count()-1 ; filterTag++) {
+                Tag* tag = (Tag*)m_ui->SelectedTagsLayout->itemAt(filterTag)->widget();
+                bool hasMovieFilterTag = false;
+                tagQuery.first();
+                tagQuery.previous();
+                while(tagQuery.next()) {
+                    if(tagQuery.value(0).toInt() == ID && QString::compare(tagQuery.value(1).toString(), tag->text()) == 0) {
+                        hasMovieFilterTag = true;
+                        break;
+                    }
+                }
+                if(hasMovieFilterTag == false) {
+                    hasMovieAllFilterTags = false;
+                    break;
+                }
+            }
+            if(hasMovieAllFilterTags == false) {
+                m_ui->MoviesListWidget->removeRow(row);
+                //Because deleting row moves all next rows, the value is decremented
+                row--;
+            }
+        }
+    }
+    delete filter;
+    m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_savedMovieID), 0);
+    m_ui->DisplayedMovieCountLabel->setText(tr("Films : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
+    fillMovieInfos();
 }
 
 void MainWindow::fillMovieInfos() {
@@ -384,7 +440,7 @@ void MainWindow::importDB() {
             }
         }
     }
-    on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+    fillTable(m_ui->QuickSearchLineEdit->text());
     fillGlobalStats();
 }
 
@@ -557,7 +613,7 @@ void MainWindow::addView() {
 
         }
         fillGlobalStats();
-        on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+        fillTable(m_ui->QuickSearchLineEdit->text());
         m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_savedMovieID), 0);
         fillMovieInfos();
     }
@@ -569,7 +625,7 @@ void MainWindow::editViews() {
     window->show();
     if(window->exec() == 1) {
         if (window->edited()) {
-            on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+            fillTable(m_ui->QuickSearchLineEdit->text());
             fillGlobalStats();
         }
     }
@@ -650,7 +706,7 @@ void MainWindow::editMovie() {
         }
 
 
-        on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+        fillTable(m_ui->QuickSearchLineEdit->text());
         fillMovieInfos();
 
     }
@@ -704,7 +760,7 @@ void MainWindow::openFilters() {
     if(window->exec() == 1) {
         delete window;
         m_isFiltered = true;
-        on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+        fillTable(m_ui->QuickSearchLineEdit->text());
     }
 }
 
@@ -773,7 +829,7 @@ void MainWindow::resetFilters() {
     m_filter_maxRating = 0;
     m_filter_minEntries = 0;
     m_isFiltered = false;
-    on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+    fillTable(m_ui->QuickSearchLineEdit->text());
 }
 
 void MainWindow::customMenuRequested(QPoint pos) {
@@ -984,13 +1040,13 @@ void MainWindow::clickedTag(Tag* tag) {
         QObject::connect(copiedTag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
 
         m_ui->SelectedTagsLayout->insertWidget(m_ui->SelectedTagsLayout->count()-1, copiedTag);
-        on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+        fillTable(m_ui->QuickSearchLineEdit->text());
     }
 }
 
 void MainWindow::clickedFilterTag(Tag* tag) {
     delete tag;
-    on_QuickSearchLineEdit_textChanged(m_ui->QuickSearchLineEdit->text());
+    fillTable(m_ui->QuickSearchLineEdit->text());
 }
 
 void MainWindow::mouseEnteredTag(Tag* tag) {
@@ -1009,65 +1065,6 @@ void MainWindow::mouseLeftTag(Tag* tag) {
                 "   padding : 1px 5px 3px 5px;"
                 "   border-radius:12px;"
                 "   border: 2px solid #653133;");
-}
-
-void MainWindow::on_QuickSearchLineEdit_textChanged(const QString &text) {
-
-    fillTable();
-
-    QSqlQuery tagQuery;
-    tagQuery.exec("SELECT * FROM tags;");
-
-    QString* filter = new QString(text);
-    for(int row = 0 ; row < m_ui->MoviesListWidget->rowCount() ; row++) {
-        int cellsNotCorrespondingToFilter = 0;
-        for(int column = 0 ; column < m_ui->MoviesListWidget->columnCount() ; column++) {
-            QString cellText = m_ui->MoviesListWidget->item(row, column)->text();
-            for(int filterIndex = 0 ; filterIndex < filter->length() ; filterIndex++) {
-                if(cellText.at(filterIndex) != filter->at(filterIndex)) {
-                    cellsNotCorrespondingToFilter++;
-                    break;
-                }
-            }
-        }
-        //If no cell in the line corresponds to the search
-        if(cellsNotCorrespondingToFilter == m_ui->MoviesListWidget->columnCount()) {
-            m_ui->MoviesListWidget->removeRow(row);
-            //Because deleting row moves all next rows, the value is decremented
-            row--;
-        }
-        //If cell correspond to the quick search, check if tags filter correspond
-        else {
-            int ID = m_ui->MoviesListWidget->item(row, 2)->text().toInt();
-            bool hasMovieAllFilterTags = true;
-            for(int filterTag = 0 ; filterTag < m_ui->SelectedTagsLayout->count()-1 ; filterTag++) {
-                Tag* tag = (Tag*)m_ui->SelectedTagsLayout->itemAt(filterTag)->widget();
-                bool hasMovieFilterTag = false;
-                tagQuery.first();
-                tagQuery.previous();
-                while(tagQuery.next()) {
-                    if(tagQuery.value(0).toInt() == ID && QString::compare(tagQuery.value(1).toString(), tag->text()) == 0) {
-                        hasMovieFilterTag = true;
-                        break;
-                    }
-                }
-                if(hasMovieFilterTag == false) {
-                    hasMovieAllFilterTags = false;
-                    break;
-                }
-            }
-            if(hasMovieAllFilterTags == false) {
-                m_ui->MoviesListWidget->removeRow(row);
-                //Because deleting row moves all next rows, the value is decremented
-                row--;
-            }
-        }
-    }
-    delete filter;
-    m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_savedMovieID), 0);
-    m_ui->DisplayedMovieCountLabel->setText(tr("Films : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
-    fillMovieInfos();
-
 }
 
 void MainWindow::selectedMovieChanged() {
