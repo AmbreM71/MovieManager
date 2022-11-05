@@ -187,7 +187,7 @@ void MainWindow::fillTable(const QString &text) {
     QString* filter = new QString(text);
     for(int row = 0 ; row < m_ui->MoviesListWidget->rowCount() ; row++) {
         int cellsNotCorrespondingToFilter = 0;
-        for(int column = 0 ; column < m_ui->MoviesListWidget->columnCount() ; column++) {
+        for(int column = 0 ; column < m_ui->MoviesListWidget->columnCount()-1 ; column++) {
             QString cellText = m_ui->MoviesListWidget->item(row, column)->text();
             for(int filterIndex = 0 ; filterIndex < filter->length() ; filterIndex++) {
                 if(cellText.at(filterIndex) != filter->at(filterIndex)) {
@@ -197,7 +197,7 @@ void MainWindow::fillTable(const QString &text) {
             }
         }
         //If no cell in the line corresponds to the search
-        if(cellsNotCorrespondingToFilter == m_ui->MoviesListWidget->columnCount()) {
+        if(cellsNotCorrespondingToFilter == m_ui->MoviesListWidget->columnCount()-1) {
             m_ui->MoviesListWidget->removeRow(row);
             //Because deleting row moves all next rows, the value is decremented
             row--;
