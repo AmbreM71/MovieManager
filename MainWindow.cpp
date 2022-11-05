@@ -677,6 +677,8 @@ void MainWindow::editMovie() {
 
                     QSqlQuery deleteMovieQuery;
                     deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+QString::number(m_savedMovieID)+"\"");
+                    QSqlQuery deleteMovieTags;
+                    deleteMovieTags.exec("DELETE FROM tags WHERE ID_Movie=\""+QString::number(m_savedMovieID)+"\"");
 
                     removeUnusedTags();
                     resetFilters();
