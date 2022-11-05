@@ -118,12 +118,15 @@ void MainWindow::databaseConnection() {
 
 void MainWindow::fillTable(const QString &text) {
 
+    m_ui->MoviesListWidget->blockSignals(true);
+    m_ui->MoviesListWidget->setSortingEnabled(false);
+
     //Clear the table
     int movieListRowCount = m_ui->MoviesListWidget->rowCount();
     for(int i=movieListRowCount ; i >= 0 ; i--) {
         m_ui->MoviesListWidget->removeRow(i);
     }
-    m_ui->MoviesListWidget->setSortingEnabled(false);
+
     //Fetch every unique movies
     QSqlQuery moviesQuery;
 
@@ -174,7 +177,6 @@ void MainWindow::fillTable(const QString &text) {
     if(m_matrixMode)
         setMatrixMode(true);
 
-    m_ui->MoviesListWidget->setSortingEnabled(true);
     m_log->append(tr("Nombre de films lus depuis la base de donnée : ")+QString::number(numberOfParsedMovies), Notice);
 
     /* QUICK FILTER PART*/
@@ -228,6 +230,9 @@ void MainWindow::fillTable(const QString &text) {
         }
     }
     delete filter;
+
+    m_ui->MoviesListWidget->blockSignals(false);
+    m_ui->MoviesListWidget->setSortingEnabled(true);
     m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_savedMovieID), 0);
     m_ui->DisplayedMovieCountLabel->setText(tr("Films : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
     fillMovieInfos();
