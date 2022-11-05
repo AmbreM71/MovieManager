@@ -999,7 +999,6 @@ void MainWindow::fillGlobalStats() {
 
 
 
-    m_ui->TotalUniqueViewsLabel->setText(tr("Nombre de vues uniques : ") + uniqueViewQuery.value(0).toString());
     m_ui->TotalViewLabel->setText(tr("Nombre total de visionnages : ") + totalViewQuery.value(0).toString());
     m_ui->AverageViewLabel->setText(tr("Moyenne de visionnages : ") + QString::number(avgViews));
     m_ui->AverageYearLabel->setText(tr("Année moyenne des films vus : ") + QString::number(avgMovieYear));
