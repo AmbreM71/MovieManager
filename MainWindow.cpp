@@ -18,19 +18,20 @@ MainWindow::MainWindow(QApplication* app) {
 
     m_app->setWindowIcon(QIcon(":/icons/Icons/logo.png"));
 
+    databaseConnection();
+
     setSettings();
     refreshLanguage();
     refreshTheme();
 
     m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << tr("Nom du film") << tr("Année\nde sortie") << tr("Nombre de\nvisionnages") << tr("Premier\nvisionnage") << tr("Dernier\nvisionnage") << tr("Entrées") << tr("Note"));
 
-    databaseConnection();
+
     fillTable("");
     if(m_ui->MoviesListWidget->rowCount() > 0) {
         m_savedMovieID = m_ui->MoviesListWidget->item(0,2)->text().toInt();
         fillMovieInfos();
     }
-    fillGlobalStats();
     menuBarConnectors();
 
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -1043,7 +1044,7 @@ void MainWindow::fillGlobalStats() {
 
 
 
-    float avgViews = totalViewQuery.value(0).toFloat()/(float)m_ui->MoviesListWidget->rowCount();
+    float avgViews = totalViewQuery.value(0).toFloat()/uniqueViewQuery.value(0).toFloat();
     avgViews = round(avgViews*100)/100;
     avgRating = round(avgRating*100)/100;
 
