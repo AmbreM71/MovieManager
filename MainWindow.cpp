@@ -1065,6 +1065,7 @@ void MainWindow::on_QuickSearchLineEdit_textChanged(const QString &text) {
     }
     delete filter;
     m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_savedMovieID), 0);
+    m_ui->DisplayedMovieCountLabel->setText(tr("Films : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
     fillMovieInfos();
 
 }

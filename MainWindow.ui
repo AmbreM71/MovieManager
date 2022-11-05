@@ -248,6 +248,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="DisplayedMovieCountLabel">
+          <property name="text">
+           <string>Films : </string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
