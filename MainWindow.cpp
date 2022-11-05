@@ -822,6 +822,7 @@ void MainWindow::openSettings() {
         else {
             setMatrixMode(false);
         }
+        fillMovieInfos();
     }
 }
 
