@@ -16,6 +16,7 @@ EditViewsDialog::EditViewsDialog(int* ID, Log* log, int* theme, QWidget* parent)
     this->setWindowTitle(tr("Vues - ")+titleQuery.value(0).toString());
 
     QObject::connect(m_ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
+    QObject::connect(m_ui->tableWidget, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(editView()));
 
     fillTable();
 
