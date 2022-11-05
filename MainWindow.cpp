@@ -658,6 +658,33 @@ void MainWindow::editMovie() {
         QString GUID = "";
         QString ext = "";
 
+        QSqlQuery existingMoviesQuery;
+        existingMoviesQuery.exec("SELECT Name, ReleaseYear, ID, Poster FROM movies");
+        while(existingMoviesQuery.next()) {
+            if(QString::compare(window->getMovieName(), existingMoviesQuery.value(0).toString()) == 0 && QString::compare(window->getReleaseYear(), existingMoviesQuery.value(1).toString()) == 0 && m_savedMovieID != existingMoviesQuery.value(2).toInt()) {
+                int answer = QMessageBox::question(this, tr("Film déjà présent"), tr("Un film correspond déjà à ce nom et cette date de sortie, les vues de ce film seront fusionnées, voulez-vous continuer ?"));
+                if(answer == QMessageBox::Yes) {
+                    QSqlQuery changeViewsIDQuery;
+                    changeViewsIDQuery.exec("UPDATE views SET ID_Movie=\""+existingMoviesQuery.value(2).toString()+"\" WHERE ID_Movie=\""+QString::number(m_savedMovieID)+"\"");
+
+                    QSqlQuery MoviePosterToDeleteQuery;
+                    MoviePosterToDeleteQuery.exec("SELECT Poster FROM Movies WHERE ID=\""+QString::number(m_savedMovieID)+"\"");
+                    MoviePosterToDeleteQuery.first();
+                    QFile::remove(m_savepath+"\\"+MoviePosterToDeleteQuery.value(0).toString());
+
+                    QSqlQuery deleteMovieQuery;
+                    deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+QString::number(m_savedMovieID)+"\"");
+
+                    removeUnusedTags();
+                    resetFilters();
+                    m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(existingMoviesQuery.value(2).toInt()), 0);
+                    fillMovieInfos();
+                    fillGlobalStats();
+                }
+                return;
+            }
+        }
+
         if(window->newPoster()) {
 
             //Delete old poster
