@@ -51,7 +51,7 @@ class MainWindow : public QMainWindow {
         QSqlDatabase m_db;
         Log* m_log;
         QTranslator m_translator;
-        int m_selectedMovieID = -1;
+        int m_savedMovieID = -1;
         QString m_savepath = "";
 
         //Setting variables
