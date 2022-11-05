@@ -367,7 +367,9 @@ void MainWindow::removeUnusedTags() {
         }
     }
     removedTags.remove(removedTags.length()-2, removedTags.length());
-    m_log->append(tr("Les tags suivants ne sont plus utilisés, ils sont supprimés : ") + removedTags, Notice);
+    if(removedTags.length() > 0) {
+        m_log->append(tr("Les tags suivants ne sont plus utilisés, ils sont supprimés : ") + removedTags, Notice);
+    }
 
 }
 
@@ -722,7 +724,13 @@ void MainWindow::editMovie() {
 
         removeUnusedTags();
 
+        QSqlQuery TagsInfoQuery;
+        TagsInfoQuery.exec("SELECT Tag FROM TagsInfo");
+        bool tagAlreadyExist;
+
         for(int i=0 ; i<window->getTags()->size() ; i++) {
+            tagAlreadyExist = false;
+
             QString hexcolor = "";
             for(int j = 0 ; j<6 ; j++) {
                 hexcolor.append(QString::number(rand() % 9));
@@ -730,14 +738,22 @@ void MainWindow::editMovie() {
 
             QSqlQuery insertIntoTagsInfoQuery;
 
-            insertIntoTagsInfoQuery.prepare("INSERT INTO tagsInfo (Tag, Color) VALUES (?,?);");
-            insertIntoTagsInfoQuery.bindValue(0, window->getTags()->at(i));
-            insertIntoTagsInfoQuery.bindValue(1, hexcolor);
-
-            if(!insertIntoTagsInfoQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), Error);
+            TagsInfoQuery.first();
+            TagsInfoQuery.previous();
+            while(TagsInfoQuery.next()) {
+                if(QString::compare(window->getTags()->at(i), TagsInfoQuery.value(0).toString())) {
+                    tagAlreadyExist = true;
+                }
             }
+            if(!tagAlreadyExist) {
+                insertIntoTagsInfoQuery.prepare("INSERT INTO tagsInfo (Tag, Color) VALUES (?,?);");
+                insertIntoTagsInfoQuery.bindValue(0, window->getTags()->at(i));
+                insertIntoTagsInfoQuery.bindValue(1, hexcolor);
 
+                if(!insertIntoTagsInfoQuery.exec()){
+                    m_log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), Error);
+                }
+            }
             QSqlQuery insertIntoTagsQuery;
 
             insertIntoTagsQuery.prepare("INSERT INTO tags (ID_Movie, Tag) VALUES (?,?);");
