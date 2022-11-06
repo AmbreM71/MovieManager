@@ -715,17 +715,17 @@ void MainWindow::editMovie() {
                 int answer = QMessageBox::question(this, tr("Film déjà présent"), tr("Un film correspond déjà à ce nom et cette date de sortie, les vues de ce film seront fusionnées, voulez-vous continuer ?"));
                 if(answer == QMessageBox::Yes) {
                     QSqlQuery changeViewsIDQuery;
-                    changeViewsIDQuery.exec("UPDATE views SET ID_Movie=\""+existingMoviesQuery.value(2).toString()+"\" WHERE ID_Movie=\""+QString::number(m_savedMovieID)+"\"");
+                    changeViewsIDQuery.exec("UPDATE views SET ID_Movie=\""+existingMoviesQuery.value(2).toString()+"\" WHERE ID_Movie=\""+ID+"\"");
 
                     QSqlQuery MoviePosterToDeleteQuery;
-                    MoviePosterToDeleteQuery.exec("SELECT Poster FROM Movies WHERE ID=\""+QString::number(m_savedMovieID)+"\"");
+                    MoviePosterToDeleteQuery.exec("SELECT Poster FROM Movies WHERE ID=\""+ID+"\"");
                     MoviePosterToDeleteQuery.first();
                     QFile::remove(m_savepath+"\\"+MoviePosterToDeleteQuery.value(0).toString());
 
                     QSqlQuery deleteMovieQuery;
-                    deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+QString::number(m_savedMovieID)+"\"");
+                    deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\"");
                     QSqlQuery deleteMovieTags;
-                    deleteMovieTags.exec("DELETE FROM tags WHERE ID_Movie=\""+QString::number(m_savedMovieID)+"\"");
+                    deleteMovieTags.exec("DELETE FROM tags WHERE ID_Movie=\""+ID+"\"");
 
                     removeUnusedTags();
                     resetFilters();
