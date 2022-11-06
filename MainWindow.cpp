@@ -453,6 +453,7 @@ void MainWindow::importDB() {
 }
 
 void MainWindow::exportDB() {
+    int i;
     QString file = QFileDialog::getSaveFileName(this, tr("Exporter"), QString(), "JSON (*.json)");  //Get the save link
     //Creates a QFile with the fetched path
     QFile jsonFile(file);
@@ -466,8 +467,8 @@ void MainWindow::exportDB() {
     //Writes movies to JSON
     QJsonObject moviesObject;
     QSqlQuery moviesQuery;
-    moviesQuery.exec("SELECT ID, Name, ReleaseYear, Entries, Rating FROM movies;");
-    int i=0;
+    moviesQuery.exec("SELECT ID, Name, ReleaseYear, Entries, Rating, Poster FROM movies;");
+    i=0;
     while(moviesQuery.next()) {
         i++;
 
@@ -478,6 +479,7 @@ void MainWindow::exportDB() {
         movieObject.insert("ReleaseYear", QJsonValue::fromVariant(moviesQuery.value(2).toInt()));
         movieObject.insert("Entries", QJsonValue::fromVariant(moviesQuery.value(3).toInt()));
         movieObject.insert("Rating", QJsonValue::fromVariant(moviesQuery.value(4).toInt()));
+        movieObject.insert("Poster", QJsonValue::fromVariant(moviesQuery.value(5).toString()));
 
         moviesObject.insert("movie" + QString::fromStdString(std::to_string(i)), movieObject);
     }
@@ -487,9 +489,9 @@ void MainWindow::exportDB() {
     QJsonObject viewsObject;
     QSqlQuery viewsQuery;
     viewsQuery.exec("SELECT ID, ID_Movie, ViewDate, ViewType FROM views;");
-    int j=0;
+    i=0;
     while(viewsQuery.next()) {
-        j++;
+        i++;
 
         QJsonObject viewObject;
 
@@ -498,12 +500,45 @@ void MainWindow::exportDB() {
         viewObject.insert("ViewDate", QJsonValue::fromVariant(viewsQuery.value(2).toString()));
         viewObject.insert("ViewType", QJsonValue::fromVariant(viewsQuery.value(3).toString()));
 
-        viewsObject.insert("view" + QString::fromStdString(std::to_string(j)), viewObject);
+        viewsObject.insert("view" + QString::fromStdString(std::to_string(i)), viewObject);
     }
     mainObject.insert("views", viewsObject);
 
-    jsonFile.write(QJsonDocument(mainObject).toJson(QJsonDocument::Indented));
+    //Writes tagsInfo to JSON
+    QJsonObject tagsInfoObject;
+    QSqlQuery tagsInfoQuery;
+    tagsInfoQuery.exec("SELECT Tag, Color FROM tagsInfo;");
+    i=0;
+    while(tagsInfoQuery.next()) {
+        i++;
 
+        QJsonObject tagInfoObject;
+
+        tagInfoObject.insert("Tag", QJsonValue::fromVariant(tagsInfoQuery.value(0).toString()));
+        tagInfoObject.insert("Color", QJsonValue::fromVariant(tagsInfoQuery.value(1).toString()));
+
+        tagsInfoObject.insert("tagInfo" + QString::fromStdString(std::to_string(i)), tagInfoObject);
+    }
+    mainObject.insert("tagsInfo", tagsInfoObject);
+
+    //Writes tags to JSON
+    QJsonObject tagsObject;
+    QSqlQuery tagsQuery;
+    tagsQuery.exec("SELECT ID_Movie, Tag FROM tags;");
+    i=0;
+    while(tagsQuery.next()) {
+        i++;
+
+        QJsonObject tagObject;
+
+        tagObject.insert("ID_Movie", QJsonValue::fromVariant(tagsQuery.value(0).toInt()));
+        tagObject.insert("Tag", QJsonValue::fromVariant(tagsQuery.value(1).toString()));
+
+        tagsObject.insert("tag" + QString::fromStdString(std::to_string(i)), tagObject);
+    }
+    mainObject.insert("tags", tagsObject);
+
+    jsonFile.write(QJsonDocument(mainObject).toJson(QJsonDocument::Indented));
     jsonFile.close();
 }
 
