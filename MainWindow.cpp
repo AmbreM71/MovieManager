@@ -931,6 +931,7 @@ void MainWindow::openSettings() {
         }
         fillMovieInfos();
     }
+    m_ui->DisplayedMovieCountLabel->setText(tr("Films : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
 }
 
 void MainWindow::resetFilters() {
