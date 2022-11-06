@@ -382,66 +382,78 @@ void MainWindow::importDB() {
         QMessageBox::critical(this, tr("Erreur"), jsonFile.errorString());
     }
     else {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(tr("Importer"));
-        msgBox.setText(tr("Souhaitez vous remplacer le contenu actuel ou ajouter au contenu actuel ?"));
-        QAbstractButton* appendButton = msgBox.addButton(tr("Ajouter"), QMessageBox::YesRole);
-        QAbstractButton* replaceButton = msgBox.addButton(tr("Remplacer"), QMessageBox::YesRole);
-        msgBox.addButton(tr("Annuler"), QMessageBox::NoRole);
-        msgBox.exec();
-        if (msgBox.clickedButton()==replaceButton || msgBox.clickedButton()==appendButton) {
-            bool add = true;
-            if (msgBox.clickedButton()==replaceButton) {
-                QMessageBox confirmReplaceBox;
-                confirmReplaceBox.setText(tr("Cette opération va supprimer tous vos visionnages actuels, voulez-vous continuer ?"));
-                QAbstractButton* yesButton = confirmReplaceBox.addButton(QMessageBox::Yes);
-                confirmReplaceBox.addButton(QMessageBox::No);
-                confirmReplaceBox.exec();
-                if(confirmReplaceBox.clickedButton()==yesButton) {
-                    QSqlQuery deleteQuery;
-                    deleteQuery.exec("DELETE FROM movies");
-                    deleteQuery.exec("DELETE FROM views");
-                }
-                else {
-                    add = false;
-                }
-            }
-            if(add) {
-                QString val = jsonFile.readAll();
-                jsonFile.close();
-                QJsonObject main = QJsonDocument::fromJson(val.toUtf8()).object();
-                foreach(const QString& mainKey, main.keys()) {
-                    if(mainKey == "movies") {
-                        QJsonObject movies = main.value(mainKey).toObject();
-                        foreach(const QString& movieKey, movies.keys()) {
-                            QJsonObject movie = movies.value(movieKey).toObject();
-                            QSqlQuery query;
-                            query.prepare("INSERT INTO movies (ID, Name, ReleaseYear, Entries, Rating) VALUES (?,?,?,?,?);");
-                            query.bindValue(0, movie["ID"].toInt());
-                            query.bindValue(1, movie["Name"].toString());
-                            query.bindValue(2, movie["ReleaseYear"].toInt());
-                            query.bindValue(3, movie["Entries"].toInt());
-                            query.bindValue(4, movie["Rating"].toInt());
+        int answer = QMessageBox::question(this, tr("Importer"), tr("Cette opération va supprimer tous vos visionnages actuels, voulez-vous continuer ?"));
+        if (answer == QMessageBox::Yes) {
 
-                            if(!query.exec()){
-                                m_log->append(tr("Erreur lors de l'import dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), Error);
-                            }
+            QSqlQuery deleteQuery;
+            deleteQuery.exec("DELETE FROM movies");
+            deleteQuery.exec("DELETE FROM views");
+            deleteQuery.exec("DELETE FROM tags");
+            deleteQuery.exec("DELETE FROM tagsInfo");
+
+            QString val = jsonFile.readAll();
+            jsonFile.close();
+            QJsonObject main = QJsonDocument::fromJson(val.toUtf8()).object();
+            foreach(const QString& mainKey, main.keys()) {
+                if(mainKey == "movies") {
+                    QJsonObject movies = main.value(mainKey).toObject();
+                    foreach(const QString& movieKey, movies.keys()) {
+                        QJsonObject movie = movies.value(movieKey).toObject();
+                        QSqlQuery query;
+                        query.prepare("INSERT INTO movies (ID, Name, ReleaseYear, Entries, Rating, Poster) VALUES (?,?,?,?,?,?);");
+                        query.bindValue(0, movie["ID"].toInt());
+                        query.bindValue(1, movie["Name"].toString());
+                        query.bindValue(2, movie["ReleaseYear"].toInt());
+                        query.bindValue(3, movie["Entries"].toInt());
+                        query.bindValue(4, movie["Rating"].toInt());
+                        query.bindValue(5, movie["Poster"].toString());
+
+                        if(!query.exec()){
+                            m_log->append(tr("Erreur lors de l'import dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), Error);
                         }
                     }
-                    else if(mainKey == "views") {
-                        QJsonObject views = main.value(mainKey).toObject();
-                        foreach(const QString& viewKey, views.keys()) {
-                            QJsonObject view = views.value(viewKey).toObject();
-                            QSqlQuery query;
-                            query.prepare("INSERT INTO views (ID, ID_Movie, ViewDate, ViewType) VALUES (?,?,?,?);");
-                            query.bindValue(0, view["ID"].toInt());
-                            query.bindValue(1, view["ID_Movie"].toInt());
-                            query.bindValue(2, view["ViewDate"].toString());
-                            query.bindValue(3, view["ViewType"].toString());
+                }
+                else if(mainKey == "views") {
+                    QJsonObject views = main.value(mainKey).toObject();
+                    foreach(const QString& viewKey, views.keys()) {
+                        QJsonObject view = views.value(viewKey).toObject();
+                        QSqlQuery query;
+                        query.prepare("INSERT INTO views (ID, ID_Movie, ViewDate, ViewType) VALUES (?,?,?,?);");
+                        query.bindValue(0, view["ID"].toInt());
+                        query.bindValue(1, view["ID_Movie"].toInt());
+                        query.bindValue(2, view["ViewDate"].toString());
+                        query.bindValue(3, view["ViewType"].toString());
 
-                            if(!query.exec()){
-                                m_log->append(tr("Erreur lors de l'import dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), Error);
-                            }
+                        if(!query.exec()){
+                            m_log->append(tr("Erreur lors de l'import dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), Error);
+                        }
+                    }
+                }
+                else if(mainKey == "tags") {
+                    QJsonObject tags = main.value(mainKey).toObject();
+                    foreach(const QString& tagKey, tags.keys()) {
+                        QJsonObject tag = tags.value(tagKey).toObject();
+                        QSqlQuery query;
+                        query.prepare("INSERT INTO tags (ID_Movie, Tag) VALUES (?,?);");
+                        query.bindValue(0, tag["ID_Movie"].toInt());
+                        query.bindValue(1, tag["Tag"].toString());
+
+                        if(!query.exec()){
+                            m_log->append(tr("Erreur lors de l'import dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), Error);
+                        }
+                    }
+                }
+                else if(mainKey == "tagsInfo") {
+                    QJsonObject tagsInfo = main.value(mainKey).toObject();
+                    foreach(const QString& tagInfoKey, tagsInfo.keys()) {
+                        QJsonObject tagInfo = tagsInfo.value(tagInfoKey).toObject();
+                        QSqlQuery query;
+                        query.prepare("INSERT INTO tagsInfo (Tag, Color) VALUES (?,?);");
+                        query.bindValue(0, tagInfo["Tag"].toString());
+                        query.bindValue(1, tagInfo["Color"].toString());
+
+                        if(!query.exec()){
+                            m_log->append(tr("Erreur lors de l'import dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), Error);
                         }
                     }
                 }
