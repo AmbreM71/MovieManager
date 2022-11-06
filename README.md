@@ -16,6 +16,7 @@ Movie Manager is written in C++ using Qt. It is currently under heavy developmen
 
 ## Contributing
 Feel free to contribute to MovieManager by:
-* Suggest features [here](https://github.com/AlexM71/MovieManager/issues)
-* Report issues or bugs [here](https://github.com/AlexM71/MovieManager/issues)
-* Movie Manager is free and open source, if you like it, please star this project on GitHub
+* Suggesting features [here](https://github.com/AlexM71/MovieManager/issues)
+* Reporting issues or bugs [here](https://github.com/AlexM71/MovieManager/issues)
+
+Movie Manager is free and open source, if you like it, please star this project on GitHub
