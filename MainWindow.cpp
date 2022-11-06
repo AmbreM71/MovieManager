@@ -772,7 +772,7 @@ void MainWindow::editMovie() {
             m_log->append(tr("Erreur lors de la suppression des tags du film, plus d'informations ci-dessous :\nCode d'erreur ")+removeMovieTagsQuery.lastError().nativeErrorCode()+tr(" : ")+removeMovieTagsQuery.lastError().text(), Error);
         }
 
-        removeUnusedTags();
+
 
         QSqlQuery TagsInfoQuery;
         TagsInfoQuery.exec("SELECT Tag FROM TagsInfo");
@@ -791,8 +791,9 @@ void MainWindow::editMovie() {
             TagsInfoQuery.first();
             TagsInfoQuery.previous();
             while(TagsInfoQuery.next()) {
-                if(QString::compare(window->getTags()->at(i), TagsInfoQuery.value(0).toString())) {
+                if(QString::compare(window->getTags()->at(i), TagsInfoQuery.value(0).toString()) == 0) {
                     tagAlreadyExist = true;
+                    break;
                 }
             }
             if(!tagAlreadyExist) {
@@ -816,7 +817,7 @@ void MainWindow::editMovie() {
 
         }
 
-
+        removeUnusedTags();
         fillTable(m_ui->QuickSearchLineEdit->text());
         fillMovieInfos();
 
