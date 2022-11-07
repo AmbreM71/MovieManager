@@ -314,7 +314,7 @@ void MainWindow::fillMovieInfos() {
     q.exec("SELECT Entries, Rating FROM movies WHERE ID='"+ID+"'");
     q.first();
     m_ui->EntriesLabel->setText(q.value(0).toString() + tr(" entrées"));
-    m_ui->RatingLabel->setText(tr("Note : ") + q.value(1).toString());
+    Common::ratingToStar(q.value(1).toInt(), m_ui->RatingLabel);
 
     QSqlQuery tagsQuery;
     tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+ID+"'");

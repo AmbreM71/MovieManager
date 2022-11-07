@@ -6,6 +6,17 @@
         <file>Icons/edit light.png</file>
         <file>Icons/remove light.png</file>
         <file>Icons/nocover.png</file>
+        <file>Icons/stars/1.png</file>
+        <file>Icons/stars/10.png</file>
+        <file>Icons/stars/2.png</file>
+        <file>Icons/stars/3.png</file>
+        <file>Icons/stars/4.png</file>
+        <file>Icons/stars/5.png</file>
+        <file>Icons/stars/6.png</file>
+        <file>Icons/stars/7.png</file>
+        <file>Icons/stars/8.png</file>
+        <file>Icons/stars/9.png</file>
+        <file>Icons/stars/0.png</file>
     </qresource>
     <qresource prefix="/localisations">
         <file>Localisation/MovieManager_en_US.qm</file>

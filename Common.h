@@ -13,6 +13,8 @@ public:
     Common();
 
     static void loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float safeRatio, QString path = "", QString* resultpath = nullptr);
+
+    static void ratingToStar(int rating, QLabel* ratingLabel);
 };
 
 #endif // COMMON_H
