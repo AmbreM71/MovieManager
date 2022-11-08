@@ -99,7 +99,7 @@
        <second>0</second>
        <year>2022</year>
        <month>6</month>
-       <day>29</day>
+       <day>28</day>
       </datetime>
      </property>
      <property name="maximumDateTime">
@@ -119,11 +119,14 @@
        <second>0</second>
        <year>1899</year>
        <month>12</month>
-       <day>23</day>
+       <day>22</day>
       </datetime>
      </property>
      <property name="displayFormat">
       <string>yyyy-MM-dd</string>
+     </property>
+     <property name="calendarPopup">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
