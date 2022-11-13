@@ -12,12 +12,12 @@ void Common::loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float
         do {
             QString temp = "";
             extOK = true;
-            temp = QFileDialog::getOpenFileName(parent, QObject::tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.webp)");
+            temp = QFileDialog::getOpenFileName(parent, QObject::tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.jpeg )");
             QString ext = temp;
             ext = ext.remove(0, temp.lastIndexOf(".")+1);
             // Test if file is a jpg or a png
-            if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "webp") != 0 && temp.size() > 0) {
-                QMessageBox::critical(parent, QObject::tr("Format incorrect"), QObject::tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou webm"));
+            if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "jpeg") != 0 && temp.size() > 0) {
+                QMessageBox::critical(parent, QObject::tr("Format incorrect"), QObject::tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou jpeg"));
                 extOK = false;
             }
             else {
