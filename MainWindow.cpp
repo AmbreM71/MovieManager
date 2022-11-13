@@ -986,6 +986,7 @@ void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->ImportAct, SIGNAL(triggered()), this, SLOT(importDB()));
     QObject::connect(m_ui->ExportAct, SIGNAL(triggered()), this, SLOT(exportDB()));
     QObject::connect(m_ui->ChartAct, SIGNAL(triggered()), this, SLOT(openCharts()));
+    QObject::connect(m_ui->CalendarAct, SIGNAL(triggered()), this, SLOT(openCalendar()));
 }
 
 void MainWindow::setSettings() {
@@ -1122,6 +1123,22 @@ void MainWindow::openCharts() {
         if(window->exec() == 0) {
             delete window;
         }
+    }
+    else {
+        m_log->append(tr("Fenêtre 'Graphiques' déjà ouverte"), Warning);
+    }
+}
+
+void MainWindow::openCalendar() {
+    if(CalendarDialog::instancesCount() == 0) {
+        CalendarDialog* window = new CalendarDialog(m_log, this);
+        window->show();
+        if(window->exec() == 0) {
+            delete window;
+        }
+    }
+    else {
+        m_log->append(tr("Calendrier déjà ouvert"), Warning);
     }
 }
 

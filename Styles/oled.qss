@@ -236,3 +236,10 @@ QDateEdit {
 QDateEdit:hover {
     border: 1px solid #713a7a;
 }
+
+.Calendar-view-class {
+    Background-color: #713a7a;
+    color: #fff;
+    border: 1px solid #713a7a;
+    border-radius: 2px;
+}

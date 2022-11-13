@@ -2,6 +2,7 @@ SOURCES += \
     Common.cpp \
     Dialogs/AboutDialog.cpp \
     Dialogs/AddViewDialog.cpp \
+    Dialogs/CalendarDialog.cpp \
     Dialogs/ChangelogDialog.cpp \
     Dialogs/ChartsDialog.cpp \
     Dialogs/EditMovieDialog.cpp \
@@ -19,6 +20,7 @@ HEADERS += \
     Common.h \
     Dialogs/AboutDialog.h \
     Dialogs/AddViewDialog.h \
+    Dialogs/CalendarDialog.h \
     Dialogs/ChangelogDialog.h \
     Dialogs/ChartsDialog.h \
     Dialogs/EditMovieDialog.h \
@@ -42,6 +44,7 @@ QT += widgets \
 FORMS += \
     Dialogs/AboutDialog.ui \
     Dialogs/AddViewDialog.ui \
+    Dialogs/CalendarDialog.ui \
     Dialogs/ChangelogDialog.ui \
     Dialogs/ChartsDialog.ui \
     Dialogs/EditMovieDialog.ui \

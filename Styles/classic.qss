@@ -1,0 +1,6 @@
+.Calendar-view-class {
+    Background-color: #0078D4;
+    color: #fff;
+    border: 1px solid #0078D4;
+    border-radius: 2px;
+}

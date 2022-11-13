@@ -36,6 +36,7 @@
 #include "Dialogs/EditMovieDialog.h"
 #include "Dialogs/ChartsDialog.h"
 #include "Dialogs/ChangelogDialog.h"
+#include "Dialogs/CalendarDialog.h"
 
 namespace Ui {
     class MainWindow;
@@ -95,6 +96,7 @@ class MainWindow : public QMainWindow {
         void openAbout();
         void openSettings();
         void openCharts();
+        void openCalendar();
         void resetFilters();
         void importDB();
         void exportDB();

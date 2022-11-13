@@ -107,3 +107,19 @@ void Common::ratingToStar(int rating, QLabel* ratingLabel) {
     QPixmap resizedPixmap = pixmap->scaledToHeight(20, Qt::SmoothTransformation);
     ratingLabel->setPixmap(resizedPixmap);
 }
+
+void Common::clearLayout(QLayout* layout) {
+    if (layout == NULL)
+        return;
+    QLayoutItem *item;
+    while((item = layout->takeAt(0))) {
+        if (item->layout()) {
+            clearLayout(item->layout());
+            delete item->layout();
+        }
+        if (item->widget()) {
+           delete item->widget();
+        }
+        delete item;
+    }
+}
