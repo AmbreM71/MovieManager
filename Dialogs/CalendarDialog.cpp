@@ -64,7 +64,7 @@ void CalendarDialog::setData() {
 
 
     QSqlQuery selectedDateViews;
-    selectedDateViews.exec("SELECT ID, ID_Movie, ViewDate, ViewType FROM views WHERE ViewDate BETWEEN '"+year+"-"+month+"-01' AND '"+year+"-"+month+"-30'");
+    selectedDateViews.exec("SELECT ID, ID_Movie, ViewDate, ViewType FROM views WHERE ViewDate BETWEEN '"+year+"-"+month+"-01' AND '"+year+"-"+month+"-31'");
     while(selectedDateViews.next()) {
         int viewDay = selectedDateViews.value(2).toString().remove(0,8).toInt();
         QSqlQuery movieInfos;
