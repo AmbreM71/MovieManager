@@ -297,7 +297,7 @@ void MainWindow::fillMovieInfos() {
         m_ui->LastViewLabel->setText(tr("Dernier visionnage : ?"));
     }
     else {
-        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+firstViewQuery.value(0).toString());
+        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+lastViewQuery.value(0).toString());
     }
 
     QSqlQuery hasUnknownView;
