@@ -38,9 +38,9 @@
        <hour>0</hour>
        <minute>0</minute>
        <second>0</second>
-       <year>2022</year>
-       <month>1</month>
-       <day>1</day>
+       <year>2021</year>
+       <month>12</month>
+       <day>31</day>
       </datetime>
      </property>
      <property name="minimumDateTime">
@@ -50,7 +50,7 @@
        <second>0</second>
        <year>1899</year>
        <month>12</month>
-       <day>28</day>
+       <day>27</day>
       </datetime>
      </property>
      <property name="displayFormat">
@@ -77,6 +77,16 @@
      <item>
       <property name="text">
        <string>Blu-Ray</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Télévision</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Cinéma (reprise)</string>
       </property>
      </item>
      <item>

@@ -99,7 +99,7 @@
        <second>0</second>
        <year>2022</year>
        <month>6</month>
-       <day>28</day>
+       <day>27</day>
       </datetime>
      </property>
      <property name="maximumDateTime">
@@ -119,7 +119,7 @@
        <second>0</second>
        <year>1899</year>
        <month>12</month>
-       <day>22</day>
+       <day>21</day>
       </datetime>
      </property>
      <property name="displayFormat">
@@ -297,6 +297,16 @@
      <item>
       <property name="text">
        <string>Blu-Ray</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Télévision</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Cinéma (reprise)</string>
       </property>
      </item>
      <item>
