@@ -34,11 +34,19 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
 
     m_ui->NameInput->setText(movieQuery.value(0).toString());
     m_ui->ReleaseYearInput->setValue(movieQuery.value(1).toInt());
-    m_ui->EntriesInput->setValue(movieQuery.value(2).toInt());
+    if(movieQuery.value(2).toInt() == -1) {
+        m_ui->UnknownEntriesCheckbox->setChecked(true);
+        m_ui->EntriesInput->setEnabled(false);
+        m_ui->EntriesInput->setValue(0);
+    }
+    else {
+        m_ui->EntriesInput->setValue(movieQuery.value(2).toInt());
+    }
     m_ui->RatingInput->setValue(movieQuery.value(3).toInt());
 
     QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
     QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
+    QObject::connect(m_ui->UnknownEntriesCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleEntriesInput(int)));
 }
 
 EditMovieDialog::~EditMovieDialog() {
@@ -120,4 +128,17 @@ void EditMovieDialog::mouseEnteredTag(Tag* tag) {
 void EditMovieDialog::mouseLeftTag(Tag* tag) {
     tag->setMinimumWidth(31);
     tag->setText(tag->getSavedTag());
+}
+
+bool EditMovieDialog::isEntriesUnknown() {
+    return m_ui->UnknownEntriesCheckbox->isChecked();
+}
+
+void EditMovieDialog::toggleEntriesInput(int state) {
+    if(state == 2) {
+        m_ui->EntriesInput->setEnabled(false);
+    }
+    else {
+        m_ui->EntriesInput->setEnabled(true);
+    }
 }

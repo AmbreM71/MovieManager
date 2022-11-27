@@ -19,6 +19,7 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
+    QObject::connect(m_ui->UnknownEntriesCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleEntriesInput(int)));
     QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
     QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
 
@@ -140,12 +141,25 @@ void AddViewDialog::toggleViewTypeInput(int state) {
     }
 }
 
+void AddViewDialog::toggleEntriesInput(int state) {
+    if(state == 2) {
+        m_ui->EntriesInput->setEnabled(false);
+    }
+    else {
+        m_ui->EntriesInput->setEnabled(true);
+    }
+}
+
 bool AddViewDialog::isDateUnknown() {
     return m_ui->UnknownViewDateCheckbox->isChecked();
 }
 
 bool AddViewDialog::isTypeUnknown() {
     return m_ui->UnknownViewTypeCheckbox->isChecked();
+}
+
+bool AddViewDialog::isEntriesUnknown() {
+    return m_ui->UnknownEntriesCheckbox->isChecked();
 }
 
 void AddViewDialog::checkValid() {

@@ -39,12 +39,14 @@ class AddViewDialog : public QDialog
         int getEntries();
         bool isDateUnknown();
         bool isTypeUnknown();
+        bool isEntriesUnknown();
         QList<QString>* getTags();
 
     public slots:
         void comboboxChanged();
         void toggleViewDateInput(int state);
         void toggleViewTypeInput(int state);
+        void toggleEntriesInput(int state);
         void checkValid();
         void loadPoster(QString path = "");
         void addTag();

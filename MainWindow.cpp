@@ -313,7 +313,12 @@ void MainWindow::fillMovieInfos() {
     QSqlQuery q;
     q.exec("SELECT Entries, Rating FROM movies WHERE ID='"+ID+"'");
     q.first();
-    m_ui->EntriesLabel->setText(q.value(0).toString() + tr(" entrées"));
+    if(q.value(0).toInt() == -1) {
+        m_ui->EntriesLabel->setText(tr("Nombre d'entrées non renseigné"));
+    }
+    else {
+        m_ui->EntriesLabel->setText(q.value(0).toString() + tr(" entrées"));
+    }
     Common::ratingToStar(q.value(1).toInt(), m_ui->RatingLabel);
 
     QSqlQuery tagsQuery;
@@ -603,7 +608,12 @@ void MainWindow::addView() {
 
                 insertIntoMoviesQuery.bindValue(0, window->getName());
                 insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
-                insertIntoMoviesQuery.bindValue(2, window->getEntries());
+                if(window->isEntriesUnknown()) {
+                    insertIntoMoviesQuery.bindValue(2, -1);
+                }
+                else {
+                    insertIntoMoviesQuery.bindValue(2, window->getEntries());
+                }
                 insertIntoMoviesQuery.bindValue(3, window->getRating());
                 insertIntoMoviesQuery.bindValue(4, posterPath);
 
@@ -760,8 +770,16 @@ void MainWindow::editMovie() {
         }
         else {
             QSqlQuery editMovieQuery;
+            int entries = 0;
+            if(window->isEntriesUnknown()) {
+                entries = -1;
+            }
+            else {
+                entries = window->getEntries();
+            }
+
             if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
-                                    "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
+                                    "\", Entries=\""+QString::number(entries)+"\", Rating=\""+QString::number(window->getRating())+
                                     "\" WHERE ID=\""+ID+"\";")) {
                 m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), Error);
             }
