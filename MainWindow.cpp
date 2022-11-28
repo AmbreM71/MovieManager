@@ -234,6 +234,7 @@ void MainWindow::fillTable(const QString &text) {
 
     m_ui->MoviesListWidget->blockSignals(false);
     m_ui->MoviesListWidget->setSortingEnabled(true);
+    m_ui->MoviesListWidget->sortItems(0);
     m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(m_savedMovieID), 0);
     m_ui->DisplayedMovieCountLabel->setText(tr("Films : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
     fillMovieInfos();
