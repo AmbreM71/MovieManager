@@ -20,4 +20,19 @@ enum LogCriticity {
     Error
 };
 
+// Changing the order will break databases
+enum ViewType {
+    Bluray,
+    Television,
+    Cinema,
+    CinemaReplay,
+    DVD,
+    Streaming,
+    Download,
+    VHS,
+    Other,
+    Unknown,
+    MaxViewType
+};
+
 #endif // ENUMS_H

@@ -40,7 +40,7 @@
        <second>0</second>
        <year>2021</year>
        <month>12</month>
-       <day>31</day>
+       <day>30</day>
       </datetime>
      </property>
      <property name="minimumDateTime">
@@ -50,7 +50,7 @@
        <second>0</second>
        <year>1899</year>
        <month>12</month>
-       <day>27</day>
+       <day>26</day>
       </datetime>
      </property>
      <property name="displayFormat">
@@ -73,53 +73,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QComboBox" name="ViewTypeInput">
-     <item>
-      <property name="text">
-       <string>Blu-Ray</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Télévision</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Cinéma (reprise)</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Cinéma</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>DVD</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Streaming</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Téléchargement</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>VHS</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Autre support physique</string>
-      </property>
-     </item>
-    </widget>
+    <widget class="QComboBox" name="ViewTypeInput"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="ViewTypeLabel">

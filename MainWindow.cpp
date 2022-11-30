@@ -86,7 +86,7 @@ void MainWindow::databaseConnection() {
                                    "ID          INTEGER PRIMARY KEY AUTOINCREMENT,"
                                    "ID_Movie    INTEGER,"
                                    "ViewDate    DATE,"
-                                   "ViewType    VARCHAR(63));";
+                                   "ViewType    INTEGER);";
 
     QSqlQuery viewsBDQuery;
 
@@ -640,7 +640,8 @@ void MainWindow::addView() {
 
         m_savedMovieID = viewedMovieIDQuery.value(0).toInt();
 
-        QString ViewDate, ViewType;
+        QString ViewDate;
+        int ViewType;
 
         if(window->isDateUnknown()) {
             ViewDate = "?";
@@ -650,7 +651,7 @@ void MainWindow::addView() {
         }
 
         if(window->isTypeUnknown()) {
-            ViewType = "?";
+            ViewType = Unknown;
         }
         else {
             ViewType = window->getViewType();

@@ -9,6 +9,8 @@
 #include <QLayoutItem>
 #include <QLayout>
 
+#include "Enums.h"
+
 class Common
 {
 public:
@@ -18,6 +20,10 @@ public:
     static void ratingToStar(int rating, QLabel* ratingLabel);
 
     static void clearLayout(QLayout* layout);
+
+    static QString viewTypeToQString(enum ViewType type);
+
+    static enum ViewType QStringToViewType(QString type);
 };
 
 #endif // COMMON_H

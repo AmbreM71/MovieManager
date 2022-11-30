@@ -32,7 +32,7 @@ class AddViewDialog : public QDialog
         QString getComboboxSelectedItem();
         QString getName();
         int getReleaseYear();
-        QString getViewType();
+        int getViewType();
         QString getViewDate();
         QString getPosterPath();
         int getRating();

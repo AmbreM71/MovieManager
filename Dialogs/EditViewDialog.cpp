@@ -22,13 +22,19 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(p
         m_ui->ViewDateInput->setDate(QDate(year, month, day));
     }
 
-    QString viewType = table->item(table->currentRow(),2)->text();
-    if(viewType == "?") {
+    for(int viewType = 0 ; viewType < MaxViewType ; viewType++) {
+        m_ui->ViewTypeInput->addItem(Common::viewTypeToQString((enum ViewType)viewType));
+    }
+
+    int viewType = Common::QStringToViewType(table->item(table->currentRow(),2)->text());
+    if(viewType == Unknown) {
         m_ui->UnknownViewTypeInput->setChecked(true);
     }
     else {
-        m_ui->ViewTypeInput->setCurrentText(viewType);
+        m_ui->ViewTypeInput->setCurrentText(Common::viewTypeToQString((enum ViewType)viewType));
     }
+
+
 
 }
 
@@ -53,8 +59,8 @@ QString EditViewDialog::getViewDate() {
     return s;
 }
 
-QString EditViewDialog::getViewType() {
-    return m_ui->ViewTypeInput->currentText();
+int EditViewDialog::getViewType() {
+    return Common::QStringToViewType(m_ui->ViewTypeInput->currentText());
 }
 
 bool EditViewDialog::isDateUnknown() {

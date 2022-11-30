@@ -5,6 +5,9 @@
 #include <QDate>
 #include <QTableWidget>
 
+#include "Common.h"
+#include "Enums.h"
+
 namespace Ui {
     class EditViewDialog;
 }
@@ -20,7 +23,7 @@ class EditViewDialog : public QDialog {
         ~EditViewDialog();
 
         QString getViewDate();
-        QString getViewType();
+        int getViewType();
         bool isDateUnknown();
         bool isTypeUnknown();
 

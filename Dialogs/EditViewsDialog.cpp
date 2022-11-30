@@ -48,7 +48,7 @@ void EditViewsDialog::fillTable() {
 
          ID->setText(query.value(0).toString());
          viewDate->setText(query.value(1).toString());
-         viewType->setText(query.value(2).toString());
+         viewType->setText(Common::viewTypeToQString((enum ViewType)query.value(2).toInt()));
 
          m_ui->tableWidget->insertRow(m_ui->tableWidget->rowCount());
 
@@ -98,7 +98,7 @@ void EditViewsDialog::deleteView() {
 void EditViewsDialog::editView() {
 
     QString viewDate;
-    QString viewType;
+    int viewType;
     QString viewID = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),0)->text();
 
     EditViewDialog* window = new EditViewDialog(m_ui->tableWidget, this);
@@ -113,9 +113,9 @@ void EditViewsDialog::editView() {
             viewDate = "?";
         }
         if(window->isTypeUnknown()) {
-            viewType = "?";
+            viewType = Unknown;
         }
-        editMovieQuery.exec("UPDATE views SET ViewDate=\""+viewDate+"\", ViewType=\""+viewType+"\" WHERE ID=\""+viewID+"\";");
+        editMovieQuery.exec("UPDATE views SET ViewDate=\""+viewDate+"\", ViewType=\""+QString::number(viewType)+"\" WHERE ID=\""+viewID+"\";");
 
         fillTable();
         m_edited = true;

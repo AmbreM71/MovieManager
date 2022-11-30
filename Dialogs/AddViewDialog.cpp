@@ -16,6 +16,10 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
 
     m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
+    for(int viewType = 0 ; viewType < MaxViewType ; viewType++) {
+        m_ui->ViewTypeComboBox->addItem(Common::viewTypeToQString((enum ViewType)viewType));
+    }
+
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
@@ -51,8 +55,8 @@ QString AddViewDialog::getName() {
 int AddViewDialog::getReleaseYear() {
     return m_ui->MovieReleaseYearInput->text().toInt();
 }
-QString AddViewDialog::getViewType() {
-    return m_ui->ViewTypeComboBox->currentText();
+int AddViewDialog::getViewType() {
+    return Common::QStringToViewType(m_ui->ViewTypeComboBox->currentText());
 }
 QString AddViewDialog::getViewDate() {
     return m_ui->MovieViewDateInput->text();

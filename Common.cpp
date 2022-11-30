@@ -123,3 +123,77 @@ void Common::clearLayout(QLayout* layout) {
         delete item;
     }
 }
+
+QString Common::viewTypeToQString(enum ViewType type) {
+    if(type == Bluray) {
+        return QObject::tr("Blu-Ray");
+    }
+    if(type == Television) {
+        return QObject::tr("Télévision");
+    }
+    if(type == Cinema) {
+        return QObject::tr("Cinéma");
+    }
+    if(type == CinemaReplay) {
+        return QObject::tr("Cinéma (reprise)");
+    }
+    if(type == DVD) {
+        return QObject::tr("DVD");
+    }
+    if(type == Streaming) {
+        return QObject::tr("Streaming");
+    }
+    if(type == Download) {
+        return QObject::tr("Téléchargement");
+    }
+    if(type == VHS) {
+        return QObject::tr("VHS");
+    }
+    if(type == Other) {
+        return QObject::tr("Autre support physique");
+    }
+    if(type == Unknown) {
+        return QObject::tr("Inconnu");
+    }
+    else {
+        qDebug() << "Error";
+        //Log(QObject::tr("Type de visionnage inconnu"), Error);
+        return "Unknown";
+    }
+}
+
+enum ViewType Common::QStringToViewType(QString type) {
+    if(QString::compare(type, QObject::tr("Blu-Ray")) == 0) {
+        return Bluray;
+    }
+    else if(QString::compare(type, QObject::tr("Télévision")) == 0) {
+        return Television;
+    }
+    else if(QString::compare(type, QObject::tr("Cinéma")) == 0) {
+        return Cinema;
+    }
+    else if(QString::compare(type, QObject::tr("Cinéma (reprise)")) == 0) {
+        return CinemaReplay;
+    }
+    else if(QString::compare(type, QObject::tr("DVD")) == 0) {
+        return DVD;
+    }
+    else if(QString::compare(type, QObject::tr("Streaming")) == 0) {
+        return Streaming;
+    }
+    else if(QString::compare(type, QObject::tr("Téléchargement")) == 0) {
+        return Download;
+    }
+    else if(QString::compare(type, QObject::tr("VHS")) == 0) {
+        return VHS;
+    }
+    else if(QString::compare(type, QObject::tr("Autre support physique")) == 0) {
+        return Other;
+    }
+    else if(QString::compare(type, QObject::tr("Inconnu")) == 0) {
+        return Unknown;
+    }
+    else {
+        return MaxViewType;
+    }
+}
