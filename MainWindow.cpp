@@ -318,7 +318,7 @@ void MainWindow::fillMovieInfos() {
         m_ui->EntriesLabel->setText(tr("Nombre d'entrées non renseigné"));
     }
     else {
-        m_ui->EntriesLabel->setText(q.value(0).toString() + tr(" entrées"));
+        m_ui->EntriesLabel->setText(m_locale->toString(q.value(0).toInt()) + tr(" entrées"));
     }
     Common::ratingToStar(q.value(1).toInt(), m_ui->RatingLabel);
 
@@ -1048,9 +1048,11 @@ void MainWindow::refreshLanguage() {
     switch(m_language) {
         case Language::English :
             path = ":/localisations/Localisation/MovieManager_en_US.qm";
+            m_locale = new QLocale(QLocale::English);
             break;
         case Language::French :
             path = ":/localisations/Localisation/MovieManager_fr_FR.qm";
+            m_locale = new QLocale(QLocale::French);
             break;
     }
 

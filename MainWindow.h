@@ -54,6 +54,7 @@ class MainWindow : public QMainWindow {
         QTranslator m_translator;
         int m_savedMovieID = -1;
         QString m_savepath = "";
+        QLocale* m_locale;
 
         //Setting variables
         bool m_matrixMode;
