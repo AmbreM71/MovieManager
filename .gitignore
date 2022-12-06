@@ -3,6 +3,7 @@
 Thumbs.db
 .DS_Store
 /debug
+/.vs
 /release
 /.qtc_clangd
 *.statsh
