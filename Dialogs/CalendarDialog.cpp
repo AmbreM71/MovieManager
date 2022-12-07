@@ -38,7 +38,6 @@ void CalendarDialog::setDisplay() {
         QWidget* dayWidget = new QWidget();
         QVBoxLayout* dayLayout = new QVBoxLayout();
         dayWidget->setLayout(dayLayout);
-
         QLabel* dayLabel = new QLabel(QString::number(i+1));
 
         QFont f = dayLabel->font();
@@ -73,6 +72,9 @@ void CalendarDialog::setData() {
         QLabel* viewLabel = new QLabel(movieInfos.value(0).toString() + " - " + movieInfos.value(1).toString());
         viewLabel->setFixedHeight(24);
         viewLabel->setProperty("class", "Calendar-view-class");
+
+        viewLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
         m_ui->CalendarLayout->itemAt(viewDay-1)->widget()->layout()->addWidget(viewLabel);
     }
 
@@ -142,7 +144,7 @@ int CalendarDialog::getOffset() {
             offsetYearDebut = 6; //Year begun on sunday
             break;
         default:
-            m_log->append(tr("Impossible de déterminer le 1er jour de l'année courante"), Error);
+            m_log->append(tr("Impossible de déterminer le 1er jour de l'année courante"), eLog::Error);
             return -1;
     }
     int currentOffset = offsetYearDebut;

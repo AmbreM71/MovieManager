@@ -27,23 +27,23 @@ void LogDialog::fillList() {
     for(int i = 0 ; i < m_log->size() ; i++) {
         m_ui->listWidget->addItem(m_log->getLog(i).string);
         switch (m_log->getLog(i).criticity) {
-            case Error:
+            case eLog::Error:
                 color->setRgb(251,42,42);
                 brush->setColor(*color);
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
-            case Warning:
+            case eLog::Warning:
                 color->setRgb(251,183,42);
                 brush->setColor(*color);
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
-            case Success:
+            case eLog::Success:
                 color->setRgb(82,206,0);
                 brush->setColor(*color);
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
-            case Notice:
-                if (*m_theme == Theme::Classic) {
+            case eLog::Notice:
+                if (*m_theme == eTheme::Classic) {
                     color->setRgb(0,0,0);
                 }
                 else {

@@ -21,9 +21,9 @@ public:
 
     static void clearLayout(QLayout* layout);
 
-    static QString viewTypeToQString(enum ViewType type);
+    static QString viewTypeToQString(enum eViewType type);
 
-    static enum ViewType QStringToViewType(QString type);
+    static enum eViewType QStringToViewType(QString type);
 };
 
 #endif // COMMON_H

@@ -124,35 +124,35 @@ void Common::clearLayout(QLayout* layout) {
     }
 }
 
-QString Common::viewTypeToQString(enum ViewType type) {
-    if(type == Bluray) {
+QString Common::viewTypeToQString(enum eViewType type) {
+    if(type == eViewType::Bluray) {
         return QObject::tr("Blu-Ray");
     }
-    if(type == Television) {
+    if(type == eViewType::Television) {
         return QObject::tr("Télévision");
     }
-    if(type == Cinema) {
+    if(type == eViewType::Cinema) {
         return QObject::tr("Cinéma");
     }
-    if(type == CinemaReplay) {
+    if(type == eViewType::CinemaReplay) {
         return QObject::tr("Cinéma (reprise)");
     }
-    if(type == DVD) {
+    if(type == eViewType::DVD) {
         return QObject::tr("DVD");
     }
-    if(type == Streaming) {
+    if(type == eViewType::Streaming) {
         return QObject::tr("Streaming");
     }
-    if(type == Download) {
+    if(type == eViewType::Download) {
         return QObject::tr("Téléchargement");
     }
-    if(type == VHS) {
+    if(type == eViewType::VHS) {
         return QObject::tr("VHS");
     }
-    if(type == Other) {
+    if(type == eViewType::Other) {
         return QObject::tr("Autre support physique");
     }
-    if(type == Unknown) {
+    if(type == eViewType::Unknown) {
         return QObject::tr("Inconnu");
     }
     else {
@@ -162,38 +162,38 @@ QString Common::viewTypeToQString(enum ViewType type) {
     }
 }
 
-enum ViewType Common::QStringToViewType(QString type) {
+enum eViewType Common::QStringToViewType(QString type) {
     if(QString::compare(type, QObject::tr("Blu-Ray")) == 0) {
-        return Bluray;
+        return eViewType::Bluray;
     }
     else if(QString::compare(type, QObject::tr("Télévision")) == 0) {
-        return Television;
+        return eViewType::Television;
     }
     else if(QString::compare(type, QObject::tr("Cinéma")) == 0) {
-        return Cinema;
+        return eViewType::Cinema;
     }
     else if(QString::compare(type, QObject::tr("Cinéma (reprise)")) == 0) {
-        return CinemaReplay;
+        return eViewType::CinemaReplay;
     }
     else if(QString::compare(type, QObject::tr("DVD")) == 0) {
-        return DVD;
+        return eViewType::DVD;
     }
     else if(QString::compare(type, QObject::tr("Streaming")) == 0) {
-        return Streaming;
+        return eViewType::Streaming;
     }
     else if(QString::compare(type, QObject::tr("Téléchargement")) == 0) {
-        return Download;
+        return eViewType::Download;
     }
     else if(QString::compare(type, QObject::tr("VHS")) == 0) {
-        return VHS;
+        return eViewType::VHS;
     }
     else if(QString::compare(type, QObject::tr("Autre support physique")) == 0) {
-        return Other;
+        return eViewType::Other;
     }
     else if(QString::compare(type, QObject::tr("Inconnu")) == 0) {
-        return Unknown;
+        return eViewType::Unknown;
     }
     else {
-        return MaxViewType;
+        return eViewType::MaxViewType;
     }
 }

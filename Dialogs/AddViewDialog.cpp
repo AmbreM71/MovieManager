@@ -16,8 +16,8 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
 
     m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    for(int viewType = 0 ; viewType < MaxViewType ; viewType++) {
-        m_ui->ViewTypeComboBox->addItem(Common::viewTypeToQString((enum ViewType)viewType));
+    for(int viewType = 0 ; viewType < eViewType::MaxViewType ; viewType++) {
+        m_ui->ViewTypeComboBox->addItem(Common::viewTypeToQString((enum eViewType)viewType));
     }
 
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));

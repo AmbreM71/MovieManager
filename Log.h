@@ -17,7 +17,7 @@ class Log : public QObject {
 
     public:
         Log();
-        void append(QString s, enum LogCriticity criticity);
+        void append(QString s, enum eLog criticity);
         void clear();
         LogElement getLog(int i);
         int size();

@@ -37,7 +37,7 @@ void EditViewsDialog::fillTable() {
     query.prepare("SELECT ID, ViewDate, ViewType FROM views WHERE ID_Movie="+QString::number(*m_ID)+" ORDER BY ViewDate DESC;");
 
     if(!query.exec()){
-        m_log->append(tr("Erreur lors de la récupération dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), Error);
+        m_log->append(tr("Erreur lors de la récupération dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
     }
 
     while(query.next()) {
@@ -48,7 +48,7 @@ void EditViewsDialog::fillTable() {
 
          ID->setText(query.value(0).toString());
          viewDate->setText(query.value(1).toString());
-         viewType->setText(Common::viewTypeToQString((enum ViewType)query.value(2).toInt()));
+         viewType->setText(Common::viewTypeToQString((enum eViewType)query.value(2).toInt()));
 
          m_ui->tableWidget->insertRow(m_ui->tableWidget->rowCount());
 
@@ -65,7 +65,7 @@ void EditViewsDialog::customMenuRequested(QPoint pos) {
     QAction* editAction = new QAction(tr("Modifier"), this);
 
 
-    if(*m_theme == Theme::Classic) {
+    if(*m_theme == eTheme::Classic) {
         deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
         editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
     }
@@ -113,7 +113,7 @@ void EditViewsDialog::editView() {
             viewDate = "?";
         }
         if(window->isTypeUnknown()) {
-            viewType = Unknown;
+            viewType = eViewType::Unknown;
         }
         editMovieQuery.exec("UPDATE views SET ViewDate=\""+viewDate+"\", ViewType=\""+QString::number(viewType)+"\" WHERE ID=\""+viewID+"\";");
 

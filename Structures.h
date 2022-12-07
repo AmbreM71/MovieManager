@@ -6,7 +6,7 @@
 
 struct LogElement {
     QString string;
-    enum LogCriticity criticity;
+    enum eLog criticity;
 };
 
 #endif // STRUCTURES_H

@@ -1,19 +1,19 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-enum Theme {
+enum eTheme {
     Classic,
     Dark,
     OLED,
     MidnightPurple
 };
 
-enum Language {
+enum eLanguage {
     French,
     English
 };
 
-enum LogCriticity {
+enum eLog {
     Notice,
     Success,
     Warning,
@@ -21,7 +21,7 @@ enum LogCriticity {
 };
 
 // Changing the order will break databases
-enum ViewType {
+enum eViewType {
     Bluray,
     Television,
     Cinema,
