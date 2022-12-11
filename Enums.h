@@ -22,17 +22,18 @@ enum eLog {
 
 // Changing the order will break databases
 enum eViewType {
-    Bluray,
-    Television,
-    Cinema,
-    CinemaReplay,
-    DVD,
-    Streaming,
-    Download,
-    VHS,
-    Other,
-    Unknown,
-    MaxViewType
+    Bluray = 0,
+    Television = 1,
+    Cinema = 2,
+    CinemaReplay = 3,
+    DVD = 4,
+    Streaming = 5,
+    Download = 6,
+    VHS = 7,
+    Other = 8,
+    Unknown = 9,
+    UHD = 10,
+    MaxViewType = 11
 };
 
 #endif // ENUMS_H

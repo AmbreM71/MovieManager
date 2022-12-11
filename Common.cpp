@@ -155,6 +155,9 @@ QString Common::viewTypeToQString(enum eViewType type) {
     if(type == eViewType::Unknown) {
         return QObject::tr("Inconnu");
     }
+    if(type == eViewType::UHD) {
+        return QObject::tr("Blu-Ray 4K");
+    }
     else {
         qDebug() << "Error";
         //Log(QObject::tr("Type de visionnage inconnu"), Error);
@@ -192,6 +195,9 @@ enum eViewType Common::QStringToViewType(QString type) {
     }
     else if(QString::compare(type, QObject::tr("Inconnu")) == 0) {
         return eViewType::Unknown;
+    }
+    else if(QString::compare(type, QObject::tr("Blu-Ray 4K")) == 0) {
+        return eViewType::UHD;
     }
     else {
         return eViewType::MaxViewType;
