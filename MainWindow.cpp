@@ -199,9 +199,7 @@ void MainWindow::fillTable(const QString &text) {
         }
         //If no cell in the line corresponds to the search
         if(cellsNotCorrespondingToFilter == m_ui->MoviesListWidget->columnCount()-1) {
-            m_ui->MoviesListWidget->removeRow(row);
-            //Because deleting row moves all next rows, the value is decremented
-            row--;
+            m_ui->MoviesListWidget->hideRow(row);
         }
         //If cell correspond to the quick search, check if tags filter correspond
         else {
@@ -224,9 +222,7 @@ void MainWindow::fillTable(const QString &text) {
                 }
             }
             if(hasMovieAllFilterTags == false) {
-                m_ui->MoviesListWidget->removeRow(row);
-                //Because deleting row moves all next rows, the value is decremented
-                row--;
+                m_ui->MoviesListWidget->hideRow(row);
             }
         }
     }
