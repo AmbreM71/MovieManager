@@ -60,6 +60,7 @@ class MainWindow : public QMainWindow {
         bool m_matrixMode;
         int m_language;
         int m_theme;
+        bool m_quickSearchCaseSensitive;
         QSettings* m_settings;
 
         //Filter variables

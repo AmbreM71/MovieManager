@@ -17,28 +17,7 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
-    <widget class="QComboBox" name="LanguageCombobox">
-     <item>
-      <property name="text">
-       <string>Français</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Anglais</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="LanguageLabel">
-     <property name="text">
-      <string>Langue</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
+   <item row="4" column="0" colspan="2">
     <spacer name="VerticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -51,20 +30,37 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="ThemeLabel">
+   <item row="0" column="0">
+    <widget class="QLabel" name="LanguageLabel">
      <property name="text">
-      <string>Thème</string>
+      <string>Langue</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item row="2" column="0" colspan="2">
+    <widget class="QCheckBox" name="MatrixModeCheckbox">
+     <property name="toolTip">
+      <string>La cuillère n’existe pas.</string>
+     </property>
+     <property name="text">
+      <string>Mode Matrix</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="ButtonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="ThemeLabel">
+     <property name="text">
+      <string>Thème</string>
      </property>
     </widget>
    </item>
@@ -92,13 +88,33 @@
      </item>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QCheckBox" name="MatrixModeCheckbox">
-     <property name="toolTip">
-      <string>La cuillère n’existe pas.</string>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="LanguageCombobox">
+     <item>
+      <property name="text">
+       <string>Français</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Anglais</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QCheckBox" name="QuickSearchCaseCheckbox">
+     <property name="enabled">
+      <bool>true</bool>
      </property>
      <property name="text">
-      <string>Mode Matrix</string>
+      <string>Filtre rapide sensible à la casse</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="autoRepeat">
+      <bool>false</bool>
      </property>
     </widget>
    </item>

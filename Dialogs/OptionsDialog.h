@@ -13,11 +13,11 @@ class OptionsDialog : public QDialog
 
     private:
         Ui::OptionsDialog* m_ui;
-        bool* m_matrixMode;
+        bool *m_matrixMode, *m_quickSearchCaseSensitive;
         int *m_language, *m_theme;
 
     public:
-        explicit OptionsDialog(bool* matrixMode, int* language, int* theme, QWidget *parent = nullptr);
+        explicit OptionsDialog(bool* matrixMode, int* language, int* theme, bool* quickSearchCaseSensitive, QWidget *parent = nullptr);
         ~OptionsDialog();
 
 

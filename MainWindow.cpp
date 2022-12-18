@@ -173,10 +173,10 @@ void MainWindow::fillTable(const QString &text) {
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 2, ID);
 
         numberOfParsedMovies++;
+        if(m_matrixMode == true && (name->text() == "Matrix" || name->text() == "The Matrix")) {
+            name->setForeground(QBrush(QColor(0,150,0)));
+        }
     }
-
-    if(m_matrixMode)
-        setMatrixMode(true);
 
     m_log->append(tr("Nombre de films lus depuis la base de donnée : ")+QString::number(numberOfParsedMovies), eLog::Notice);
 
@@ -191,9 +191,17 @@ void MainWindow::fillTable(const QString &text) {
         for(int column = 0 ; column < m_ui->MoviesListWidget->columnCount()-1 ; column++) {
             QString cellText = m_ui->MoviesListWidget->item(row, column)->text();
             for(int filterIndex = 0 ; filterIndex < filter->length() ; filterIndex++) {
-                if(cellText.at(filterIndex) != filter->at(filterIndex)) {
-                    cellsNotCorrespondingToFilter++;
-                    break;
+                if(m_quickSearchCaseSensitive) {
+                    if(cellText.at(filterIndex) != filter->at(filterIndex)) {
+                        cellsNotCorrespondingToFilter++;
+                        break;
+                    }
+                }
+                else {
+                    if(cellText.at(filterIndex).toLower() != filter->at(filterIndex).toLower()) {
+                        cellsNotCorrespondingToFilter++;
+                        break;
+                    }
                 }
             }
         }
@@ -932,19 +940,14 @@ void MainWindow::on_whatsnewAct_triggered() {
 }
 
 void MainWindow::openSettings() {
-    OptionsDialog* window = new OptionsDialog(&m_matrixMode, &m_language, &m_theme);
+    OptionsDialog* window = new OptionsDialog(&m_matrixMode, &m_language, &m_theme, &m_quickSearchCaseSensitive);
     window->show();
     if(window->exec() == 1) {
         delete window;
         refreshLanguage();
         refreshTheme();
         saveSettings();
-        if(m_matrixMode) {
-            setMatrixMode(true);
-        }
-        else {
-            setMatrixMode(false);
-        }
+        fillTable(m_ui->QuickSearchLineEdit->text());
         fillMovieInfos();
     }
     m_ui->DisplayedMovieCountLabel->setText(tr("Films : ") + QString::number(m_ui->MoviesListWidget->rowCount()));
@@ -1009,12 +1012,14 @@ void MainWindow::setSettings() {
     m_language = m_settings->value("language").toInt();
     m_theme = m_settings->value("theme").toInt();
     m_matrixMode = m_settings->value("matrixMode").toBool();
+    m_quickSearchCaseSensitive = m_settings->value("quickSearchCaseSensitive").toBool();
 }
 
 void MainWindow::saveSettings() {
     m_settings->setValue("language", m_language);
     m_settings->setValue("theme", m_theme);
     m_settings->setValue("matrixMode", m_matrixMode);
+    m_settings->setValue("quickSearchCaseSensitive", m_quickSearchCaseSensitive);
 }
 
 void MainWindow::setMatrixMode(bool state) {
