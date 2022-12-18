@@ -4,7 +4,7 @@
 #include <QString>
 #include <Enums.h>
 
-struct LogElement {
+struct stLogElement {
     QString string;
     enum eLog criticity;
 };

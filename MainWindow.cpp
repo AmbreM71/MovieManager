@@ -940,7 +940,7 @@ void MainWindow::on_whatsnewAct_triggered() {
 }
 
 void MainWindow::openSettings() {
-    OptionsDialog* window = new OptionsDialog(&m_matrixMode, &m_language, &m_theme, &m_quickSearchCaseSensitive);
+    OptionsDialog* window = new OptionsDialog(&m_matrixMode, &m_language, &m_theme, &m_quickSearchCaseSensitive, this);
     window->show();
     if(window->exec() == 1) {
         delete window;
