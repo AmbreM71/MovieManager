@@ -186,22 +186,28 @@ void MainWindow::fillTable(const QString &text) {
     tagQuery.exec("SELECT * FROM tags;");
 
     QString* filter = new QString(text);
+    QChar cellChar, filterChar;
+    int cellsNotCorrespondingToFilter;
     for(int row = 0 ; row < m_ui->MoviesListWidget->rowCount() ; row++) {
-        int cellsNotCorrespondingToFilter = 0;
+        cellsNotCorrespondingToFilter = 0;
         for(int column = 0 ; column < m_ui->MoviesListWidget->columnCount()-1 ; column++) {
             QString cellText = m_ui->MoviesListWidget->item(row, column)->text();
             for(int filterIndex = 0 ; filterIndex < filter->length() ; filterIndex++) {
-                if(m_quickSearchCaseSensitive) {
-                    if(cellText.at(filterIndex) != filter->at(filterIndex)) {
+                if(filterIndex < cellText.length()) {
+                    cellChar = cellText.at(filterIndex);
+                    filterChar = filter->at(filterIndex);
+                    if(!m_quickSearchCaseSensitive) {
+                        cellChar = cellChar.toLower();
+                        filterChar = filterChar.toLower();
+                    }
+                    if(cellChar != filterChar) {
                         cellsNotCorrespondingToFilter++;
                         break;
                     }
                 }
                 else {
-                    if(cellText.at(filterIndex).toLower() != filter->at(filterIndex).toLower()) {
-                        cellsNotCorrespondingToFilter++;
-                        break;
-                    }
+                    cellsNotCorrespondingToFilter++;
+                    break;
                 }
             }
         }
