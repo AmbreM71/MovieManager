@@ -67,37 +67,37 @@ void Common::ratingToStar(int rating, QLabel* ratingLabel) {
 
     switch(rating) {
         case 0:
-            pixmap = new QPixmap(":/icons/Icons/stars/0.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/0.png");
             break;
         case 1:
-            pixmap = new QPixmap(":/icons/Icons/stars/1.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/1.png");
             break;
         case 2:
-            pixmap = new QPixmap(":/icons/Icons/stars/2.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/2.png");
             break;
         case 3:
-            pixmap = new QPixmap(":/icons/Icons/stars/3.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/3.png");
             break;
         case 4:
-            pixmap = new QPixmap(":/icons/Icons/stars/4.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/4.png");
             break;
         case 5:
-            pixmap = new QPixmap(":/icons/Icons/stars/5.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/5.png");
             break;
         case 6:
-            pixmap = new QPixmap(":/icons/Icons/stars/6.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/6.png");
             break;
         case 7:
-            pixmap = new QPixmap(":/icons/Icons/stars/7.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/7.png");
             break;
         case 8:
-            pixmap = new QPixmap(":/icons/Icons/stars/8.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/8.png");
             break;
         case 9:
-            pixmap = new QPixmap(":/icons/Icons/stars/9.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/9.png");
             break;
         case 10:
-            pixmap = new QPixmap(":/icons/Icons/stars/10.png");
+            pixmap = new QPixmap(":/assets/Assets/stars/10.png");
             break;
         default:
             pixmap = new QPixmap();
