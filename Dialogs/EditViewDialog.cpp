@@ -5,6 +5,7 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(p
 
     m_ui = new Ui::EditViewDialog;
     m_ui->setupUi(this);
+    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
 
     m_ui->ViewDateInput->setDate(QDate::currentDate());
 

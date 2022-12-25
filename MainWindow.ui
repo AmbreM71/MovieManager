@@ -480,6 +480,10 @@
    </property>
   </action>
   <action name="QuitAct">
+   <property name="icon">
+    <iconset resource="MovieManager.qrc">
+     <normaloff>:/icons/Icons/exit.png</normaloff>:/icons/Icons/exit.png</iconset>
+   </property>
    <property name="text">
     <string>Quitter</string>
    </property>
@@ -496,6 +500,10 @@
    </property>
   </action>
   <action name="OptionsAct">
+   <property name="icon">
+    <iconset resource="MovieManager.qrc">
+     <normaloff>:/icons/Icons/settings.png</normaloff>:/icons/Icons/settings.png</iconset>
+   </property>
    <property name="text">
     <string>Options...</string>
    </property>
@@ -517,6 +525,10 @@
    </property>
   </action>
   <action name="LogAct">
+   <property name="icon">
+    <iconset resource="MovieManager.qrc">
+     <normaloff>:/icons/Icons/log.png</normaloff>:/icons/Icons/log.png</iconset>
+   </property>
    <property name="text">
     <string>Log</string>
    </property>
@@ -525,36 +537,62 @@
    </property>
   </action>
   <action name="AboutAct">
+   <property name="icon">
+    <iconset resource="MovieManager.qrc">
+     <normaloff>:/icons/Icons/info.png</normaloff>:/icons/Icons/info.png</iconset>
+   </property>
    <property name="text">
     <string>À Propos</string>
    </property>
   </action>
   <action name="ImportAct">
+   <property name="icon">
+    <iconset resource="MovieManager.qrc">
+     <normaloff>:/icons/Icons/import.png</normaloff>:/icons/Icons/import.png</iconset>
+   </property>
    <property name="text">
     <string>Importer</string>
    </property>
   </action>
   <action name="ExportAct">
+   <property name="icon">
+    <iconset resource="MovieManager.qrc">
+     <normaloff>:/icons/Icons/export.png</normaloff>:/icons/Icons/export.png</iconset>
+   </property>
    <property name="text">
     <string>Exporter</string>
    </property>
   </action>
   <action name="ChartAct">
+   <property name="icon">
+    <iconset resource="MovieManager.qrc">
+     <normaloff>:/icons/Icons/chart.png</normaloff>:/icons/Icons/chart.png</iconset>
+   </property>
    <property name="text">
     <string>Graphique</string>
    </property>
   </action>
   <action name="whatsnewAct">
+   <property name="icon">
+    <iconset resource="MovieManager.qrc">
+     <normaloff>:/icons/Icons/github.png</normaloff>:/icons/Icons/github.png</iconset>
+   </property>
    <property name="text">
     <string>Nouveautés</string>
    </property>
   </action>
   <action name="CalendarAct">
+   <property name="icon">
+    <iconset resource="MovieManager.qrc">
+     <normaloff>:/icons/Icons/calendar.png</normaloff>:/icons/Icons/calendar.png</iconset>
+   </property>
    <property name="text">
     <string>Calendrier</string>
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="MovieManager.qrc"/>
+ </resources>
  <connections/>
 </ui>

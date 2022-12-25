@@ -20,34 +20,20 @@
    <string>À Propos de MovieManager</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="8" column="1" colspan="4">
+    <widget class="QDialogButtonBox" name="ButtonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
    <item row="6" column="0">
     <widget class="QLabel" name="QtVersionLabel">
      <property name="text">
       <string>Qt 6.4.0</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" colspan="4">
-    <widget class="QLabel" name="VersionLabel">
-     <property name="text">
-      <string>Version dev</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="5">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="5">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Développé par AlexM</string>
      </property>
     </widget>
    </item>
@@ -64,27 +50,13 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1" colspan="4">
-    <widget class="QLabel" name="DescrLabel">
+   <item row="6" column="1" colspan="4">
+    <widget class="QLabel" name="VersionLabel">
      <property name="text">
-      <string>Un gestionnaire des films que vous avez vus</string>
+      <string>Version dev</string>
      </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QPushButton" name="GithubButton">
-     <property name="text">
-      <string>GitHub</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1" colspan="4">
-    <widget class="QDialogButtonBox" name="ButtonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Close</set>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -110,6 +82,34 @@
      </property>
      <property name="scaledContents">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QPushButton" name="GithubButton">
+     <property name="text">
+      <string>GitHub</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="4">
+    <widget class="QLabel" name="DescrLabel">
+     <property name="text">
+      <string>Un gestionnaire des films que vous avez vus</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="5">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Développé par AlexM</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="5">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>

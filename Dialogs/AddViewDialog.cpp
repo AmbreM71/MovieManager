@@ -6,6 +6,7 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     m_tags = new QList<QString>;
     m_ui->setupUi(this);
     this->setFixedSize(600,407);
+    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/plus.png"));
 
     m_ui->MovieViewDateInput->setDate(QDate::currentDate());
 

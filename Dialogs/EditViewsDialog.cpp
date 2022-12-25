@@ -7,6 +7,7 @@ EditViewsDialog::EditViewsDialog(int* ID, Log* log, int* theme, QWidget* parent)
     m_ID = ID;
     m_log = log;
     m_theme = theme;
+    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
 
     m_ui->tableWidget->setColumnHidden(0, true);
 
@@ -66,12 +67,12 @@ void EditViewsDialog::customMenuRequested(QPoint pos) {
 
 
     if(*m_theme == eTheme::Classic) {
-        deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
+        deleteAction->setIcon(QIcon(":/icons/Icons/delete.png"));
         editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
     }
     else {
-        deleteAction->setIcon(QIcon(":/icons/Icons/remove light.png"));
-        editAction->setIcon(QIcon(":/icons/Icons/edit light.png"));
+        deleteAction->setIcon(QIcon(":/icons/Icons/delete.png"));
+        editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
     }
 
     menu->addAction(editAction);

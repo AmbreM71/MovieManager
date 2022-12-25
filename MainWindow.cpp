@@ -16,7 +16,7 @@ MainWindow::MainWindow(QApplication* app) {
     m_settings = new QSettings("MovieManager", "MovieManager");
     m_ui->setupUi(this);
 
-    m_app->setWindowIcon(QIcon(":/icons/Icons/logo.png"));
+    m_app->setWindowIcon(QIcon(":/assets/Assets/logo.png"));
 
     databaseConnection();
 
@@ -32,6 +32,7 @@ MainWindow::MainWindow(QApplication* app) {
         m_savedMovieID = m_ui->MoviesListWidget->item(0,2)->text().toInt();
         fillMovieInfos();
     }
+
     menuBarConnectors();
 
     m_ui->MoviesListWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -857,7 +858,6 @@ void MainWindow::editMovie() {
 void MainWindow::deleteMovie() {
     QMessageBox::StandardButton reply;
     int savedRow = 0;
-
     reply = QMessageBox::question(this, tr("Supprimer le film"), tr("Êtes-vous sûr de vouloir supprimer le film ? Les visionnages associés seront effacés."));
     if(reply == QMessageBox::Yes) {
 
@@ -981,18 +981,18 @@ void MainWindow::customMenuRequested(QPoint pos) {
 
     QAction* deleteAction = new QAction(tr("Supprimer"), this);
     if(m_theme == eTheme::Classic) {
-        deleteAction->setIcon(QIcon(":/icons/Icons/remove.png"));
+        deleteAction->setIcon(QIcon(":/assets/Assets/Icons/Dark/delete.png"));
     }
     else {
-        deleteAction->setIcon(QIcon(":/icons/Icons/remove light.png"));
+        deleteAction->setIcon(QIcon(":/assets/Assets/Icons/Bright/delete.png"));
     }
 
     QAction* editAction = new QAction(tr("Modifier"), this);
     if(m_theme == eTheme::Classic) {
-        editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
+        editAction->setIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
     }
     else {
-        editAction->setIcon(QIcon(":/icons/Icons/edit light.png"));
+        editAction->setIcon(QIcon(":/assets/Assets/Icons/Bright/edit.png"));
     }
 
     menu->addAction(editAction);
@@ -1097,6 +1097,29 @@ void MainWindow::refreshTheme() {
     qss.open(QFile::ReadOnly);
     qApp->setStyleSheet(qss.readAll());
     qss.close();
+
+    if(m_theme == eTheme::Classic) {
+        m_ui->ExportAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/export.png"));
+        m_ui->ImportAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/import.png"));
+        m_ui->QuitAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/exit.png"));
+        m_ui->OptionsAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/settings.png"));
+        m_ui->LogAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/log.png"));
+        m_ui->ChartAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/chart.png"));
+        m_ui->CalendarAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/calendar.png"));
+        m_ui->whatsnewAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/github.png"));
+        m_ui->AboutAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/info.png"));
+    }
+    else {
+        m_ui->ExportAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/export.png"));
+        m_ui->ImportAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/import.png"));
+        m_ui->QuitAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/exit.png"));
+        m_ui->OptionsAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/settings.png"));
+        m_ui->LogAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/log.png"));
+        m_ui->ChartAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/chart.png"));
+        m_ui->CalendarAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/calendar.png"));
+        m_ui->whatsnewAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/github.png"));
+        m_ui->AboutAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/info.png"));
+    }
 }
 
 void MainWindow::fillGlobalStats() {

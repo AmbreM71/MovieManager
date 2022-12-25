@@ -9,6 +9,8 @@ LogDialog::LogDialog(Log* log,  int* theme, QWidget *parent) : QDialog(parent) {
     m_ui->setupUi(this);
     m_log = log;
     m_theme = theme;
+    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/log.png"));
+
     fillList();
     QObject::connect(m_log, SIGNAL(logAppended()), this, SLOT(refresh()));
 }

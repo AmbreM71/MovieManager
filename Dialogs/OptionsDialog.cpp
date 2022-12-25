@@ -4,6 +4,7 @@
 OptionsDialog::OptionsDialog(bool* matrixMode, int *language, int *theme, bool* quickSearchCaseSensitive, QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::OptionsDialog;
     m_ui->setupUi(this);
+    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/settings.png"));
 
     m_matrixMode = matrixMode;
     m_language = language;

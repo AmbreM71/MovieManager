@@ -7,6 +7,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     m_ui->setupUi(this);
     this->setFixedSize(500,300);
     m_ID = &ID;
+    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
 
     QSqlQuery movieQuery;
     movieQuery.exec("SELECT Name, ReleaseYear, Entries, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'");

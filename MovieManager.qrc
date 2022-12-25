@@ -1,23 +1,4 @@
 <RCC>
-    <qresource prefix="/icons">
-        <file>Icons/remove.png</file>
-        <file>Icons/logo.png</file>
-        <file>Icons/edit.png</file>
-        <file>Icons/edit light.png</file>
-        <file>Icons/remove light.png</file>
-        <file>Icons/nocover.png</file>
-        <file>Icons/stars/1.png</file>
-        <file>Icons/stars/10.png</file>
-        <file>Icons/stars/2.png</file>
-        <file>Icons/stars/3.png</file>
-        <file>Icons/stars/4.png</file>
-        <file>Icons/stars/5.png</file>
-        <file>Icons/stars/6.png</file>
-        <file>Icons/stars/7.png</file>
-        <file>Icons/stars/8.png</file>
-        <file>Icons/stars/9.png</file>
-        <file>Icons/stars/0.png</file>
-    </qresource>
     <qresource prefix="/localisations">
         <file>Localisation/MovieManager_en_US.qm</file>
         <file>Localisation/MovieManager_fr_FR.qm</file>
@@ -27,5 +8,50 @@
         <file>Styles/midnightPurple.qss</file>
         <file>Styles/classic.qss</file>
         <file>Styles/oled.qss</file>
+    </qresource>
+    <qresource prefix="/assets">
+        <file>Assets/Icons/Bright/calendar.png</file>
+        <file>Assets/Icons/Bright/chart.png</file>
+        <file>Assets/Icons/Bright/delete.png</file>
+        <file>Assets/Icons/Bright/edit.png</file>
+        <file>Assets/Icons/Bright/exit.png</file>
+        <file>Assets/Icons/Bright/export.png</file>
+        <file>Assets/Icons/Bright/github.png</file>
+        <file>Assets/Icons/Bright/import.png</file>
+        <file>Assets/Icons/Bright/info.png</file>
+        <file>Assets/Icons/Bright/log.png</file>
+        <file>Assets/Icons/Bright/plus.png</file>
+        <file>Assets/Icons/Bright/search.png</file>
+        <file>Assets/Icons/Bright/settings.png</file>
+        <file>Assets/Icons/Dark/calendar.png</file>
+        <file>Assets/Icons/Dark/chart.png</file>
+        <file>Assets/Icons/Dark/delete.png</file>
+        <file>Assets/Icons/Dark/edit.png</file>
+        <file>Assets/Icons/Dark/exit.png</file>
+        <file>Assets/Icons/Dark/export.png</file>
+        <file>Assets/Icons/Dark/github.png</file>
+        <file>Assets/Icons/Dark/import.png</file>
+        <file>Assets/Icons/Dark/info.png</file>
+        <file>Assets/Icons/Dark/log.png</file>
+        <file>Assets/Icons/Dark/plus.png</file>
+        <file>Assets/Icons/Dark/search.png</file>
+        <file>Assets/Icons/Dark/settings.png</file>
+        <file>Assets/stars/0.png</file>
+        <file>Assets/stars/1.png</file>
+        <file>Assets/stars/10.png</file>
+        <file>Assets/stars/2.png</file>
+        <file>Assets/stars/3.png</file>
+        <file>Assets/stars/4.png</file>
+        <file>Assets/stars/5.png</file>
+        <file>Assets/stars/6.png</file>
+        <file>Assets/stars/7.png</file>
+        <file>Assets/stars/8.png</file>
+        <file>Assets/stars/9.png</file>
+        <file>Assets/icon_licence.html</file>
+        <file>Assets/logo.png</file>
+        <file>Assets/logo.psd</file>
+        <file>Assets/nocover.png</file>
+        <file>Assets/nocover.psd</file>
+        <file>Assets/stars.psd</file>
     </qresource>
 </RCC>
