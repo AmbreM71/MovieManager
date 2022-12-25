@@ -193,23 +193,22 @@ void MainWindow::fillTable(const QString &text) {
         cellsNotCorrespondingToFilter = 0;
         for(int column = 0 ; column < m_ui->MoviesListWidget->columnCount()-1 ; column++) {
             QString cellText = m_ui->MoviesListWidget->item(row, column)->text();
-            for(int filterIndex = 0 ; filterIndex < filter->length() ; filterIndex++) {
-                if(filterIndex < cellText.length()) {
-                    cellChar = cellText.at(filterIndex);
-                    filterChar = filter->at(filterIndex);
-                    if(!m_quickSearchCaseSensitive) {
-                        cellChar = cellChar.toLower();
-                        filterChar = filterChar.toLower();
-                    }
-                    if(cellChar != filterChar) {
-                        cellsNotCorrespondingToFilter++;
-                        break;
+            if(filter->length() <= cellText.length()) {
+                for(int filterIndex = 0 ; filterIndex < filter->length() ; filterIndex++) {
+                        cellChar = cellText.at(filterIndex);
+                        filterChar = filter->at(filterIndex);
+                        if(!m_quickSearchCaseSensitive) {
+                            cellChar = cellChar.toLower();
+                            filterChar = filterChar.toLower();
+                        }
+                        if(cellChar != filterChar) {
+                            cellsNotCorrespondingToFilter++;
+                            break;
+                        }
                     }
                 }
-                else {
-                    cellsNotCorrespondingToFilter++;
-                    break;
-                }
+            else {
+                cellsNotCorrespondingToFilter++;
             }
         }
         //If no cell in the line corresponds to the search
