@@ -25,10 +25,10 @@ class EditViewsDialog : public QDialog
         int* m_ID;
         Log* m_log;
         bool m_edited = false;
-        int* m_theme;
+        enum eTheme* m_theme;
 
     public:
-        explicit EditViewsDialog(int* ID, Log* log, int* theme, QWidget *parent = nullptr);
+        explicit EditViewsDialog(int* ID, Log* log, enum eTheme* theme, QWidget *parent = nullptr);
         ~EditViewsDialog();
 
         void fillTable();

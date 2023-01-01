@@ -58,8 +58,8 @@ class MainWindow : public QMainWindow {
 
         //Setting variables
         bool m_matrixMode;
-        int m_language;
-        int m_theme;
+        enum eLanguage m_language;
+        enum eTheme m_theme;
         bool m_quickSearchCaseSensitive;
         QSettings* m_settings;
 

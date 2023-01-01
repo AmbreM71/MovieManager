@@ -1,7 +1,7 @@
 #include "EditViewsDialog.h"
 #include "ui_EditViewsDialog.h"
 
-EditViewsDialog::EditViewsDialog(int* ID, Log* log, int* theme, QWidget* parent) : QDialog(parent) {
+EditViewsDialog::EditViewsDialog(int* ID, Log* log, enum eTheme* theme, QWidget* parent) : QDialog(parent) {
     m_ui = new Ui::EditViewsDialog;
     m_ui->setupUi(this);
     m_ID = ID;

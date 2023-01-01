@@ -15,12 +15,12 @@ class LogDialog : public QDialog
     private:
         Ui::LogDialog* m_ui;
         Log* m_log;
-        int* m_theme;
+        enum eTheme* m_theme;
         static int instances;
 
     public:
 
-        explicit LogDialog(Log* log,  int* theme, QWidget *parent = nullptr);
+        explicit LogDialog(Log* log,  enum eTheme* theme, QWidget *parent = nullptr);
         ~LogDialog();
 
         void fillList();

@@ -24,6 +24,8 @@ public:
     static QString viewTypeToQString(enum eViewType type);
 
     static enum eViewType QStringToViewType(QString type);
+
+    static void setIconAccordingToTheme(QAction* object, enum eTheme theme, QString filename);
 };
 
 #endif // COMMON_H

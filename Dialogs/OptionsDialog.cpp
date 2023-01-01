@@ -1,7 +1,7 @@
 #include "OptionsDialog.h"
 #include "ui_OptionsDialog.h"
 
-OptionsDialog::OptionsDialog(bool* matrixMode, int *language, int *theme, bool* quickSearchCaseSensitive, QWidget *parent) : QDialog(parent) {
+OptionsDialog::OptionsDialog(bool* matrixMode, enum eLanguage *language, enum eTheme *theme, bool* quickSearchCaseSensitive, QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::OptionsDialog;
     m_ui->setupUi(this);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/settings.png"));
@@ -19,8 +19,8 @@ OptionsDialog::OptionsDialog(bool* matrixMode, int *language, int *theme, bool* 
 
 OptionsDialog::~OptionsDialog() {
     *m_matrixMode = m_ui->MatrixModeCheckbox->isChecked();
-    *m_language = m_ui->LanguageCombobox->currentIndex();
-    *m_theme = m_ui->ThemeCombobox->currentIndex();
+    *m_language = (enum eLanguage)m_ui->LanguageCombobox->currentIndex();
+    *m_theme = (enum eTheme)m_ui->ThemeCombobox->currentIndex();
     *m_quickSearchCaseSensitive = m_ui->QuickSearchCaseCheckbox->isChecked();
     delete m_ui;
 }

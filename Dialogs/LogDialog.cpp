@@ -3,7 +3,7 @@
 
 int LogDialog::instances = 0;
 
-LogDialog::LogDialog(Log* log,  int* theme, QWidget *parent) : QDialog(parent) {
+LogDialog::LogDialog(Log* log,  enum eTheme* theme, QWidget *parent) : QDialog(parent) {
     instances++;
     m_ui = new Ui::LogDialog;
     m_ui->setupUi(this);

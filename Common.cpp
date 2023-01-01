@@ -203,3 +203,12 @@ enum eViewType Common::QStringToViewType(QString type) {
         return eViewType::MaxViewType;
     }
 }
+
+void Common::setIconAccordingToTheme(QAction* action, enum eTheme theme, QString filename) {
+    if(theme == eTheme::Classic) {
+        action->setIcon(QIcon(":/assets/Assets/Icons/Dark/"+filename));
+    }
+    else {
+        action->setIcon(QIcon(":/assets/Assets/Icons/Bright/"+filename));
+    }
+}

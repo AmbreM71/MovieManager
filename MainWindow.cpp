@@ -571,7 +571,7 @@ void MainWindow::exportDB() {
 }
 
 void MainWindow::addView() {
-    AddViewDialog* window = new AddViewDialog();
+    AddViewDialog* window = new AddViewDialog(this);
     window->show();
     if(window->exec() == 1) {
 
@@ -978,27 +978,20 @@ void MainWindow::customMenuRequested(QPoint pos) {
 
     QMenu *menu = new QMenu(this);
 
-    QAction* deleteAction = new QAction(tr("Supprimer"), this);
-    if(m_theme == eTheme::Classic) {
-        deleteAction->setIcon(QIcon(":/assets/Assets/Icons/Dark/delete.png"));
-    }
-    else {
-        deleteAction->setIcon(QIcon(":/assets/Assets/Icons/Bright/delete.png"));
-    }
 
     QAction* editAction = new QAction(tr("Modifier"), this);
-    if(m_theme == eTheme::Classic) {
-        editAction->setIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
-    }
-    else {
-        editAction->setIcon(QIcon(":/assets/Assets/Icons/Bright/edit.png"));
-    }
+    Common::setIconAccordingToTheme(editAction, m_theme, "edit.png");
+
+    QAction* deleteAction = new QAction(tr("Supprimer"), this);
+    Common::setIconAccordingToTheme(deleteAction, m_theme, "delete.png");
+
 
     menu->addAction(editAction);
     menu->addAction(deleteAction);
 
-    QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteMovie()));
     QObject::connect(editAction, SIGNAL(triggered()), this, SLOT(editMovie()));
+    QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteMovie()));
+    
     menu->popup(m_ui->MoviesListWidget->viewport()->mapToGlobal(pos));
 }
 
@@ -1014,8 +1007,8 @@ void MainWindow::menuBarConnectors() {
 }
 
 void MainWindow::setSettings() {
-    m_language = m_settings->value("language").toInt();
-    m_theme = m_settings->value("theme").toInt();
+    m_language = (enum eLanguage)m_settings->value("language").toInt();
+    m_theme = (enum eTheme)m_settings->value("theme").toInt();
     m_matrixMode = m_settings->value("matrixMode").toBool();
     m_quickSearchCaseSensitive = m_settings->value("quickSearchCaseSensitive").toBool();
 }
