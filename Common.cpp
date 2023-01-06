@@ -42,7 +42,7 @@ void Common::loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float
             pixmap = new QPixmap(posterPath);
         }
         else {
-            pixmap = new QPixmap(":/icons/Icons/nocover.png");
+            pixmap = new QPixmap(":/assets/Assets/nocover.png");
         }
         QPixmap pm;
 

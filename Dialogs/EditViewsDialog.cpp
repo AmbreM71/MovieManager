@@ -66,24 +66,19 @@ void EditViewsDialog::fillTable() {
 
 void EditViewsDialog::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
-    QAction* deleteAction = new QAction(tr("Supprimer"), this);
+
     QAction* editAction = new QAction(tr("Modifier"), this);
+    Common::setIconAccordingToTheme(editAction, *m_theme, "edit");
 
-
-    if(*m_theme == eTheme::Classic) {
-        deleteAction->setIcon(QIcon(":/icons/Icons/delete.png"));
-        editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
-    }
-    else {
-        deleteAction->setIcon(QIcon(":/icons/Icons/delete.png"));
-        editAction->setIcon(QIcon(":/icons/Icons/edit.png"));
-    }
+    QAction* deleteAction = new QAction(tr("Supprimer"), this);
+    Common::setIconAccordingToTheme(deleteAction, *m_theme, "delete.png");
 
     menu->addAction(editAction);
     menu->addAction(deleteAction);
 
-    QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteView()));
     QObject::connect(editAction, SIGNAL(triggered()), this, SLOT(editView()));
+    QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteView()));
+
     menu->popup(m_ui->tableWidget->viewport()->mapToGlobal(pos));
 }
 
