@@ -1,13 +1,15 @@
 #include "EditViewDialog.h"
 #include "ui_EditViewDialog.h"
 
-EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(parent) {
+EditViewDialog::EditViewDialog(QTableWidget* table, QString* dateFormat, QWidget* parent) : QDialog(parent) {
 
     m_ui = new Ui::EditViewDialog;
     m_ui->setupUi(this);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
+    m_DateFormat = dateFormat;
 
     m_ui->ViewDateInput->setDate(QDate::currentDate());
+    m_ui->ViewDateInput->setDisplayFormat(*m_DateFormat);
 
     QObject::connect(m_ui->UnknownViewDateInput, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeInput, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
@@ -17,9 +19,22 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(p
         m_ui->UnknownViewDateInput->setChecked(true);
     }
     else {
-        int year = viewDate.sliced(0,4).toInt();
-        int month = viewDate.sliced(5,2).toInt();
-        int day = viewDate.sliced(8,2).toInt();
+        int year, month, day;
+        if(*m_DateFormat == "yyyy-MM-dd") {
+            year = viewDate.sliced(0,4).toInt();
+            month = viewDate.sliced(5,2).toInt();
+            day = viewDate.sliced(8,2).toInt();
+        }
+        else if (*m_DateFormat == "dd/MM/yyyy") {
+            day = viewDate.sliced(0,2).toInt();
+            month = viewDate.sliced(3,2).toInt();
+            year = viewDate.sliced(6,4).toInt();
+        }
+        else /*if (*m_DateFormat == "MM/dd/yyyy")*/ {
+            month = viewDate.sliced(0,2).toInt();
+            day = viewDate.sliced(3,2).toInt();
+            year = viewDate.sliced(6,4).toInt();
+        }
         m_ui->ViewDateInput->setDate(QDate(year, month, day));
     }
 
@@ -43,21 +58,8 @@ EditViewDialog::~EditViewDialog() {
     delete m_ui;
 }
 
-QString EditViewDialog::getViewDate() {
-    QString year = QString::number(m_ui->ViewDateInput->date().year());
-    QString month = QString::number(m_ui->ViewDateInput->date().month());
-    QString day = QString::number(m_ui->ViewDateInput->date().day());
-
-    QString s = year+"-";
-    if(month.length()==1) {
-        s.append("0");
-    }
-    s.append(month+"-");
-    if(day.length()==1) {
-        s.append("0");
-    }
-    s.append(day);
-    return s;
+QDate EditViewDialog::getViewDate() {
+    m_ui->ViewDateInput->date();
 }
 
 int EditViewDialog::getViewType() {

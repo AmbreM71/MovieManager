@@ -1,12 +1,13 @@
 #include "EditViewsDialog.h"
 #include "ui_EditViewsDialog.h"
 
-EditViewsDialog::EditViewsDialog(int* ID, Log* log, enum eTheme* theme, QWidget* parent) : QDialog(parent) {
+EditViewsDialog::EditViewsDialog(int* ID, Log* log, enum eTheme* theme, QString* dateFormat, QWidget* parent) : QDialog(parent) {
     m_ui = new Ui::EditViewsDialog;
     m_ui->setupUi(this);
     m_ID = ID;
     m_log = log;
     m_theme = theme;
+    m_DateFormat = dateFormat;
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
 
     m_ui->tableWidget->setColumnHidden(0, true);
@@ -48,7 +49,10 @@ void EditViewsDialog::fillTable() {
          QTableWidgetItem* viewType = new QTableWidgetItem();
 
          ID->setText(query.value(0).toString());
-         viewDate->setText(query.value(1).toString());
+         if(query.value(1).toString() == "?")
+             viewDate->setText("?");
+         else
+            viewDate->setText(query.value(1).toDate().toString(*m_DateFormat));
          viewType->setText(Common::viewTypeToQString((enum eViewType)query.value(2).toInt()));
 
          m_ui->tableWidget->insertRow(m_ui->tableWidget->rowCount());
@@ -102,13 +106,13 @@ void EditViewsDialog::editView() {
     int viewType;
     QString viewID = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),0)->text();
 
-    EditViewDialog* window = new EditViewDialog(m_ui->tableWidget, this);
+    EditViewDialog* window = new EditViewDialog(m_ui->tableWidget, m_DateFormat, this);
     window->show();
     if(window->exec() == 1) {
         QSqlQuery editMovieQuery;
 
         viewType = window->getViewType();
-        viewDate = window->getViewDate();
+        viewDate = window->getViewDate().toString("yyyy-MM-dd");
 
         if(window->isDateUnknown()) {
             viewDate = "?";

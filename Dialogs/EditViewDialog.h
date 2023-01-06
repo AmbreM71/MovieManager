@@ -17,12 +17,13 @@ class EditViewDialog : public QDialog {
 
     private:
         Ui::EditViewDialog* m_ui;
+        QString* m_DateFormat;
 
     public:
-        explicit EditViewDialog(QTableWidget* table, QWidget* parent = nullptr);
+        explicit EditViewDialog(QTableWidget* table, QString* dateFormat, QWidget* parent = nullptr);
         ~EditViewDialog();
 
-        QString getViewDate();
+        QDate getViewDate();
         int getViewType();
         bool isDateUnknown();
         bool isTypeUnknown();

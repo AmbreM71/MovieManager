@@ -297,7 +297,7 @@ void MainWindow::fillMovieInfos() {
         m_ui->FirstViewLabel->setText(tr("Premier visionnage : ?"));
     }
     else {
-        m_ui->FirstViewLabel->setText(tr("Premier visionnage : ")+firstViewQuery.value(0).toString());
+        m_ui->FirstViewLabel->setText(tr("Premier visionnage : ")+firstViewQuery.value(0).toDate().toString(m_dateFormat));
     }
 
     //Fetch the last view of the current movie
@@ -308,7 +308,7 @@ void MainWindow::fillMovieInfos() {
         m_ui->LastViewLabel->setText(tr("Dernier visionnage : ?"));
     }
     else {
-        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+lastViewQuery.value(0).toString());
+        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+lastViewQuery.value(0).toDate().toString(m_dateFormat));
     }
 
     QSqlQuery hasUnknownView;
@@ -571,7 +571,7 @@ void MainWindow::exportDB() {
 }
 
 void MainWindow::addView() {
-    AddViewDialog* window = new AddViewDialog(this);
+    AddViewDialog* window = new AddViewDialog(this, &m_dateFormat);
     window->show();
     if(window->exec() == 1) {
 
@@ -657,7 +657,7 @@ void MainWindow::addView() {
             ViewDate = "?";
         }
         else {
-            ViewDate = window->getViewDate();
+            ViewDate = window->getViewDate().toString("yyyy-MM-dd");
         }
 
         if(window->isTypeUnknown()) {
@@ -711,7 +711,7 @@ void MainWindow::addView() {
 
 void MainWindow::editViews() {
     int ID = m_savedMovieID;
-    EditViewsDialog* window = new EditViewsDialog(&ID, m_log, &m_theme);
+    EditViewsDialog* window = new EditViewsDialog(&ID, m_log, &m_theme, &m_dateFormat, this);
     window->show();
     if(window->exec() == 1) {
         if (window->edited()) {
@@ -945,7 +945,7 @@ void MainWindow::on_whatsnewAct_triggered() {
 }
 
 void MainWindow::openSettings() {
-    OptionsDialog* window = new OptionsDialog(&m_matrixMode, &m_language, &m_theme, &m_quickSearchCaseSensitive, this);
+    OptionsDialog* window = new OptionsDialog(&m_matrixMode, &m_language, &m_theme, &m_quickSearchCaseSensitive, &m_dateFormat, this);
     window->show();
     if(window->exec() == 1) {
         delete window;
@@ -1011,6 +1011,7 @@ void MainWindow::setSettings() {
     m_theme = (enum eTheme)m_settings->value("theme").toInt();
     m_matrixMode = m_settings->value("matrixMode").toBool();
     m_quickSearchCaseSensitive = m_settings->value("quickSearchCaseSensitive").toBool();
+    m_dateFormat = m_settings->value("dateFormat").toString();
 }
 
 void MainWindow::saveSettings() {
@@ -1018,6 +1019,7 @@ void MainWindow::saveSettings() {
     m_settings->setValue("theme", m_theme);
     m_settings->setValue("matrixMode", m_matrixMode);
     m_settings->setValue("quickSearchCaseSensitive", m_quickSearchCaseSensitive);
+    m_settings->setValue("dateFormat", m_dateFormat);
 }
 
 void MainWindow::setMatrixMode(bool state) {

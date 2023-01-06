@@ -1,9 +1,10 @@
 #include "AddViewDialog.h"
 #include "ui_AddViewDialog.h"
 
-AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
+AddViewDialog::AddViewDialog(QWidget *parent, QString* dateFormat) : QDialog(parent) {
     m_ui = new Ui::AddViewDialog;
     m_tags = new QList<QString>;
+    m_dateFormat = dateFormat;
     m_ui->setupUi(this);
     this->setFixedSize(600,407);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/plus.png"));
@@ -12,6 +13,8 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
 
     m_ui->MovieReleaseYearInput->setMaximum(QDate::currentDate().year());
     m_ui->MovieReleaseYearInput->setValue(QDate::currentDate().year());
+
+    m_ui->MovieViewDateInput->setDisplayFormat(*dateFormat);
 
     FillMovieComboBox();
 
@@ -59,8 +62,8 @@ int AddViewDialog::getReleaseYear() {
 int AddViewDialog::getViewType() {
     return Common::QStringToViewType(m_ui->ViewTypeComboBox->currentText());
 }
-QString AddViewDialog::getViewDate() {
-    return m_ui->MovieViewDateInput->text();
+QDate AddViewDialog::getViewDate() {
+    return m_ui->MovieViewDateInput->date();
 }
 QString AddViewDialog::getPosterPath() {
     return m_posterPath;

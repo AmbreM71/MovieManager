@@ -61,6 +61,7 @@ class MainWindow : public QMainWindow {
         enum eLanguage m_language;
         enum eTheme m_theme;
         bool m_quickSearchCaseSensitive;
+        QString m_dateFormat;
         QSettings* m_settings;
 
         //Filter variables

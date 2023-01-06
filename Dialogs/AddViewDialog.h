@@ -23,8 +23,10 @@ class AddViewDialog : public QDialog
         QList<QString>* m_tags;
         QString m_posterPath;
 
+        QString* m_dateFormat;
+
     public:
-        explicit AddViewDialog(QWidget *parent = nullptr);
+        explicit AddViewDialog(QWidget *parent, QString* dateFormat);
         ~AddViewDialog();
 
         void FillMovieComboBox();
@@ -33,7 +35,7 @@ class AddViewDialog : public QDialog
         QString getName();
         int getReleaseYear();
         int getViewType();
-        QString getViewDate();
+        QDate getViewDate();
         QString getPosterPath();
         int getRating();
         int getEntries();
