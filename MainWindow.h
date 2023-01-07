@@ -57,11 +57,6 @@ class MainWindow : public QMainWindow {
         QLocale* m_locale;
 
         //Setting variables
-        bool m_matrixMode;
-        enum eLanguage m_language;
-        enum eTheme m_theme;
-        bool m_quickSearchCaseSensitive;
-        QString m_dateFormat;
         QSettings* m_settings;
 
         //Filter variables
@@ -81,10 +76,8 @@ class MainWindow : public QMainWindow {
         void fillGlobalStats();
         void filterTable();
         void removeUnusedTags();
-        void setSettings();
         void refreshLanguage();
         void refreshTheme();
-        void saveSettings();
         void setMatrixMode(bool state);
         int getIndexOfMovie(int ID);
         ~MainWindow();

@@ -1,15 +1,15 @@
 #include "EditViewDialog.h"
 #include "ui_EditViewDialog.h"
 
-EditViewDialog::EditViewDialog(QTableWidget* table, QString* dateFormat, QWidget* parent) : QDialog(parent) {
+EditViewDialog::EditViewDialog(QTableWidget* table, QSettings* settings, QWidget* parent) : QDialog(parent) {
 
     m_ui = new Ui::EditViewDialog;
     m_ui->setupUi(this);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
-    m_DateFormat = dateFormat;
+    m_settings = settings;
 
     m_ui->ViewDateInput->setDate(QDate::currentDate());
-    m_ui->ViewDateInput->setDisplayFormat(*m_DateFormat);
+    m_ui->ViewDateInput->setDisplayFormat(m_settings->value("dateFormat").toString());
 
     QObject::connect(m_ui->UnknownViewDateInput, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeInput, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
@@ -20,17 +20,17 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QString* dateFormat, QWidget
     }
     else {
         int year, month, day;
-        if(*m_DateFormat == "yyyy-MM-dd") {
+        if(m_settings->value("dateFormat").toString() == "yyyy-MM-dd") {
             year = viewDate.sliced(0,4).toInt();
             month = viewDate.sliced(5,2).toInt();
             day = viewDate.sliced(8,2).toInt();
         }
-        else if (*m_DateFormat == "dd/MM/yyyy") {
+        else if (m_settings->value("dateFormat").toString() == "dd/MM/yyyy") {
             day = viewDate.sliced(0,2).toInt();
             month = viewDate.sliced(3,2).toInt();
             year = viewDate.sliced(6,4).toInt();
         }
-        else /*if (*m_DateFormat == "MM/dd/yyyy")*/ {
+        else /*if (m_settings->value("dateFormat").toString() == "MM/dd/yyyy")*/ {
             month = viewDate.sliced(0,2).toInt();
             day = viewDate.sliced(3,2).toInt();
             year = viewDate.sliced(6,4).toInt();
@@ -59,7 +59,7 @@ EditViewDialog::~EditViewDialog() {
 }
 
 QDate EditViewDialog::getViewDate() {
-    m_ui->ViewDateInput->date();
+    return m_ui->ViewDateInput->date();
 }
 
 int EditViewDialog::getViewType() {

@@ -7,6 +7,7 @@
 #include <QSqlError>
 #include <QPushButton>
 #include <QMenu>
+#include <QSettings>
 
 #include "Log.h"
 #include "Enums.h"
@@ -25,11 +26,10 @@ class EditViewsDialog : public QDialog
         int* m_ID;
         Log* m_log;
         bool m_edited = false;
-        enum eTheme* m_theme;
-        QString* m_DateFormat;
+        QSettings* m_settings;
 
     public:
-        explicit EditViewsDialog(int* ID, Log* log, enum eTheme* theme, QString* dateFormat, QWidget *parent = nullptr);
+        explicit EditViewsDialog(int* ID, Log* log, QSettings* settings, QWidget *parent = nullptr);
         ~EditViewsDialog();
 
         void fillTable();

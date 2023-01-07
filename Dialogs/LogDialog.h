@@ -2,6 +2,8 @@
 #define LOGDIALOG_H
 
 #include <QDialog>
+#include <QSettings>
+
 #include "Log.h"
 
 namespace Ui {
@@ -15,12 +17,12 @@ class LogDialog : public QDialog
     private:
         Ui::LogDialog* m_ui;
         Log* m_log;
-        enum eTheme* m_theme;
+        QSettings* m_settings;
         static int instances;
 
     public:
 
-        explicit LogDialog(Log* log,  enum eTheme* theme, QWidget *parent = nullptr);
+        explicit LogDialog(Log* log, QSettings* settings, QWidget *parent = nullptr);
         ~LogDialog();
 
         void fillList();

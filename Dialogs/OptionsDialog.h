@@ -2,6 +2,7 @@
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
+#include <QSettings>
 #include "Enums.h"
 
 namespace Ui {
@@ -14,13 +15,10 @@ class OptionsDialog : public QDialog
 
     private:
         Ui::OptionsDialog* m_ui;
-        bool* m_matrixMode, *m_quickSearchCaseSensitive;
-        enum eTheme* m_theme;
-        enum eLanguage* m_language;
-        QString* m_dateFormat;
+        QSettings* m_settings;
 
     public:
-        explicit OptionsDialog(bool* matrixMode, enum eLanguage* language, enum eTheme* theme, bool* quickSearchCaseSensitive, QString* m_dateFormat, QWidget *parent = nullptr);
+        explicit OptionsDialog(QSettings* settings, QWidget* parent = nullptr);
         ~OptionsDialog();
 
 

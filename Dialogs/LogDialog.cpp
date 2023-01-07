@@ -3,12 +3,12 @@
 
 int LogDialog::instances = 0;
 
-LogDialog::LogDialog(Log* log,  enum eTheme* theme, QWidget *parent) : QDialog(parent) {
+LogDialog::LogDialog(Log* log, QSettings* settings, QWidget *parent) : QDialog(parent) {
     instances++;
     m_ui = new Ui::LogDialog;
     m_ui->setupUi(this);
     m_log = log;
-    m_theme = theme;
+    m_settings = settings;
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/log.png"));
 
     fillList();
@@ -45,7 +45,7 @@ void LogDialog::fillList() {
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
             case eLog::Notice:
-                if (*m_theme == eTheme::Classic) {
+                if (m_settings->value("theme").toInt() == eTheme::Classic) {
                     color->setRgb(0,0,0);
                 }
                 else {

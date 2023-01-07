@@ -20,7 +20,6 @@ MainWindow::MainWindow(QApplication* app) {
 
     databaseConnection();
 
-    setSettings();
     refreshLanguage();
     refreshTheme();
 
@@ -174,7 +173,7 @@ void MainWindow::fillTable(const QString &text) {
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 2, ID);
 
         numberOfParsedMovies++;
-        if(m_matrixMode == true && (name->text() == "Matrix" || name->text() == "The Matrix")) {
+        if(m_settings->value("matrixMode").toBool() == true && (name->text() == "Matrix" || name->text() == "The Matrix")) {
             name->setForeground(QBrush(QColor(0,150,0)));
         }
     }
@@ -197,7 +196,7 @@ void MainWindow::fillTable(const QString &text) {
                 for(int filterIndex = 0 ; filterIndex < filter->length() ; filterIndex++) {
                         cellChar = cellText.at(filterIndex);
                         filterChar = filter->at(filterIndex);
-                        if(!m_quickSearchCaseSensitive) {
+                        if(!m_settings->value("quickSearchCaseSensitive").toBool()) {
                             cellChar = cellChar.toLower();
                             filterChar = filterChar.toLower();
                         }
@@ -297,7 +296,7 @@ void MainWindow::fillMovieInfos() {
         m_ui->FirstViewLabel->setText(tr("Premier visionnage : ?"));
     }
     else {
-        m_ui->FirstViewLabel->setText(tr("Premier visionnage : ")+firstViewQuery.value(0).toDate().toString(m_dateFormat));
+        m_ui->FirstViewLabel->setText(tr("Premier visionnage : ")+firstViewQuery.value(0).toDate().toString(m_settings->value("dateFormat").toString()));
     }
 
     //Fetch the last view of the current movie
@@ -308,7 +307,7 @@ void MainWindow::fillMovieInfos() {
         m_ui->LastViewLabel->setText(tr("Dernier visionnage : ?"));
     }
     else {
-        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+lastViewQuery.value(0).toDate().toString(m_dateFormat));
+        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+lastViewQuery.value(0).toDate().toString(m_settings->value("dateFormat").toString()));
     }
 
     QSqlQuery hasUnknownView;
@@ -571,7 +570,7 @@ void MainWindow::exportDB() {
 }
 
 void MainWindow::addView() {
-    AddViewDialog* window = new AddViewDialog(this, &m_dateFormat);
+    AddViewDialog* window = new AddViewDialog(this, m_settings);
     window->show();
     if(window->exec() == 1) {
 
@@ -711,7 +710,7 @@ void MainWindow::addView() {
 
 void MainWindow::editViews() {
     int ID = m_savedMovieID;
-    EditViewsDialog* window = new EditViewsDialog(&ID, m_log, &m_theme, &m_dateFormat, this);
+    EditViewsDialog* window = new EditViewsDialog(&ID, m_log, m_settings, this);
     window->show();
     if(window->exec() == 1) {
         if (window->edited()) {
@@ -907,7 +906,7 @@ void MainWindow::openFilters() {
 
 void MainWindow::openLog() {
     if(LogDialog::instancesCount() == 0) {
-        LogDialog* window = new LogDialog(m_log, &m_theme, this);
+        LogDialog* window = new LogDialog(m_log, m_settings, this);
         window->show();
         if(window->exec() == 0) {
             delete window;
@@ -945,13 +944,12 @@ void MainWindow::on_whatsnewAct_triggered() {
 }
 
 void MainWindow::openSettings() {
-    OptionsDialog* window = new OptionsDialog(&m_matrixMode, &m_language, &m_theme, &m_quickSearchCaseSensitive, &m_dateFormat, this);
+    OptionsDialog* window = new OptionsDialog(m_settings, this);
     window->show();
     if(window->exec() == 1) {
         delete window;
         refreshLanguage();
         refreshTheme();
-        saveSettings();
         fillTable(m_ui->QuickSearchLineEdit->text());
         fillMovieInfos();
     }
@@ -980,10 +978,10 @@ void MainWindow::customMenuRequested(QPoint pos) {
 
 
     QAction* editAction = new QAction(tr("Modifier"), this);
-    Common::setIconAccordingToTheme(editAction, m_theme, "edit.png");
+    Common::setIconAccordingToTheme(editAction, (enum eTheme)m_settings->value("theme").toInt(), "edit.png");
 
     QAction* deleteAction = new QAction(tr("Supprimer"), this);
-    Common::setIconAccordingToTheme(deleteAction, m_theme, "delete.png");
+    Common::setIconAccordingToTheme(deleteAction, (enum eTheme)m_settings->value("theme").toInt(), "delete.png");
 
 
     menu->addAction(editAction);
@@ -1004,22 +1002,6 @@ void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->ExportAct, SIGNAL(triggered()), this, SLOT(exportDB()));
     QObject::connect(m_ui->ChartAct, SIGNAL(triggered()), this, SLOT(openCharts()));
     QObject::connect(m_ui->CalendarAct, SIGNAL(triggered()), this, SLOT(openCalendar()));
-}
-
-void MainWindow::setSettings() {
-    m_language = (enum eLanguage)m_settings->value("language").toInt();
-    m_theme = (enum eTheme)m_settings->value("theme").toInt();
-    m_matrixMode = m_settings->value("matrixMode").toBool();
-    m_quickSearchCaseSensitive = m_settings->value("quickSearchCaseSensitive").toBool();
-    m_dateFormat = m_settings->value("dateFormat").toString();
-}
-
-void MainWindow::saveSettings() {
-    m_settings->setValue("language", m_language);
-    m_settings->setValue("theme", m_theme);
-    m_settings->setValue("matrixMode", m_matrixMode);
-    m_settings->setValue("quickSearchCaseSensitive", m_quickSearchCaseSensitive);
-    m_settings->setValue("dateFormat", m_dateFormat);
 }
 
 void MainWindow::setMatrixMode(bool state) {
@@ -1046,7 +1028,7 @@ void MainWindow::refreshLanguage() {
     bool successLoad = false;
     QString path;
 
-    switch(m_language) {
+    switch(m_settings->value("language").toInt()) {
         case eLanguage::English :
             path = ":/localisations/Localisation/MovieManager_en_US.qm";
             m_locale = new QLocale(QLocale::English);
@@ -1072,7 +1054,7 @@ void MainWindow::refreshLanguage() {
 void MainWindow::refreshTheme() {
     QString path;
 
-    switch(m_theme) {
+    switch(m_settings->value("theme").toInt()) {
         case eTheme::Classic:
             path = ":/styles/Styles/classic.qss";
             break;
@@ -1092,15 +1074,15 @@ void MainWindow::refreshTheme() {
     qApp->setStyleSheet(qss.readAll());
     qss.close();
 
-    Common::setIconAccordingToTheme(m_ui->ExportAct, m_theme, "export.png");
-    Common::setIconAccordingToTheme(m_ui->ImportAct, m_theme, "import.png");
-    Common::setIconAccordingToTheme(m_ui->QuitAct, m_theme, "exit.png");
-    Common::setIconAccordingToTheme(m_ui->OptionsAct, m_theme, "settings.png");
-    Common::setIconAccordingToTheme(m_ui->LogAct, m_theme, "log.png");
-    Common::setIconAccordingToTheme(m_ui->ChartAct, m_theme, "chart.png");
-    Common::setIconAccordingToTheme(m_ui->CalendarAct, m_theme, "calendar.png");
-    Common::setIconAccordingToTheme(m_ui->whatsnewAct, m_theme, "github.png");
-    Common::setIconAccordingToTheme(m_ui->AboutAct, m_theme, "info.png");
+    Common::setIconAccordingToTheme(m_ui->ExportAct, (enum eTheme)m_settings->value("theme").toInt(), "export.png");
+    Common::setIconAccordingToTheme(m_ui->ImportAct, (enum eTheme)m_settings->value("theme").toInt(), "import.png");
+    Common::setIconAccordingToTheme(m_ui->QuitAct, (enum eTheme)m_settings->value("theme").toInt(), "exit.png");
+    Common::setIconAccordingToTheme(m_ui->OptionsAct, (enum eTheme)m_settings->value("theme").toInt(), "settings.png");
+    Common::setIconAccordingToTheme(m_ui->LogAct, (enum eTheme)m_settings->value("theme").toInt(), "log.png");
+    Common::setIconAccordingToTheme(m_ui->ChartAct, (enum eTheme)m_settings->value("theme").toInt(), "chart.png");
+    Common::setIconAccordingToTheme(m_ui->CalendarAct, (enum eTheme)m_settings->value("theme").toInt(), "calendar.png");
+    Common::setIconAccordingToTheme(m_ui->whatsnewAct, (enum eTheme)m_settings->value("theme").toInt(), "github.png");
+    Common::setIconAccordingToTheme(m_ui->AboutAct, (enum eTheme)m_settings->value("theme").toInt(), "info.png");
 }
 
 void MainWindow::fillGlobalStats() {
