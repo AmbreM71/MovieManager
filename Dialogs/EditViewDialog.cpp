@@ -49,9 +49,6 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QSettings* settings, QWidget
     else {
         m_ui->ViewTypeInput->setCurrentText(Common::viewTypeToQString((enum eViewType)viewType));
     }
-
-
-
 }
 
 EditViewDialog::~EditViewDialog() {
@@ -75,7 +72,7 @@ bool EditViewDialog::isTypeUnknown() {
 }
 
 void EditViewDialog::toggleViewDateInput(int state) {
-    if(m_ui->UnknownViewDateInput->isChecked()) {
+    if(state == Qt::Checked) {
         m_ui->ViewDateInput->setEnabled(false);
     }
     else {
@@ -84,7 +81,7 @@ void EditViewDialog::toggleViewDateInput(int state) {
 }
 
 void EditViewDialog::toggleViewTypeInput(int state) {
-    if(m_ui->UnknownViewTypeInput->isChecked()) {
+    if(state == Qt::Checked) {
         m_ui->ViewTypeInput->setEnabled(false);
     }
     else {
