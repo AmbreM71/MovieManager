@@ -1092,28 +1092,15 @@ void MainWindow::refreshTheme() {
     qApp->setStyleSheet(qss.readAll());
     qss.close();
 
-    if(m_theme == eTheme::Classic) {
-        m_ui->ExportAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/export.png"));
-        m_ui->ImportAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/import.png"));
-        m_ui->QuitAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/exit.png"));
-        m_ui->OptionsAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/settings.png"));
-        m_ui->LogAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/log.png"));
-        m_ui->ChartAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/chart.png"));
-        m_ui->CalendarAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/calendar.png"));
-        m_ui->whatsnewAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/github.png"));
-        m_ui->AboutAct->setIcon(QIcon(":/assets/Assets/Icons/Dark/info.png"));
-    }
-    else {
-        m_ui->ExportAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/export.png"));
-        m_ui->ImportAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/import.png"));
-        m_ui->QuitAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/exit.png"));
-        m_ui->OptionsAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/settings.png"));
-        m_ui->LogAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/log.png"));
-        m_ui->ChartAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/chart.png"));
-        m_ui->CalendarAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/calendar.png"));
-        m_ui->whatsnewAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/github.png"));
-        m_ui->AboutAct->setIcon(QIcon(":/assets/Assets/Icons/Bright/info.png"));
-    }
+    Common::setIconAccordingToTheme(m_ui->ExportAct, m_theme, "export.png");
+    Common::setIconAccordingToTheme(m_ui->ImportAct, m_theme, "import.png");
+    Common::setIconAccordingToTheme(m_ui->QuitAct, m_theme, "exit.png");
+    Common::setIconAccordingToTheme(m_ui->OptionsAct, m_theme, "settings.png");
+    Common::setIconAccordingToTheme(m_ui->LogAct, m_theme, "log.png");
+    Common::setIconAccordingToTheme(m_ui->ChartAct, m_theme, "chart.png");
+    Common::setIconAccordingToTheme(m_ui->CalendarAct, m_theme, "calendar.png");
+    Common::setIconAccordingToTheme(m_ui->whatsnewAct, m_theme, "github.png");
+    Common::setIconAccordingToTheme(m_ui->AboutAct, m_theme, "info.png");
 }
 
 void MainWindow::fillGlobalStats() {
