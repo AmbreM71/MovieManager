@@ -18,6 +18,10 @@ MainWindow::MainWindow(QApplication* app) {
 
     m_app->setWindowIcon(QIcon(":/assets/Assets/logo.png"));
 
+    if(QString::compare(m_app->arguments().at(0), "Neo")) {
+        m_ui->EasterEggAct->setVisible(false);
+    }
+
     databaseConnection();
 
     refreshLanguage();
@@ -1002,6 +1006,16 @@ void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->ExportAct, SIGNAL(triggered()), this, SLOT(exportDB()));
     QObject::connect(m_ui->ChartAct, SIGNAL(triggered()), this, SLOT(openCharts()));
     QObject::connect(m_ui->CalendarAct, SIGNAL(triggered()), this, SLOT(openCalendar()));
+}
+
+void MainWindow::on_EasterEggAct_triggered() {
+    qDebug() << tr("Why, Mr. Anderson, why? Why, why do you do it? Why, why opening a terminal? Why looking for this easter egg? Do you believe you’re searching for "
+                   "something, for more than your curiosity? Can you tell me what it is, do you even know? Is it freedom or truth, perhaps "
+                   "peace – could it be for love? Illusions, Mr. Anderson, vagaries of perception. Temporary constructs of a feeble human "
+                   "intellect trying desperately to justify an existence that is without meaning or purpose. And all of them as artificial "
+                   "as the MovieManager itself. Although, only a human mind could do something as insipid as lauching this through a terminal. "
+                   "You must be able to see it, Mr. Anderson, you must know it by now! You can’t win, it’s pointless to keep searching! Why, Mr. Anderson, why, "
+                   "why do you persist?");
 }
 
 void MainWindow::setMatrixMode(bool state) {

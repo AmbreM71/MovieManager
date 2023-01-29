@@ -101,6 +101,7 @@ class MainWindow : public QMainWindow {
         void editMovie();
         void fillMovieInfos();
         void selectedMovieChanged();
+        void on_EasterEggAct_triggered();
         void on_whatsnewAct_triggered();
 
         void clickedTag(Tag* tag);
