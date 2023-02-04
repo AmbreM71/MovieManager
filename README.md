@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="128" align="center" src="Icons/logo.png">
+  <img width="128" align="center" src="Assets/logo.png">
 </p>
 <h1 align="center">
     MovieManager
