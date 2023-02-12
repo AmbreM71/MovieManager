@@ -36,4 +36,10 @@ enum eViewType {
     MaxViewType = 11
 };
 
+enum eChart {
+    ViewedByMovieYear,
+    ViewedByType,
+    ViewedByYear
+};
+
 #endif // ENUMS_H

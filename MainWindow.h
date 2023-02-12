@@ -24,7 +24,6 @@
 
 #include "Log.h"
 #include "Enums.h"
-#include "Common.h"
 #include "Tag.h"
 
 #include "Dialogs/AddViewDialog.h"
