@@ -38,23 +38,23 @@ void Common::loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float
         posterPath = path;
 
     if(posterPath != "") {
-        QPixmap* pixmap;
+        QPixmap pixmap;
         //If no movie has no cover
         QFileInfo imgFile(posterPath);
         if(imgFile.exists(posterPath) && imgFile.isFile()) {
-            pixmap = new QPixmap(posterPath);
+            pixmap.load(posterPath);
         }
         else {
-            pixmap = new QPixmap(":/assets/Assets/nocover.png");
+            pixmap.load(":/assets/Assets/nocover.png");
         }
         QPixmap pm;
 
         //If picture is too wide, poster is scaled to width to fit in UI (safe until 4:3)
-        if((float)pixmap->height()/(float)pixmap->width() < safeRatio) {
-            pm = pixmap->scaledToWidth(posterHeight/safeRatio, Qt::SmoothTransformation);
+        if((float)pixmap.height()/(float)pixmap.width() < safeRatio) {
+            pm = pixmap.scaledToWidth(posterHeight/safeRatio, Qt::SmoothTransformation);
         }
         else {
-            pm = pixmap->scaledToHeight(posterHeight, Qt::SmoothTransformation);
+            pm = pixmap.scaledToHeight(posterHeight, Qt::SmoothTransformation);
         }
         poster->setPixmap(pm);
     }
