@@ -22,6 +22,18 @@ MainWindow::MainWindow(QApplication* app) {
         m_ui->EasterEggAct->setVisible(true);
     }
 
+    // Set default settings value if not already set
+    if(m_settings->contains("language") == false)
+        m_settings->setValue("language", 0);
+    if(m_settings->contains("theme") == false)
+        m_settings->setValue("theme", 0);
+    if(m_settings->contains("matrixMode") == false)
+        m_settings->setValue("matrixMode", false);
+    if(m_settings->contains("quickSearchCaseSensitive") == false)
+        m_settings->setValue("quickSearchCaseSensitive", false);
+    if(m_settings->contains("dateFormat") == false)
+        m_settings->setValue("dateFormat", "yyyy-MM-dd");
+
     databaseConnection();
 
     refreshLanguage();
