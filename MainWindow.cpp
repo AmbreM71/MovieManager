@@ -12,27 +12,25 @@ MainWindow::MainWindow(QApplication* app) {
 
     m_app = app;
     m_ui = new Ui::MainWindow;
-    m_log = new Log();
-    m_settings = new QSettings("MovieManager", "MovieManager");
     m_ui->setupUi(this);
 
     m_app->setWindowIcon(QIcon(":/assets/Assets/logo.png"));
 
     if(QString::compare(m_app->arguments().at(0), "Neo")) {
-        m_ui->EasterEggAct->setVisible(true);
+        m_ui->EasterEggAct->setVisible(false);
     }
 
     // Set default settings value if not already set
-    if(m_settings->contains("language") == false)
-        m_settings->setValue("language", 0);
-    if(m_settings->contains("theme") == false)
-        m_settings->setValue("theme", 0);
-    if(m_settings->contains("matrixMode") == false)
-        m_settings->setValue("matrixMode", false);
-    if(m_settings->contains("quickSearchCaseSensitive") == false)
-        m_settings->setValue("quickSearchCaseSensitive", false);
-    if(m_settings->contains("dateFormat") == false)
-        m_settings->setValue("dateFormat", "yyyy-MM-dd");
+    if(Common::Settings->contains("language") == false)
+        Common::Settings->setValue("language", 0);
+    if(Common::Settings->contains("theme") == false)
+        Common::Settings->setValue("theme", 0);
+    if(Common::Settings->contains("matrixMode") == false)
+        Common::Settings->setValue("matrixMode", false);
+    if(Common::Settings->contains("quickSearchCaseSensitive") == false)
+        Common::Settings->setValue("quickSearchCaseSensitive", false);
+    if(Common::Settings->contains("dateFormat") == false)
+        Common::Settings->setValue("dateFormat", "yyyy-MM-dd");
 
     databaseConnection();
 
@@ -76,10 +74,10 @@ void MainWindow::databaseConnection() {
     m_db.setDatabaseName("movieDatabase.db");
 
     if(!m_db.open()) {
-        m_log->append(tr("Erreur lors de l'ouverture de la base de données"), eLog::Error);
+        Common::Log->append(tr("Erreur lors de l'ouverture de la base de données"), eLog::Error);
     }
     else {
-        m_log->append(tr("Base de donnée ouverte avec succès"), eLog::Success);
+        Common::Log->append(tr("Base de donnée ouverte avec succès"), eLog::Success);
     }
 
     //Movies table
@@ -94,7 +92,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery movieDBQuery;
 
     if(!movieDBQuery.exec(movieDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table movies"), eLog::Error);
+        Common::Log->append(tr("Erreur lors de la création de la table movies"), eLog::Error);
     }
 
     //Views table
@@ -107,7 +105,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery viewsBDQuery;
 
     if(!viewsBDQuery.exec(ViewsDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table views"), eLog::Error);
+        Common::Log->append(tr("Erreur lors de la création de la table views"), eLog::Error);
     }
 
     //TagsInfo Table
@@ -118,7 +116,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery tagsInfoBDQuery;
 
     if(!tagsInfoBDQuery.exec(TagsInfoDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table tagsInfo"), eLog::Error);
+        Common::Log->append(tr("Erreur lors de la création de la table tagsInfo"), eLog::Error);
     }
 
     //Tags Table
@@ -129,7 +127,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery TagsBDQuery;
 
     if(!TagsBDQuery.exec(TagsDatabaseCreationString)) {
-        m_log->append(tr("Erreur lors de la création de la table tags"), eLog::Error);
+        Common::Log->append(tr("Erreur lors de la création de la table tags"), eLog::Error);
     }
 }
 
@@ -148,7 +146,7 @@ void MainWindow::fillTable(const QString &text) {
     QSqlQuery moviesQuery;
 
     if(m_isFiltered) {
-        m_log->append(tr("Recupération filtrée depuis la base de donnée"), eLog::Notice);
+        Common::Log->append(tr("Recupération filtrée depuis la base de donnée"), eLog::Notice);
         moviesQuery.exec("SELECT ID, Name, ReleaseYear FROM movies "
                          "WHERE Name LIKE \"%" + m_filter_name + "%\""
                          "AND ReleaseYear BETWEEN '"+QString::number(m_filter_minYear)+"' AND '"+QString::number(m_filter_maxYear)+"'"
@@ -189,12 +187,12 @@ void MainWindow::fillTable(const QString &text) {
         m_ui->MoviesListWidget->setItem(m_ui->MoviesListWidget->rowCount()-1, 2, ID);
 
         numberOfParsedMovies++;
-        if(m_settings->value("matrixMode").toBool() == true && (name->text() == "Matrix" || name->text() == "The Matrix")) {
+        if(Common::Settings->value("matrixMode").toBool() == true && (name->text() == "Matrix" || name->text() == "The Matrix")) {
             name->setForeground(QBrush(QColor(0,150,0)));
         }
     }
 
-    m_log->append(tr("Nombre de films lus depuis la base de donnée : ")+QString::number(numberOfParsedMovies), eLog::Notice);
+    Common::Log->append(tr("Nombre de films lus depuis la base de donnée : ")+QString::number(numberOfParsedMovies), eLog::Notice);
 
     /* QUICK FILTER PART*/
 
@@ -212,7 +210,7 @@ void MainWindow::fillTable(const QString &text) {
                 for(int filterIndex = 0 ; filterIndex < filter->length() ; filterIndex++) {
                         cellChar = cellText.at(filterIndex);
                         filterChar = filter->at(filterIndex);
-                        if(!m_settings->value("quickSearchCaseSensitive").toBool()) {
+                        if(!Common::Settings->value("quickSearchCaseSensitive").toBool()) {
                             cellChar = cellChar.toLower();
                             filterChar = filterChar.toLower();
                         }
@@ -312,7 +310,7 @@ void MainWindow::fillMovieInfos() {
         m_ui->FirstViewLabel->setText(tr("Premier visionnage : ?"));
     }
     else {
-        m_ui->FirstViewLabel->setText(tr("Premier visionnage : ")+firstViewQuery.value(0).toDate().toString(m_settings->value("dateFormat").toString()));
+        m_ui->FirstViewLabel->setText(tr("Premier visionnage : ")+firstViewQuery.value(0).toDate().toString(Common::Settings->value("dateFormat").toString()));
     }
 
     //Fetch the last view of the current movie
@@ -323,7 +321,7 @@ void MainWindow::fillMovieInfos() {
         m_ui->LastViewLabel->setText(tr("Dernier visionnage : ?"));
     }
     else {
-        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+lastViewQuery.value(0).toDate().toString(m_settings->value("dateFormat").toString()));
+        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ")+lastViewQuery.value(0).toDate().toString(Common::Settings->value("dateFormat").toString()));
     }
 
     QSqlQuery hasUnknownView;
@@ -393,14 +391,14 @@ void MainWindow::removeUnusedTags() {
         }
         if(found == false) {
             if(!deleteTagQuery.exec("DELETE FROM tagsInfo WHERE Tag=\""+tagsInfoQuery.value(0).toString()+"\";")) {
-                m_log->append(tr("Erreur lors de la suppression dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+deleteTagQuery.lastError().nativeErrorCode()+tr(" : ")+deleteTagQuery.lastError().text(), eLog::Error);
+                Common::Log->append(tr("Erreur lors de la suppression dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+deleteTagQuery.lastError().nativeErrorCode()+tr(" : ")+deleteTagQuery.lastError().text(), eLog::Error);
             }
             removedTags.append(tagsInfoQuery.value(0).toString() + ", ");
         }
     }
     removedTags.remove(removedTags.length()-2, removedTags.length());
     if(removedTags.length() > 0) {
-        m_log->append(tr("Les tags suivants ne sont plus utilisés, ils sont supprimés : ") + removedTags, eLog::Notice);
+        Common::Log->append(tr("Les tags suivants ne sont plus utilisés, ils sont supprimés : ") + removedTags, eLog::Notice);
     }
 
 }
@@ -440,7 +438,7 @@ void MainWindow::importDB() {
                         query.bindValue(5, movie["Poster"].toString());
 
                         if(!query.exec()){
-                            m_log->append(tr("Erreur lors de l'import dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
+                            Common::Log->append(tr("Erreur lors de l'import dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
                         }
                     }
                 }
@@ -456,7 +454,7 @@ void MainWindow::importDB() {
                         query.bindValue(3, view["ViewType"].toString());
 
                         if(!query.exec()){
-                            m_log->append(tr("Erreur lors de l'import dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
+                            Common::Log->append(tr("Erreur lors de l'import dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
                         }
                     }
                 }
@@ -470,7 +468,7 @@ void MainWindow::importDB() {
                         query.bindValue(1, tag["Tag"].toString());
 
                         if(!query.exec()){
-                            m_log->append(tr("Erreur lors de l'import dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
+                            Common::Log->append(tr("Erreur lors de l'import dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
                         }
                     }
                 }
@@ -484,7 +482,7 @@ void MainWindow::importDB() {
                         query.bindValue(1, tagInfo["Color"].toString());
 
                         if(!query.exec()){
-                            m_log->append(tr("Erreur lors de l'import dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
+                            Common::Log->append(tr("Erreur lors de l'import dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
                         }
                     }
                 }
@@ -586,7 +584,7 @@ void MainWindow::exportDB() {
 }
 
 void MainWindow::addView() {
-    AddViewDialog* window = new AddViewDialog(this, m_settings);
+    AddViewDialog* window = new AddViewDialog(this);
     window->show();
     if(window->exec() == 1) {
 
@@ -614,7 +612,7 @@ void MainWindow::addView() {
                 if(window->getPosterPath() != "") {
                     QImage poster(window->getPosterPath());
                     if(poster.height() > 1200 || poster.width() > 1200) {
-                        m_log->append(tr("Image trop grande (") + QString::number(poster.width()) + "x" + QString::number(poster.height()) +
+                        Common::Log->append(tr("Image trop grande (") + QString::number(poster.width()) + "x" + QString::number(poster.height()) +
                                       "). Des latences peuvent apparaître.", eLog::Warning);
                     }
 
@@ -622,7 +620,7 @@ void MainWindow::addView() {
                     QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
                     QString GUID = QString::number(QRandomGenerator::global()->generate());
                     if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
-                        m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, eLog::Error);
+                        Common::Log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, eLog::Error);
                     }
                     posterPath = GUID+"."+ext;
                 }
@@ -644,7 +642,7 @@ void MainWindow::addView() {
                 insertIntoMoviesQuery.bindValue(4, posterPath);
 
                 if(!insertIntoMoviesQuery.exec()){
-                    m_log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoMoviesQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoMoviesQuery.lastError().text(), eLog::Error);
+                    Common::Log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoMoviesQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoMoviesQuery.lastError().text(), eLog::Error);
                     return;
                 }
             }
@@ -687,7 +685,7 @@ void MainWindow::addView() {
         insertIntoViewsQuery.bindValue(2, ViewType);
 
         if(!insertIntoViewsQuery.exec()){
-            m_log->append(tr("Erreur lors de l'ajout dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoViewsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoViewsQuery.lastError().text(), eLog::Error);
+            Common::Log->append(tr("Erreur lors de l'ajout dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoViewsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoViewsQuery.lastError().text(), eLog::Error);
         }
 
         for(int i=0 ; i<window->getTags()->size() ; i++) {
@@ -703,7 +701,7 @@ void MainWindow::addView() {
             insertIntoTagsInfoQuery.bindValue(1, hexcolor);
 
             if(!insertIntoTagsInfoQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), eLog::Error);
+                Common::Log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), eLog::Error);
             }
 
             QSqlQuery insertIntoTagsQuery;
@@ -713,7 +711,7 @@ void MainWindow::addView() {
             insertIntoTagsQuery.bindValue(1, window->getTags()->at(i));
 
             if(!insertIntoTagsQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), eLog::Error);
+                Common::Log->append(tr("Erreur lors de l'ajout dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), eLog::Error);
             }
 
         }
@@ -726,7 +724,7 @@ void MainWindow::addView() {
 
 void MainWindow::editViews() {
     int ID = m_savedMovieID;
-    EditViewsDialog* window = new EditViewsDialog(&ID, m_log, m_settings, this);
+    EditViewsDialog* window = new EditViewsDialog(&ID, this);
     window->show();
     if(window->exec() == 1) {
         if (window->edited()) {
@@ -786,13 +784,13 @@ void MainWindow::editMovie() {
 
             GUID = QString::number(QRandomGenerator::global()->generate());
             if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
-                m_log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, eLog::Error);
+                Common::Log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, eLog::Error);
             }
             QSqlQuery editMovieQuery;
             if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
                                     "\", Entries=\""+QString::number(window->getEntries())+"\", Rating=\""+QString::number(window->getRating())+
                                     "\", Poster=\""+GUID+"."+ext+"\" WHERE ID=\""+ID+"\";")) {
-                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), eLog::Error);
+                Common::Log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), eLog::Error);
             }
         }
         else {
@@ -808,13 +806,13 @@ void MainWindow::editMovie() {
             if(!editMovieQuery.exec("UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
                                     "\", Entries=\""+QString::number(entries)+"\", Rating=\""+QString::number(window->getRating())+
                                     "\" WHERE ID=\""+ID+"\";")) {
-                m_log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), eLog::Error);
+                Common::Log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+editMovieQuery.lastError().nativeErrorCode()+tr(" : ")+editMovieQuery.lastError().text(), eLog::Error);
             }
         }
 
         QSqlQuery removeMovieTagsQuery;
         if(!removeMovieTagsQuery.exec("DELETE FROM tags WHERE ID_Movie="+ID)){
-            m_log->append(tr("Erreur lors de la suppression des tags du film, plus d'informations ci-dessous :\nCode d'erreur ")+removeMovieTagsQuery.lastError().nativeErrorCode()+tr(" : ")+removeMovieTagsQuery.lastError().text(), eLog::Error);
+            Common::Log->append(tr("Erreur lors de la suppression des tags du film, plus d'informations ci-dessous :\nCode d'erreur ")+removeMovieTagsQuery.lastError().nativeErrorCode()+tr(" : ")+removeMovieTagsQuery.lastError().text(), eLog::Error);
         }
 
 
@@ -847,7 +845,7 @@ void MainWindow::editMovie() {
                 insertIntoTagsInfoQuery.bindValue(1, hexcolor);
 
                 if(!insertIntoTagsInfoQuery.exec()){
-                    m_log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), eLog::Error);
+                    Common::Log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsInfoQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsInfoQuery.lastError().text(), eLog::Error);
                 }
             }
             QSqlQuery insertIntoTagsQuery;
@@ -857,7 +855,7 @@ void MainWindow::editMovie() {
             insertIntoTagsQuery.bindValue(1, window->getTags()->at(i));
 
             if(!insertIntoTagsQuery.exec()){
-                m_log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), eLog::Error);
+                Common::Log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur ")+insertIntoTagsQuery.lastError().nativeErrorCode()+tr(" : ")+insertIntoTagsQuery.lastError().text(), eLog::Error);
             }
 
         }
@@ -889,15 +887,15 @@ void MainWindow::deleteMovie() {
         QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
 
         if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text(), eLog::Error);
+            Common::Log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+deleteMovieQuery.lastError().nativeErrorCode()+tr(" : ")+deleteMovieQuery.lastError().text(), eLog::Error);
         }
 
         if(!deleteAssociatedViewsQuery.exec("DELETE FROM views WHERE ID_Movie=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de la suppression dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedViewsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedViewsQuery.lastError().text(), eLog::Error);
+            Common::Log->append(tr("Erreur lors de la suppression dans la table views, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedViewsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedViewsQuery.lastError().text(), eLog::Error);
         }
 
         if(!deleteAssociatedTagsQuery.exec("DELETE FROM tags WHERE ID_Movie=\""+ID+"\";")) {
-            m_log->append(tr("Erreur lors de la suppression dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedTagsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedTagsQuery.lastError().text(), eLog::Error);
+            Common::Log->append(tr("Erreur lors de la suppression dans la table tags, plus d'informations ci-dessous :\nCode d'erreur ")+deleteAssociatedTagsQuery.lastError().nativeErrorCode()+tr(" : ")+deleteAssociatedTagsQuery.lastError().text(), eLog::Error);
         }
 
         removeUnusedTags();
@@ -922,14 +920,14 @@ void MainWindow::openFilters() {
 
 void MainWindow::openLog() {
     if(LogDialog::instancesCount() == 0) {
-        LogDialog* window = new LogDialog(m_log, m_settings, this);
+        LogDialog* window = new LogDialog(this);
         window->show();
         if(window->exec() == 0) {
             delete window;
         }
     }
     else {
-        m_log->append(tr("Log déjà ouvert"), eLog::Warning);
+        Common::Log->append(tr("Log déjà ouvert"), eLog::Warning);
     }
 }
 
@@ -942,7 +940,7 @@ void MainWindow::openAbout() {
         }
     }
     else {
-        m_log->append(tr("Fenêtre 'A Propos' déjà ouverte"), eLog::Warning);
+        Common::Log->append(tr("Fenêtre 'A Propos' déjà ouverte"), eLog::Warning);
     }
 }
 
@@ -955,12 +953,12 @@ void MainWindow::on_whatsnewAct_triggered() {
         }
     }
     else {
-        m_log->append(tr("Fenêtre 'Nouveautés' déjà ouverte"), eLog::Warning);
+        Common::Log->append(tr("Fenêtre 'Nouveautés' déjà ouverte"), eLog::Warning);
     }
 }
 
 void MainWindow::openSettings() {
-    OptionsDialog* window = new OptionsDialog(m_settings, this);
+    OptionsDialog* window = new OptionsDialog(this);
     window->show();
     if(window->exec() == 1) {
         delete window;
@@ -994,10 +992,10 @@ void MainWindow::customMenuRequested(QPoint pos) {
 
 
     QAction* editAction = new QAction(tr("Modifier"), this);
-    Common::setIconAccordingToTheme(editAction, (enum eTheme)m_settings->value("theme").toInt(), "edit.png");
+    Common::setIconAccordingToTheme(editAction, (enum eTheme)Common::Settings->value("theme").toInt(), "edit.png");
 
     QAction* deleteAction = new QAction(tr("Supprimer"), this);
-    Common::setIconAccordingToTheme(deleteAction, (enum eTheme)m_settings->value("theme").toInt(), "delete.png");
+    Common::setIconAccordingToTheme(deleteAction, (enum eTheme)Common::Settings->value("theme").toInt(), "delete.png");
 
 
     menu->addAction(editAction);
@@ -1054,7 +1052,7 @@ void MainWindow::refreshLanguage() {
     bool successLoad = false;
     QString path;
 
-    switch(m_settings->value("language").toInt()) {
+    switch(Common::Settings->value("language").toInt()) {
         case eLanguage::English :
             path = ":/localisations/Localisation/MovieManager_en_US.qm";
             m_locale = new QLocale(QLocale::English);
@@ -1071,7 +1069,7 @@ void MainWindow::refreshLanguage() {
     }
 
     if(!successLoad) {
-        m_log->append(tr("Impossible de charger le fichier de langage"), eLog::Error);
+        Common::Log->append(tr("Impossible de charger le fichier de langage"), eLog::Error);
     }
     m_ui->retranslateUi(this);
     fillGlobalStats();
@@ -1080,7 +1078,7 @@ void MainWindow::refreshLanguage() {
 void MainWindow::refreshTheme() {
     QString path;
 
-    switch(m_settings->value("theme").toInt()) {
+    switch(Common::Settings->value("theme").toInt()) {
         case eTheme::Classic:
             path = ":/styles/Styles/classic.qss";
             break;
@@ -1100,15 +1098,15 @@ void MainWindow::refreshTheme() {
     qApp->setStyleSheet(qss.readAll());
     qss.close();
 
-    Common::setIconAccordingToTheme(m_ui->ExportAct, (enum eTheme)m_settings->value("theme").toInt(), "export.png");
-    Common::setIconAccordingToTheme(m_ui->ImportAct, (enum eTheme)m_settings->value("theme").toInt(), "import.png");
-    Common::setIconAccordingToTheme(m_ui->QuitAct, (enum eTheme)m_settings->value("theme").toInt(), "exit.png");
-    Common::setIconAccordingToTheme(m_ui->OptionsAct, (enum eTheme)m_settings->value("theme").toInt(), "settings.png");
-    Common::setIconAccordingToTheme(m_ui->LogAct, (enum eTheme)m_settings->value("theme").toInt(), "log.png");
-    Common::setIconAccordingToTheme(m_ui->ChartAct, (enum eTheme)m_settings->value("theme").toInt(), "chart.png");
-    Common::setIconAccordingToTheme(m_ui->CalendarAct, (enum eTheme)m_settings->value("theme").toInt(), "calendar.png");
-    Common::setIconAccordingToTheme(m_ui->whatsnewAct, (enum eTheme)m_settings->value("theme").toInt(), "github.png");
-    Common::setIconAccordingToTheme(m_ui->AboutAct, (enum eTheme)m_settings->value("theme").toInt(), "info.png");
+    Common::setIconAccordingToTheme(m_ui->ExportAct, (enum eTheme)Common::Settings->value("theme").toInt(), "export.png");
+    Common::setIconAccordingToTheme(m_ui->ImportAct, (enum eTheme)Common::Settings->value("theme").toInt(), "import.png");
+    Common::setIconAccordingToTheme(m_ui->QuitAct, (enum eTheme)Common::Settings->value("theme").toInt(), "exit.png");
+    Common::setIconAccordingToTheme(m_ui->OptionsAct, (enum eTheme)Common::Settings->value("theme").toInt(), "settings.png");
+    Common::setIconAccordingToTheme(m_ui->LogAct, (enum eTheme)Common::Settings->value("theme").toInt(), "log.png");
+    Common::setIconAccordingToTheme(m_ui->ChartAct, (enum eTheme)Common::Settings->value("theme").toInt(), "chart.png");
+    Common::setIconAccordingToTheme(m_ui->CalendarAct, (enum eTheme)Common::Settings->value("theme").toInt(), "calendar.png");
+    Common::setIconAccordingToTheme(m_ui->whatsnewAct, (enum eTheme)Common::Settings->value("theme").toInt(), "github.png");
+    Common::setIconAccordingToTheme(m_ui->AboutAct, (enum eTheme)Common::Settings->value("theme").toInt(), "info.png");
 }
 
 void MainWindow::fillGlobalStats() {
@@ -1166,20 +1164,20 @@ void MainWindow::openCharts() {
         }
     }
     else {
-        m_log->append(tr("Fenêtre 'Graphiques' déjà ouverte"), eLog::Warning);
+        Common::Log->append(tr("Fenêtre 'Graphiques' déjà ouverte"), eLog::Warning);
     }
 }
 
 void MainWindow::openCalendar() {
     if(CalendarDialog::instancesCount() == 0) {
-        CalendarDialog* window = new CalendarDialog(m_log, this);
+        CalendarDialog* window = new CalendarDialog(this);
         window->show();
         if(window->exec() == 0) {
             delete window;
         }
     }
     else {
-        m_log->append(tr("Calendrier déjà ouvert"), eLog::Warning);
+        Common::Log->append(tr("Calendrier déjà ouvert"), eLog::Warning);
     }
 }
 

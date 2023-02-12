@@ -12,7 +12,6 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QSettings>
 #include <QPixmap>
 #include <QRandomGenerator>
 #include <QStandardPaths>
@@ -22,7 +21,7 @@
 #include <ctime>
 #include <iostream>
 
-#include "Log.h"
+#include "Common.h"
 #include "Enums.h"
 #include "Tag.h"
 
@@ -49,14 +48,10 @@ class MainWindow : public QMainWindow {
         Ui::MainWindow* m_ui;
         QApplication* m_app;
         QSqlDatabase m_db;
-        Log* m_log;
         QTranslator m_translator;
         int m_savedMovieID = -1;
         QString m_savepath = "";
         QLocale* m_locale;
-
-        //Setting variables
-        QSettings* m_settings;
 
         //Filter variables
         bool m_isFiltered = false;

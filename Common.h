@@ -8,13 +8,20 @@
 #include <QFileInfo>
 #include <QLayoutItem>
 #include <QLayout>
+#include <QSettings>
 
 #include "Enums.h"
+#include "Log.h"
 
 class Common
 {
 public:
+
     Common();
+
+    static Log* Log;
+    static QSettings* Settings;
+
     static void loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float safeRatio, QString path = "", QString* resultpath = nullptr);
 
     static void ratingToStar(int rating, QLabel* ratingLabel);

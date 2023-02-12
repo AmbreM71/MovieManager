@@ -1,12 +1,10 @@
 #include "EditViewsDialog.h"
 #include "ui_EditViewsDialog.h"
 
-EditViewsDialog::EditViewsDialog(int* ID, Log* log, QSettings* settings, QWidget* parent) : QDialog(parent) {
+EditViewsDialog::EditViewsDialog(int* ID, QWidget* parent) : QDialog(parent) {
     m_ui = new Ui::EditViewsDialog;
     m_ui->setupUi(this);
     m_ID = ID;
-    m_log = log;
-    m_settings = settings;
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
 
     m_ui->tableWidget->setColumnHidden(0, true);
@@ -38,7 +36,7 @@ void EditViewsDialog::fillTable() {
     query.prepare("SELECT ID, ViewDate, ViewType FROM views WHERE ID_Movie="+QString::number(*m_ID)+" ORDER BY ViewDate DESC;");
 
     if(!query.exec()){
-        m_log->append(tr("Erreur lors de la récupération dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
+        Common::Log->append(tr("Erreur lors de la récupération dans la base de données, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
     }
 
     while(query.next()) {
@@ -51,7 +49,7 @@ void EditViewsDialog::fillTable() {
          if(query.value(1).toString() == "?")
              viewDate->setText("?");
          else
-            viewDate->setText(query.value(1).toDate().toString(m_settings->value("dateFormat").toString()));
+            viewDate->setText(query.value(1).toDate().toString(Common::Settings->value("dateFormat").toString()));
          viewType->setText(Common::viewTypeToQString((enum eViewType)query.value(2).toInt()));
 
          m_ui->tableWidget->insertRow(m_ui->tableWidget->rowCount());
@@ -67,10 +65,10 @@ void EditViewsDialog::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
 
     QAction* editAction = new QAction(tr("Modifier"), this);
-    Common::setIconAccordingToTheme(editAction, (enum eTheme)m_settings->value("theme").toInt(), "edit");
+    Common::setIconAccordingToTheme(editAction, (enum eTheme)Common::Settings->value("theme").toInt(), "edit");
 
     QAction* deleteAction = new QAction(tr("Supprimer"), this);
-    Common::setIconAccordingToTheme(deleteAction, (enum eTheme)m_settings->value("theme").toInt(), "delete.png");
+    Common::setIconAccordingToTheme(deleteAction, (enum eTheme)Common::Settings->value("theme").toInt(), "delete.png");
 
     menu->addAction(editAction);
     menu->addAction(deleteAction);
@@ -100,7 +98,7 @@ void EditViewsDialog::editView() {
     int viewType;
     QString viewID = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),0)->text();
 
-    EditViewDialog* window = new EditViewDialog(m_ui->tableWidget, m_settings, this);
+    EditViewDialog* window = new EditViewDialog(m_ui->tableWidget, this);
     window->show();
     if(window->exec() == 1) {
         QSqlQuery editMovieQuery;

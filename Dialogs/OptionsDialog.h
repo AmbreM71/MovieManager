@@ -2,8 +2,8 @@
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
-#include <QSettings>
 #include "Enums.h"
+#include "Common.h"
 
 namespace Ui {
 class OptionsDialog;
@@ -15,10 +15,9 @@ class OptionsDialog : public QDialog
 
     private:
         Ui::OptionsDialog* m_ui;
-        QSettings* m_settings;
 
     public:
-        explicit OptionsDialog(QSettings* settings, QWidget* parent = nullptr);
+        explicit OptionsDialog(QWidget* parent = nullptr);
         ~OptionsDialog();
 
 

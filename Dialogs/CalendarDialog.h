@@ -9,7 +9,6 @@
 #include <QSqlQuery>
 
 #include "Common.h"
-#include "Log.h"
 
 namespace Ui {
     class CalendarDialog;
@@ -21,7 +20,6 @@ class CalendarDialog : public QDialog
 
     private:
         Ui::CalendarDialog* m_ui;
-        Log* m_log;
         QDate m_selectedDate;
         int m_daysPerMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
         QStringList m_monthLabel = {
@@ -42,7 +40,7 @@ class CalendarDialog : public QDialog
         static int instances;
 
     public:
-        explicit CalendarDialog(Log* log, QWidget *parent = nullptr);
+        explicit CalendarDialog(QWidget *parent = nullptr);
         ~CalendarDialog();
 
         void setDisplay();

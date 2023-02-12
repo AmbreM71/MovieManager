@@ -15,6 +15,7 @@
 
 #include "Enums.h"
 #include "Common.h"
+#include "qsqlerror.h"
 
 namespace Ui {
 class ChartsDialog;

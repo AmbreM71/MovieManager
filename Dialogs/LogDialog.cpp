@@ -3,16 +3,14 @@
 
 int LogDialog::instances = 0;
 
-LogDialog::LogDialog(Log* log, QSettings* settings, QWidget *parent) : QDialog(parent) {
+LogDialog::LogDialog(QWidget *parent) : QDialog(parent) {
     instances++;
     m_ui = new Ui::LogDialog;
     m_ui->setupUi(this);
-    m_log = log;
-    m_settings = settings;
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/log.png"));
 
     fillList();
-    QObject::connect(m_log, SIGNAL(logAppended()), this, SLOT(refresh()));
+    QObject::connect(Common::Log, SIGNAL(logAppended()), this, SLOT(refresh()));
 }
 
 LogDialog::~LogDialog() {
@@ -26,9 +24,9 @@ void LogDialog::fillList() {
     QColor* color = new QColor();
     QBrush* brush = new QBrush(*color);
 
-    for(int i = 0 ; i < m_log->size() ; i++) {
-        m_ui->listWidget->addItem(m_log->getLog(i).string);
-        switch (m_log->getLog(i).criticity) {
+    for(int i = 0 ; i < Common::Log->size() ; i++) {
+        m_ui->listWidget->addItem(Common::Log->getLog(i).string);
+        switch (Common::Log->getLog(i).criticity) {
             case eLog::Error:
                 color->setRgb(251,42,42);
                 brush->setColor(*color);
@@ -45,7 +43,7 @@ void LogDialog::fillList() {
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
             case eLog::Notice:
-                if (m_settings->value("theme").toInt() == eTheme::Classic) {
+                if (Common::Settings->value("theme").toInt() == eTheme::Classic) {
                     color->setRgb(0,0,0);
                 }
                 else {

@@ -4,7 +4,6 @@
 #include <QDialog>
 #include <QDate>
 #include <QTableWidget>
-#include <QSettings>
 
 #include "Common.h"
 #include "Enums.h"
@@ -18,10 +17,9 @@ class EditViewDialog : public QDialog {
 
     private:
         Ui::EditViewDialog* m_ui;
-        QSettings* m_settings;
 
     public:
-        explicit EditViewDialog(QTableWidget* table, QSettings* settings, QWidget* parent = nullptr);
+        explicit EditViewDialog(QTableWidget* table, QWidget* parent = nullptr);
         ~EditViewDialog();
 
         QDate getViewDate();

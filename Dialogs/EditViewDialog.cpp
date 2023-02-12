@@ -1,15 +1,14 @@
 #include "EditViewDialog.h"
 #include "ui_EditViewDialog.h"
 
-EditViewDialog::EditViewDialog(QTableWidget* table, QSettings* settings, QWidget* parent) : QDialog(parent) {
+EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(parent) {
 
     m_ui = new Ui::EditViewDialog;
     m_ui->setupUi(this);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
-    m_settings = settings;
 
     m_ui->ViewDateInput->setDate(QDate::currentDate());
-    m_ui->ViewDateInput->setDisplayFormat(m_settings->value("dateFormat").toString());
+    m_ui->ViewDateInput->setDisplayFormat(Common::Settings->value("dateFormat").toString());
 
     QObject::connect(m_ui->UnknownViewDateInput, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeInput, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
@@ -20,17 +19,17 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QSettings* settings, QWidget
     }
     else {
         int year, month, day;
-        if(m_settings->value("dateFormat").toString() == "yyyy-MM-dd") {
+        if(Common::Settings->value("dateFormat").toString() == "yyyy-MM-dd") {
             year = viewDate.sliced(0,4).toInt();
             month = viewDate.sliced(5,2).toInt();
             day = viewDate.sliced(8,2).toInt();
         }
-        else if (m_settings->value("dateFormat").toString() == "dd/MM/yyyy") {
+        else if (Common::Settings->value("dateFormat").toString() == "dd/MM/yyyy") {
             day = viewDate.sliced(0,2).toInt();
             month = viewDate.sliced(3,2).toInt();
             year = viewDate.sliced(6,4).toInt();
         }
-        else /*if (m_settings->value("dateFormat").toString() == "MM/dd/yyyy")*/ {
+        else /*if (Common::Settings->value("dateFormat").toString() == "MM/dd/yyyy")*/ {
             month = viewDate.sliced(0,2).toInt();
             day = viewDate.sliced(3,2).toInt();
             year = viewDate.sliced(6,4).toInt();

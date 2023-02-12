@@ -7,7 +7,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStandardPaths>
-#include <QSettings>
 
 #include <Common.h>
 #include <Tag.h>
@@ -24,10 +23,8 @@ class AddViewDialog : public QDialog
         QList<QString>* m_tags;
         QString m_posterPath;
 
-        QSettings* m_settings;
-
     public:
-        explicit AddViewDialog(QWidget *parent, QSettings* settings);
+        explicit AddViewDialog(QWidget *parent);
         ~AddViewDialog();
 
         void FillMovieComboBox();

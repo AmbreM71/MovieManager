@@ -3,12 +3,11 @@
 
 int CalendarDialog::instances = 0;
 
-CalendarDialog::CalendarDialog(Log* log, QWidget *parent) : QDialog(parent) {
+CalendarDialog::CalendarDialog(QWidget *parent) : QDialog(parent) {
     instances++;
     m_ui = new Ui::CalendarDialog;
     m_ui->setupUi(this);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/calendar.png"));
-    m_log = log;
 
     m_selectedDate = QDate::currentDate();
 
@@ -145,7 +144,7 @@ int CalendarDialog::getOffset() {
             offsetYearDebut = 6; //Year begun on sunday
             break;
         default:
-            m_log->append(tr("Impossible de déterminer le 1er jour de l'année courante"), eLog::Error);
+            Common::Log->append(tr("Impossible de déterminer le 1er jour de l'année courante"), eLog::Error);
             return -1;
     }
     int currentOffset = offsetYearDebut;
