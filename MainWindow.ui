@@ -44,13 +44,6 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="AverageRatingLabel">
-          <property name="text">
-           <string>Note moyenne : </string>
-          </property>
-         </widget>
-        </item>
         <item row="3" column="1">
          <spacer name="horizontalSpacer">
           <property name="orientation">
@@ -67,6 +60,13 @@
           </property>
          </spacer>
         </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="AverageYearLabel">
+          <property name="text">
+           <string>Année moyenne des films vus : </string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="0">
          <widget class="QLabel" name="AverageViewLabel">
           <property name="text">
@@ -74,7 +74,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="7" column="0">
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -90,6 +90,13 @@
           </property>
          </spacer>
         </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="AverageRatingLabel">
+          <property name="text">
+           <string>Note moyenne : </string>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="TotalViewLabel">
           <property name="text">
@@ -97,17 +104,17 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="AverageYearLabel">
-          <property name="text">
-           <string>Année moyenne des films vus : </string>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="0">
          <widget class="QLabel" name="ViewThisYear">
           <property name="text">
            <string>Vues cette année : </string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="NewThisYearLabel">
+          <property name="text">
+           <string>Découvert cette année : </string>
           </property>
          </widget>
         </item>

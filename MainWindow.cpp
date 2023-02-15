@@ -1139,19 +1139,22 @@ void MainWindow::fillGlobalStats() {
     avgViews = round(avgViews*100)/100;
     avgRating = round(avgRating*100)/100;
 
-    QSqlQuery movieThisYearQuery;
-    int movieThisYear=0;
-    movieThisYearQuery.exec("SELECT * FROM views WHERE ViewDate BETWEEN '"+QString::number(QDate::currentDate().year())+"-01-01' AND '"+QString::number(QDate::currentDate().year())+"-12-31' GROUP BY ID_Movie;");
-    while(movieThisYearQuery.next()) {
-        movieThisYear++;
+    QSqlQuery newThisYearQuery;
+    int newThisYear=0;
+    newThisYearQuery.exec("SELECT * FROM views WHERE ViewDate BETWEEN '"+QString::number(QDate::currentDate().year())+"-01-01' AND '"+QString::number(QDate::currentDate().year())+"-12-31' GROUP BY ID_Movie");
+    while(newThisYearQuery.next()) {
+        newThisYear++;
     }
 
+    QSqlQuery movieThisYearQuery;
+    movieThisYearQuery.exec("SELECT count(*) FROM views WHERE ViewDate BETWEEN '"+QString::number(QDate::currentDate().year())+"-01-01' AND '"+QString::number(QDate::currentDate().year())+"-12-31'");
+    movieThisYearQuery.first();
 
-
+    m_ui->NewThisYearLabel->setText(tr("Découvert cette année : ") + QString::number(newThisYear));
     m_ui->TotalViewLabel->setText(tr("Nombre total de visionnages : ") + totalViewQuery.value(0).toString());
     m_ui->AverageViewLabel->setText(tr("Moyenne de visionnages : ") + QString::number(avgViews));
     m_ui->AverageYearLabel->setText(tr("Année moyenne des films vus : ") + QString::number(avgMovieYear));
-    m_ui->ViewThisYear->setText(tr("Vus cette année : ") + QString::number(movieThisYear));
+    m_ui->ViewThisYear->setText(tr("Vus cette année : ") + movieThisYearQuery.value(0).toString());
     m_ui->AverageRatingLabel->setText(tr("Note moyenne : ") + QString::number(avgRating));
 }
 
