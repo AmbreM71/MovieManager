@@ -60,3 +60,5 @@ RESOURCES += \
 
 TRANSLATIONS += Localisation/MovieManager_fr_FR.ts \
                 Localisation/MovieManager_en_US.ts
+
+RC_ICONS += Assets/logo.ico
