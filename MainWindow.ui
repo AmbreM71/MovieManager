@@ -220,7 +220,7 @@
       <item row="13" column="0">
        <widget class="QLabel" name="ViewsLabel">
         <property name="text">
-         <string>Sélectionnez un film pour voir les information sur ce dernier</string>
+         <string/>
         </property>
        </widget>
       </item>

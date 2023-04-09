@@ -1,7 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-
 MainWindow::MainWindow(QApplication* app) {
 
     m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters";
@@ -1140,7 +1139,6 @@ void MainWindow::fillGlobalStats() {
     avgRating = round(avgRating*100)/100;
 
     QSqlQuery newThisYearQuery;
-    int newThisYear=0;
     newThisYearQuery.exec("SELECT count(*) FROM movies WHERE ID IN"
                           "(SELECT ID_Movie FROM views WHERE ID_Movie IN"
                           "(SELECT ID_Movie FROM views WHERE ViewDate BETWEEN '"+QString::number(QDate::currentDate().year())+"-01-01' AND '"+QString::number(QDate::currentDate().year())+"-12-31') AND ID_Movie NOT IN"
