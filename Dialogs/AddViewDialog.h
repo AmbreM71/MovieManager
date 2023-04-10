@@ -24,7 +24,7 @@ class AddViewDialog : public QDialog
         QString m_posterPath;
 
     public:
-        explicit AddViewDialog(QWidget *parent);
+        explicit AddViewDialog(QWidget *parent, int nMovieID = -1);
         ~AddViewDialog();
 
         void FillMovieComboBox();

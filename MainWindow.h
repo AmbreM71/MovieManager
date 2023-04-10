@@ -16,6 +16,7 @@
 #include <QRandomGenerator>
 #include <QStandardPaths>
 #include <QImage>
+#include <QSignalMapper>
 
 #include <cmath>
 #include <ctime>
@@ -78,7 +79,7 @@ class MainWindow : public QMainWindow {
 
     public slots:
         void fillTable(const QString &text);
-        void addView();
+        void addView(int nMovieID = -1);
         void editViews();
         void openFilters();
         void menuBarConnectors();

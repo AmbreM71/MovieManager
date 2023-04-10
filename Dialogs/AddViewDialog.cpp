@@ -1,7 +1,7 @@
 #include "AddViewDialog.h"
 #include "ui_AddViewDialog.h"
 
-AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
+AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     m_ui = new Ui::AddViewDialog;
     m_tags = new QList<QString>;
     m_ui->setupUi(this);
@@ -33,6 +33,15 @@ AddViewDialog::AddViewDialog(QWidget *parent) : QDialog(parent) {
     //Connectors to check if input are filled to enable Ok button
     QObject::connect(m_ui->MovieNameInput, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(checkValid()));
+
+    // If a movie is preselected when calling the dialog
+    if(nMovieID != -1) {
+        QSqlQuery moviesQuery;
+        moviesQuery.exec("SELECT Name, ReleaseYear FROM movies WHERE ID = '" + QString::number(nMovieID) + "';");
+        moviesQuery.first();
+        m_ui->ExistingMoviesComboBox->setCurrentIndex(m_ui->ExistingMoviesComboBox->findText(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString()));
+    }
+
 }
 
 AddViewDialog::~AddViewDialog() {

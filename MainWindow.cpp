@@ -582,8 +582,8 @@ void MainWindow::exportDB() {
     jsonFile.close();
 }
 
-void MainWindow::addView() {
-    AddViewDialog* window = new AddViewDialog(this);
+void MainWindow::addView(int nMovieID) {
+    AddViewDialog* window = new AddViewDialog(this, nMovieID);
     window->show();
     if(window->exec() == 1) {
 
@@ -989,6 +989,8 @@ void MainWindow::customMenuRequested(QPoint pos) {
 
     QMenu *menu = new QMenu(this);
 
+    QAction* addViewAction = new QAction(tr("Ajouter un visionnage"), this);
+    Common::setIconAccordingToTheme(addViewAction, (enum eTheme)Common::Settings->value("theme").toInt(), "plus.png");
 
     QAction* editAction = new QAction(tr("Modifier"), this);
     Common::setIconAccordingToTheme(editAction, (enum eTheme)Common::Settings->value("theme").toInt(), "edit.png");
@@ -997,9 +999,15 @@ void MainWindow::customMenuRequested(QPoint pos) {
     Common::setIconAccordingToTheme(deleteAction, (enum eTheme)Common::Settings->value("theme").toInt(), "delete.png");
 
 
+    menu->addAction(addViewAction);
     menu->addAction(editAction);
     menu->addAction(deleteAction);
 
+    QSignalMapper* signalMapper = new QSignalMapper(this);
+    QObject::connect(signalMapper, SIGNAL(mappedInt(int)), this, SLOT(addView(int)));
+    signalMapper->setMapping(addViewAction, m_savedMovieID);
+
+    QObject::connect(addViewAction, SIGNAL(triggered()), signalMapper, SLOT(map()));
     QObject::connect(editAction, SIGNAL(triggered()), this, SLOT(editMovie()));
     QObject::connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteMovie()));
     
