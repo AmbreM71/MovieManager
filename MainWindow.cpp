@@ -15,6 +15,7 @@ MainWindow::MainWindow(QApplication* app) {
 
     m_app->setWindowIcon(QIcon(":/assets/Assets/logo.png"));
 
+    // Shhhh, keep it secret
     if(QString::compare(m_app->arguments().at(0), "Neo")) {
         m_ui->EasterEggAct->setVisible(false);
     }

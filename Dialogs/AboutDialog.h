@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QDesktopServices>
+#include <QtVersion>
 
 namespace Ui {
     class AboutDialog;
