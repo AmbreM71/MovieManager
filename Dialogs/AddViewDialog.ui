@@ -271,7 +271,7 @@
        <second>0</second>
        <year>2022</year>
        <month>6</month>
-       <day>26</day>
+       <day>25</day>
       </datetime>
      </property>
      <property name="maximumDateTime">
@@ -291,7 +291,7 @@
        <second>0</second>
        <year>1899</year>
        <month>12</month>
-       <day>20</day>
+       <day>19</day>
       </datetime>
      </property>
      <property name="displayFormat">
@@ -343,6 +343,20 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>MovieNameInput</tabstop>
+  <tabstop>MovieReleaseYearInput</tabstop>
+  <tabstop>MovieRatingInput</tabstop>
+  <tabstop>EntriesInput</tabstop>
+  <tabstop>UnknownEntriesCheckbox</tabstop>
+  <tabstop>PosterButton</tabstop>
+  <tabstop>TagsInput</tabstop>
+  <tabstop>TagsAddButton</tabstop>
+  <tabstop>MovieViewDateInput</tabstop>
+  <tabstop>UnknownViewDateCheckbox</tabstop>
+  <tabstop>ViewTypeComboBox</tabstop>
+  <tabstop>UnknownViewTypeCheckbox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

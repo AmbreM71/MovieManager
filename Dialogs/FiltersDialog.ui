@@ -136,6 +136,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>NameInput</tabstop>
+  <tabstop>MinYearInput</tabstop>
+  <tabstop>MaxYearInput</tabstop>
+  <tabstop>MinRatingInput</tabstop>
+  <tabstop>MaxRatingInput</tabstop>
+  <tabstop>MinEntriesInput</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

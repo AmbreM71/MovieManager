@@ -201,6 +201,16 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>NameInput</tabstop>
+  <tabstop>ReleaseYearInput</tabstop>
+  <tabstop>RatingInput</tabstop>
+  <tabstop>EntriesInput</tabstop>
+  <tabstop>UnknownEntriesCheckbox</tabstop>
+  <tabstop>PosterButton</tabstop>
+  <tabstop>TagsInput</tabstop>
+  <tabstop>TagsAddButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

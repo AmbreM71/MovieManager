@@ -146,6 +146,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>LanguageCombobox</tabstop>
+  <tabstop>ThemeCombobox</tabstop>
+  <tabstop>DateFormatCombobox</tabstop>
+  <tabstop>MatrixModeCheckbox</tabstop>
+  <tabstop>QuickSearchCaseCheckbox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
