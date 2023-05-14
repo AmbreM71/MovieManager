@@ -37,7 +37,8 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     // If a movie is preselected when calling the dialog
     if(nMovieID != -1) {
         QSqlQuery moviesQuery;
-        moviesQuery.exec("SELECT Name, ReleaseYear FROM movies WHERE ID = '" + QString::number(nMovieID) + "';");
+        if(!moviesQuery.exec("SELECT Name, ReleaseYear FROM movies WHERE ID = '" + QString::number(nMovieID) + "';"))
+            Common::Log->append(tr("Erreur lors de la récupération des informations du film, ID du film : ") + QString::number(nMovieID), eLog::Error);
         moviesQuery.first();
         m_ui->ExistingMoviesComboBox->setCurrentIndex(m_ui->ExistingMoviesComboBox->findText(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString()));
     }
@@ -51,7 +52,8 @@ AddViewDialog::~AddViewDialog() {
 void AddViewDialog::FillMovieComboBox() {
     m_ui->ExistingMoviesComboBox->addItem("");
     QSqlQuery moviesQuery;
-    moviesQuery.exec("SELECT Name, ReleaseYear FROM movies ORDER BY Name ASC;");
+    if(!moviesQuery.exec("SELECT Name, ReleaseYear FROM movies ORDER BY Name ASC;"))
+        Common::Log->append(tr("Erreur lors de la récupération des informations des films"), eLog::Error);
     while(moviesQuery.next()) {
         m_ui->ExistingMoviesComboBox->addItem(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString());
     }
@@ -130,7 +132,8 @@ void AddViewDialog::comboboxChanged() {
         QString movieYear = m_ui->ExistingMoviesComboBox->currentText().remove(0, m_ui->ExistingMoviesComboBox->currentText().length()-4);
 
         QSqlQuery posterQuery;
-        posterQuery.exec("SELECT Poster FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear='"+movieYear+"'");
+        if(!posterQuery.exec("SELECT Poster FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear='"+movieYear+"'"))
+            Common::Log->append(tr("Erreur lors de la récupération de l'affiche du film, nom du film : ") + movieName, eLog::Error);
         posterQuery.first();
 
 

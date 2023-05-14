@@ -63,11 +63,13 @@ void CalendarDialog::setData() {
 
 
     QSqlQuery selectedDateViews;
-    selectedDateViews.exec("SELECT ID, ID_Movie, ViewDate, ViewType FROM views WHERE ViewDate BETWEEN '"+year+"-"+month+"-01' AND '"+year+"-"+month+"-31'");
+    if(!selectedDateViews.exec("SELECT ID, ID_Movie, ViewDate, ViewType FROM views WHERE ViewDate BETWEEN '"+year+"-"+month+"-01' AND '"+year+"-"+month+"-31'"))
+        Common::Log->append(tr("Erreur lors de la récupération des vues"), eLog::Error);
     while(selectedDateViews.next()) {
         int viewDay = selectedDateViews.value(2).toString().remove(0,8).toInt();
         QSqlQuery movieInfos;
-        movieInfos.exec("SELECT Name, ReleaseYear FROM movies WHERE ID=\""+selectedDateViews.value(1).toString()+"\"");
+        if(!movieInfos.exec("SELECT Name, ReleaseYear FROM movies WHERE ID=\""+selectedDateViews.value(1).toString()+"\""))
+            Common::Log->append(tr("Erreur lors de la récupération des informations du film, nom du film : ") + selectedDateViews.value(1).toString(), eLog::Error);
         movieInfos.first();
         QLabel* viewLabel = new QLabel(movieInfos.value(0).toString() + " - " + movieInfos.value(1).toString());
         viewLabel->setFixedHeight(24);

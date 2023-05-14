@@ -10,7 +10,8 @@ EditViewsDialog::EditViewsDialog(int* ID, QWidget* parent) : QDialog(parent) {
     m_ui->tableWidget->setColumnHidden(0, true);
 
     QSqlQuery titleQuery;
-    titleQuery.exec("SELECT Name FROM movies WHERE ID="+QString::number(*m_ID)+";");
+    if(!titleQuery.exec("SELECT Name FROM movies WHERE ID="+QString::number(*m_ID)+";"))
+        Common::Log->append(tr("Erreur lors de la récupération du nom du film, ID du film : ") + QString::number(*m_ID), eLog::Error);
     titleQuery.first();
     this->setWindowTitle(tr("Vues - ")+titleQuery.value(0).toString());
 
@@ -87,7 +88,8 @@ void EditViewsDialog::deleteView() {
     QSqlQuery deleteQuery;
     QString viewID = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),0)->text();
 
-    deleteQuery.exec("DELETE FROM views WHERE ID=\""+viewID+"\";");
+    if(!deleteQuery.exec("DELETE FROM views WHERE ID=\""+viewID+"\";"))
+        Common::Log->append(tr("Erreur lors de la suppression de la vue, ID de la vue : ") + viewID, eLog::Error);
     fillTable();
     m_edited = true;
 }
@@ -112,7 +114,8 @@ void EditViewsDialog::editView() {
         if(window->isTypeUnknown()) {
             viewType = eViewType::Unknown;
         }
-        editMovieQuery.exec("UPDATE views SET ViewDate=\""+viewDate+"\", ViewType=\""+QString::number(viewType)+"\" WHERE ID=\""+viewID+"\";");
+        if(!editMovieQuery.exec("UPDATE views SET ViewDate=\""+viewDate+"\", ViewType=\""+QString::number(viewType)+"\" WHERE ID=\""+viewID+"\";"))
+            Common::Log->append(tr("Erreur lors de la mise à jour de la vue, ID de la vue : ") + viewID, eLog::Error);
 
         fillTable();
         m_edited = true;

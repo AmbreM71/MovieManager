@@ -10,14 +10,16 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
 
     QSqlQuery movieQuery;
-    movieQuery.exec("SELECT Name, ReleaseYear, Entries, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'");
+    if(!movieQuery.exec("SELECT Name, ReleaseYear, Entries, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'"))
+        Common::Log->append(tr("Erreur lors de la récupération des informations du film, ID du film : ") + *m_ID, eLog::Error);
     movieQuery.first();
 
     m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+movieQuery.value(4).toString();
     loadPoster(m_posterPath);
 
     QSqlQuery tagsQuery;
-    tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+*m_ID+"'");
+    if(!tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+*m_ID+"'"))
+        Common::Log->append(tr("Erreur lors de la récupération des tags du film, ID du film : ") + *m_ID, eLog::Error);
     while(tagsQuery.next()) {
         m_tags->append(tagsQuery.value(0).toString());
         Tag* tag = new Tag(tagsQuery.value(0).toString());
