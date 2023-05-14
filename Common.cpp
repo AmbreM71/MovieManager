@@ -19,7 +19,10 @@ void Common::loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float
             QString ext = temp;
             ext = ext.remove(0, temp.lastIndexOf(".")+1);
             // Test if file is a jpg or a png
-            if(QString::compare(ext, "png") != 0 && QString::compare(ext, "jpg") && QString::compare(ext, "jpeg") != 0 && temp.size() > 0) {
+            if(QString::compare(ext, "png", Qt::CaseInsensitive) != 0
+            && QString::compare(ext, "jpg", Qt::CaseInsensitive) != 0
+            && QString::compare(ext, "jpeg", Qt::CaseInsensitive) != 0
+            && temp.size() > 0) {
                 QMessageBox::critical(parent, QObject::tr("Format incorrect"), QObject::tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou jpeg"));
                 extOK = false;
             }
