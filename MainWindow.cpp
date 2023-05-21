@@ -29,6 +29,8 @@ MainWindow::MainWindow(QApplication* app) {
         Common::Settings->setValue("matrixMode", false);
     if(Common::Settings->contains("quickSearchCaseSensitive") == false)
         Common::Settings->setValue("quickSearchCaseSensitive", false);
+    if(Common::Settings->contains("MoreLogsCheckbox") == false)
+        Common::Settings->setValue("MoreLogsCheckbox", false);
     if(Common::Settings->contains("dateFormat") == false)
         Common::Settings->setValue("dateFormat", "yyyy-MM-dd");
 
