@@ -7,8 +7,8 @@ Log::Log() {
 void Log::append(QString s, enum eLog criticity) {
     QString datetime = QString::number(QDate::currentDate().year()) + "-" + QString::number(QDate::currentDate().month()) + "-" + QString::number(QDate::currentDate().day()) + " " + QString::number(QTime::currentTime().hour()) + ":" + QString::number(QTime::currentTime().minute()) + ":" + QString::number(QTime::currentTime().second());
     struct stLogElement elem;
-    elem.string = datetime + tr(" : ") + s;
-    elem.criticity = criticity;
+    elem.sText = datetime + tr(" : ") + s;
+    elem.eCriticity = criticity;
     m_log.append(elem);
     emit logAppended();
 }

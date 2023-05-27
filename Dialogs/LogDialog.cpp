@@ -25,8 +25,8 @@ void LogDialog::fillList() {
     QBrush* brush = new QBrush(*color);
 
     for(int i = 0 ; i < Common::Log->size() ; i++) {
-        m_ui->listWidget->addItem(Common::Log->getLog(i).string);
-        switch (Common::Log->getLog(i).criticity) {
+        m_ui->listWidget->addItem(Common::Log->getLog(i).sText);
+        switch (Common::Log->getLog(i).eCriticity) {
             case eLog::Error:
                 color->setRgb(251,42,42);
                 brush->setColor(*color);

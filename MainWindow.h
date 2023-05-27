@@ -50,18 +50,9 @@ class MainWindow : public QMainWindow {
         QApplication* m_app;
         QSqlDatabase m_db;
         QTranslator m_translator;
-        int m_savedMovieID = -1;
         QString m_savepath = "";
         QLocale* m_locale;
-
-        //Filter variables
-        bool m_isFiltered = false;
-        QString m_filter_name = "";
-        int m_filter_minYear = 0,
-            m_filter_maxYear = 0,
-            m_filter_minRating = 0,
-            m_filter_maxRating = 0,
-            m_filter_minEntries = 0;
+        stFilters m_filters;
 
 
     public:
@@ -75,12 +66,13 @@ class MainWindow : public QMainWindow {
         void refreshTheme();
         void setMatrixMode(bool state);
         int getIndexOfMovie(int ID);
+        int getIDOfMovie(int nIndex);
         ~MainWindow();
 
     public slots:
-        void fillTable(const QString &text);
+        void fillTable();
         void addView(int nMovieID = -1);
-        void editViews();
+        void editViews(int nMovieID = -1);
         void openFilters();
         void menuBarConnectors();
         void openLog();
@@ -92,12 +84,14 @@ class MainWindow : public QMainWindow {
         void importDB();
         void exportDB();
         void customMenuRequested(QPoint pos);
-        void deleteMovie();
-        void editMovie();
-        void fillMovieInfos();
-        void selectedMovieChanged();
+        void deleteMovie(int nMovieID = -1);
+        void editMovie(int nMovieID = -1);
+        void fillMovieInfos(int nMovieID = -1);
         void on_EasterEggAct_triggered();
         void on_whatsnewAct_triggered();
+        void on_MoviesListWidget_cellClicked(int row, int column);
+        void on_MoviesListWidget_cellDoubleClicked(int row, int column);
+        void on_ManageMovieViewsButton_clicked();
 
         void clickedTag(Tag* tag);
         void clickedFilterTag(Tag* tag);

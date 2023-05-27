@@ -146,6 +146,9 @@
    </item>
    <item row="3" column="1">
     <widget class="QCheckBox" name="MoreLogsCheckbox">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Affiche plus de logs si lancée depuis un terminal. (Uniquement à des fins de débogage )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="text">
       <string>Plus de logs</string>
      </property>
