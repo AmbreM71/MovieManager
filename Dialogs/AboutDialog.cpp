@@ -10,6 +10,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent) {
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/info.png"));
 
     m_ui->QtVersionLabel->setText(tr("Qt ") + qVersion());
+    m_ui->VersionLabel->setText(tr("Version ") + Common::getVersion());
 
     QObject::connect(m_ui->GithubButton, SIGNAL(clicked()), this, SLOT(redirectGithub()));
 }

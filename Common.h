@@ -33,6 +33,8 @@ public:
     static enum eViewType QStringToViewType(QString type);
 
     static void setIconAccordingToTheme(QAction* object, enum eTheme theme, QString filename);
+
+    static QString getVersion();
 };
 
 #endif // COMMON_H

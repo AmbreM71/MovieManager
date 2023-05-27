@@ -5,6 +5,8 @@
 #include <QDesktopServices>
 #include <QtVersion>
 
+#include "Common.h"
+
 namespace Ui {
     class AboutDialog;
 }

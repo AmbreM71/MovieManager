@@ -218,3 +218,7 @@ void Common::setIconAccordingToTheme(QAction* action, enum eTheme theme, QString
         action->setIcon(QIcon(":/assets/Assets/Icons/Bright/"+filename));
     }
 }
+
+QString Common::getVersion() {
+    return "1.0.0";
+}
