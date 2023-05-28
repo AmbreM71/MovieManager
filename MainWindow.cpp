@@ -378,8 +378,6 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         Tag* tag = new Tag(tagsQuery.value(0).toString());
 
         QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));
-        QObject::connect(tag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
-        QObject::connect(tag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
         m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
     }
 }
@@ -1290,8 +1288,6 @@ void MainWindow::clickedTag(Tag* tag) {
         Tag* copiedTag = new Tag(tag);
 
         QObject::connect(copiedTag, SIGNAL(clicked(Tag*)), this, SLOT(clickedFilterTag(Tag*)));
-        QObject::connect(copiedTag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
-        QObject::connect(copiedTag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
 
         m_ui->SelectedTagsLayout->insertWidget(m_ui->SelectedTagsLayout->count()-1, copiedTag);
         fillTable();
@@ -1301,24 +1297,6 @@ void MainWindow::clickedTag(Tag* tag) {
 void MainWindow::clickedFilterTag(Tag* tag) {
     delete tag;
     fillTable();
-}
-
-void MainWindow::mouseEnteredTag(Tag* tag) {
-    tag->setStyleSheet(
-                "   background-color : #744547;"
-                "   color : #d58286;"
-                "   padding : 1px 5px 3px 5px;"
-                "   border-radius:12px;"
-                "   border: 2px solid #744547;");
-}
-
-void MainWindow::mouseLeftTag(Tag* tag) {
-    tag->setStyleSheet(
-                "   background-color : #653133;"
-                "   color : #d58286;"
-                "   padding : 1px 5px 3px 5px;"
-                "   border-radius:12px;"
-                "   border: 2px solid #653133;");
 }
 
 void MainWindow::on_MoviesListWidget_cellClicked(int row, int column) {

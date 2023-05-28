@@ -243,3 +243,19 @@ QDateEdit:hover {
     border: 1px solid #713a7a;
     border-radius: 2px;
 }
+
+Tag {
+    background-color : #653133;
+    color : #d17579;
+    padding : 1px 5px 3px 5px;
+    border-radius:12px;
+    border: 2px solid #653133;
+}
+
+Tag:hover {
+    background-color : #744547;
+    color : #d58286;
+    padding : 1px 5px 3px 5px;
+    border-radius:12px;
+    border: 2px solid #744547;
+}

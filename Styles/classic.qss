@@ -4,3 +4,19 @@
     border: 1px solid #0078D4;
     border-radius: 2px;
 }
+
+Tag {
+    background-color : #d17579;
+    color : #653133;
+    padding : 1px 5px 3px 5px;
+    border-radius:12px;
+    border: 2px solid #d17579;
+}
+
+Tag:hover {
+    background-color : #d58286;
+    color : #744547;
+    padding : 1px 5px 3px 5px;
+    border-radius:12px;
+    border: 2px solid #d58286;
+}
