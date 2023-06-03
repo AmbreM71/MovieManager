@@ -4,7 +4,7 @@
 #define MyAppPublisher "AmbreM"
 #define MyAppExeName "MovieManager.exe"
 
-#define LicenceFile ""
+; Path needs to be filled acording to the location of the development folder and the build folder
 #define DevFolder ""
 #define BuildFolder ""
 
@@ -19,14 +19,14 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile={#LicenceFile}
+LicenseFile={#DevFolder}\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 SetupIconFile={#DevFolder}\Assets\logo.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-OutputBaseFilename=MovieManager
+OutputBaseFilename=MovieManager_Installer
 PrivilegesRequired=admin
 OutputDir={#BuildFolder}/installer
 
