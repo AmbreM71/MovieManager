@@ -17,6 +17,7 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    BuildFunctions.h \
     Common.h \
     Dialogs/AboutDialog.h \
     Dialogs/AddViewDialog.h \

@@ -25,6 +25,7 @@
 #include "Common.h"
 #include "Enums.h"
 #include "Tag.h"
+#include "BuildFunctions.h"
 
 #include "Dialogs/AddViewDialog.h"
 #include "Dialogs/EditViewsDialog.h"

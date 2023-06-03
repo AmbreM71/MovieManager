@@ -5,6 +5,10 @@ MainWindow::MainWindow(QApplication* app) {
 
     m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager";
 
+#ifdef DEV
+    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager_Dev";
+#endif
+
     QDir dir(m_savepath);
     dir.mkpath("./Posters");
 
