@@ -3,11 +3,10 @@
 
 MainWindow::MainWindow(QApplication* app) {
 
-    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters";
+    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager";
 
     QDir dir(m_savepath);
-    if (!dir.exists())
-        dir.mkpath(".");
+    dir.mkpath("./Posters");
 
     m_app = app;
     m_ui = new Ui::MainWindow;
@@ -73,7 +72,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::databaseConnection() {
     m_db = QSqlDatabase::addDatabase("QSQLITE");
-    m_db.setDatabaseName("movieDatabase.db");
+    m_db.setDatabaseName(m_savepath+"/movieDatabase.db");
 
     if(!m_db.open()) {
         Common::Log->append(tr("Erreur lors de l'ouverture de la base de données"), eLog::Error);
@@ -308,7 +307,7 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         Common::Log->append(tr("Erreur lors de la récupération de de l'affiche, ID du film : ") + ID, eLog::Error);
     posterQuery.first();
 
-    Common::loadPoster(this, m_ui->PosterLabel, 400, 1, m_savepath+"\\"+posterQuery.value(0).toString());
+    Common::loadPoster(this, m_ui->PosterLabel, 400, 1, m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
 
     //Fetch the number of views of the current movie
     QSqlQuery viewsQuery;
@@ -650,8 +649,8 @@ void MainWindow::addView(int nMovieID) {
                     //Processing poster moving and renaming
                     QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
                     QString GUID = QString::number(QRandomGenerator::global()->generate());
-                    if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
-                        Common::Log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, eLog::Error);
+                    if(QFile::copy(window->getPosterPath(), m_savepath+"\\Posters/"+GUID+"."+ext) == false) {
+                        Common::Log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"\\Posters/"+GUID+"."+ext, eLog::Error);
                     }
                     posterPath = GUID+"."+ext;
                 }
@@ -816,7 +815,7 @@ void MainWindow::editMovie(int nMovieID) {
                         Common::Log->append(tr("Erreur lors de la récupération de l'affiche, ID du film : ") + ID, eLog::Error);
 
                     MoviePosterToDeleteQuery.first();
-                    QFile::remove(m_savepath+"\\"+MoviePosterToDeleteQuery.value(0).toString());
+                    QFile::remove(m_savepath+"\\Posters\\"+MoviePosterToDeleteQuery.value(0).toString());
 
                     QSqlQuery deleteMovieQuery;
                     if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\""))
@@ -843,13 +842,13 @@ void MainWindow::editMovie(int nMovieID) {
             if(!posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";"))
                 Common::Log->append(tr("Erreur lors de la récupération de l'affiche, ID du film : ") + ID, eLog::Error);
             posterQuery.first();
-            QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
+            QFile::remove(m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
 
             ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
 
             GUID = QString::number(QRandomGenerator::global()->generate());
-            if(QFile::copy(window->getPosterPath(), m_savepath+"/"+GUID+"."+ext) == false) {
-                Common::Log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"/"+GUID+"."+ext, eLog::Error);
+            if(QFile::copy(window->getPosterPath(), m_savepath+"\\Posters/"+GUID+"."+ext) == false) {
+                Common::Log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : ")+window->getPosterPath()+tr("\nChemin de destination : ")+m_savepath+"\\Posters/"+GUID+"."+ext, eLog::Error);
             }
 
             // Add poster ID modification to the update request
@@ -942,7 +941,7 @@ void MainWindow::deleteMovie(int nMovieID) {
             Common::Log->append(tr("Erreur lors de la récupération de l'affiche, ID du film : ") + ID, eLog::Error);
 
         posterQuery.first();
-        QFile::remove(m_savepath+"\\"+posterQuery.value(0).toString());
+        QFile::remove(m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
 
 
         if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
