@@ -38,7 +38,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     if(nMovieID != -1) {
         QSqlQuery moviesQuery;
         if(!moviesQuery.exec("SELECT Name, ReleaseYear FROM movies WHERE ID = '" + QString::number(nMovieID) + "';"))
-            Common::Log->append(tr("Erreur lors de la récupération des informations du film, ID du film : ") + QString::number(nMovieID), eLog::Error);
+            Common::Log->append(tr("Erreur lors de la récupération des informations du film, ID du film : %1").arg(QString::number(nMovieID)), eLog::Error);
         moviesQuery.first();
         m_ui->ExistingMoviesComboBox->setCurrentIndex(m_ui->ExistingMoviesComboBox->findText(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString()));
     }
@@ -133,7 +133,7 @@ void AddViewDialog::comboboxChanged() {
 
         QSqlQuery posterQuery;
         if(!posterQuery.exec("SELECT Poster FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear='"+movieYear+"'"))
-            Common::Log->append(tr("Erreur lors de la récupération de l'affiche du film, nom du film : ") + movieName, eLog::Error);
+            Common::Log->append(tr("Erreur lors de la récupération de l'affiche du film, nom du film : %1").arg(movieName), eLog::Error);
         posterQuery.first();
 
 

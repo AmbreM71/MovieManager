@@ -11,7 +11,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
 
     QSqlQuery movieQuery;
     if(!movieQuery.exec("SELECT Name, ReleaseYear, Entries, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'"))
-        Common::Log->append(tr("Erreur lors de la récupération des informations du film, ID du film : ") + *m_ID, eLog::Error);
+        Common::Log->append(tr("Erreur lors de la récupération des informations du film, ID du film : %1").arg(*m_ID), eLog::Error);
     movieQuery.first();
 
     m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+movieQuery.value(4).toString();
@@ -19,7 +19,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
 
     QSqlQuery tagsQuery;
     if(!tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+*m_ID+"'"))
-        Common::Log->append(tr("Erreur lors de la récupération des tags du film, ID du film : ") + *m_ID, eLog::Error);
+        Common::Log->append(tr("Erreur lors de la récupération des tags du film, ID du film : %1").arg(*m_ID), eLog::Error);
     while(tagsQuery.next()) {
         m_tags->append(tagsQuery.value(0).toString());
         Tag* tag = new Tag(tagsQuery.value(0).toString());
@@ -31,7 +31,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
         m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
     }
 
-    this->setWindowTitle(tr("Modifier - ") + movieQuery.value(0).toString());
+    this->setWindowTitle(tr("Modifier - %1").arg(movieQuery.value(0).toString()));
 
     m_ui->ReleaseYearInput->setMaximum(QDate::currentDate().year());
 

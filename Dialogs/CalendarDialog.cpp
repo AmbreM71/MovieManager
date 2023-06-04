@@ -69,7 +69,7 @@ void CalendarDialog::setData() {
         int viewDay = selectedDateViews.value(2).toString().remove(0,8).toInt();
         QSqlQuery movieInfos;
         if(!movieInfos.exec("SELECT Name, ReleaseYear FROM movies WHERE ID=\""+selectedDateViews.value(1).toString()+"\""))
-            Common::Log->append(tr("Erreur lors de la récupération des informations du film, nom du film : ") + selectedDateViews.value(1).toString(), eLog::Error);
+            Common::Log->append(tr("Erreur lors de la récupération des informations du film, nom du film : %1").arg(selectedDateViews.value(1).toString()), eLog::Error);
         movieInfos.first();
         QLabel* viewLabel = new QLabel(movieInfos.value(0).toString() + " - " + movieInfos.value(1).toString());
         viewLabel->setFixedHeight(24);

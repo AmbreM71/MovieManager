@@ -96,7 +96,7 @@ void ChartsDialog::setViewedByMovieYearChart() {
     int maxValue = 0;
 
     if(!query.exec(sRequest)) {
-        Common::Log->append(tr("Erreur lors de la requete dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
+        Common::Log->append(tr("Erreur lors de la requete dans la table movies, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(query.lastError().nativeErrorCode(), query.lastError().text()), eLog::Error);
         return;
     }
     else {
@@ -134,7 +134,7 @@ void ChartsDialog::setViewedByTypeChart() {
     sRequest = "SELECT ViewType, count(*) FROM views GROUP BY ViewType";
 
     if(!query.exec(sRequest)) {
-        Common::Log->append(tr("Erreur lors de la requete dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
+        Common::Log->append(tr("Erreur lors de la requete dans la table movies, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(query.lastError().nativeErrorCode(), query.lastError().text()), eLog::Error);
         return;
     }
     else {
@@ -158,7 +158,7 @@ void ChartsDialog::setViewedByYearChart() {
     int maxValue = 0;
 
     if(!query.exec(sRequest)) {
-        Common::Log->append(tr("Erreur lors de la requete dans la table movies, plus d'informations ci-dessous :\nCode d'erreur ")+query.lastError().nativeErrorCode()+tr(" : ")+query.lastError().text(), eLog::Error);
+        Common::Log->append(tr("Erreur lors de la requete dans la table movies, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(query.lastError().nativeErrorCode(), query.lastError().text()), eLog::Error);
         return;
     }
     else {
