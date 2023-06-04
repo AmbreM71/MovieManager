@@ -96,16 +96,6 @@ void AddViewDialog::comboboxChanged() {
         m_ui->TagsAddButton->setEnabled(true);
         m_ui->TagsInput->setEnabled(true);
 
-        for(int i = 0 ; i < m_ui->TagsLayout->count()-1 ; i++) {
-            Tag* tag = (Tag*)m_ui->TagsLayout->itemAt(i)->widget();
-            tag->setStyleSheet(
-                        "   background-color : #653133;"
-                        "   color : #d17579;"
-                        "   padding : 1px 5px 3px 5px;"
-                        "   border-radius:12px;"
-                        "   border: 2px solid #653133;");
-        }
-
         m_ui->PosterLabel->setText(tr("Affiche"));
         m_posterPath = "";
     }
@@ -118,16 +108,6 @@ void AddViewDialog::comboboxChanged() {
         m_ui->TagsAddButton->setEnabled(false);
         m_ui->TagsInput->setEnabled(false);
 
-        for(int i = 0 ; i < m_ui->TagsLayout->count()-1 ; i++) {
-            Tag* tag = (Tag*)m_ui->TagsLayout->itemAt(i)->widget();
-            tag->setStyleSheet(
-                        "   background-color : #444444;"
-                        "   color : #bbbbbb;"
-                        "   padding : 1px 5px 3px 5px;"
-                        "   border-radius:12px;"
-                        "   border: 2px solid #444444;");
-        }
-
         QString movieName = m_ui->ExistingMoviesComboBox->currentText().remove(m_ui->ExistingMoviesComboBox->currentText().length()-7, m_ui->ExistingMoviesComboBox->currentText().length());
         QString movieYear = m_ui->ExistingMoviesComboBox->currentText().remove(0, m_ui->ExistingMoviesComboBox->currentText().length()-4);
 
@@ -135,8 +115,6 @@ void AddViewDialog::comboboxChanged() {
         if(!posterQuery.exec("SELECT Poster FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear='"+movieYear+"'"))
             Common::Log->append(tr("Erreur lors de la récupération de l'affiche du film, nom du film : %1").arg(movieName), eLog::Error);
         posterQuery.first();
-
-
 
         loadPoster(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+posterQuery.value(0).toString());
     }
