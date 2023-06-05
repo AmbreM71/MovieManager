@@ -9,8 +9,8 @@ enum eTheme {
 };
 
 enum eLanguage {
-    French,
-    English
+    English,
+    French
 };
 
 enum eLog {

@@ -50,7 +50,7 @@ MainWindow::MainWindow(QApplication* app) {
     refreshLanguage();
     refreshTheme();
 
-    m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << tr("Nom du film") << tr("Année\nde sortie") << tr("Nombre de\nvisionnages") << tr("Premier\nvisionnage") << tr("Dernier\nvisionnage") << tr("Entrées") << tr("Note"));
+    m_ui->MoviesListWidget->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Release year"));
 
 
     fillTable();
@@ -79,10 +79,10 @@ void MainWindow::databaseConnection() {
     m_db.setDatabaseName(m_savepath+"/movieDatabase.db");
 
     if(!m_db.open()) {
-        Common::Log->append(tr("Erreur lors de l'ouverture de la base de données"), eLog::Error);
+        Common::Log->append(tr("Can't open database"), eLog::Error);
     }
     else {
-        Common::Log->append(tr("Base de donnée ouverte avec succès"), eLog::Success);
+        Common::Log->append(tr("Database opened successfully"), eLog::Success);
     }
 
     //Movies table
@@ -97,7 +97,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery movieDBQuery;
 
     if(!movieDBQuery.exec(movieDatabaseCreationString)) {
-        Common::Log->append(tr("Erreur lors de la création de la table movies"), eLog::Error);
+        Common::LogDatabaseError(&movieDBQuery);
     }
 
     //Views table
@@ -110,7 +110,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery viewsBDQuery;
 
     if(!viewsBDQuery.exec(ViewsDatabaseCreationString)) {
-        Common::Log->append(tr("Erreur lors de la création de la table views"), eLog::Error);
+        Common::LogDatabaseError(&viewsBDQuery);
     }
 
     //TagsInfo Table
@@ -121,7 +121,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery tagsInfoBDQuery;
 
     if(!tagsInfoBDQuery.exec(TagsInfoDatabaseCreationString)) {
-        Common::Log->append(tr("Erreur lors de la création de la table tagsInfo"), eLog::Error);
+        Common::LogDatabaseError(&tagsInfoBDQuery);
     }
 
     //Tags Table
@@ -132,7 +132,7 @@ void MainWindow::databaseConnection() {
     QSqlQuery TagsBDQuery;
 
     if(!TagsBDQuery.exec(TagsDatabaseCreationString)) {
-        Common::Log->append(tr("Erreur lors de la création de la table tags"), eLog::Error);
+        Common::LogDatabaseError(&TagsBDQuery);
     }
 }
 
@@ -163,9 +163,9 @@ void MainWindow::fillTable() {
     if(m_filters.bShowMovieWithUnknownEntries == true)
         sMovieQueryRequest.append(" OR Entries == -1");
 
-    Common::Log->append(tr("Recupération depuis la base de donnée"), eLog::Notice);
+    Common::Log->append(tr("Fetching from database"), eLog::Notice);
     if(!moviesQuery.exec(sMovieQueryRequest))
-        Common::Log->append(tr("Erreur lors de la récupération depuis la base de données"), eLog::Error);
+        Common::LogDatabaseError(&moviesQuery);
 
     int numberOfParsedMovies = 0;
     while(moviesQuery.next()) {
@@ -194,13 +194,13 @@ void MainWindow::fillTable() {
         numberOfParsedMovies++;
     }
 
-    Common::Log->append(tr("Nombre de films lus depuis la base de donnée : %1").arg(QString::number(numberOfParsedMovies)), eLog::Notice);
+    Common::Log->append(tr("Movies fetched from database: %1").arg(QString::number(numberOfParsedMovies)), eLog::Notice);
 
     /* QUICK FILTER PART*/
 
     QSqlQuery tagQuery;
     if(!tagQuery.exec("SELECT * FROM tags;"))
-        Common::Log->append(tr("Erreur lors de la récupération des tags depuis la base de données"), eLog::Error);
+        Common::LogDatabaseError(&tagQuery);
 
     QString filter = m_ui->QuickSearchLineEdit->text();
     QChar cellChar, filterChar;
@@ -260,7 +260,7 @@ void MainWindow::fillTable() {
     m_ui->MoviesListWidget->blockSignals(false);
     m_ui->MoviesListWidget->setSortingEnabled(true);
     m_ui->MoviesListWidget->sortItems(0);
-    m_ui->DisplayedMovieCountLabel->setText(tr("Films : %1").arg(QString::number(m_ui->MoviesListWidget->rowCount())));
+    m_ui->DisplayedMovieCountLabel->setText(tr("Movies: %1").arg(QString::number(m_ui->MoviesListWidget->rowCount())));
 
     int nMovieID;
 
@@ -282,11 +282,11 @@ void MainWindow::fillTable() {
 void MainWindow::fillMovieInfos(int nMovieID) {
 
     if(Common::Settings->value("moreLogs").toBool()) {
-        qDebug() << "Appel de fillMovieInfos, Movie ID : " << nMovieID;
+        qDebug() << "fillMovieInfos called with ID: " << nMovieID;
     }
 
     if(nMovieID == -1) {
-        m_ui->MovieTitleLabel->setText(tr("Sélectionnez un film pour voir les information sur ce dernier"));
+        m_ui->MovieTitleLabel->setText(tr("Select a movie to see its informations"));
         m_ui->MovieTitleLabel->setAlignment(Qt::AlignHCenter);
         m_ui->FirstViewLabel->setText("");
         m_ui->LastViewLabel->setText("");
@@ -308,7 +308,7 @@ void MainWindow::fillMovieInfos(int nMovieID) {
     //Fetch the number of views of the current movie
     QSqlQuery posterQuery;
     if(!posterQuery.exec("SELECT Poster FROM movies WHERE ID='"+ID+"'"))
-        Common::Log->append(tr("Erreur lors de la récupération de de l'affiche, ID du film : %1").arg(ID), eLog::Error);
+        Common::LogDatabaseError(&posterQuery);
     posterQuery.first();
 
     Common::loadPoster(this, m_ui->PosterLabel, 400, 1, m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
@@ -316,39 +316,39 @@ void MainWindow::fillMovieInfos(int nMovieID) {
     //Fetch the number of views of the current movie
     QSqlQuery viewsQuery;
     if(!viewsQuery.exec("SELECT COUNT(*) FROM views WHERE ID_Movie='"+ID+"'"))
-        Common::Log->append(tr("Erreur lors de la récupération de du nombre de visionnage, ID du film : %1").arg(ID), eLog::Error);
+        Common::LogDatabaseError(&viewsQuery);
     viewsQuery.first();
     //
-    m_ui->ViewsLabel->setText(tr("vu %1 fois").arg(viewsQuery.value(0).toInt()));
+    m_ui->ViewsLabel->setText(tr("Viewed %1 time(s)").arg(viewsQuery.value(0).toInt()));
 
 
     //Fetch the first view of the current movie
     QSqlQuery firstViewQuery;
     if(!firstViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND NOT ViewDate='?' ORDER BY ViewDate ASC LIMIT 1"))
-        Common::Log->append(tr("Erreur lors de la récupération de la date de premier visonnage, ID du film : %1").arg(ID), eLog::Error);
+        Common::LogDatabaseError(&firstViewQuery);
     firstViewQuery.first();
     if(firstViewQuery.value(0).toString()=="") {
-        m_ui->FirstViewLabel->setText(tr("Premier visionnage : ?"));
+        m_ui->FirstViewLabel->setText(tr("First view: ?"));
     }
     else {
-        m_ui->FirstViewLabel->setText(tr("Premier visionnage : %1").arg(firstViewQuery.value(0).toDate().toString(Common::Settings->value("dateFormat").toString())));
+        m_ui->FirstViewLabel->setText(tr("First view: %1").arg(firstViewQuery.value(0).toDate().toString(Common::Settings->value("dateFormat").toString())));
     }
 
     //Fetch the last view of the current movie
     QSqlQuery lastViewQuery;
     if(!lastViewQuery.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND NOT ViewDate='?' ORDER BY ViewDate DESC LIMIT 1"))
-        Common::Log->append(tr("Erreur lors de la récupération de la date de dernier visonnage, ID du film : %1").arg(ID), eLog::Error);
+        Common::LogDatabaseError(&lastViewQuery);
     lastViewQuery.first();
     if(lastViewQuery.value(0).toString()=="") {
-        m_ui->LastViewLabel->setText(tr("Dernier visionnage : ?"));
+        m_ui->LastViewLabel->setText(tr("Last view: ?"));
     }
     else {
-        m_ui->LastViewLabel->setText(tr("Dernier visionnage : %1").arg(lastViewQuery.value(0).toDate().toString(Common::Settings->value("dateFormat").toString())));
+        m_ui->LastViewLabel->setText(tr("Last view: %1").arg(lastViewQuery.value(0).toDate().toString(Common::Settings->value("dateFormat").toString())));
     }
 
     QSqlQuery hasUnknownView;
     if(!hasUnknownView.exec("SELECT ViewDate FROM views WHERE ID_Movie='"+ID+"' AND ViewDate='?'"))
-        Common::Log->append(tr("Erreur lors de la récupération de si le film a des dates de vues inconnues, ID du film : %1").arg(ID), eLog::Error);
+        Common::LogDatabaseError(&lastViewQuery);
     hasUnknownView.first();
     if(!hasUnknownView.isNull(0)) {
         m_ui->FirstViewLabel->setStyleSheet("color:red;");
@@ -359,19 +359,19 @@ void MainWindow::fillMovieInfos(int nMovieID) {
 
     QSqlQuery q;
     if(!q.exec("SELECT Entries, Rating FROM movies WHERE ID='"+ID+"'"))
-        Common::Log->append(tr("Erreur lors de la récupération du nombre d'entrées et de la note du film, ID du film : %1").arg(ID), eLog::Error);
+        Common::LogDatabaseError(&q);
     q.first();
     if(q.value(0).toInt() == -1) {
-        m_ui->EntriesLabel->setText(tr("Nombre d'entrées non renseigné"));
+        m_ui->EntriesLabel->setText(tr("Entries count unknown"));
     }
     else {
-        m_ui->EntriesLabel->setText(tr("%1 entrées").arg(m_locale->toString(q.value(0).toInt())));
+        m_ui->EntriesLabel->setText(tr("%1 entries").arg(m_locale->toString(q.value(0).toInt())));
     }
     Common::ratingToStar(q.value(1).toInt(), m_ui->RatingLabel);
 
     QSqlQuery tagsQuery;
     if(!tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+ID+"'"))
-        Common::Log->append(tr("Erreur lors des tags du film, ID du film : %1").arg(ID), eLog::Error);
+        Common::LogDatabaseError(&tagsQuery);
 
     // Clear tags from layout
     for(int i = m_ui->TagsLayout->count()-1 ; i >= 0 ; i--) {
@@ -391,11 +391,11 @@ void MainWindow::removeUnusedTags() {
 
     QSqlQuery tagsQuery;
     if(!tagsQuery.exec("SELECT Tag FROM tags"))
-        Common::Log->append(tr("Erreur lors de la récupération des tags"), eLog::Error);
+        Common::LogDatabaseError(&tagsQuery);
 
     QSqlQuery tagsInfoQuery;
     if(!tagsInfoQuery.exec("SELECT Tag FROM tagsInfo"))
-        Common::Log->append(tr("Erreur lors de la récupération des informations des tags"), eLog::Error);
+        Common::LogDatabaseError(&tagsInfoQuery);
 
     bool found;
 
@@ -415,38 +415,38 @@ void MainWindow::removeUnusedTags() {
         }
         if(found == false) {
             if(!deleteTagQuery.exec("DELETE FROM tagsInfo WHERE Tag=\""+tagsInfoQuery.value(0).toString()+"\";")) {
-                Common::Log->append(tr("Erreur lors de la suppression dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(deleteTagQuery.lastError().nativeErrorCode(), deleteTagQuery.lastError().text()), eLog::Error);
+                Common::LogDatabaseError(&deleteTagQuery);
             }
             removedTags.append(tagsInfoQuery.value(0).toString() + ", ");
         }
     }
     removedTags.remove(removedTags.length()-2, removedTags.length());
     if(removedTags.length() > 0) {
-        Common::Log->append(tr("Les tags suivants ne sont plus utilisés, ils sont supprimés : %1").arg(removedTags), eLog::Notice);
+        Common::Log->append(tr("Following tags are no longer used, they're deleted: %1").arg(removedTags), eLog::Notice);
     }
 
 }
 
 void MainWindow::importDB() {
-    QString file = QFileDialog::getOpenFileName(this, tr("Exporter"), QString(), "JSON (*.json)");
+    QString file = QFileDialog::getOpenFileName(this, tr("Import"), QString(), tr("JSON (*.json)"));
     QFile jsonFile(file);
     //Test if the file is correctly opened
     if (!jsonFile.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(this, tr("Erreur"), jsonFile.errorString());
+        QMessageBox::critical(this, tr("Error"), jsonFile.errorString());
     }
     else {
-        int answer = QMessageBox::question(this, tr("Importer"), tr("Cette opération va supprimer tous vos visionnages actuels, voulez-vous continuer ?"));
+        int answer = QMessageBox::question(this, tr("Import"), tr("This operation will remove all actual views, do you want to continue?"));
         if (answer == QMessageBox::Yes) {
 
             QSqlQuery deleteQuery;
             if(!deleteQuery.exec("DELETE FROM movies"))
-                Common::Log->append(tr("Erreur lors de la suppressions des données de la table movies"), eLog::Error);
+                Common::LogDatabaseError(&deleteQuery);
             if(!deleteQuery.exec("DELETE FROM views"))
-                Common::Log->append(tr("Erreur lors de la suppressions des données de la table views"), eLog::Error);
+                Common::LogDatabaseError(&deleteQuery);
             if(!deleteQuery.exec("DELETE FROM tags"))
-                Common::Log->append(tr("Erreur lors de la suppressions des données de la table tags"), eLog::Error);
+                Common::LogDatabaseError(&deleteQuery);
             if(!deleteQuery.exec("DELETE FROM tagsInfo"))
-                Common::Log->append(tr("Erreur lors de la suppressions des données de la table tagsInfo"), eLog::Error);
+                Common::LogDatabaseError(&deleteQuery);
 
             QString val = jsonFile.readAll();
             jsonFile.close();
@@ -466,7 +466,7 @@ void MainWindow::importDB() {
                         query.bindValue(5, movie["Poster"].toString());
 
                         if(!query.exec()){
-                            Common::Log->append(tr("Erreur lors de l'import dans la table movies, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(query.lastError().nativeErrorCode(), query.lastError().text()), eLog::Error);
+                            Common::LogDatabaseError(&query);
                         }
                     }
                 }
@@ -482,7 +482,7 @@ void MainWindow::importDB() {
                         query.bindValue(3, view["ViewType"].toString());
 
                         if(!query.exec()){
-                            Common::Log->append(tr("Erreur lors de l'import dans la table views, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(query.lastError().nativeErrorCode(), query.lastError().text()), eLog::Error);
+                            Common::LogDatabaseError(&query);
                         }
                     }
                 }
@@ -496,7 +496,7 @@ void MainWindow::importDB() {
                         query.bindValue(1, tag["Tag"].toString());
 
                         if(!query.exec()){
-                            Common::Log->append(tr("Erreur lors de l'import dans la table tags, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(query.lastError().nativeErrorCode(), query.lastError().text()), eLog::Error);
+                            Common::LogDatabaseError(&query);
                         }
                     }
                 }
@@ -510,7 +510,7 @@ void MainWindow::importDB() {
                         query.bindValue(1, tagInfo["Color"].toString());
 
                         if(!query.exec()){
-                            Common::Log->append(tr("Erreur lors de l'import dans la table tags, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(query.lastError().nativeErrorCode(), query.lastError().text()), eLog::Error);
+                            Common::LogDatabaseError(&query);
                         }
                     }
                 }
@@ -523,12 +523,12 @@ void MainWindow::importDB() {
 
 void MainWindow::exportDB() {
     int i;
-    QString file = QFileDialog::getSaveFileName(this, tr("Exporter"), QString(), "JSON (*.json)");  //Get the save link
+    QString file = QFileDialog::getSaveFileName(this, tr("Export"), QString(), tr("JSON (*.json)"));  //Get the save link
     //Creates a QFile with the fetched path
     QFile jsonFile(file);
     //Test if the file is correctly opened
     if (!jsonFile.open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(this, tr("Erreur"), jsonFile.errorString());
+        QMessageBox::critical(this, tr("Error"), jsonFile.errorString());
     }
 
     QJsonObject mainObject;
@@ -537,7 +537,7 @@ void MainWindow::exportDB() {
     QJsonObject moviesObject;
     QSqlQuery moviesQuery;
     if(!moviesQuery.exec("SELECT ID, Name, ReleaseYear, Entries, Rating, Poster FROM movies;"))
-        Common::Log->append(tr("Erreur lors de la récupérations des films"), eLog::Error);
+        Common::LogDatabaseError(&moviesQuery);
     i=0;
     while(moviesQuery.next()) {
         i++;
@@ -559,7 +559,7 @@ void MainWindow::exportDB() {
     QJsonObject viewsObject;
     QSqlQuery viewsQuery;
     if(!viewsQuery.exec("SELECT ID, ID_Movie, ViewDate, ViewType FROM views;"))
-        Common::Log->append(tr("Erreur lors de la récupérations des vues"), eLog::Error);
+        Common::LogDatabaseError(&viewsQuery);
     i=0;
     while(viewsQuery.next()) {
         i++;
@@ -579,7 +579,7 @@ void MainWindow::exportDB() {
     QJsonObject tagsInfoObject;
     QSqlQuery tagsInfoQuery;
     if(!tagsInfoQuery.exec("SELECT Tag, Color FROM tagsInfo;"))
-        Common::Log->append(tr("Erreur lors de la récupérations des informations des tags"), eLog::Error);
+        Common::LogDatabaseError(&tagsInfoQuery);
     i=0;
     while(tagsInfoQuery.next()) {
         i++;
@@ -597,7 +597,7 @@ void MainWindow::exportDB() {
     QJsonObject tagsObject;
     QSqlQuery tagsQuery;
     if(!tagsQuery.exec("SELECT ID_Movie, Tag FROM tags;"))
-        Common::Log->append(tr("Erreur lors de la récupérations des tags"), eLog::Error);
+        Common::LogDatabaseError(&tagsQuery);
     i=0;
     while(tagsQuery.next()) {
         i++;
@@ -632,13 +632,13 @@ void MainWindow::addView(int nMovieID) {
             bool movieAlreadyExist = false;
             QSqlQuery existingMoviesQuery;
             if(!existingMoviesQuery.exec("SELECT Name, ReleaseYear FROM movies")) {
-                Common::Log->append(tr("Erreur lors de la récupérations des films"), eLog::Error);
+                Common::LogDatabaseError(&existingMoviesQuery);
                 return;
             }
             while(existingMoviesQuery.next()) {
                 if(QString::compare(movieName, existingMoviesQuery.value(0).toString()) == 0 && QString::compare(movieYear, existingMoviesQuery.value(1).toString()) == 0) {
                     movieAlreadyExist = true;
-                    QMessageBox::information(this, tr("Film déjà présent"), tr("Un film correspond déjà à ce nom et cette date de sortie, la vue sera ajouté à ce dernier"));
+                    QMessageBox::information(this, tr("Movie already exists"), tr("There is already a movie with this name and release year, the view will be added to this one"));
                     break;
                 }
             }
@@ -647,14 +647,14 @@ void MainWindow::addView(int nMovieID) {
                 if(window->getPosterPath() != "") {
                     QImage poster(window->getPosterPath());
                     if(poster.height() > 1200 || poster.width() > 1200) {
-                        Common::Log->append(tr("Image trop grande (%1x%2). Des latences peuvent apparaître.").arg(QString::number(poster.width()), QString::number(poster.height())), eLog::Warning);
+                        Common::Log->append(tr("Image to big (%1x%2). Latencies can be felt.").arg(QString::number(poster.width()), QString::number(poster.height())), eLog::Warning);
                     }
 
                     //Processing poster moving and renaming
                     QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
                     QString GUID = QString::number(QRandomGenerator::global()->generate());
                     if(QFile::copy(window->getPosterPath(), m_savepath+"\\Posters/"+GUID+"."+ext) == false) {
-                        Common::Log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : %1\nChemin de destination : %2\\Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
+                        Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2\\Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
                     }
                     posterPath = GUID+"."+ext;
                 }
@@ -676,7 +676,7 @@ void MainWindow::addView(int nMovieID) {
                 insertIntoMoviesQuery.bindValue(4, posterPath);
 
                 if(!insertIntoMoviesQuery.exec()){
-                    Common::Log->append(tr("Erreur lors de l'ajout dans la table movies, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(insertIntoMoviesQuery.lastError().nativeErrorCode(), insertIntoMoviesQuery.lastError().text()), eLog::Error);
+                    Common::LogDatabaseError(&insertIntoMoviesQuery);
                     return;
                 }
             }
@@ -693,7 +693,7 @@ void MainWindow::addView(int nMovieID) {
 
         QSqlQuery viewedMovieIDQuery;
         if(!viewedMovieIDQuery.exec("SELECT ID FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear=\""+movieYear+"\"")) {
-            Common::Log->append(tr("Erreur lors de la récupérations de l'ID du film ajouté"), eLog::Error);
+            Common::LogDatabaseError(&viewedMovieIDQuery);
             return;
         }
         viewedMovieIDQuery.first();
@@ -722,7 +722,7 @@ void MainWindow::addView(int nMovieID) {
         insertIntoViewsQuery.bindValue(2, ViewType);
 
         if(!insertIntoViewsQuery.exec()){
-            Common::Log->append(tr("Erreur lors de l'ajout dans la table views, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(insertIntoViewsQuery.lastError().nativeErrorCode(), insertIntoViewsQuery.lastError().text()), eLog::Error);
+            Common::LogDatabaseError(&insertIntoViewsQuery);
             return;
         }
 
@@ -739,7 +739,7 @@ void MainWindow::addView(int nMovieID) {
             insertIntoTagsInfoQuery.bindValue(1, hexcolor);
 
             if(!insertIntoTagsInfoQuery.exec()){
-                Common::Log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(insertIntoTagsInfoQuery.lastError().nativeErrorCode(), insertIntoTagsInfoQuery.lastError().text()), eLog::Error);
+                Common::LogDatabaseError(&insertIntoTagsInfoQuery);
                 return;
             }
 
@@ -750,7 +750,7 @@ void MainWindow::addView(int nMovieID) {
             insertIntoTagsQuery.bindValue(1, window->getTags()->at(i));
 
             if(!insertIntoTagsQuery.exec()){
-                Common::Log->append(tr("Erreur lors de l'ajout dans la table tags, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(insertIntoTagsQuery.lastError().nativeErrorCode(), insertIntoTagsQuery.lastError().text()), eLog::Error);
+                Common::LogDatabaseError(&insertIntoTagsQuery);
                 return;
             }
 
@@ -771,7 +771,7 @@ void MainWindow::addView(int nMovieID) {
 void MainWindow::editViews(int nMovieID) {
 
     if(Common::Settings->value("moreLogs").toBool())
-        qDebug() << "Affichage des vues du film, ID : " << nMovieID;
+        qDebug() << "Display views of the selected movie, ID: " << nMovieID;
 
     EditViewsDialog* window = new EditViewsDialog(&nMovieID, this);
     window->show();
@@ -786,7 +786,7 @@ void MainWindow::editViews(int nMovieID) {
 void MainWindow::editMovie(int nMovieID) {
 
     if(Common::Settings->value("moreLogs").toBool())
-        qDebug() << "Movie ID : " << nMovieID;
+        qDebug() << "Movie's ID : " << nMovieID;
 
     EditMovieDialog* window = new EditMovieDialog(QString::number(nMovieID), this);
     window->show();
@@ -798,35 +798,35 @@ void MainWindow::editMovie(int nMovieID) {
 
         QSqlQuery existingMoviesQuery;
         if(!existingMoviesQuery.exec("SELECT Name, ReleaseYear, ID, Poster FROM movies")) {
-            Common::Log->append(tr("Erreur lors de la récupérations des films"), eLog::Error);
+            Common::LogDatabaseError(&existingMoviesQuery);
             return;
         }
         while(existingMoviesQuery.next()) {
             if(QString::compare(window->getMovieName(), existingMoviesQuery.value(0).toString()) == 0
             && QString::compare(window->getReleaseYear(), existingMoviesQuery.value(1).toString()) == 0
             && nMovieID != existingMoviesQuery.value(2).toInt()) {
-                int answer = QMessageBox::question(this, tr("Film déjà présent"), tr("Un film correspond déjà à ce nom et cette date de sortie, les vues de ce film seront fusionnées, voulez-vous continuer ?"));
+                int answer = QMessageBox::question(this, tr("Movie already exists"), tr("There is already a movie with this name and release year, views will be combined, do you want to continue?"));
                 if(answer == QMessageBox::Yes) {
-                    Common::Log->append(tr("Fusion des films ayant les ID suivant : %1 et %2").arg(existingMoviesQuery.value(2).toString(), ID) , eLog::Notice);
+                    Common::Log->append(tr("Merging of the following movies' ID: %1 and %2").arg(existingMoviesQuery.value(2).toString(), ID) , eLog::Notice);
                     QSqlQuery changeViewsIDQuery;
                     if(!changeViewsIDQuery.exec("UPDATE views SET ID_Movie=\""+existingMoviesQuery.value(2).toString()+"\" WHERE ID_Movie=\""+ID+"\"")) {
-                        Common::Log->append(tr("Erreur lors de la mise à jour de l'ID du film modifié"), eLog::Error);
+                        Common::LogDatabaseError(&changeViewsIDQuery);
                         return;
                     }
 
                     QSqlQuery MoviePosterToDeleteQuery;
                     if(!MoviePosterToDeleteQuery.exec("SELECT Poster FROM Movies WHERE ID=\""+ID+"\""))
-                        Common::Log->append(tr("Erreur lors de la récupération de l'affiche, ID du film : %1").arg(ID), eLog::Error);
+                        Common::LogDatabaseError(&MoviePosterToDeleteQuery);
 
                     MoviePosterToDeleteQuery.first();
                     QFile::remove(m_savepath+"\\Posters\\"+MoviePosterToDeleteQuery.value(0).toString());
 
                     QSqlQuery deleteMovieQuery;
                     if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\""))
-                        Common::Log->append(tr("Erreur lors de la suppression du film, ID du film : %1").arg(ID), eLog::Error);
+                        Common::LogDatabaseError(&deleteMovieQuery);
                     QSqlQuery deleteMovieTags;
                     if(!deleteMovieTags.exec("DELETE FROM tags WHERE ID_Movie=\""+ID+"\""))
-                        Common::Log->append(tr("Erreur lors de la suppression des tags du film, ID du film : %1").arg(ID), eLog::Error);
+                        Common::LogDatabaseError(&deleteMovieTags);
 
                     removeUnusedTags();
                     resetFilters();
@@ -844,7 +844,7 @@ void MainWindow::editMovie(int nMovieID) {
             //Delete old poster
             QSqlQuery posterQuery;
             if(!posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";"))
-                Common::Log->append(tr("Erreur lors de la récupération de l'affiche, ID du film : %1").arg(ID), eLog::Error);
+                Common::LogDatabaseError(&posterQuery);
             posterQuery.first();
             QFile::remove(m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
 
@@ -852,7 +852,7 @@ void MainWindow::editMovie(int nMovieID) {
 
             GUID = QString::number(QRandomGenerator::global()->generate());
             if(QFile::copy(window->getPosterPath(), m_savepath+"\\Posters/"+GUID+"."+ext) == false) {
-                Common::Log->append(tr("Erreur lors de la copie de l'image,\nChemin d'origine : %1\nChemin de destination : %2\\Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
+                Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2\\Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
             }
 
             // Add poster ID modification to the update request
@@ -865,20 +865,20 @@ void MainWindow::editMovie(int nMovieID) {
                               "\", Entries=\""+QString::number(entries)+"\", Rating=\""+QString::number(window->getRating())+"\""+
                               sUpdateMovieRequest+" WHERE ID=\""+ID+"\";";
         if(!editMovieQuery.exec(sUpdateMovieRequest)) {
-            Common::Log->append(tr("Erreur lors de l'édition dans la table movies, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(editMovieQuery.lastError().nativeErrorCode(), editMovieQuery.lastError().text()), eLog::Error);
+            Common::LogDatabaseError(&editMovieQuery);
         }
 
 
         QSqlQuery removeMovieTagsQuery;
         if(!removeMovieTagsQuery.exec("DELETE FROM tags WHERE ID_Movie="+ID)){
-            Common::Log->append(tr("Erreur lors de la suppression des tags du film, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(removeMovieTagsQuery.lastError().nativeErrorCode(), removeMovieTagsQuery.lastError().text()), eLog::Error);
+            Common::LogDatabaseError(&removeMovieTagsQuery);
         }
 
 
 
         QSqlQuery TagsInfoQuery;
         if(!TagsInfoQuery.exec("SELECT Tag FROM TagsInfo"))
-            Common::Log->append(tr("Erreur lors de la récupération des tags"), eLog::Error);
+            Common::LogDatabaseError(&TagsInfoQuery);
         bool tagAlreadyExist;
 
         for(int i=0 ; i<window->getTags()->size() ; i++) {
@@ -905,7 +905,7 @@ void MainWindow::editMovie(int nMovieID) {
                 insertIntoTagsInfoQuery.bindValue(1, hexcolor);
 
                 if(!insertIntoTagsInfoQuery.exec()){
-                    Common::Log->append(tr("Erreur lors de l'ajout dans la table tagsInfo, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(insertIntoTagsInfoQuery.lastError().nativeErrorCode(), insertIntoTagsInfoQuery.lastError().text()), eLog::Error);
+                    Common::LogDatabaseError(&insertIntoTagsInfoQuery);
                 }
             }
             QSqlQuery insertIntoTagsQuery;
@@ -915,7 +915,7 @@ void MainWindow::editMovie(int nMovieID) {
             insertIntoTagsQuery.bindValue(1, window->getTags()->at(i));
 
             if(!insertIntoTagsQuery.exec()){
-                Common::Log->append(tr("Erreur lors de l'ajout dans la table tagslinks, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(insertIntoTagsQuery.lastError().nativeErrorCode(), insertIntoTagsQuery.lastError().text()), eLog::Error);
+                Common::LogDatabaseError(&insertIntoTagsQuery);
             }
 
         }
@@ -930,7 +930,7 @@ void MainWindow::editMovie(int nMovieID) {
 void MainWindow::deleteMovie(int nMovieID) {
     QMessageBox::StandardButton reply;
     int savedRow = 0;
-    reply = QMessageBox::question(this, tr("Supprimer le film"), tr("Êtes-vous sûr de vouloir supprimer le film ? Les visionnages associés seront effacés."));
+    reply = QMessageBox::question(this, tr("Remove the movie"), tr("Are you sure do you want to remove the movie? Its views will be removed."));
     if(reply == QMessageBox::Yes) {
 
         QSqlQuery deleteMovieQuery;
@@ -942,22 +942,22 @@ void MainWindow::deleteMovie(int nMovieID) {
         savedRow = m_ui->MoviesListWidget->currentRow();
 
         if(!posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";"))
-            Common::Log->append(tr("Erreur lors de la récupération de l'affiche, ID du film : %1").arg(ID), eLog::Error);
+            Common::LogDatabaseError(&posterQuery);
 
         posterQuery.first();
         QFile::remove(m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
 
 
         if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
-            Common::Log->append(tr("Erreur lors de la suppression dans la table movies, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(deleteMovieQuery.lastError().nativeErrorCode(), deleteMovieQuery.lastError().text()), eLog::Error);
+            Common::LogDatabaseError(&deleteMovieQuery);
         }
 
         if(!deleteAssociatedViewsQuery.exec("DELETE FROM views WHERE ID_Movie=\""+ID+"\";")) {
-            Common::Log->append(tr("Erreur lors de la suppression dans la table views, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(deleteAssociatedViewsQuery.lastError().nativeErrorCode(), deleteAssociatedViewsQuery.lastError().text()), eLog::Error);
+            Common::LogDatabaseError(&deleteAssociatedViewsQuery);
         }
 
         if(!deleteAssociatedTagsQuery.exec("DELETE FROM tags WHERE ID_Movie=\""+ID+"\";")) {
-            Common::Log->append(tr("Erreur lors de la suppression dans la table tags, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(deleteAssociatedTagsQuery.lastError().nativeErrorCode(), deleteAssociatedTagsQuery.lastError().text()), eLog::Error);
+            Common::LogDatabaseError(&deleteAssociatedTagsQuery);
         }
 
         removeUnusedTags();
@@ -989,7 +989,7 @@ void MainWindow::openLog() {
         }
     }
     else {
-        Common::Log->append(tr("Log déjà ouvert"), eLog::Warning);
+        Common::Log->append(tr("Log already open"), eLog::Warning);
     }
 }
 
@@ -1002,7 +1002,7 @@ void MainWindow::openAbout() {
         }
     }
     else {
-        Common::Log->append(tr("Fenêtre 'A Propos' déjà ouverte"), eLog::Warning);
+        Common::Log->append(tr("About window already open"), eLog::Warning);
     }
 }
 
@@ -1015,7 +1015,7 @@ void MainWindow::on_whatsnewAct_triggered() {
         }
     }
     else {
-        Common::Log->append(tr("Fenêtre 'Nouveautés' déjà ouverte"), eLog::Warning);
+        Common::Log->append(tr("News window already open"), eLog::Warning);
     }
 }
 
@@ -1028,7 +1028,7 @@ void MainWindow::openSettings() {
         refreshTheme();
         fillTable();
     }
-    m_ui->DisplayedMovieCountLabel->setText(tr("Films : %1").arg(QString::number(m_ui->MoviesListWidget->rowCount())));
+    m_ui->DisplayedMovieCountLabel->setText(tr("Movies: %1").arg(QString::number(m_ui->MoviesListWidget->rowCount())));
 }
 
 void MainWindow::resetFilters() {
@@ -1051,13 +1051,13 @@ void MainWindow::customMenuRequested(QPoint pos) {
 
     QMenu *menu = new QMenu(this);
 
-    QAction* addViewAction = new QAction(tr("Ajouter un visionnage"), this);
+    QAction* addViewAction = new QAction(tr("Add a view"), this);
     Common::setIconAccordingToTheme(addViewAction, (enum eTheme)Common::Settings->value("theme").toInt(), "plus.png");
 
-    QAction* editAction = new QAction(tr("Modifier"), this);
+    QAction* editAction = new QAction(tr("Edit"), this);
     Common::setIconAccordingToTheme(editAction, (enum eTheme)Common::Settings->value("theme").toInt(), "edit.png");
 
-    QAction* deleteAction = new QAction(tr("Supprimer"), this);
+    QAction* deleteAction = new QAction(tr("Remove"), this);
     Common::setIconAccordingToTheme(deleteAction, (enum eTheme)Common::Settings->value("theme").toInt(), "delete.png");
 
 
@@ -1096,13 +1096,13 @@ void MainWindow::menuBarConnectors() {
 }
 
 void MainWindow::on_EasterEggAct_triggered() {
-    qDebug() << tr("Why, Mr. Anderson, why? Why, why do you do it? Why, why opening a terminal? Why looking for this easter egg? Do you believe you’re searching for "
+    qDebug() << "Why, Mr. Anderson, why? Why, why do you do it? Why, why opening a terminal? Why looking for this easter egg? Do you believe you’re searching for "
                    "something, for more than your curiosity? Can you tell me what it is, do you even know? Is it freedom or truth, perhaps "
                    "peace – could it be for love? Illusions, Mr. Anderson, vagaries of perception. Temporary constructs of a feeble human "
                    "intellect trying desperately to justify an existence that is without meaning or purpose. And all of them as artificial "
                    "as the MovieManager itself. Although, only a human mind could do something as insipid as lauching this through a terminal. "
                    "You must be able to see it, Mr. Anderson, you must know it by now! You can’t win, it’s pointless to keep searching! Why, Mr. Anderson, why, "
-                   "why do you persist?");
+                   "why do you persist?";
 }
 
 void MainWindow::setMatrixMode(bool state) {
@@ -1146,7 +1146,7 @@ void MainWindow::refreshLanguage() {
     }
 
     if(!successLoad) {
-        Common::Log->append(tr("Impossible de charger le fichier de langage"), eLog::Error);
+        Common::Log->append(tr("Unable to load translation"), eLog::Error);
     }
     m_ui->retranslateUi(this);
     fillGlobalStats();
@@ -1190,17 +1190,17 @@ void MainWindow::fillGlobalStats() {
 
     QSqlQuery uniqueViewQuery;
     if(!uniqueViewQuery.exec("SELECT COUNT(*) FROM movies;"))
-            Common::Log->append(tr("Erreur lors de la récupération du nombre de films vus"), eLog::Error);
+            Common::LogDatabaseError(&uniqueViewQuery);
     uniqueViewQuery.first();
 
     QSqlQuery totalViewQuery;
     if(!totalViewQuery.exec("SELECT COUNT(*) FROM views;"))
-            Common::Log->append(tr("Erreur lors de la récupération du nombre total de visionnages"), eLog::Error);
+            Common::LogDatabaseError(&totalViewQuery);
     totalViewQuery.first();
 
     QSqlQuery avgMovieYearQuery;
     if(!avgMovieYearQuery.exec("SELECT ReleaseYear, Rating FROM movies"))
-            Common::Log->append(tr("Erreur lors de la récupération des informations des films vus"), eLog::Error);
+            Common::LogDatabaseError(&avgMovieYearQuery);
     float avgMovieYear = 0;
     float avgRating = 0;
     float i=0;
@@ -1224,21 +1224,21 @@ void MainWindow::fillGlobalStats() {
                           "(SELECT ID_Movie FROM views WHERE ID_Movie IN"
                           "(SELECT ID_Movie FROM views WHERE ViewDate BETWEEN '"+QString::number(QDate::currentDate().year())+"-01-01' AND '"+QString::number(QDate::currentDate().year())+"-12-31') AND ID_Movie NOT IN"
                           "(SELECT ID_Movie FROM views WHERE ViewDate < '"+QString::number(QDate::currentDate().year())+"-01-01' AND ViewDate != '?'))"))
-        Common::Log->append(tr("Erreur lors de la récupération du nombre de films découverts cette année"), eLog::Error);
+        Common::LogDatabaseError(&newThisYearQuery);
     newThisYearQuery.first();
 
     QSqlQuery movieThisYearQuery;
     if(!movieThisYearQuery.exec("SELECT count(*) FROM views "
                                 "WHERE ViewDate BETWEEN '"+QString::number(QDate::currentDate().year())+"-01-01' AND '"+QString::number(QDate::currentDate().year())+"-12-31'"))
-        Common::Log->append(tr("Erreur lors de la récupération du nombre de films vus cette année"), eLog::Error);
+        Common::LogDatabaseError(&movieThisYearQuery);
     movieThisYearQuery.first();
 
-    m_ui->NewThisYearLabel->setText(tr("Découvert cette année : %1").arg(newThisYearQuery.value(0).toString()));
-    m_ui->TotalViewLabel->setText(tr("Nombre total de visionnages : %1").arg(totalViewQuery.value(0).toString()));
-    m_ui->AverageViewLabel->setText(tr("Moyenne de visionnages : %1").arg(QString::number(avgViews)));
-    m_ui->AverageYearLabel->setText(tr("Année moyenne des films vus : %1").arg(QString::number(avgMovieYear)));
-    m_ui->ViewThisYear->setText(tr("Vus cette année : %1").arg(movieThisYearQuery.value(0).toString()));
-    m_ui->AverageRatingLabel->setText(tr("Note moyenne : %1").arg(QString::number(avgRating)));
+    m_ui->NewThisYearLabel->setText(tr("Discovered this year: %1").arg(newThisYearQuery.value(0).toString()));
+    m_ui->TotalViewLabel->setText(tr("Views count: %1").arg(totalViewQuery.value(0).toString()));
+    m_ui->AverageViewLabel->setText(tr("Average views: %1").arg(QString::number(avgViews)));
+    m_ui->AverageYearLabel->setText(tr("Average viewed movie's year: %1").arg(QString::number(avgMovieYear)));
+    m_ui->ViewThisYear->setText(tr("Viewed this year: %1").arg(movieThisYearQuery.value(0).toString()));
+    m_ui->AverageRatingLabel->setText(tr("Average rating: %1").arg(QString::number(avgRating)));
 }
 
 void MainWindow::openCharts() {
@@ -1250,7 +1250,7 @@ void MainWindow::openCharts() {
         }
     }
     else {
-        Common::Log->append(tr("Fenêtre 'Graphiques' déjà ouverte"), eLog::Warning);
+        Common::Log->append(tr("Charts window already open"), eLog::Warning);
     }
 }
 
@@ -1263,7 +1263,7 @@ void MainWindow::openCalendar() {
         }
     }
     else {
-        Common::Log->append(tr("Calendrier déjà ouvert"), eLog::Warning);
+        Common::Log->append(tr("Calendar already open"), eLog::Warning);
     }
 }
 

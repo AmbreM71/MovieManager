@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Filtrage</string>
+   <string>Filters</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -20,7 +20,7 @@
    <item row="1" column="2">
     <widget class="QLabel" name="YearAndLabel">
      <property name="text">
-      <string>et</string>
+      <string>and</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -30,7 +30,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="EntriesLabel">
      <property name="text">
-      <string>Avec au moins</string>
+      <string>With at least</string>
      </property>
     </widget>
    </item>
@@ -67,7 +67,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="ReleaseYearLabel">
      <property name="text">
-      <string>Sortie entre</string>
+      <string>Released between</string>
      </property>
     </widget>
    </item>
@@ -87,7 +87,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="NameLabel">
      <property name="text">
-      <string>Nom</string>
+      <string>Name</string>
      </property>
     </widget>
    </item>
@@ -97,7 +97,7 @@
    <item row="3" column="2">
     <widget class="QLabel" name="EntriesLabel2">
      <property name="text">
-      <string>entrées</string>
+      <string>entries</string>
      </property>
     </widget>
    </item>
@@ -120,7 +120,7 @@
    <item row="2" column="2">
     <widget class="QLabel" name="RatinAndLabel">
      <property name="text">
-      <string>et</string>
+      <string>and</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -130,14 +130,14 @@
    <item row="2" column="0">
     <widget class="QLabel" name="RatingLabel">
      <property name="text">
-      <string>Note entre</string>
+      <string>Rating between</string>
      </property>
     </widget>
    </item>
    <item row="4" column="0" colspan="4">
     <widget class="QCheckBox" name="UnknownEntriesCheckbox">
      <property name="text">
-      <string>Afficher les films avec un nombre d'entrées inconnu</string>
+      <string>Show movies with unknown entries</string>
      </property>
      <property name="checkable">
       <bool>true</bool>

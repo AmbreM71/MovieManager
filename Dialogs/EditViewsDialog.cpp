@@ -11,9 +11,9 @@ EditViewsDialog::EditViewsDialog(int* ID, QWidget* parent) : QDialog(parent) {
 
     QSqlQuery titleQuery;
     if(!titleQuery.exec("SELECT Name FROM movies WHERE ID="+QString::number(*m_ID)+";"))
-        Common::Log->append(tr("Erreur lors de la récupération du nom du film, ID du film : %1").arg(QString::number(*m_ID)), eLog::Error);
+        Common::LogDatabaseError(&titleQuery);
     titleQuery.first();
-    this->setWindowTitle(tr("Vues - %1").arg(titleQuery.value(0).toString()));
+    this->setWindowTitle(tr("Views - %1").arg(titleQuery.value(0).toString()));
 
     QObject::connect(m_ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
     QObject::connect(m_ui->tableWidget, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(editView()));
@@ -37,7 +37,7 @@ void EditViewsDialog::fillTable() {
     query.prepare("SELECT ID, ViewDate, ViewType FROM views WHERE ID_Movie="+QString::number(*m_ID)+" ORDER BY ViewDate DESC;");
 
     if(!query.exec()){
-        Common::Log->append(tr("Erreur lors de la récupération dans la base de données, plus d'informations ci-dessous :\nCode d'erreur %1 : %2").arg(query.lastError().nativeErrorCode(), query.lastError().text()), eLog::Error);
+        Common::LogDatabaseError(&query);
     }
 
     while(query.next()) {
@@ -65,10 +65,10 @@ void EditViewsDialog::fillTable() {
 void EditViewsDialog::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
 
-    QAction* editAction = new QAction(tr("Modifier"), this);
+    QAction* editAction = new QAction(tr("Edit"), this);
     Common::setIconAccordingToTheme(editAction, (enum eTheme)Common::Settings->value("theme").toInt(), "edit");
 
-    QAction* deleteAction = new QAction(tr("Supprimer"), this);
+    QAction* deleteAction = new QAction(tr("Delete"), this);
     Common::setIconAccordingToTheme(deleteAction, (enum eTheme)Common::Settings->value("theme").toInt(), "delete.png");
 
     menu->addAction(editAction);
@@ -89,7 +89,7 @@ void EditViewsDialog::deleteView() {
     QString viewID = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),0)->text();
 
     if(!deleteQuery.exec("DELETE FROM views WHERE ID=\""+viewID+"\";"))
-        Common::Log->append(tr("Erreur lors de la suppression de la vue, ID de la vue : %1").arg(viewID), eLog::Error);
+         Common::LogDatabaseError(&deleteQuery);
     fillTable();
     m_edited = true;
 }
@@ -115,7 +115,7 @@ void EditViewsDialog::editView() {
             viewType = eViewType::Unknown;
         }
         if(!editMovieQuery.exec("UPDATE views SET ViewDate=\""+viewDate+"\", ViewType=\""+QString::number(viewType)+"\" WHERE ID=\""+viewID+"\";"))
-            Common::Log->append(tr("Erreur lors de la mise à jour de la vue, ID de la vue : %1").arg(viewID), eLog::Error);
+            Common::LogDatabaseError(&editMovieQuery);
 
         fillTable();
         m_edited = true;

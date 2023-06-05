@@ -37,7 +37,7 @@
            </font>
           </property>
           <property name="text">
-           <string>STATISTIQUES GLOBALES</string>
+           <string>GLOBAL STATISTICS</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -63,14 +63,14 @@
         <item row="3" column="0">
          <widget class="QLabel" name="AverageYearLabel">
           <property name="text">
-           <string>Année moyenne des films vus : </string>
+           <string/>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="AverageViewLabel">
           <property name="text">
-           <string>Moyenne de visionnages : </string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -93,28 +93,28 @@
         <item row="6" column="0">
          <widget class="QLabel" name="AverageRatingLabel">
           <property name="text">
-           <string>Note moyenne : </string>
+           <string/>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="TotalViewLabel">
           <property name="text">
-           <string>Nombre total de visionnages : </string>
+           <string/>
           </property>
          </widget>
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="ViewThisYear">
           <property name="text">
-           <string>Vues cette année : </string>
+           <string/>
           </property>
          </widget>
         </item>
         <item row="5" column="0">
          <widget class="QLabel" name="NewThisYearLabel">
           <property name="text">
-           <string>Découvert cette année : </string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -240,7 +240,7 @@
         <item>
          <widget class="QLabel" name="QuickSearchLabel">
           <property name="text">
-           <string>Recherche rapide</string>
+           <string>Quick search</string>
           </property>
          </widget>
         </item>
@@ -254,7 +254,7 @@
         <item>
          <widget class="QLabel" name="DisplayedMovieCountLabel">
           <property name="text">
-           <string>Films : </string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -396,7 +396,7 @@
           <item>
            <widget class="QPushButton" name="AddViewButton">
             <property name="text">
-             <string>Ajouter un visionnage</string>
+             <string>Add a view</string>
             </property>
            </widget>
           </item>
@@ -406,7 +406,7 @@
              <bool>true</bool>
             </property>
             <property name="text">
-             <string>Gérer les visionnages</string>
+             <string>Manage views</string>
             </property>
             <property name="checkable">
              <bool>false</bool>
@@ -416,7 +416,7 @@
           <item>
            <widget class="QPushButton" name="AdvancedSearchButton">
             <property name="text">
-             <string>Filtrer</string>
+             <string>Filters</string>
             </property>
            </widget>
           </item>
@@ -426,7 +426,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Réinitialiser les filtres</string>
+             <string>Reset filters</string>
             </property>
            </widget>
           </item>
@@ -449,7 +449,7 @@
    </property>
    <widget class="QMenu" name="FileMenu">
     <property name="title">
-     <string>Fichier</string>
+     <string>File</string>
     </property>
     <addaction name="ImportAct"/>
     <addaction name="ExportAct"/>
@@ -457,7 +457,7 @@
    </widget>
    <widget class="QMenu" name="HelpMenu">
     <property name="title">
-     <string>Aide</string>
+     <string>Help</string>
     </property>
     <addaction name="whatsnewAct"/>
     <addaction name="AboutAct"/>
@@ -465,7 +465,7 @@
    </widget>
    <widget class="QMenu" name="ViewMenu">
     <property name="title">
-     <string>Affichage</string>
+     <string>View</string>
     </property>
     <addaction name="LogAct"/>
     <addaction name="ChartAct"/>
@@ -473,7 +473,7 @@
    </widget>
    <widget class="QMenu" name="EditMenu">
     <property name="title">
-     <string>Édition</string>
+     <string>Edit</string>
     </property>
     <addaction name="OptionsAct"/>
    </widget>
@@ -482,29 +482,16 @@
    <addaction name="ViewMenu"/>
    <addaction name="HelpMenu"/>
   </widget>
-  <action name="actionEnregistrer">
-   <property name="text">
-    <string>Enregistrer sous...</string>
-   </property>
-  </action>
   <action name="QuitAct">
    <property name="icon">
     <iconset>
      <normaloff>:/icons/Icons/exit.png</normaloff>:/icons/Icons/exit.png</iconset>
    </property>
    <property name="text">
-    <string>Quitter</string>
+    <string>Quit</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Q</string>
-   </property>
-  </action>
-  <action name="actionNouvelle_base_de_donn_e">
-   <property name="text">
-    <string>Nouvelle Base de Données...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+N</string>
+    <string notr="true">Ctrl+Q</string>
    </property>
   </action>
   <action name="OptionsAct">
@@ -513,23 +500,7 @@
      <normaloff>:/icons/Icons/settings.png</normaloff>:/icons/Icons/settings.png</iconset>
    </property>
    <property name="text">
-    <string>Options...</string>
-   </property>
-  </action>
-  <action name="actionOuvrir_une_base_de_donn_e">
-   <property name="text">
-    <string>Ouvrir une base de donnée...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
-  </action>
-  <action name="actionEnregistrer_2">
-   <property name="text">
-    <string>Enregistrer</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string>Options</string>
    </property>
   </action>
   <action name="LogAct">
@@ -541,7 +512,7 @@
     <string>Log</string>
    </property>
    <property name="shortcut">
-    <string>Alt+L</string>
+    <string notr="true">Alt+L</string>
    </property>
   </action>
   <action name="AboutAct">
@@ -550,7 +521,7 @@
      <normaloff>:/icons/Icons/info.png</normaloff>:/icons/Icons/info.png</iconset>
    </property>
    <property name="text">
-    <string>À Propos</string>
+    <string>About</string>
    </property>
   </action>
   <action name="ImportAct">
@@ -559,7 +530,7 @@
      <normaloff>:/icons/Icons/import.png</normaloff>:/icons/Icons/import.png</iconset>
    </property>
    <property name="text">
-    <string>Importer</string>
+    <string>Import</string>
    </property>
   </action>
   <action name="ExportAct">
@@ -568,7 +539,7 @@
      <normaloff>:/icons/Icons/export.png</normaloff>:/icons/Icons/export.png</iconset>
    </property>
    <property name="text">
-    <string>Exporter</string>
+    <string>Export</string>
    </property>
   </action>
   <action name="ChartAct">
@@ -577,7 +548,7 @@
      <normaloff>:/icons/Icons/chart.png</normaloff>:/icons/Icons/chart.png</iconset>
    </property>
    <property name="text">
-    <string>Graphique</string>
+    <string>Charts</string>
    </property>
   </action>
   <action name="whatsnewAct">
@@ -586,7 +557,7 @@
      <normaloff>:/icons/Icons/github.png</normaloff>:/icons/Icons/github.png</iconset>
    </property>
    <property name="text">
-    <string>Nouveautés</string>
+    <string>What's new?</string>
    </property>
   </action>
   <action name="CalendarAct">
@@ -595,12 +566,18 @@
      <normaloff>:/icons/Icons/calendar.png</normaloff>:/icons/Icons/calendar.png</iconset>
    </property>
    <property name="text">
-    <string>Calendrier</string>
+    <string>Calendar</string>
    </property>
   </action>
   <action name="EasterEggAct">
    <property name="text">
-    <string>¯\_(ツ)_/¯</string>
+    <string notr="true">¯\_(ツ)_/¯</string>
+   </property>
+   <property name="iconText">
+    <string notr="true">¯\_(ツ)_/¯</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true">¯\_(ツ)_/¯</string>
    </property>
   </action>
  </widget>

@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>À Propos de MovieManager</string>
+   <string>About MovieManager</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="8" column="1" colspan="4">
@@ -33,7 +33,7 @@
    <item row="6" column="0">
     <widget class="QLabel" name="QtVersionLabel">
      <property name="text">
-      <string>Qt 6.4.0</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -53,7 +53,7 @@
    <item row="6" column="1" colspan="4">
     <widget class="QLabel" name="VersionLabel">
      <property name="text">
-      <string>Version dev</string>
+      <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -95,14 +95,14 @@
    <item row="1" column="1" colspan="4">
     <widget class="QLabel" name="DescrLabel">
      <property name="text">
-      <string>Un gestionnaire des films que vous avez vus</string>
+      <string>A manager for the movies you saw</string>
      </property>
     </widget>
    </item>
    <item row="5" column="0" colspan="5">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Développé par AlexM</string>
+      <string>Developped by AmbreM</string>
      </property>
     </widget>
    </item>

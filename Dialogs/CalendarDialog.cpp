@@ -64,12 +64,12 @@ void CalendarDialog::setData() {
 
     QSqlQuery selectedDateViews;
     if(!selectedDateViews.exec("SELECT ID, ID_Movie, ViewDate, ViewType FROM views WHERE ViewDate BETWEEN '"+year+"-"+month+"-01' AND '"+year+"-"+month+"-31'"))
-        Common::Log->append(tr("Erreur lors de la récupération des vues"), eLog::Error);
+        Common::LogDatabaseError(&selectedDateViews);
     while(selectedDateViews.next()) {
         int viewDay = selectedDateViews.value(2).toString().remove(0,8).toInt();
         QSqlQuery movieInfos;
         if(!movieInfos.exec("SELECT Name, ReleaseYear FROM movies WHERE ID=\""+selectedDateViews.value(1).toString()+"\""))
-            Common::Log->append(tr("Erreur lors de la récupération des informations du film, nom du film : %1").arg(selectedDateViews.value(1).toString()), eLog::Error);
+            Common::LogDatabaseError(&movieInfos);
         movieInfos.first();
         QLabel* viewLabel = new QLabel(movieInfos.value(0).toString() + " - " + movieInfos.value(1).toString());
         viewLabel->setFixedHeight(24);
@@ -146,7 +146,7 @@ int CalendarDialog::getOffset() {
             offsetYearDebut = 6; //Year begun on sunday
             break;
         default:
-            Common::Log->append(tr("Impossible de déterminer le 1er jour de l'année courante"), eLog::Error);
+            Common::Log->append(tr("Unable to determine the first day of the current year"), eLog::Error);
             return -1;
     }
     int currentOffset = offsetYearDebut;

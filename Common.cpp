@@ -15,7 +15,7 @@ void Common::loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float
         do {
             QString temp = "";
             extOK = true;
-            temp = QFileDialog::getOpenFileName(parent, QObject::tr("Selectionner une affiche"), QString(), "Image (*.png; *.jpg; *.jpeg )");
+            temp = QFileDialog::getOpenFileName(parent, QObject::tr("Select a picture"), QString(), QObject::tr("Image (*.png; *.jpg; *.jpeg )"));
             QString ext = temp;
             ext = ext.remove(0, temp.lastIndexOf(".")+1);
             // Test if file is a jpg or a png
@@ -23,7 +23,7 @@ void Common::loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float
             && QString::compare(ext, "jpg", Qt::CaseInsensitive) != 0
             && QString::compare(ext, "jpeg", Qt::CaseInsensitive) != 0
             && temp.size() > 0) {
-                QMessageBox::critical(parent, QObject::tr("Format incorrect"), QObject::tr("Le format de l'image est incorrect\nVeuillez sélectionner un fichier au format jpg, png ou jpeg"));
+                QMessageBox::critical(parent, QObject::tr("Incorrect format"), QObject::tr("Image format is incorrect\nPlease select a jpg, jpeg or png file"));
                 extOK = false;
             }
             else {
@@ -135,13 +135,13 @@ QString Common::viewTypeToQString(enum eViewType type) {
         return QObject::tr("Blu-Ray");
     }
     if(type == eViewType::Television) {
-        return QObject::tr("Télévision");
+        return QObject::tr("TV");
     }
     if(type == eViewType::Cinema) {
-        return QObject::tr("Cinéma");
+        return QObject::tr("Cinema");
     }
     if(type == eViewType::CinemaReplay) {
-        return QObject::tr("Cinéma (reprise)");
+        return QObject::tr("Cinema (replay)");
     }
     if(type == eViewType::DVD) {
         return QObject::tr("DVD");
@@ -150,23 +150,23 @@ QString Common::viewTypeToQString(enum eViewType type) {
         return QObject::tr("Streaming");
     }
     if(type == eViewType::Download) {
-        return QObject::tr("Téléchargement");
+        return QObject::tr("Download");
     }
     if(type == eViewType::VHS) {
         return QObject::tr("VHS");
     }
     if(type == eViewType::Other) {
-        return QObject::tr("Autre support physique");
+        return QObject::tr("Other physical support");
     }
     if(type == eViewType::Unknown) {
-        return QObject::tr("Inconnu");
+        return QObject::tr("Unknown");
     }
     if(type == eViewType::UHD) {
         return QObject::tr("Blu-Ray 4K");
     }
     else {
         qDebug() << "Error";
-        //Log(QObject::tr("Type de visionnage inconnu"), Error);
+        //Log(QObject::tr("Unknown view type"), Error);
         return "Unknown";
     }
 }
@@ -175,13 +175,13 @@ enum eViewType Common::QStringToViewType(QString type) {
     if(QString::compare(type, QObject::tr("Blu-Ray")) == 0) {
         return eViewType::Bluray;
     }
-    else if(QString::compare(type, QObject::tr("Télévision")) == 0) {
+    else if(QString::compare(type, QObject::tr("TV")) == 0) {
         return eViewType::Television;
     }
-    else if(QString::compare(type, QObject::tr("Cinéma")) == 0) {
+    else if(QString::compare(type, QObject::tr("Cinema")) == 0) {
         return eViewType::Cinema;
     }
-    else if(QString::compare(type, QObject::tr("Cinéma (reprise)")) == 0) {
+    else if(QString::compare(type, QObject::tr("Cinema (replay)")) == 0) {
         return eViewType::CinemaReplay;
     }
     else if(QString::compare(type, QObject::tr("DVD")) == 0) {
@@ -190,16 +190,16 @@ enum eViewType Common::QStringToViewType(QString type) {
     else if(QString::compare(type, QObject::tr("Streaming")) == 0) {
         return eViewType::Streaming;
     }
-    else if(QString::compare(type, QObject::tr("Téléchargement")) == 0) {
+    else if(QString::compare(type, QObject::tr("Download")) == 0) {
         return eViewType::Download;
     }
     else if(QString::compare(type, QObject::tr("VHS")) == 0) {
         return eViewType::VHS;
     }
-    else if(QString::compare(type, QObject::tr("Autre support physique")) == 0) {
+    else if(QString::compare(type, QObject::tr("Other physical support")) == 0) {
         return eViewType::Other;
     }
-    else if(QString::compare(type, QObject::tr("Inconnu")) == 0) {
+    else if(QString::compare(type, QObject::tr("Unknown")) == 0) {
         return eViewType::Unknown;
     }
     else if(QString::compare(type, QObject::tr("Blu-Ray 4K")) == 0) {
@@ -221,4 +221,9 @@ void Common::setIconAccordingToTheme(QAction* action, enum eTheme theme, QString
 
 QString Common::getVersion() {
     return "1.0.0";
+}
+
+void Common::LogDatabaseError(QSqlQuery *query) {
+    QString sLog = QObject::tr("Database error: %1\nQuery: %2").arg(query->lastError().text(), query->executedQuery());
+    Common::Log->append(sLog, eLog::Error);
 }

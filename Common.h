@@ -9,6 +9,8 @@
 #include <QLayoutItem>
 #include <QLayout>
 #include <QSettings>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include "Enums.h"
 #include "Log.h"
@@ -35,6 +37,8 @@ public:
     static void setIconAccordingToTheme(QAction* object, enum eTheme theme, QString filename);
 
     static QString getVersion();
+
+    static void LogDatabaseError(QSqlQuery *query);
 };
 
 #endif // COMMON_H

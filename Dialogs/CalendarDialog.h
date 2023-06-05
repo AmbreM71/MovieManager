@@ -23,18 +23,18 @@ class CalendarDialog : public QDialog
         QDate m_selectedDate;
         int m_daysPerMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
         QStringList m_monthLabel = {
-            tr("Janvier"),
-            tr("Février"),
-            tr("Mars"),
-            tr("Avril"),
-            tr("Mai"),
-            tr("Juin"),
-            tr("Juillet"),
-            tr("Août"),
-            tr("Septembre"),
-            tr("Octobre"),
-            tr("Novembre"),
-            tr("Décembre")
+            tr("January"),
+            tr("February"),
+            tr("March"),
+            tr("April"),
+            tr("May"),
+            tr("June"),
+            tr("July"),
+            tr("August"),
+            tr("September"),
+            tr("October"),
+            tr("November"),
+            tr("December")
         };
 
         static int instances;

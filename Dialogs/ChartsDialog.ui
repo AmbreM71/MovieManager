@@ -11,24 +11,24 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Graphiques</string>
+   <string>Charts</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QComboBox" name="ChartSelector">
      <item>
       <property name="text">
-       <string>Films vus par année de sortie</string>
+       <string>Viewed movies by release year</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Types de vues</string>
+       <string>Views type</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Nombre de films vus par année</string>
+       <string>Viewed movies each years</string>
       </property>
      </item>
     </widget>

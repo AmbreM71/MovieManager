@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Gérer les visionnages</string>
+   <string/>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -74,12 +74,12 @@
      </column>
      <column>
       <property name="text">
-       <string>Visionnage</string>
+       <string>View date</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Type</string>
+       <string>View type</string>
       </property>
      </column>
     </widget>

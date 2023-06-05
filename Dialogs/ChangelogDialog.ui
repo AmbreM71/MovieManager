@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Nouveautés</string>
+   <string>What's new?</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="TitleLabel">
      <property name="text">
-      <string>Nouveautés</string>
+      <string>What's new?</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

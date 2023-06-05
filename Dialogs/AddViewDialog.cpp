@@ -38,7 +38,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     if(nMovieID != -1) {
         QSqlQuery moviesQuery;
         if(!moviesQuery.exec("SELECT Name, ReleaseYear FROM movies WHERE ID = '" + QString::number(nMovieID) + "';"))
-            Common::Log->append(tr("Erreur lors de la récupération des informations du film, ID du film : %1").arg(QString::number(nMovieID)), eLog::Error);
+            Common::LogDatabaseError(&moviesQuery);
         moviesQuery.first();
         m_ui->ExistingMoviesComboBox->setCurrentIndex(m_ui->ExistingMoviesComboBox->findText(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString()));
     }
@@ -53,7 +53,7 @@ void AddViewDialog::FillMovieComboBox() {
     m_ui->ExistingMoviesComboBox->addItem("");
     QSqlQuery moviesQuery;
     if(!moviesQuery.exec("SELECT Name, ReleaseYear FROM movies ORDER BY Name ASC;"))
-        Common::Log->append(tr("Erreur lors de la récupération des informations des films"), eLog::Error);
+        Common::LogDatabaseError(&moviesQuery);
     while(moviesQuery.next()) {
         m_ui->ExistingMoviesComboBox->addItem(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString());
     }
@@ -96,7 +96,7 @@ void AddViewDialog::comboboxChanged() {
         m_ui->TagsAddButton->setEnabled(true);
         m_ui->TagsInput->setEnabled(true);
 
-        m_ui->PosterLabel->setText(tr("Affiche"));
+        m_ui->PosterLabel->setText(tr("Poster"));
         m_posterPath = "";
     }
     else {
@@ -113,7 +113,7 @@ void AddViewDialog::comboboxChanged() {
 
         QSqlQuery posterQuery;
         if(!posterQuery.exec("SELECT Poster FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear='"+movieYear+"'"))
-            Common::Log->append(tr("Erreur lors de la récupération de l'affiche du film, nom du film : %1").arg(movieName), eLog::Error);
+            Common::LogDatabaseError(&posterQuery);
         posterQuery.first();
 
         loadPoster(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+posterQuery.value(0).toString());

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Préférences</string>
+   <string>Options</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -33,7 +33,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="LanguageLabel">
      <property name="text">
-      <string>Langue</string>
+      <string>Language</string>
      </property>
     </widget>
    </item>
@@ -43,7 +43,7 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>Filtre rapide sensible à la casse</string>
+      <string>Quick filter case sensitive</string>
      </property>
      <property name="checked">
       <bool>false</bool>
@@ -57,12 +57,12 @@
     <widget class="QComboBox" name="LanguageCombobox">
      <item>
       <property name="text">
-       <string>Français</string>
+       <string>English</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Anglais</string>
+       <string>French</string>
       </property>
      </item>
     </widget>
@@ -81,12 +81,12 @@
     <widget class="QComboBox" name="ThemeCombobox">
      <item>
       <property name="text">
-       <string>Classique</string>
+       <string>Classic</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Sombre</string>
+       <string>Dark</string>
       </property>
      </item>
      <item>
@@ -104,14 +104,14 @@
    <item row="1" column="0">
     <widget class="QLabel" name="ThemeLabel">
      <property name="text">
-      <string>Thème</string>
+      <string>Theme</string>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="DateFormatLabel">
      <property name="text">
-      <string>Format des dates</string>
+      <string>Date format</string>
      </property>
     </widget>
    </item>
@@ -137,20 +137,20 @@
    <item row="3" column="0">
     <widget class="QCheckBox" name="MatrixModeCheckbox">
      <property name="toolTip">
-      <string>La cuillère n’existe pas.</string>
+      <string>There is no spoon.</string>
      </property>
      <property name="text">
-      <string>Mode Matrix</string>
+      <string>Matrix mode</string>
      </property>
     </widget>
    </item>
    <item row="3" column="1">
     <widget class="QCheckBox" name="MoreLogsCheckbox">
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Affiche plus de logs si lancée depuis un terminal. (Uniquement à des fins de débogage )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>Show more logs if launched from a terminal (for debugging purpose)</string>
      </property>
      <property name="text">
-      <string>Plus de logs</string>
+      <string>More logs</string>
      </property>
     </widget>
    </item>
