@@ -14,6 +14,7 @@
 
 #include "Enums.h"
 #include "Log.h"
+#include "BuildFunctions.h"
 
 class Common
 {

@@ -1,7 +1,11 @@
 #include "Common.h"
 
 Log* Common::Log = new class Log();
-QSettings* Common::Settings = new class QSettings("MovieManager", "MovieManager");
+#ifdef DEV
+    QSettings* Common::Settings = new class QSettings("MovieManager_Dev", "MovieManager_Dev");
+#else
+    QSettings* Common::Settings = new class QSettings("MovieManager", "MovieManager");
+#endif
 
 Common::Common()
 {
