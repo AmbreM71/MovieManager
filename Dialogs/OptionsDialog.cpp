@@ -14,6 +14,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent) {
     m_ui->MoreLogsCheckbox->setChecked(Common::Settings->value("moreLogs").toBool());
     m_ui->DateFormatCombobox->setCurrentIndex(m_ui->DateFormatCombobox->findText(Common::Settings->value("dateFormat").toString()));
 
+    QObject::connect(m_ui->AddColumnButton, SIGNAL(clicked()), this, SLOT(AddColumn()));
 }
 
 OptionsDialog::~OptionsDialog() {
@@ -25,3 +26,23 @@ OptionsDialog::~OptionsDialog() {
     Common::Settings->setValue("dateFormat", m_ui->DateFormatCombobox->currentText());
     delete m_ui;
 }
+
+
+void OptionsDialog::AddColumn() {
+    AddColumnDialog* window = new AddColumnDialog(this);
+    window->show();
+    if(window->exec() == 1) {
+        struct stColumn* stColumn = window->getColumn();
+        QLabel* sName = new QLabel(stColumn->sName);
+        QLabel* sType = new QLabel(Common::ColumnTypeToQString(stColumn->eType));
+        QPushButton* editButton = new QPushButton(tr("Edit"));
+
+        QGridLayout* layout = (QGridLayout*)m_ui->scrollAreaWidgetContents->layout();
+        QLayoutItem* spacer = layout->takeAt(layout->count()-1);
+        layout->addWidget(sName);
+        layout->addWidget(sType);
+        layout->addWidget(editButton);
+        layout->addItem(spacer,layout->rowCount(),0,1,3);
+    }
+}
+

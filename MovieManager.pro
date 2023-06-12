@@ -1,6 +1,7 @@
 SOURCES += \
     Common.cpp \
     Dialogs/AboutDialog.cpp \
+    Dialogs/AddColumnDialog.cpp \
     Dialogs/AddViewDialog.cpp \
     Dialogs/CalendarDialog.cpp \
     Dialogs/ChangelogDialog.cpp \
@@ -20,6 +21,7 @@ HEADERS += \
     BuildFunctions.h \
     Common.h \
     Dialogs/AboutDialog.h \
+    Dialogs/AddColumnDialog.h \
     Dialogs/AddViewDialog.h \
     Dialogs/CalendarDialog.h \
     Dialogs/ChangelogDialog.h \
@@ -44,6 +46,7 @@ QT += widgets \
 
 FORMS += \
     Dialogs/AboutDialog.ui \
+    Dialogs/AddColumnDialog.ui \
     Dialogs/AddViewDialog.ui \
     Dialogs/CalendarDialog.ui \
     Dialogs/ChangelogDialog.ui \

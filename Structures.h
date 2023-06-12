@@ -19,4 +19,13 @@ struct stFilters {
     bool bShowMovieWithUnknownEntries;
 };
 
+struct stColumn {
+    QString sName;
+    enum eColumnType eType;
+    double nMin;
+    double nMax;
+    int nPrecision;
+    int textMaxLength;
+};
+
 #endif // STRUCTURES_H

@@ -40,6 +40,65 @@
     </message>
 </context>
 <context>
+    <name>AddColumnDialog</name>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="26"/>
+        <source>Add a column</source>
+        <translation>Add a column</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="53"/>
+        <source>Max length</source>
+        <translation>Max length</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="85"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="153"/>
+        <source>Min value</source>
+        <translation>Min value</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="95"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="160"/>
+        <source>Max value</source>
+        <translation>Max value</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="115"/>
+        <source>Type</source>
+        <translation>Type</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="167"/>
+        <source>Number of decimals</source>
+        <translation>Number of decimals</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="191"/>
+        <location filename="../Dialogs/AddColumnDialog.cpp" line="39"/>
+        <location filename="../Dialogs/AddColumnDialog.cpp" line="64"/>
+        <source>Integer</source>
+        <translation>Integer</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="196"/>
+        <source>Precise integer</source>
+        <translation>Precise integer</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="201"/>
+        <location filename="../Dialogs/AddColumnDialog.cpp" line="42"/>
+        <location filename="../Dialogs/AddColumnDialog.cpp" line="69"/>
+        <source>Text</source>
+        <translation>Text</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="223"/>
+        <source>Name</source>
+        <translation>Name</translation>
+    </message>
+</context>
+<context>
     <name>AddViewDialog</name>
     <message>
         <location filename="../Dialogs/AddViewDialog.ui" line="20"/>
@@ -366,7 +425,7 @@
     </message>
     <message>
         <location filename="../Dialogs/FiltersDialog.ui" line="23"/>
-        <location filename="../Dialogs/FiltersDialog.ui" line="123"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="127"/>
         <source>and</source>
         <translation>and</translation>
     </message>
@@ -381,22 +440,22 @@
         <translation>Released between</translation>
     </message>
     <message>
-        <location filename="../Dialogs/FiltersDialog.ui" line="90"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="94"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../Dialogs/FiltersDialog.ui" line="100"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="104"/>
         <source>entries</source>
         <translation>entries</translation>
     </message>
     <message>
-        <location filename="../Dialogs/FiltersDialog.ui" line="133"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="137"/>
         <source>Rating between</source>
         <translation>Rating between</translation>
     </message>
     <message>
-        <location filename="../Dialogs/FiltersDialog.ui" line="140"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="144"/>
         <source>Show movies with unknown entries</source>
         <translation>Show movies with unknown entries</translation>
     </message>
@@ -753,183 +812,267 @@ Destination path: %2\Posters/%3.%4</translation>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="36"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="67"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="46"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="151"/>
         <source>Quick filter case sensitive</source>
         <translation>Quick filter case sensitive</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="60"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="111"/>
         <source>English</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="65"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="116"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="84"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="125"/>
         <source>Classic</source>
         <translation>Classic</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="89"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="130"/>
         <source>Dark</source>
         <translation>Dark</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="94"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="135"/>
         <source>OLED</source>
         <translation>OLED</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="99"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="140"/>
         <source>Midnight Purple</source>
         <translation>Midnight Purple</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="107"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="60"/>
         <source>Theme</source>
         <translation>Theme</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="114"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="41"/>
+        <source>Customize movie&apos;s columns</source>
+        <translation>Customize movie&apos;s columns</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="54"/>
+        <source>General</source>
+        <translation>General</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="74"/>
         <source>Date format</source>
         <translation>Date format</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="122"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="92"/>
         <source>yyyy-MM-dd</source>
         <translation>yyyy-MM-dd</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="127"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="97"/>
         <source>dd/MM/yyyy</source>
         <translation>dd/MM/yyyy</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="132"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="102"/>
         <source>MM/dd/yyyy</source>
         <translation>MM/dd/yyyy</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="140"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="164"/>
         <source>There is no spoon.</source>
         <translation>There is no spoon.</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="143"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="167"/>
         <source>Matrix mode</source>
         <translation>Matrix mode</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="150"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="188"/>
+        <source>Movie informations</source>
+        <translation>Movie informations</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="228"/>
+        <source>Rating</source>
+        <translation>Rating</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="238"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="248"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="285"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="309"/>
+        <source>Mandatory</source>
+        <translation>Mandatory</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="261"/>
+        <source>Poster</source>
+        <translation>Poster</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="268"/>
+        <source>Name</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="275"/>
+        <source>Text</source>
+        <translation>Text</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="292"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="323"/>
+        <source>Integer</source>
+        <translation>Integer</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="299"/>
+        <source>Image</source>
+        <translation>Image</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="316"/>
+        <source>Release year</source>
+        <translation>Release year</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="347"/>
+        <source>Add a column</source>
+        <translation>Add a column</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.ui" line="81"/>
         <source>Show more logs if launched from a terminal (for debugging purpose)</source>
         <translation>Show more logs if launched from a terminal (for debugging purpose)</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.ui" line="153"/>
+        <location filename="../Dialogs/OptionsDialog.ui" line="84"/>
         <source>More logs</source>
         <translation>More logs</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/OptionsDialog.cpp" line="38"/>
+        <source>Edit</source>
+        <translation>Edit</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../Common.cpp" line="18"/>
+        <location filename="../Common.cpp" line="22"/>
         <source>Select a picture</source>
         <translation>Select a picture</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="18"/>
+        <location filename="../Common.cpp" line="22"/>
         <source>Image (*.png; *.jpg; *.jpeg )</source>
         <translation>Image (*.png; *.jpg; *.jpeg )</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="26"/>
+        <location filename="../Common.cpp" line="30"/>
         <source>Incorrect format</source>
         <translation>Incorrect format</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="26"/>
+        <location filename="../Common.cpp" line="30"/>
         <source>Image format is incorrect
 Please select a jpg, jpeg or png file</source>
         <translation>Image format is incorrect
 Please select a jpg, jpeg or png file</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="135"/>
-        <location filename="../Common.cpp" line="175"/>
+        <location filename="../Common.cpp" line="139"/>
+        <location filename="../Common.cpp" line="179"/>
         <source>Blu-Ray</source>
         <translation>Blu-Ray</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="138"/>
-        <location filename="../Common.cpp" line="178"/>
+        <location filename="../Common.cpp" line="142"/>
+        <location filename="../Common.cpp" line="182"/>
         <source>TV</source>
         <translation>TV</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="141"/>
-        <location filename="../Common.cpp" line="181"/>
+        <location filename="../Common.cpp" line="145"/>
+        <location filename="../Common.cpp" line="185"/>
         <source>Cinema</source>
         <translation>Cinema</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="144"/>
-        <location filename="../Common.cpp" line="184"/>
+        <location filename="../Common.cpp" line="148"/>
+        <location filename="../Common.cpp" line="188"/>
         <source>Cinema (replay)</source>
         <translation>Cinema (replay)</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="147"/>
-        <location filename="../Common.cpp" line="187"/>
+        <location filename="../Common.cpp" line="151"/>
+        <location filename="../Common.cpp" line="191"/>
         <source>DVD</source>
         <translation>DVD</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="150"/>
-        <location filename="../Common.cpp" line="190"/>
+        <location filename="../Common.cpp" line="154"/>
+        <location filename="../Common.cpp" line="194"/>
         <source>Streaming</source>
         <translation>Streaming</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="153"/>
-        <location filename="../Common.cpp" line="193"/>
+        <location filename="../Common.cpp" line="157"/>
+        <location filename="../Common.cpp" line="197"/>
         <source>Download</source>
         <translation>Download</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="156"/>
-        <location filename="../Common.cpp" line="196"/>
+        <location filename="../Common.cpp" line="160"/>
+        <location filename="../Common.cpp" line="200"/>
         <source>VHS</source>
         <translation>VHS</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="159"/>
-        <location filename="../Common.cpp" line="199"/>
+        <location filename="../Common.cpp" line="163"/>
+        <location filename="../Common.cpp" line="203"/>
         <source>Other physical support</source>
         <translation>Other physical support</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="162"/>
-        <location filename="../Common.cpp" line="202"/>
+        <location filename="../Common.cpp" line="166"/>
+        <location filename="../Common.cpp" line="206"/>
         <source>Unknown</source>
         <translation>Unknown</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="165"/>
-        <location filename="../Common.cpp" line="205"/>
+        <location filename="../Common.cpp" line="169"/>
+        <location filename="../Common.cpp" line="209"/>
         <source>Blu-Ray 4K</source>
         <translation>Blu-Ray 4K</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="227"/>
+        <location filename="../Common.cpp" line="220"/>
+        <source>Precise Int</source>
+        <translation>Precise Int</translation>
+    </message>
+    <message>
+        <location filename="../Common.cpp" line="222"/>
+        <source>Integer</source>
+        <translation>Integer</translation>
+    </message>
+    <message>
+        <location filename="../Common.cpp" line="224"/>
+        <source>Text</source>
+        <translation>Text</translation>
+    </message>
+    <message>
+        <location filename="../Common.cpp" line="242"/>
         <source>Database error: %1
 Query: %2</source>
         <translation>Database error: %1

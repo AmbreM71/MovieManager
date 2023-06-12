@@ -53,7 +53,7 @@ class MainWindow : public QMainWindow {
         QTranslator m_translator;
         QString m_savepath = "";
         QLocale* m_locale;
-        stFilters m_filters;
+        struct stFilters m_filters;
 
 
     public:

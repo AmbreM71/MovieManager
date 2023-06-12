@@ -35,6 +35,8 @@ public:
 
     static enum eViewType QStringToViewType(QString type);
 
+    static QString ColumnTypeToQString(enum eColumnType type);
+
     static void setIconAccordingToTheme(QAction* object, enum eTheme theme, QString filename);
 
     static QString getVersion();

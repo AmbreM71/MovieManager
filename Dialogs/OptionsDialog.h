@@ -4,9 +4,10 @@
 #include <QDialog>
 #include "Enums.h"
 #include "Common.h"
+#include "AddColumnDialog.h"
 
 namespace Ui {
-class OptionsDialog;
+    class OptionsDialog;
 }
 
 class OptionsDialog : public QDialog
@@ -20,7 +21,8 @@ class OptionsDialog : public QDialog
         explicit OptionsDialog(QWidget* parent = nullptr);
         ~OptionsDialog();
 
-
+    public slots:
+        void AddColumn();
 };
 
 #endif // OPTIONSDIALOG_H

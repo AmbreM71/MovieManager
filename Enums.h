@@ -42,4 +42,10 @@ enum eChart {
     ViewedByYear
 };
 
+enum eColumnType {
+    eColumnInteger = 0,
+    eColumnDouble = 1,
+    eColumnText = 2
+};
+
 #endif // ENUMS_H
