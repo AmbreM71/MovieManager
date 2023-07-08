@@ -1,7 +1,7 @@
 #include "AddColumnDialog.h"
 #include "ui_AddColumnDialog.h"
 
-AddColumnDialog::AddColumnDialog(QWidget *parent) : QDialog(parent) {
+AddColumnDialog::AddColumnDialog(QWidget *parent, struct stColumn* stColumnToEdit) : QDialog(parent) {
     m_ui = new Ui::AddColumnDialog;
     m_ui->setupUi(this);
 
@@ -16,7 +16,46 @@ AddColumnDialog::AddColumnDialog(QWidget *parent) : QDialog(parent) {
     m_ui->IntPropertiesWidget->setVisible(true);
 
 
-    m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    sColumnNameList << tr("Name") << tr("Release year") << tr("Rating") << tr("Poster");
+
+    QSqlQuery columnsQuery;
+    if(!columnsQuery.exec("SELECT Name FROM columns"))
+        Common::LogDatabaseError(&columnsQuery);
+
+    while(columnsQuery.next()) {
+        // If a column is edited, it must not be in the list of unauthorized name
+        if(stColumnToEdit != nullptr)
+            if(QString::compare(columnsQuery.value(0).toString(), stColumnToEdit->sName) == 0)
+                continue;
+        sColumnNameList << columnsQuery.value(0).toString();
+    }
+
+    if(stColumnToEdit != nullptr) {
+        m_ui->IntPropertiesWidget->setVisible(false);
+
+        m_ui->NameLineEdit->setText(stColumnToEdit->sName);
+        m_ui->TypeComboBox->setCurrentIndex(stColumnToEdit->eType);
+        switch(stColumnToEdit->eType) {
+            case eColumnInteger:
+                m_ui->IntPropertiesWidget->setVisible(true);
+                m_ui->IntMinValue->setValue(stColumnToEdit->nMin);
+                m_ui->IntMaxValue->setValue(stColumnToEdit->nMax);
+                break;
+            case eColumnDouble:
+                m_ui->DoublePropertiesWidget->setVisible(true);
+                m_ui->DoubleMinValue->setValue(stColumnToEdit->nMin);
+                m_ui->DoubleMaxValue->setValue(stColumnToEdit->nMax);
+                m_ui->DoubleDecimals->setValue(stColumnToEdit->nPrecision);
+                break;
+            case eColumnText:
+                m_ui->TextPropertiesWidget->setVisible(true);
+                m_ui->TextMaxLength->setValue(stColumnToEdit->textMaxLength);
+                break;
+        }
+    }
+
+    if(m_ui->NameLineEdit->text().length() == 0)
+        m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
     QObject::connect(m_ui->TypeComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(TypeChanged(QString)));
     QObject::connect(m_ui->DoubleDecimals, SIGNAL(valueChanged(int)), this, SLOT(DecimalsPrecisionChanged(int)));
@@ -53,8 +92,16 @@ void AddColumnDialog::DecimalsPrecisionChanged(int nPrecision) {
 }
 
 void AddColumnDialog::IsColumnValid() {
-    if(m_ui->NameLineEdit->text().length() > 0)
+    if(m_ui->NameLineEdit->text().length() > 0) {
+         for(QString sColumn : sColumnNameList) {
+             if(QString::compare(m_ui->NameLineEdit->text(), sColumn) == 0)
+             {
+                 m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+                 return;
+             }
+         }
         m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    }
     else
         m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 }
@@ -68,12 +115,12 @@ void AddColumnDialog::Validate() {
     }
     else if(QString::compare(m_ui->TypeComboBox->currentText(), tr("Text")) == 0) {
         m_stColumn.eType = eColumnType::eColumnText;
-        m_stColumn.nMin = m_ui->IntMinValue->value();
-        m_stColumn.nMax = m_ui->IntMaxValue->value();
-        m_stColumn.nPrecision = m_ui->DoubleDecimals->value();
+        m_stColumn.textMaxLength = m_ui->TextMaxLength->value();
     }
     else {
         m_stColumn.eType = eColumnType::eColumnDouble;
-        m_stColumn.textMaxLength = m_ui->TextMaxLength->value();
+        m_stColumn.nMin = m_ui->DoubleMinValue->value();
+        m_stColumn.nMax = m_ui->DoubleMaxValue->value();
+        m_stColumn.nPrecision = m_ui->DoubleDecimals->value();
     }
 }

@@ -134,6 +134,21 @@ void MainWindow::databaseConnection() {
     if(!TagsBDQuery.exec(TagsDatabaseCreationString)) {
         Common::LogDatabaseError(&TagsBDQuery);
     }
+
+    //Columns Table
+    QString ColumnDatabaseCreationString = "CREATE TABLE IF NOT EXISTS columns ("
+                                         "Name          VARCHAR(127),"
+                                         "Type          INTEGER,"
+                                         "Min           DOUBLE(10,5),"
+                                         "Max           DOUBLE(10,5),"
+                                         "Precision     INTEGER,"
+                                         "TextMaxLength INTEGER);";
+
+    QSqlQuery ColumnBDQuery;
+
+    if(!ColumnBDQuery.exec(ColumnDatabaseCreationString)) {
+        Common::LogDatabaseError(&ColumnBDQuery);
+    }
 }
 
 void MainWindow::fillTable() {
@@ -1058,13 +1073,13 @@ void MainWindow::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
 
     QAction* addViewAction = new QAction(tr("Add a view"), this);
-    Common::setIconAccordingToTheme(addViewAction, (enum eTheme)Common::Settings->value("theme").toInt(), "plus.png");
+    Common::setIconAccordingToTheme(addViewAction, "plus.png");
 
     QAction* editAction = new QAction(tr("Edit"), this);
-    Common::setIconAccordingToTheme(editAction, (enum eTheme)Common::Settings->value("theme").toInt(), "edit.png");
+    Common::setIconAccordingToTheme(editAction, "edit.png");
 
     QAction* deleteAction = new QAction(tr("Remove"), this);
-    Common::setIconAccordingToTheme(deleteAction, (enum eTheme)Common::Settings->value("theme").toInt(), "delete.png");
+    Common::setIconAccordingToTheme(deleteAction, "delete.png");
 
 
     menu->addAction(addViewAction);
@@ -1181,15 +1196,15 @@ void MainWindow::refreshTheme() {
     qApp->setStyleSheet(qss.readAll());
     qss.close();
 
-    Common::setIconAccordingToTheme(m_ui->ExportAct, (enum eTheme)Common::Settings->value("theme").toInt(), "export.png");
-    Common::setIconAccordingToTheme(m_ui->ImportAct, (enum eTheme)Common::Settings->value("theme").toInt(), "import.png");
-    Common::setIconAccordingToTheme(m_ui->QuitAct, (enum eTheme)Common::Settings->value("theme").toInt(), "exit.png");
-    Common::setIconAccordingToTheme(m_ui->OptionsAct, (enum eTheme)Common::Settings->value("theme").toInt(), "settings.png");
-    Common::setIconAccordingToTheme(m_ui->LogAct, (enum eTheme)Common::Settings->value("theme").toInt(), "log.png");
-    Common::setIconAccordingToTheme(m_ui->ChartAct, (enum eTheme)Common::Settings->value("theme").toInt(), "chart.png");
-    Common::setIconAccordingToTheme(m_ui->CalendarAct, (enum eTheme)Common::Settings->value("theme").toInt(), "calendar.png");
-    Common::setIconAccordingToTheme(m_ui->whatsnewAct, (enum eTheme)Common::Settings->value("theme").toInt(), "github.png");
-    Common::setIconAccordingToTheme(m_ui->AboutAct, (enum eTheme)Common::Settings->value("theme").toInt(), "info.png");
+    Common::setIconAccordingToTheme(m_ui->ExportAct, "export.png");
+    Common::setIconAccordingToTheme(m_ui->ImportAct, "import.png");
+    Common::setIconAccordingToTheme(m_ui->QuitAct, "exit.png");
+    Common::setIconAccordingToTheme(m_ui->OptionsAct, "settings.png");
+    Common::setIconAccordingToTheme(m_ui->LogAct, "log.png");
+    Common::setIconAccordingToTheme(m_ui->ChartAct, "chart.png");
+    Common::setIconAccordingToTheme(m_ui->CalendarAct, "calendar.png");
+    Common::setIconAccordingToTheme(m_ui->whatsnewAct, "github.png");
+    Common::setIconAccordingToTheme(m_ui->AboutAct, "info.png");
 }
 
 void MainWindow::fillGlobalStats() {

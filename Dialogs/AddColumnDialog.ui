@@ -87,7 +87,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="IntMinValue"/>
+       <widget class="QSpinBox" name="IntMinValue">
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
       </item>
       <item row="0" column="2">
        <widget class="QLabel" name="IntMaxValueLabel">
@@ -99,7 +103,7 @@
       <item row="0" column="3">
        <widget class="QSpinBox" name="IntMaxValue">
         <property name="maximum">
-         <number>65535</number>
+         <number>999999999</number>
         </property>
         <property name="value">
          <number>100</number>
@@ -135,12 +139,16 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="2" column="1">
-       <widget class="QDoubleSpinBox" name="DoubleMinValue"/>
+       <widget class="QDoubleSpinBox" name="DoubleMinValue">
+        <property name="maximum">
+         <double>65535.000000000000000</double>
+        </property>
+       </widget>
       </item>
       <item row="2" column="3">
        <widget class="QDoubleSpinBox" name="DoubleMaxValue">
         <property name="maximum">
-         <double>65535.000000000000000</double>
+         <double>99999.000000000000000</double>
         </property>
         <property name="value">
          <double>100.000000000000000</double>
@@ -249,6 +257,16 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>NameLineEdit</tabstop>
+  <tabstop>TypeComboBox</tabstop>
+  <tabstop>IntMinValue</tabstop>
+  <tabstop>IntMaxValue</tabstop>
+  <tabstop>DoubleDecimals</tabstop>
+  <tabstop>DoubleMinValue</tabstop>
+  <tabstop>DoubleMaxValue</tabstop>
+  <tabstop>TextMaxLength</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

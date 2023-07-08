@@ -11,6 +11,7 @@
 #include <QSettings>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QPushButton>
 
 #include "Enums.h"
 #include "Log.h"
@@ -37,7 +38,8 @@ public:
 
     static QString ColumnTypeToQString(enum eColumnType type);
 
-    static void setIconAccordingToTheme(QAction* object, enum eTheme theme, QString filename);
+    static void setIconAccordingToTheme(QAction* object, QString filename);
+    static void setIconAccordingToTheme(QPushButton* object, QString filename);
 
     static QString getVersion();
 

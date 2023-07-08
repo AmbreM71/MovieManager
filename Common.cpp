@@ -217,7 +217,7 @@ enum eViewType Common::QStringToViewType(QString type) {
 QString Common::ColumnTypeToQString(enum eColumnType type) {
     switch(type) {
         case eColumnType::eColumnDouble:
-            return QObject::tr("Precise Int");
+            return QObject::tr("Precise integer");
         case eColumnType::eColumnInteger:
             return QObject::tr("Integer");
         case eColumnType::eColumnText:
@@ -225,8 +225,17 @@ QString Common::ColumnTypeToQString(enum eColumnType type) {
     }
 }
 
-void Common::setIconAccordingToTheme(QAction* action, enum eTheme theme, QString filename) {
-    if(theme == eTheme::Classic) {
+void Common::setIconAccordingToTheme(QAction* action, QString filename) {
+    if((enum eTheme)Common::Settings->value("theme").toInt() == eTheme::Classic) {
+        action->setIcon(QIcon(":/assets/Assets/Icons/Dark/"+filename));
+    }
+    else {
+        action->setIcon(QIcon(":/assets/Assets/Icons/Bright/"+filename));
+    }
+}
+
+void Common::setIconAccordingToTheme(QPushButton* action, QString filename) {
+    if((enum eTheme)Common::Settings->value("theme").toInt() == eTheme::Classic) {
         action->setIcon(QIcon(":/assets/Assets/Icons/Dark/"+filename));
     }
     else {

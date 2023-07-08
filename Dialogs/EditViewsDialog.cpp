@@ -66,10 +66,10 @@ void EditViewsDialog::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
 
     QAction* editAction = new QAction(tr("Edit"), this);
-    Common::setIconAccordingToTheme(editAction, (enum eTheme)Common::Settings->value("theme").toInt(), "edit");
+    Common::setIconAccordingToTheme(editAction, "edit");
 
     QAction* deleteAction = new QAction(tr("Delete"), this);
-    Common::setIconAccordingToTheme(deleteAction, (enum eTheme)Common::Settings->value("theme").toInt(), "delete.png");
+    Common::setIconAccordingToTheme(deleteAction, "delete.png");
 
     menu->addAction(editAction);
     menu->addAction(deleteAction);

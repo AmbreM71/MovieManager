@@ -3,7 +3,9 @@
 
 #include <QDialog>
 #include <QPushButton>
-#include <Structures.h>
+#include <QStringList>
+#include "Structures.h"
+#include "Common.h"
 
 namespace Ui {
     class AddColumnDialog;
@@ -16,9 +18,10 @@ class AddColumnDialog : public QDialog
     private:
         Ui::AddColumnDialog* m_ui;
         struct stColumn m_stColumn;
+        QStringList sColumnNameList;
 
     public:
-        explicit AddColumnDialog(QWidget *parent = nullptr);
+        explicit AddColumnDialog(QWidget *parent = nullptr, struct stColumn* stColumnToEdit = nullptr);
         ~AddColumnDialog();
         stColumn* getColumn();
 
