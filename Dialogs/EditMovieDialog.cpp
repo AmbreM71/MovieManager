@@ -10,7 +10,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
 
     QSqlQuery movieQuery;
-    if(!movieQuery.exec("SELECT Name, ReleaseYear, Entries, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'"))
+    if(!movieQuery.exec("SELECT Name, ReleaseYear, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'"))
         Common::LogDatabaseError(&movieQuery);
     movieQuery.first();
 
@@ -37,19 +37,10 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
 
     m_ui->NameInput->setText(movieQuery.value(0).toString());
     m_ui->ReleaseYearInput->setValue(movieQuery.value(1).toInt());
-    if(movieQuery.value(2).toInt() == -1) {
-        m_ui->UnknownEntriesCheckbox->setChecked(true);
-        m_ui->EntriesInput->setEnabled(false);
-        m_ui->EntriesInput->setValue(0);
-    }
-    else {
-        m_ui->EntriesInput->setValue(movieQuery.value(2).toInt());
-    }
-    m_ui->RatingInput->setValue(movieQuery.value(3).toInt());
+    m_ui->RatingInput->setValue(movieQuery.value(2).toInt());
 
     QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
     QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
-    QObject::connect(m_ui->UnknownEntriesCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleEntriesInput(int)));
 }
 
 EditMovieDialog::~EditMovieDialog() {
@@ -78,10 +69,6 @@ QString EditMovieDialog::getPosterPath() {
 
 int EditMovieDialog::getRating() {
     return m_ui->RatingInput->value();
-}
-
-int EditMovieDialog::getEntries() {
-    return m_ui->EntriesInput->value();
 }
 
 void EditMovieDialog::loadPoster(QString path) {
@@ -131,17 +118,4 @@ void EditMovieDialog::mouseEnteredTag(Tag* tag) {
 void EditMovieDialog::mouseLeftTag(Tag* tag) {
     tag->setMinimumWidth(31);
     tag->setText(tag->getSavedTag());
-}
-
-bool EditMovieDialog::isEntriesUnknown() {
-    return m_ui->UnknownEntriesCheckbox->isChecked();
-}
-
-void EditMovieDialog::toggleEntriesInput(int state) {
-    if(state == 2) {
-        m_ui->EntriesInput->setEnabled(false);
-    }
-    else {
-        m_ui->EntriesInput->setEnabled(true);
-    }
 }

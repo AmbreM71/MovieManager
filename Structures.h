@@ -15,8 +15,6 @@ struct stFilters {
     int nMaxYear;
     int nMinRating;
     int nMaxRating;
-    int nMinEntries;
-    bool bShowMovieWithUnknownEntries;
 };
 
 struct stColumn {

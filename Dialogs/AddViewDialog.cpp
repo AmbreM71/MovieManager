@@ -26,7 +26,6 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
-    QObject::connect(m_ui->UnknownEntriesCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleEntriesInput(int)));
     QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
     QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
 
@@ -81,9 +80,6 @@ QString AddViewDialog::getPosterPath() {
 int AddViewDialog::getRating() {
     return m_ui->MovieRatingInput->value();
 }
-int AddViewDialog::getEntries() {
-    return m_ui->EntriesInput->value();
-}
 
 void AddViewDialog::comboboxChanged() {
     //If no movie is selected in combobox
@@ -91,7 +87,6 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieNameInput->setEnabled(true);
         m_ui->MovieReleaseYearInput->setEnabled(true);
         m_ui->MovieRatingInput->setEnabled(true);
-        m_ui->EntriesInput->setEnabled(true);
         m_ui->PosterButton->setEnabled(true);
         m_ui->TagsAddButton->setEnabled(true);
         m_ui->TagsInput->setEnabled(true);
@@ -103,7 +98,6 @@ void AddViewDialog::comboboxChanged() {
         m_ui->MovieNameInput->setEnabled(false);
         m_ui->MovieReleaseYearInput->setEnabled(false);
         m_ui->MovieRatingInput->setEnabled(false);
-        m_ui->EntriesInput->setEnabled(false);
         m_ui->PosterButton->setEnabled(false);
         m_ui->TagsAddButton->setEnabled(false);
         m_ui->TagsInput->setEnabled(false);
@@ -138,15 +132,6 @@ void AddViewDialog::toggleViewTypeInput(int state) {
     }
 }
 
-void AddViewDialog::toggleEntriesInput(int state) {
-    if(state == 2) {
-        m_ui->EntriesInput->setEnabled(false);
-    }
-    else {
-        m_ui->EntriesInput->setEnabled(true);
-    }
-}
-
 bool AddViewDialog::isDateUnknown() {
     return m_ui->UnknownViewDateCheckbox->isChecked();
 }
@@ -155,9 +140,6 @@ bool AddViewDialog::isTypeUnknown() {
     return m_ui->UnknownViewTypeCheckbox->isChecked();
 }
 
-bool AddViewDialog::isEntriesUnknown() {
-    return m_ui->UnknownEntriesCheckbox->isChecked();
-}
 
 void AddViewDialog::checkValid() {
     //If movie isn't selected in combobox

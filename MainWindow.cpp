@@ -24,7 +24,6 @@ MainWindow::MainWindow(QApplication* app) {
     m_filters.nMaxYear = 2023;
     m_filters.nMinRating = 0;
     m_filters.nMaxRating = 10;
-    m_filters.nMinEntries = -1;
 
     // Shhhh, keep it secret
     if(QString::compare(m_app->arguments().at(0), "Neo")) {
@@ -90,7 +89,6 @@ void MainWindow::databaseConnection() {
                                    "ID          INTEGER PRIMARY KEY AUTOINCREMENT,"
                                    "Name        VARCHAR(127),"
                                    "ReleaseYear SMALLINT,"
-                                   "Entries     INT,"
                                    "Rating      TINYINT(10),"
                                    "Poster      VARCHAR(127));";
 
@@ -172,11 +170,7 @@ void MainWindow::fillTable() {
     QString sMovieQueryRequest = "SELECT ID, Name, ReleaseYear FROM movies "
                                  "WHERE Name LIKE \"%" + m_filters.sName + "%\""
                                  "AND ReleaseYear BETWEEN '"+QString::number(m_filters.nMinYear)+"' AND '"+QString::number(m_filters.nMaxYear)+"'"
-                                 "AND Rating BETWEEN '"+QString::number(m_filters.nMinRating)+"' AND '"+QString::number(m_filters.nMaxRating)+"'"
-                                 "AND Entries >= "+QString::number(m_filters.nMinEntries);
-
-    if(m_filters.bShowMovieWithUnknownEntries == true)
-        sMovieQueryRequest.append(" OR Entries == -1");
+                                 "AND Rating BETWEEN '"+QString::number(m_filters.nMinRating)+"' AND '"+QString::number(m_filters.nMaxRating)+"'";
 
     Common::Log->append(tr("Fetching from database"), eLog::Notice);
     if(!moviesQuery.exec(sMovieQueryRequest))
@@ -305,7 +299,6 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         m_ui->MovieTitleLabel->setAlignment(Qt::AlignHCenter);
         m_ui->FirstViewLabel->setText("");
         m_ui->LastViewLabel->setText("");
-        m_ui->EntriesLabel->setText("");
         m_ui->RatingLabel->setText("");
         m_ui->ViewsLabel->setText("");
         m_ui->PosterLabel->setPixmap(QPixmap());
@@ -373,16 +366,10 @@ void MainWindow::fillMovieInfos(int nMovieID) {
     }
 
     QSqlQuery q;
-    if(!q.exec("SELECT Entries, Rating FROM movies WHERE ID='"+ID+"'"))
+    if(!q.exec("SELECT Rating FROM movies WHERE ID='"+ID+"'"))
         Common::LogDatabaseError(&q);
     q.first();
-    if(q.value(0).toInt() == -1) {
-        m_ui->EntriesLabel->setText(tr("Entries count unknown"));
-    }
-    else {
-        m_ui->EntriesLabel->setText(tr("%1 entries").arg(m_locale->toString(q.value(0).toInt())));
-    }
-    Common::ratingToStar(q.value(1).toInt(), m_ui->RatingLabel);
+    Common::ratingToStar(q.value(0).toInt(), m_ui->RatingLabel);
 
     QSqlQuery tagsQuery;
     if(!tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+ID+"'"))
@@ -472,13 +459,12 @@ void MainWindow::importDB() {
                     foreach(const QString& movieKey, movies.keys()) {
                         QJsonObject movie = movies.value(movieKey).toObject();
                         QSqlQuery query;
-                        query.prepare("INSERT INTO movies (ID, Name, ReleaseYear, Entries, Rating, Poster) VALUES (?,?,?,?,?,?);");
+                        query.prepare("INSERT INTO movies (ID, Name, ReleaseYear, Rating, Poster) VALUES (?,?,?,?,?);");
                         query.bindValue(0, movie["ID"].toInt());
                         query.bindValue(1, movie["Name"].toString());
                         query.bindValue(2, movie["ReleaseYear"].toInt());
-                        query.bindValue(3, movie["Entries"].toInt());
-                        query.bindValue(4, movie["Rating"].toInt());
-                        query.bindValue(5, movie["Poster"].toString());
+                        query.bindValue(3, movie["Rating"].toInt());
+                        query.bindValue(4, movie["Poster"].toString());
 
                         if(!query.exec()){
                             Common::LogDatabaseError(&query);
@@ -551,7 +537,7 @@ void MainWindow::exportDB() {
     //Writes movies to JSON
     QJsonObject moviesObject;
     QSqlQuery moviesQuery;
-    if(!moviesQuery.exec("SELECT ID, Name, ReleaseYear, Entries, Rating, Poster FROM movies;"))
+    if(!moviesQuery.exec("SELECT ID, Name, ReleaseYear, Rating, Poster FROM movies;"))
         Common::LogDatabaseError(&moviesQuery);
     i=0;
     while(moviesQuery.next()) {
@@ -562,9 +548,8 @@ void MainWindow::exportDB() {
         movieObject.insert("ID", QJsonValue::fromVariant(moviesQuery.value(0).toInt()));
         movieObject.insert("Name", QJsonValue::fromVariant(moviesQuery.value(1).toString()));
         movieObject.insert("ReleaseYear", QJsonValue::fromVariant(moviesQuery.value(2).toInt()));
-        movieObject.insert("Entries", QJsonValue::fromVariant(moviesQuery.value(3).toInt()));
-        movieObject.insert("Rating", QJsonValue::fromVariant(moviesQuery.value(4).toInt()));
-        movieObject.insert("Poster", QJsonValue::fromVariant(moviesQuery.value(5).toString()));
+        movieObject.insert("Rating", QJsonValue::fromVariant(moviesQuery.value(3).toInt()));
+        movieObject.insert("Poster", QJsonValue::fromVariant(moviesQuery.value(4).toString()));
 
         moviesObject.insert("movie" + QString::fromStdString(std::to_string(i)), movieObject);
     }
@@ -675,20 +660,13 @@ void MainWindow::addView(int nMovieID) {
                 }
 
                 QSqlQuery insertIntoMoviesQuery;
-                insertIntoMoviesQuery.prepare("INSERT INTO movies (Name, ReleaseYear, Entries, Rating, Poster) VALUES (?,?,?,?,?);");
-
+                insertIntoMoviesQuery.prepare("INSERT INTO movies (Name, ReleaseYear, Rating, Poster) VALUES (?,?,?,?);");
 
 
                 insertIntoMoviesQuery.bindValue(0, window->getName());
                 insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
-                if(window->isEntriesUnknown()) {
-                    insertIntoMoviesQuery.bindValue(2, -1);
-                }
-                else {
-                    insertIntoMoviesQuery.bindValue(2, window->getEntries());
-                }
-                insertIntoMoviesQuery.bindValue(3, window->getRating());
-                insertIntoMoviesQuery.bindValue(4, posterPath);
+                insertIntoMoviesQuery.bindValue(2, window->getRating());
+                insertIntoMoviesQuery.bindValue(3, posterPath);
 
                 if(!insertIntoMoviesQuery.exec()){
                     Common::LogDatabaseError(&insertIntoMoviesQuery);
@@ -874,10 +852,9 @@ void MainWindow::editMovie(int nMovieID) {
             sUpdateMovieRequest += ", Poster=\""+GUID+"."+ext+"\"";
         }
         QSqlQuery editMovieQuery;
-        int entries = window->isEntriesUnknown() ? -1 : window->getEntries();
 
         sUpdateMovieRequest = "UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
-                              "\", Entries=\""+QString::number(entries)+"\", Rating=\""+QString::number(window->getRating())+"\""+
+                              "\", Rating=\""+QString::number(window->getRating())+"\""+
                               sUpdateMovieRequest+" WHERE ID=\""+ID+"\";";
         if(!editMovieQuery.exec(sUpdateMovieRequest)) {
             Common::LogDatabaseError(&editMovieQuery);
@@ -1059,7 +1036,6 @@ void MainWindow::resetFilters() {
     m_filters.nMaxYear = 2023;
     m_filters.nMinRating = 0;
     m_filters.nMaxRating = 10;
-    m_filters.nMinEntries = -1;
     fillTable();
 }
 

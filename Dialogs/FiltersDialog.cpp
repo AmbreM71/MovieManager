@@ -16,9 +16,6 @@ FiltersDialog::FiltersDialog(stFilters* filters, QWidget *parent) : QDialog(pare
         m_ui->MaxYearInput->setValue(filters->nMaxYear);
         m_ui->MinRatingInput->setValue(filters->nMinRating);
         m_ui->MaxRatingInput->setValue(filters->nMaxRating);
-        m_ui->MinEntriesInput->setValue(filters->nMinEntries);
-        m_ui->MinEntriesInput->setValue(filters->nMinEntries);
-        m_ui->UnknownEntriesCheckbox->setChecked(filters->bShowMovieWithUnknownEntries);
 
 
 }
@@ -29,7 +26,5 @@ FiltersDialog::~FiltersDialog() {
     m_filters->nMaxYear = m_ui->MaxYearInput->value();
     m_filters->nMinRating = m_ui->MinRatingInput->value();
     m_filters->nMaxRating = m_ui->MaxRatingInput->value();
-    m_filters->nMinEntries = m_ui->MinEntriesInput->value();
-    m_filters->bShowMovieWithUnknownEntries = m_ui->UnknownEntriesCheckbox->isChecked();
     delete m_ui;
 }

@@ -37,9 +37,7 @@ class EditMovieDialog : public QDialog
         QString getReleaseYear();
         QString getPosterPath();
         int getRating();
-        int getEntries();
         QList<QString>* getTags();
-        bool isEntriesUnknown();
 
     public slots:
         void loadPoster(QString path = "");
@@ -48,7 +46,6 @@ class EditMovieDialog : public QDialog
         void clickedTag(Tag* tag);
         void mouseEnteredTag(Tag* tag);
         void mouseLeftTag(Tag* tag);
-        void toggleEntriesInput(int state);
 
 
 };
