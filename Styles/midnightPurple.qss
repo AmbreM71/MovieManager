@@ -259,3 +259,18 @@ Tag:hover {
     border-radius:12px;
     border: 2px solid #744547;
 }
+
+QTabWidget::pane {
+    border: 1px solid #455971;
+    padding: 10px;
+    top: -1px;
+}
+QTabBar::tab {
+    background-color: #111525;
+    border: 1px solid #455971;
+    padding: 2px 12px 2px 12px;
+}
+
+QTabBar::tab:selected {
+    color: #7f4d87;
+}

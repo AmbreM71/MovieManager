@@ -7,6 +7,7 @@ AddColumnDialog::AddColumnDialog(QWidget *parent, struct stColumn* stColumnToEdi
 
     if(stColumnToEdit == nullptr)
         m_ui->WarningLabel->setVisible(false);
+    m_ui->WarningLabel->setStyleSheet("color:#ce0000");
 
     m_ui->DoublePropertiesWidget->setVisible(false);
     m_ui->TextPropertiesWidget->setVisible(false);
