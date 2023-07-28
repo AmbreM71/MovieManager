@@ -87,10 +87,10 @@ void MainWindow::databaseConnection() {
     //Movies table
     QString movieDatabaseCreationString = "CREATE TABLE IF NOT EXISTS movies ("
                                    "ID          INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                   "Name        VARCHAR(127),"
-                                   "ReleaseYear SMALLINT,"
-                                   "Rating      TINYINT(10),"
-                                   "Poster      VARCHAR(127));";
+                                   "Name        TEXT,"
+                                   "ReleaseYear INTEGER,"
+                                   "Rating      INTEGER,"
+                                   "Poster      TEXT);";
 
     QSqlQuery movieDBQuery;
 
@@ -113,8 +113,8 @@ void MainWindow::databaseConnection() {
 
     //TagsInfo Table
     QString TagsInfoDatabaseCreationString = "CREATE TABLE IF NOT EXISTS tagsInfo ("
-                                   "Tag         VARCHAR(63) PRIMARY KEY ,"
-                                   "Color       VARCHAR(6));";
+                                   "Tag         TEXT PRIMARY KEY ,"
+                                   "Color       TEXT);";
 
     QSqlQuery tagsInfoBDQuery;
 
@@ -125,7 +125,7 @@ void MainWindow::databaseConnection() {
     //Tags Table
     QString TagsDatabaseCreationString = "CREATE TABLE IF NOT EXISTS tags ("
                                    "ID_Movie    INTEGER,"
-                                   "Tag         VARCHAR(63));";
+                                   "Tag         TEXT);";
 
     QSqlQuery TagsBDQuery;
 
@@ -135,10 +135,10 @@ void MainWindow::databaseConnection() {
 
     //Columns Table
     QString ColumnDatabaseCreationString = "CREATE TABLE IF NOT EXISTS columns ("
-                                         "Name          VARCHAR(127),"
+                                         "Name          TEXT,"
                                          "Type          INTEGER,"
-                                         "Min           DOUBLE(10,5),"
-                                         "Max           DOUBLE(10,5),"
+                                         "Min           REAL,"
+                                         "Max           REAL,"
                                          "Precision     INTEGER,"
                                          "TextMaxLength INTEGER);";
 
@@ -1025,6 +1025,105 @@ void MainWindow::openSettings() {
         refreshLanguage();
         refreshTheme();
         fillTable();
+
+        // Update movie's table columns
+        QStringList sExistingColumns;
+        QStringList sCustomColumns;
+        QStringList sCustomColumnsType;
+
+        QSqlQuery columnsQuery;
+        if(!columnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength FROM columns"))
+            Common::LogDatabaseError(&columnsQuery);
+        while(columnsQuery.next()) {
+            sCustomColumns << columnsQuery.value(0).toString();
+            sCustomColumnsType << columnsQuery.value(1).toString();
+        }
+
+        QSqlQuery existingColumnsQuery;
+        if(!existingColumnsQuery.exec("PRAGMA table_info(movies)"))
+            Common::LogDatabaseError(&existingColumnsQuery);
+        while(existingColumnsQuery.next())
+            sExistingColumns << existingColumnsQuery.value(1).toString();
+
+        // Remove dropped columns
+        existingColumnsQuery.first();
+        existingColumnsQuery.previous();
+        bool bDeleteColumn;
+        while(existingColumnsQuery.next()) {
+            bDeleteColumn = false;
+            QString sColumn = existingColumnsQuery.value(1).toString();
+
+            // No check for mandatory columns
+            if(QString::compare(sColumn, "ID") == 0
+            || QString::compare(sColumn, "Name") == 0
+            || QString::compare(sColumn, "ReleaseYear") == 0
+            || QString::compare(sColumn, "Rating") == 0
+            || QString::compare(sColumn, "Poster") == 0)
+                continue;
+
+            // If column is removed or renamed, it is dropped from movies table,
+            // Else, if type changed, the column is updated (and data of the column is deleted)
+            if(sCustomColumns.contains(sColumn) == false) {
+                bDeleteColumn = true;
+            }
+            else {
+                QString sType = existingColumnsQuery.value(2).toString();
+                int nIndexOfColumn = sCustomColumns.indexOf(sColumn);
+                int nType = 0;
+
+                if(QString::compare(sType, "INTEGER") == 0)
+                    nType = 0;
+                else if(QString::compare(sType, "REAL") == 0)
+                    nType = 1;
+                else if(QString::compare(sType, "TEXT") == 0)
+                    nType = 2;
+
+                if(nType != sCustomColumnsType.at(nIndexOfColumn).toInt()) {
+                    bDeleteColumn = true;
+                }
+            }
+
+            if(bDeleteColumn == true) {
+                QSqlQuery dropColumnFromTable;
+                QString sRequest = "ALTER TABLE movies DROP COLUMN " + sColumn;
+                if(!dropColumnFromTable.exec(sRequest))
+                    Common::LogDatabaseError(&dropColumnFromTable);
+                else {
+                    Common::Log->append(tr("Column %1 successfully dropped from movies table").arg(sColumn), eLog::Success);
+                    sExistingColumns.removeAt(sExistingColumns.indexOf(sColumn));
+                }
+            }
+        }
+
+        // Add columns
+        columnsQuery.first();
+        columnsQuery.previous();
+        while(columnsQuery.next()) {
+            if(sExistingColumns.contains(columnsQuery.value(0).toString()) == false) {
+                QSqlQuery addColumnToTable;
+                QString sRequest = "ALTER TABLE movies ADD COLUMN \"" + columnsQuery.value(0).toString() + "\" ";
+                switch(columnsQuery.value(1).toInt()) {
+                case 0:
+                    sRequest.append("INTEGER");
+                    break;
+                case 1:
+                    sRequest.append("REAL");
+                    break;
+                case 2:
+                    sRequest.append("TEXT");
+                    break;
+                default:
+                    Common::Log->append(tr("Unknown column type, can't add column %1 to movies table").arg(columnsQuery.value(0).toString()), eLog::Error);
+                    break;
+                }
+
+                if(!addColumnToTable.exec(sRequest))
+                    Common::LogDatabaseError(&addColumnToTable);
+                else
+                    Common::Log->append(tr("Column %1 successfully added to movies table").arg(columnsQuery.value(0).toString()), eLog::Success);
+            }
+        }
+
     }
     m_ui->DisplayedMovieCountLabel->setText(tr("Movies: %1").arg(QString::number(m_ui->MoviesListWidget->rowCount())));
 }

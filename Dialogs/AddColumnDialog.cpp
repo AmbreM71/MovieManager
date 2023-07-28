@@ -5,6 +5,9 @@ AddColumnDialog::AddColumnDialog(QWidget *parent, struct stColumn* stColumnToEdi
     m_ui = new Ui::AddColumnDialog;
     m_ui->setupUi(this);
 
+    if(stColumnToEdit == nullptr)
+        m_ui->WarningLabel->setVisible(false);
+
     m_ui->DoublePropertiesWidget->setVisible(false);
     m_ui->TextPropertiesWidget->setVisible(false);
     m_ui->IntPropertiesWidget->setVisible(false);
