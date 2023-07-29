@@ -1171,7 +1171,7 @@ void MainWindow::openSettings() {
 
             if(bDeleteColumn == true) {
                 QSqlQuery dropColumnFromTable;
-                QString sRequest = "ALTER TABLE movies DROP COLUMN " + sColumn;
+                QString sRequest = "ALTER TABLE movies DROP COLUMN \"" + sColumn + "\"";
                 if(!dropColumnFromTable.exec(sRequest))
                     Common::LogDatabaseError(&dropColumnFromTable);
                 else {
