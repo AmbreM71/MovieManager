@@ -55,6 +55,7 @@ class MainWindow : public QMainWindow {
         QString m_savepath = "";
         QLocale* m_locale;
         struct stFilters m_filters;
+        QString m_customColumnsRequestFilter;
 
 
     public:

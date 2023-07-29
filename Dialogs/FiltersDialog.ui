@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
-    <height>193</height>
+    <width>300</width>
+    <height>180</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>300</width>
+    <height>180</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Filters</string>
@@ -16,44 +22,8 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
-    <widget class="QSpinBox" name="MinRatingInput">
-     <property name="maximum">
-      <number>10</number>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="3">
-    <widget class="QSpinBox" name="MaxRatingInput">
-     <property name="maximum">
-      <number>10</number>
-     </property>
-     <property name="value">
-      <number>10</number>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="3">
-    <widget class="QLineEdit" name="NameInput"/>
-   </item>
-   <item row="1" column="1">
-    <widget class="QSpinBox" name="MinYearInput">
-     <property name="minimum">
-      <number>1870</number>
-     </property>
-     <property name="maximum">
-      <number>2022</number>
-     </property>
-     <property name="value">
-      <number>1900</number>
-     </property>
-     <property name="displayIntegerBase">
-      <number>10</number>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="4">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0">
+   <item row="1" column="0">
     <widget class="QDialogButtonBox" name="ButtonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -63,69 +33,102 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="RatingLabel">
-     <property name="text">
-      <string>Rating between</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="ReleaseYearLabel">
-     <property name="text">
-      <string>Released between</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
-    <widget class="QLabel" name="NameLabel">
-     <property name="text">
-      <string>Name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2">
-    <widget class="QLabel" name="RatinAndLabel">
-     <property name="text">
-      <string>and</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QSpinBox" name="MaxYearInput">
-     <property name="minimum">
-      <number>1870</number>
-     </property>
-     <property name="maximum">
-      <number>3000</number>
-     </property>
-     <property name="value">
-      <number>2000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QLabel" name="YearAndLabel">
-     <property name="text">
-      <string>and</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
+    <layout class="QGridLayout" name="FormLayout" columnstretch="0,10,0,10">
+     <item row="0" column="1" colspan="3">
+      <widget class="QLineEdit" name="NameInput"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="MinYearInput">
+       <property name="minimum">
+        <number>1870</number>
+       </property>
+       <property name="maximum">
+        <number>2022</number>
+       </property>
+       <property name="value">
+        <number>1900</number>
+       </property>
+       <property name="displayIntegerBase">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="ReleaseYearLabel">
+       <property name="text">
+        <string>Released between</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="YearAndLabel">
+       <property name="text">
+        <string>and</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="NameLabel">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QSpinBox" name="MaxYearInput">
+       <property name="minimum">
+        <number>1870</number>
+       </property>
+       <property name="maximum">
+        <number>3000</number>
+       </property>
+       <property name="value">
+        <number>2000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="RatingLabel">
+       <property name="text">
+        <string>Rating between</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="MinRatingInput">
+       <property name="maximum">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="RatinAndLabel">
+       <property name="text">
+        <string>and</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QSpinBox" name="MaxRatingInput">
+       <property name="maximum">
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>NameInput</tabstop>
-  <tabstop>MinYearInput</tabstop>
-  <tabstop>MaxYearInput</tabstop>
-  <tabstop>MinRatingInput</tabstop>
-  <tabstop>MaxRatingInput</tabstop>
- </tabstops>
  <resources/>
  <connections>
   <connection>

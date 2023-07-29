@@ -15,6 +15,7 @@ MainWindow::MainWindow(QApplication* app) {
     m_app = app;
     m_ui = new Ui::MainWindow;
     m_ui->setupUi(this);
+    m_customColumnsRequestFilter = "";
 
     m_app->setWindowIcon(QIcon(":/assets/Assets/logo.png"));
 
@@ -167,10 +168,10 @@ void MainWindow::fillTable() {
 
     //Fetch every unique movies
     QSqlQuery moviesQuery;
-    QString sMovieQueryRequest = "SELECT ID, Name, ReleaseYear FROM movies "
-                                 "WHERE Name LIKE \"%" + m_filters.sName + "%\""
-                                 "AND ReleaseYear BETWEEN '"+QString::number(m_filters.nMinYear)+"' AND '"+QString::number(m_filters.nMaxYear)+"'"
-                                 "AND Rating BETWEEN '"+QString::number(m_filters.nMinRating)+"' AND '"+QString::number(m_filters.nMaxRating)+"'";
+    QString sMovieQueryRequest = "SELECT ID, Name, ReleaseYear FROM movies WHERE Name LIKE \"%" + m_filters.sName + "%\" "
+                                 "AND ReleaseYear BETWEEN '"+QString::number(m_filters.nMinYear)+"' AND '"+QString::number(m_filters.nMaxYear)+"' "
+                                 "AND Rating BETWEEN '"+QString::number(m_filters.nMinRating)+"' AND '"+QString::number(m_filters.nMaxRating)+"'"
+                                 +m_customColumnsRequestFilter;
 
     Common::Log->append(tr("Fetching from database"), eLog::Notice);
     if(!moviesQuery.exec(sMovieQueryRequest))
@@ -306,6 +307,10 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         for(int i = m_ui->TagsLayout->count()-1 ; i >= 0 ; i--) {
             delete m_ui->TagsLayout->itemAt(i)->widget();
         }
+        for(int i = m_ui->CustomInfosLayout->count()-1 ; i >= 0 ; i--) {
+            delete m_ui->CustomInfosLayout->itemAt(i)->widget();
+        }
+
         return;
     }
 
@@ -1058,8 +1063,50 @@ void MainWindow::openFilters() {
     FiltersDialog* window = new FiltersDialog(&m_filters);
     window->show();
     if(window->exec() == 1) {
-        delete window;
         m_ui->ResetFiltersButton->setEnabled(true);
+
+        QList<QString> sColumnsList;
+        for(auto value : window->getCustomColumnsMap()->values()) {
+            if(sColumnsList.contains(value) == false)
+                sColumnsList.append(value);
+        }
+
+        m_customColumnsRequestFilter = "";
+        for(QString sColumn : sColumnsList) {
+            QSqlQuery sColumnTypeQuery;
+            if(sColumnTypeQuery.exec("SELECT Type FROM columns WHERE Name=\"" + sColumn + "\"") == false) {
+                Common::LogDatabaseError(&sColumnTypeQuery);
+                continue;
+            }
+            sColumnTypeQuery.first();
+
+            QList<QWidget*> widgetList;
+            for(auto key : window->getCustomColumnsMap()->keys(sColumn)) {
+                widgetList.append(key);
+            }
+
+            if(sColumnTypeQuery.value(0).toInt() == 0) { // Int
+                QSpinBox* lowValue = qobject_cast<QSpinBox*>(widgetList.at(0));
+                QSpinBox* highValue = qobject_cast<QSpinBox*>(widgetList.at(1));
+                int nLowValue = std::min(lowValue->value(), highValue->value());
+                int nHighValue = std::max(lowValue->value(), highValue->value());
+                m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" BETWEEN \"" + QString::number(nLowValue) + "\" AND \"" + QString::number(nHighValue) + "\"");
+            }
+            else if(sColumnTypeQuery.value(0).toInt() == 1) { // Double
+                QDoubleSpinBox* lowValue = qobject_cast<QDoubleSpinBox*>(widgetList.at(0));
+                QDoubleSpinBox* highValue = qobject_cast<QDoubleSpinBox*>(widgetList.at(1));
+                double nLowValue = std::min(lowValue->value(), highValue->value());
+                double nHighValue = std::max(lowValue->value(), highValue->value());
+                m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" BETWEEN \"" + QString::number(nLowValue) + "\" AND \"" + QString::number(nHighValue) + "\"");
+            }
+            else if(sColumnTypeQuery.value(0).toInt() == 2) { // Text
+                QLineEdit* lineEdit = qobject_cast<QLineEdit*>(widgetList.at(0));
+                m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" LIKE \"%" + lineEdit->text() + "%\"");
+            }
+        }
+
+        delete window;
+
         fillTable();
     }
 }
@@ -1221,6 +1268,7 @@ void MainWindow::resetFilters() {
     m_filters.nMaxYear = 2023;
     m_filters.nMinRating = 0;
     m_filters.nMaxRating = 10;
+    m_customColumnsRequestFilter = "";
     fillTable();
 }
 
