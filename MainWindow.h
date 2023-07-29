@@ -17,6 +17,7 @@
 #include <QStandardPaths>
 #include <QImage>
 #include <QSignalMapper>
+#include <QSpinBox>
 
 #include <cmath>
 #include <ctime>

@@ -22,6 +22,8 @@ class AddViewDialog : public QDialog
         Ui::AddViewDialog* m_ui;
         QList<QString>* m_tags;
         QString m_posterPath;
+        QList<QWidget*>* m_customColumnsInputList;
+        QList<QString>* m_customColumnsNameList;
 
     public:
         explicit AddViewDialog(QWidget *parent, int nMovieID = -1);
@@ -39,6 +41,8 @@ class AddViewDialog : public QDialog
         QList<QString>* getTags();
         bool isDateUnknown();
         bool isTypeUnknown();
+        QList<QWidget*>* getCustomColumnsInputList();
+        QList<QString>* getCustomColumnsNameList();
 
     public slots:
         void comboboxChanged();

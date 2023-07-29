@@ -673,7 +673,7 @@ void MainWindow::addView(int nMovieID) {
                     break;
                 }
             }
-            if(!movieAlreadyExist) {
+            if(movieAlreadyExist == false) {
                 QString posterPath = "";
                 if(window->getPosterPath() != "") {
                     QImage poster(window->getPosterPath());
@@ -690,14 +690,45 @@ void MainWindow::addView(int nMovieID) {
                     posterPath = GUID+"."+ext;
                 }
 
-                QSqlQuery insertIntoMoviesQuery;
-                insertIntoMoviesQuery.prepare("INSERT INTO movies (Name, ReleaseYear, Rating, Poster) VALUES (?,?,?,?);");
-
+                QList<QWidget*>* customColumnsInputList = window->getCustomColumnsInputList();
+                QList<QString>* customColumnsNameList = window->getCustomColumnsNameList();
+                QString sRequest = "INSERT INTO movies (Name, ReleaseYear, Rating, Poster";
+                for(int nColumn = 0; nColumn < customColumnsNameList->size(); nColumn++) {
+                    sRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"");
+                }
+                sRequest.append(") VALUES (?,?,?,?");
+                for(int nColumn = 0; nColumn < customColumnsNameList->size(); nColumn++) {
+                    sRequest.append(",?");
+                }
+                sRequest.append(");");
+                
+		QSqlQuery insertIntoMoviesQuery;
+                insertIntoMoviesQuery.prepare(sRequest);
 
                 insertIntoMoviesQuery.bindValue(0, window->getName());
                 insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
                 insertIntoMoviesQuery.bindValue(2, window->getRating());
                 insertIntoMoviesQuery.bindValue(3, posterPath);
+                for(int nColumn = 0; nColumn < customColumnsInputList->size(); nColumn++) {
+                    if(qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn)) != nullptr)
+                    {
+                        QLineEdit* input = qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn));
+
+                        insertIntoMoviesQuery.bindValue(4 + nColumn, input->text());
+                    }
+                    else if(qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
+                    {
+                        QSpinBox* input = qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn));
+
+                        insertIntoMoviesQuery.bindValue(4 + nColumn, input->value());
+                    }
+                    else if(qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
+                    {
+                        QDoubleSpinBox* input = qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn));
+
+                        insertIntoMoviesQuery.bindValue(4 + nColumn, input->value());
+                    }
+                }
 
                 if(!insertIntoMoviesQuery.exec()){
                     Common::LogDatabaseError(&insertIntoMoviesQuery);

@@ -4,6 +4,8 @@
 AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     m_ui = new Ui::AddViewDialog;
     m_tags = new QList<QString>;
+    m_customColumnsInputList = new QList<QWidget*>;
+    m_customColumnsNameList = new QList<QString>;
     m_ui->setupUi(this);
     this->setFixedSize(600,407);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/plus.png"));
@@ -33,6 +35,42 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     QObject::connect(m_ui->MovieNameInput, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(checkValid()));
 
+    QSqlQuery customColumnsQuery;
+    if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength FROM columns;"))
+        Common::LogDatabaseError(&customColumnsQuery);
+    int nColumnIndex = 0;
+    while(customColumnsQuery.next()) {
+        QLabel* columnLabel = new QLabel(customColumnsQuery.value(0).toString());
+        m_ui->CustomColumnsLabelLayout->addWidget(columnLabel, nColumnIndex);
+        m_customColumnsNameList->append(columnLabel->text());
+
+        if(customColumnsQuery.value(1).toInt() == 0) {
+            // Int
+            QSpinBox* input = new QSpinBox();
+            input->setMinimum(customColumnsQuery.value(2).toInt());
+            input->setMaximum(customColumnsQuery.value(3).toInt());
+            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            m_customColumnsInputList->append(input);
+        }
+        else if(customColumnsQuery.value(1).toInt() == 1) {
+            // Double
+            QDoubleSpinBox* input = new QDoubleSpinBox();
+            input->setMinimum(customColumnsQuery.value(2).toDouble());
+            input->setMaximum(customColumnsQuery.value(3).toDouble());
+            input->setDecimals(customColumnsQuery.value(4).toDouble());
+            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            m_customColumnsInputList->append(input);
+        }
+        else if(customColumnsQuery.value(1).toInt() == 2) {
+            // Text
+            QLineEdit* input = new QLineEdit();
+            input->setMaxLength(customColumnsQuery.value(5).toInt());
+            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            m_customColumnsInputList->append(input);
+        }
+        nColumnIndex++;
+    }
+
     // If a movie is preselected when calling the dialog
     if(nMovieID != -1) {
         QSqlQuery moviesQuery;
@@ -41,7 +79,6 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
         moviesQuery.first();
         m_ui->ExistingMoviesComboBox->setCurrentIndex(m_ui->ExistingMoviesComboBox->findText(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString()));
     }
-
 }
 
 AddViewDialog::~AddViewDialog() {
@@ -90,6 +127,10 @@ void AddViewDialog::comboboxChanged() {
         m_ui->PosterButton->setEnabled(true);
         m_ui->TagsAddButton->setEnabled(true);
         m_ui->TagsInput->setEnabled(true);
+        // Set state for custom columns
+        for(int nWidget = 0; nWidget < m_customColumnsInputList->size(); nWidget++) {
+            m_customColumnsInputList->at(nWidget)->setEnabled(true);
+        }
 
         m_ui->PosterLabel->setText(tr("Poster"));
         m_posterPath = "";
@@ -101,6 +142,10 @@ void AddViewDialog::comboboxChanged() {
         m_ui->PosterButton->setEnabled(false);
         m_ui->TagsAddButton->setEnabled(false);
         m_ui->TagsInput->setEnabled(false);
+        // Set state for custom columns
+        for(int nWidget = 0; nWidget < m_customColumnsInputList->size(); nWidget++) {
+            m_customColumnsInputList->at(nWidget)->setEnabled(false);
+        }
 
         QString movieName = m_ui->ExistingMoviesComboBox->currentText().remove(m_ui->ExistingMoviesComboBox->currentText().length()-7, m_ui->ExistingMoviesComboBox->currentText().length());
         QString movieYear = m_ui->ExistingMoviesComboBox->currentText().remove(0, m_ui->ExistingMoviesComboBox->currentText().length()-4);
@@ -198,4 +243,12 @@ void AddViewDialog::mouseEnteredTag(Tag* tag) {
 void AddViewDialog::mouseLeftTag(Tag* tag) {
     tag->setMinimumWidth(31);
     tag->setText(tag->getSavedTag());
+}
+
+QList<QWidget*>* AddViewDialog::getCustomColumnsInputList() {
+    return m_customColumnsInputList;
+}
+
+QList<QString>* AddViewDialog::getCustomColumnsNameList() {
+    return m_customColumnsNameList;
 }
