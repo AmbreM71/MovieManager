@@ -131,6 +131,7 @@ void OptionsDialog::InsertColumnQt(QString sName, enum eColumnType eType) {
     QPushButton* editButton = new QPushButton(tr("Edit"));
     QPushButton* deleteButton = new QPushButton();
     Common::setIconAccordingToTheme(deleteButton, "delete.png");
+    deleteButton->setMaximumWidth(30);
 
     QHBoxLayout* pActionsLayout = new QHBoxLayout();
 

@@ -217,6 +217,9 @@
         </property>
        </spacer>
       </item>
+      <item row="15" column="0" colspan="2">
+       <layout class="QVBoxLayout" name="CustomInfosLayout"/>
+      </item>
      </layout>
     </item>
     <item row="0" column="2">
