@@ -915,9 +915,33 @@ void MainWindow::editMovie(int nMovieID) {
         }
         QSqlQuery editMovieQuery;
 
+        QList<QWidget*>* customColumnsInputList = window->getCustomColumnsInputList();
+        QList<QString>* customColumnsNameList = window->getCustomColumnsNameList();
+
         sUpdateMovieRequest = "UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
-                              "\", Rating=\""+QString::number(window->getRating())+"\""+
-                              sUpdateMovieRequest+" WHERE ID=\""+ID+"\";";
+                              "\", Rating=\""+QString::number(window->getRating())+"\" ";
+        for(int nColumn = 0; nColumn < customColumnsNameList->size(); nColumn++) {
+            if(qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn)) != nullptr)
+            {
+                QLineEdit* input = qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn));
+                sUpdateMovieRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"=\"" + input->text() + "\"");
+
+            }
+            else if(qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
+            {
+                QSpinBox* input = qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn));
+                sUpdateMovieRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"=\"" + QString::number(input->value()) + "\"");
+
+            }
+            else if(qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
+            {
+                QDoubleSpinBox* input = qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn));
+                sUpdateMovieRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"=\"" + QString::number(input->value()) + "\"");
+
+            }
+        }
+        sUpdateMovieRequest.append(" WHERE ID=\""+ID+"\";");
+
         if(!editMovieQuery.exec(sUpdateMovieRequest)) {
             Common::LogDatabaseError(&editMovieQuery);
         }

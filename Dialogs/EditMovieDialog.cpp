@@ -4,6 +4,8 @@
 EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::EditMovieDialog;
     m_tags = new QList<QString>;
+    m_customColumnsInputList = new QList<QWidget*>;
+    m_customColumnsNameList = new QList<QString>;
     m_ui->setupUi(this);
     this->setFixedSize(500,300);
     m_ID = &ID;
@@ -41,6 +43,77 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
 
     QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
     QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
+
+    QSqlQuery customColumnsQuery;
+    QString sCustomColumns;
+    int nCustomColumnCount = 0;
+    QStringList sCustomColumnsNameList;
+
+    if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength FROM columns;"))
+        Common::LogDatabaseError(&customColumnsQuery);
+    int nColumnIndex = 0;
+    while(customColumnsQuery.next()) {
+        QLabel* columnLabel = new QLabel(customColumnsQuery.value(0).toString());
+        m_ui->CustomColumnsLabelLayout->addWidget(columnLabel, nColumnIndex);
+        m_customColumnsNameList->append(columnLabel->text());
+
+        sCustomColumns.append(" \"" + customColumnsQuery.value(0).toString() + "\",");
+        nCustomColumnCount++;
+        sCustomColumnsNameList << customColumnsQuery.value(0).toString();
+
+        if(customColumnsQuery.value(1).toInt() == 0) {
+            // Int
+            QSpinBox* input = new QSpinBox();
+            input->setMinimum(customColumnsQuery.value(2).toInt());
+            input->setMaximum(customColumnsQuery.value(3).toInt());
+            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            m_customColumnsInputList->append(input);
+        }
+        else if(customColumnsQuery.value(1).toInt() == 1) {
+            // Double
+            QDoubleSpinBox* input = new QDoubleSpinBox();
+            input->setMinimum(customColumnsQuery.value(2).toDouble());
+            input->setMaximum(customColumnsQuery.value(3).toDouble());
+            input->setDecimals(customColumnsQuery.value(4).toDouble());
+            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            m_customColumnsInputList->append(input);
+        }
+        else if(customColumnsQuery.value(1).toInt() == 2) {
+            // Text
+            QLineEdit* input = new QLineEdit();
+            input->setMaxLength(customColumnsQuery.value(5).toInt());
+            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            m_customColumnsInputList->append(input);
+        }
+        nColumnIndex++;
+    }
+    sCustomColumns.removeLast(); // Removes the last ","
+
+    // Add custom columns informations
+    QString sRequest = "SELECT" + sCustomColumns + " FROM movies WHERE ID='"+ID+"'";
+    QSqlQuery customColumnsInformationsQuery;
+    if(!customColumnsInformationsQuery.exec(sRequest))
+        Common::LogDatabaseError(&customColumnsInformationsQuery);
+    customColumnsInformationsQuery.first();
+
+    for(int nColumn = 0; nColumn < nCustomColumnCount; nColumn++)
+    {
+        if(qobject_cast<QLineEdit*>(m_customColumnsInputList->at(nColumn)) != nullptr)
+        {
+            QLineEdit* input = qobject_cast<QLineEdit*>(m_customColumnsInputList->at(nColumn));
+            input->setText(customColumnsInformationsQuery.value(nColumn).toString());
+        }
+        else if(qobject_cast<QSpinBox*>(m_customColumnsInputList->at(nColumn)) != nullptr)
+        {
+            QSpinBox* input = qobject_cast<QSpinBox*>(m_customColumnsInputList->at(nColumn));
+            input->setValue(customColumnsInformationsQuery.value(nColumn).toInt());
+        }
+        else if(qobject_cast<QDoubleSpinBox*>(m_customColumnsInputList->at(nColumn)) != nullptr)
+        {
+            QDoubleSpinBox* input = qobject_cast<QDoubleSpinBox*>(m_customColumnsInputList->at(nColumn));
+            input->setValue(customColumnsInformationsQuery.value(nColumn).toDouble());
+        }
+    }
 }
 
 EditMovieDialog::~EditMovieDialog() {
@@ -118,4 +191,12 @@ void EditMovieDialog::mouseEnteredTag(Tag* tag) {
 void EditMovieDialog::mouseLeftTag(Tag* tag) {
     tag->setMinimumWidth(31);
     tag->setText(tag->getSavedTag());
+}
+
+QList<QWidget*>* EditMovieDialog::getCustomColumnsInputList() {
+    return m_customColumnsInputList;
+}
+
+QList<QString>* EditMovieDialog::getCustomColumnsNameList() {
+    return m_customColumnsNameList;
 }

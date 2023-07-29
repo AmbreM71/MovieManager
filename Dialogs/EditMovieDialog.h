@@ -26,6 +26,8 @@ class EditMovieDialog : public QDialog
         bool m_newPoster = false;
         QString m_posterPath;
         QList<QString>* m_tags;
+        QList<QWidget*>* m_customColumnsInputList;
+        QList<QString>* m_customColumnsNameList;
 
     public:
         explicit EditMovieDialog(QString ID, QWidget *parent = nullptr);
@@ -38,6 +40,8 @@ class EditMovieDialog : public QDialog
         QString getPosterPath();
         int getRating();
         QList<QString>* getTags();
+        QList<QWidget*>* getCustomColumnsInputList();
+        QList<QString>* getCustomColumnsNameList();
 
     public slots:
         void loadPoster(QString path = "");
