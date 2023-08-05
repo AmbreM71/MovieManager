@@ -3,10 +3,12 @@
 
 MainWindow::MainWindow(QApplication* app) {
 
-    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager";
-
 #ifdef DEV
     m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager_Dev";
+    this->setWindowTitle("Movie Manager (DEV)");
+#else
+    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager";
+    this->setWindowTitle(tr("Movie Manager"));
 #endif
 
     QDir dir(m_savepath);
@@ -18,6 +20,8 @@ MainWindow::MainWindow(QApplication* app) {
     m_customColumnsRequestFilter = "";
 
     m_app->setWindowIcon(QIcon(":/assets/Assets/logo.png"));
+
+
 
     // Filters initialisation
     m_filters.sName = "";
