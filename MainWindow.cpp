@@ -962,10 +962,16 @@ void MainWindow::deleteMovie(int nMovieID) {
 
         removeUnusedTags();
         resetFilters();
-        if(savedRow+1 >= m_ui->MoviesListWidget->rowCount())
+        if(savedRow == m_ui->MoviesListWidget->rowCount())
             savedRow--;
+        if(savedRow == -1)
+            savedRow = 0;
         m_ui->MoviesListWidget->setCurrentCell(savedRow, 0);
-        fillMovieInfos(nMovieID);
+
+        if(m_ui->MoviesListWidget->rowCount() == 0)
+            fillMovieInfos(-1);
+        else
+            fillMovieInfos(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt());
         fillGlobalStats();
     }
 }
