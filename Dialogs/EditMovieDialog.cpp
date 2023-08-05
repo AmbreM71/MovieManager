@@ -7,7 +7,6 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     m_customColumnsInputList = new QList<QWidget*>;
     m_customColumnsNameList = new QList<QString>;
     m_ui->setupUi(this);
-    this->setFixedSize(500,300);
     m_ID = &ID;
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
 
@@ -16,7 +15,12 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
         Common::LogDatabaseError(&movieQuery);
     movieQuery.first();
 
-    m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+movieQuery.value(4).toString();
+#ifdef DEV
+    m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager_Dev\\Posters\\"+movieQuery.value(3).toString();
+#else
+    m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+movieQuery.value(3).toString();
+#endif
+
     loadPoster(m_posterPath);
 
     QSqlQuery tagsQuery;
@@ -114,6 +118,8 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
             input->setValue(customColumnsInformationsQuery.value(nColumn).toDouble());
         }
     }
+
+    this->setFixedSize(this->sizeHint());
 }
 
 EditMovieDialog::~EditMovieDialog() {
@@ -146,7 +152,8 @@ int EditMovieDialog::getRating() {
 
 void EditMovieDialog::loadPoster(QString path) {
     QString tmp = m_posterPath;
-    Common::loadPoster(this, m_ui->PosterLabel, 150, 1.33, path, &m_posterPath);
+    float ratio = (float)m_ui->PosterLabel->sizeHint().height() / (float)m_ui->PosterLabel->sizeHint().width();
+    Common::loadPoster(this, m_ui->PosterLabel, m_ui->PosterLabel->sizeHint().height(), ratio, path, &m_posterPath);
     if (QString::compare(tmp, m_posterPath) != 0) {
         m_newPoster = true;
     }

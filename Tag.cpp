@@ -4,13 +4,15 @@ Tag::Tag(QString label)
 {
     this->setText(label);
     this->setAlignment(Qt::AlignHCenter);
-    this->setMinimumWidth(31);
+    this->setMinimumWidth(35);
+    this->setFixedHeight(25);
 }
 
 Tag::Tag(Tag* tag) {
     this->setText(tag->text());
     this->setAlignment(Qt::AlignHCenter);
-    this->setMinimumWidth(31);
+    this->setMinimumWidth(35);
+    this->setFixedHeight(25);
 }
 
 QString Tag::getSavedTag() {

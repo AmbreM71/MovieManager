@@ -54,7 +54,7 @@
            <second>0</second>
            <year>2022</year>
            <month>6</month>
-           <day>13</day>
+           <day>11</day>
           </datetime>
          </property>
          <property name="maximumDateTime">
@@ -74,7 +74,7 @@
            <second>0</second>
            <year>1899</year>
            <month>12</month>
-           <day>7</day>
+           <day>5</day>
           </datetime>
          </property>
          <property name="displayFormat">
@@ -244,6 +244,9 @@
      </item>
      <item row="9" column="0" colspan="2">
       <layout class="QHBoxLayout" name="TagsLayout">
+       <property name="spacing">
+        <number>6</number>
+       </property>
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
@@ -252,7 +255,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>40</width>
-           <height>10</height>
+           <height>25</height>
           </size>
          </property>
         </spacer>
@@ -312,6 +315,12 @@
    </item>
    <item row="0" column="1">
     <widget class="QLabel" name="PosterLabel">
+     <property name="minimumSize">
+      <size>
+       <width>250</width>
+       <height>350</height>
+      </size>
+     </property>
      <property name="text">
       <string>Poster</string>
      </property>
