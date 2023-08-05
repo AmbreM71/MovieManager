@@ -395,7 +395,7 @@ void MainWindow::fillMovieInfos(int nMovieID) {
     // Add custom columns informations
     QSqlQuery customColumnsQuery;
     if(!customColumnsQuery.exec("SELECT Name FROM columns"))
-        Common::LogDatabaseError(&customColumnsQuery);
+            Common::LogDatabaseError(&customColumnsQuery);
 
     int nCustomColumnCount = 0;
     QString sCustomColumns;
@@ -406,21 +406,22 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         sCustomColumnsNameList << customColumnsQuery.value(0).toString();
     }
     sCustomColumns.removeLast(); // Removes the last ","
+    if(sCustomColumns.isEmpty() == false) {
+        QString sRequest = "SELECT" + sCustomColumns + " FROM movies WHERE ID='"+ID+"'";
+        QSqlQuery customColumnsInformationsQuery;
+        if(!customColumnsInformationsQuery.exec(sRequest))
+            Common::LogDatabaseError(&customColumnsInformationsQuery);
+        customColumnsInformationsQuery.first();
 
-    QString sRequest = "SELECT" + sCustomColumns + " FROM movies WHERE ID='"+ID+"'";
-    QSqlQuery customColumnsInformationsQuery;
-    if(!customColumnsInformationsQuery.exec(sRequest))
-        Common::LogDatabaseError(&customColumnsInformationsQuery);
-    customColumnsInformationsQuery.first();
-
-    // Clear custom columns informations from layout
-    for(int i = m_ui->CustomInfosLayout->count()-1 ; i >= 0 ; i--) {
-        delete m_ui->CustomInfosLayout->itemAt(i)->widget();
-    }
-    for(int nColumn = 0; nColumn < nCustomColumnCount; nColumn++)
-    {
-        QLabel* label = new QLabel(QString(tr("%1: %2")).arg(sCustomColumnsNameList.at(nColumn), customColumnsInformationsQuery.value(nColumn).toString()));
-        m_ui->CustomInfosLayout->addWidget(label);
+        // Clear custom columns informations from layout
+        for(int i = m_ui->CustomInfosLayout->count()-1 ; i >= 0 ; i--) {
+            delete m_ui->CustomInfosLayout->itemAt(i)->widget();
+        }
+        for(int nColumn = 0; nColumn < nCustomColumnCount; nColumn++)
+        {
+            QLabel* label = new QLabel(QString(tr("%1: %2")).arg(sCustomColumnsNameList.at(nColumn), customColumnsInformationsQuery.value(nColumn).toString()));
+            m_ui->CustomInfosLayout->addWidget(label);
+        }
     }
 }
 
