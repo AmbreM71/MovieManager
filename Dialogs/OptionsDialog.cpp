@@ -24,11 +24,13 @@ OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent) {
     m_editColumnSignalMapper = new QSignalMapper();
     m_deleteColumnSignalMapper = new QSignalMapper();
 
-    while(columnsQuery.next())
-        InsertColumnQt(columnsQuery.value(0).toString(), (enum eColumnType)columnsQuery.value(1).toInt());
-
-    QObject::connect(m_editColumnSignalMapper, SIGNAL(mappedString(QString)), this, SLOT(EditColumn(QString)));
-    QObject::connect(m_deleteColumnSignalMapper, SIGNAL(mappedString(QString)), this, SLOT(RemoveColumn(QString)));
+    int nRow = 0;
+    while(columnsQuery.next()) {
+        InsertColumnQt(columnsQuery.value(0).toString(), (enum eColumnType)columnsQuery.value(1).toInt(), 4 + nRow);
+        nRow++;
+    }
+    QObject::connect(m_editColumnSignalMapper, SIGNAL(mappedInt(int)), this, SLOT(EditColumn(int)));
+    QObject::connect(m_deleteColumnSignalMapper, SIGNAL(mappedInt(int)), this, SLOT(RemoveColumn(int)));
 
     QObject::connect(m_ui->AddColumnButton, SIGNAL(clicked()), this, SLOT(AddColumn()));
 }
@@ -48,12 +50,12 @@ void OptionsDialog::AddColumn() {
     AddColumnDialog* window = new AddColumnDialog(this);
     window->show();
     if(window->exec() == 1) {
-        InsertColumn(window->getColumn());
+        InsertColumn(window->getColumn(), m_ui->DefaultColumnGridLayout->rowCount());
     }
 }
 
-void OptionsDialog::EditColumn(QString sName) {
-
+void OptionsDialog::EditColumn(int nRow) {
+    QString sName = qobject_cast<QLabel*>(m_ui->DefaultColumnGridLayout->itemAtPosition(nRow,0)->widget())->text();
     QSqlQuery columnsQuery;
     if(!columnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength FROM columns WHERE Name = \"" + sName + "\""))
         Common::LogDatabaseError(&columnsQuery);
@@ -70,46 +72,37 @@ void OptionsDialog::EditColumn(QString sName) {
     AddColumnDialog* window = new AddColumnDialog(this, &stColumnToEdit);
     window->show();
     if(window->exec() == 1) {
-        RemoveColumn(sName);
-        InsertColumn(window->getColumn());
+        RemoveColumn(nRow);
+        InsertColumn(window->getColumn(), m_ui->DefaultColumnGridLayout->rowCount());
     }
 }
 
-void OptionsDialog::RemoveColumn(QString sName) {
-    RemoveColumnQt(sName);
+void OptionsDialog::RemoveColumn(int nRow) {
+    QString sName = qobject_cast<QLabel*>(m_ui->DefaultColumnGridLayout->itemAtPosition(nRow,0)->widget())->text();
+    RemoveColumnQt(nRow);
     RemoveColumnDB(sName);
 }
 
-void OptionsDialog::RemoveColumnQt(QString sName) {
-    QGridLayout* columnLayout;
-    QLabel* sNameLabel;
+void OptionsDialog::RemoveColumnQt(int nRow) {
 
-    int nRow;
-    for(nRow = 1; nRow < m_ui->scrollAreaLayout->count()-1; nRow++) {
-        columnLayout = (QGridLayout*)(m_ui->scrollAreaLayout->itemAt(nRow)->layout());
-        sNameLabel = qobject_cast<QLabel*>(columnLayout->itemAtPosition(0,0)->widget());
-        if(QString::compare(sNameLabel->text(), sName) == 0)
-            break;
-    }
-
-    QLabel* sType = qobject_cast<QLabel*>(columnLayout->itemAtPosition(0,1)->widget());
-    QHBoxLayout* pActionLayout = (QHBoxLayout*)(columnLayout->itemAtPosition(0,2)->layout());
+    QLabel* label = qobject_cast<QLabel*>(m_ui->DefaultColumnGridLayout->itemAtPosition(nRow,0)->widget());
+    QLabel* sType = qobject_cast<QLabel*>(m_ui->DefaultColumnGridLayout->itemAtPosition(nRow,1)->widget());
+    QHBoxLayout* pActionLayout = (QHBoxLayout*)(m_ui->DefaultColumnGridLayout->itemAtPosition(nRow,2)->layout());
 
     QPushButton* editButton = qobject_cast<QPushButton*>(pActionLayout->itemAt(0)->widget());
     QPushButton* deleteButton = qobject_cast<QPushButton*>(pActionLayout->itemAt(1)->widget());
 
-    m_ui->scrollAreaLayout->removeItem(columnLayout);
-    columnLayout->removeWidget(sNameLabel);
-    columnLayout->removeWidget(sType);
-    columnLayout->removeItem(pActionLayout);
-    columnLayout->removeWidget(editButton);
-    columnLayout->removeWidget(deleteButton);
-    delete columnLayout;
-    delete sNameLabel;
+    m_ui->DefaultColumnGridLayout->removeWidget(label);
+    m_ui->DefaultColumnGridLayout->removeWidget(sType);
+    m_ui->DefaultColumnGridLayout->removeWidget(editButton);
+    m_ui->DefaultColumnGridLayout->removeWidget(deleteButton);
+    m_ui->DefaultColumnGridLayout->removeItem(pActionLayout);
+
+    delete label;
     delete sType;
-    delete pActionLayout;
     delete editButton;
     delete deleteButton;
+    delete pActionLayout;
 }
 
 void OptionsDialog::RemoveColumnDB(QString sName) {
@@ -118,19 +111,18 @@ void OptionsDialog::RemoveColumnDB(QString sName) {
         Common::LogDatabaseError(&deleteColumnsQuery);
 }
 
-void OptionsDialog::InsertColumn(struct stColumn* stColumnToInsert) {
-    InsertColumnQt(stColumnToInsert->sName, stColumnToInsert->eType);
+void OptionsDialog::InsertColumn(struct stColumn* stColumnToInsert, int nRow) {
+    InsertColumnQt(stColumnToInsert->sName, stColumnToInsert->eType, nRow);
     InsertColumnDB(stColumnToInsert);
 }
 
-void OptionsDialog::InsertColumnQt(QString sName, enum eColumnType eType) {
-    QGridLayout* pColumnLayout = new QGridLayout();
-
+void OptionsDialog::InsertColumnQt(QString sName, enum eColumnType eType, int nRow) {
     QLabel* NameLabel = new QLabel(sName);
     QLabel* TypeLabel = new QLabel(Common::ColumnTypeToQString(eType));
     QPushButton* editButton = new QPushButton(tr("Edit"));
     QPushButton* deleteButton = new QPushButton();
     Common::setIconAccordingToTheme(deleteButton, "delete.png");
+    deleteButton->setStyleSheet("min-width: 0px;");
     deleteButton->setMaximumWidth(30);
 
     QHBoxLayout* pActionsLayout = new QHBoxLayout();
@@ -138,19 +130,16 @@ void OptionsDialog::InsertColumnQt(QString sName, enum eColumnType eType) {
     pActionsLayout->addWidget(editButton);
     pActionsLayout->addWidget(deleteButton);
 
-    pColumnLayout->addWidget(NameLabel,0,0,1,1);
-    pColumnLayout->addWidget(TypeLabel,0,1,1,1);
-    pColumnLayout->addLayout(pActionsLayout,0,2,1,1);
+    m_ui->DefaultColumnGridLayout->addWidget(NameLabel, nRow, 0);
+    m_ui->DefaultColumnGridLayout->addWidget(TypeLabel, nRow, 1);
+    m_ui->DefaultColumnGridLayout->addLayout(pActionsLayout, nRow, 2);
 
-    m_editColumnSignalMapper->setMapping(editButton, NameLabel->text());
+    m_editColumnSignalMapper->setMapping(editButton, nRow);
     QObject::connect(editButton, SIGNAL(clicked()), m_editColumnSignalMapper, SLOT(map()));
 
     m_deleteColumnSignalMapper->setMapping(deleteButton, NameLabel->text());
+    m_deleteColumnSignalMapper->setMapping(deleteButton, nRow);
     QObject::connect(deleteButton, SIGNAL(clicked()), m_deleteColumnSignalMapper, SLOT(map()));
-
-    // nRow-1 to insert before the stretch
-    m_ui->scrollAreaLayout->insertLayout(m_ui->scrollAreaLayout->count()-1, pColumnLayout);
-
 }
 
 void OptionsDialog::InsertColumnDB(struct stColumn* stColumnToInsert) {

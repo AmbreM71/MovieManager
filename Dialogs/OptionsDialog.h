@@ -25,17 +25,17 @@ class OptionsDialog : public QDialog
         explicit OptionsDialog(QWidget* parent = nullptr);
         ~OptionsDialog();
 
-        void InsertColumn(struct stColumn* stColumnToInsert);
-        void InsertColumnQt(QString sName, enum eColumnType eType);
+        void InsertColumn(struct stColumn* stColumnToInsert, int nRow);
+        void InsertColumnQt(QString sName, enum eColumnType eType, int nRow);
         void InsertColumnDB(struct stColumn* stColumnToInsert);
 
-        void RemoveColumnQt(QString sName);
+        void RemoveColumnQt(int nRow);
         void RemoveColumnDB(QString sName);
 
     public slots:
         void AddColumn();
-        void EditColumn(QString sName);
-        void RemoveColumn(QString sName);
+        void EditColumn(int nRow);
+        void RemoveColumn(int nRow);
 };
 
 #endif // OPTIONSDIALOG_H
