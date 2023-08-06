@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStandardPaths>
+#include <QKeyEvent>
 
 #include <Common.h>
 #include <Tag.h>
@@ -24,6 +25,8 @@ class AddViewDialog : public QDialog
         QString m_posterPath;
         QList<QWidget*>* m_customColumnsInputList;
         QList<QString>* m_customColumnsNameList;
+
+        bool eventFilter(QObject *obj, QEvent *event);
 
     public:
         explicit AddViewDialog(QWidget *parent, int nMovieID = -1);

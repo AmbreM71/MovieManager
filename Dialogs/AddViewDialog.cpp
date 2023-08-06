@@ -8,6 +8,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     m_customColumnsNameList = new QList<QString>;
     m_ui->setupUi(this);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/plus.png"));
+    m_ui->TagsInput->installEventFilter(this);
 
     m_ui->MovieViewDateInput->setDate(QDate::currentDate());
 
@@ -23,6 +24,8 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     for(int viewType = 0 ; viewType < eViewType::MaxViewType ; viewType++) {
         m_ui->ViewTypeComboBox->addItem(Common::viewTypeToQString((enum eViewType)viewType));
     }
+
+
 
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
@@ -258,4 +261,15 @@ QList<QWidget*>* AddViewDialog::getCustomColumnsInputList() {
 
 QList<QString>* AddViewDialog::getCustomColumnsNameList() {
     return m_customColumnsNameList;
+}
+
+bool AddViewDialog::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == m_ui->TagsInput && event->type() == QEvent::KeyPress) {
+        QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        if(key->key() == Qt::Key_Return) {
+            addTag();
+            return true;
+        }
+    }
+    return false;
 }

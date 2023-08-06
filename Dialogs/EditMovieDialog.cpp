@@ -9,6 +9,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     m_ui->setupUi(this);
     m_ID = &ID;
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
+    m_ui->TagsInput->installEventFilter(this);
 
     QSqlQuery movieQuery;
     if(!movieQuery.exec("SELECT Name, ReleaseYear, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'"))
@@ -206,4 +207,15 @@ QList<QWidget*>* EditMovieDialog::getCustomColumnsInputList() {
 
 QList<QString>* EditMovieDialog::getCustomColumnsNameList() {
     return m_customColumnsNameList;
+}
+
+bool EditMovieDialog::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == m_ui->TagsInput && event->type() == QEvent::KeyPress) {
+        QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        if(key->key() == Qt::Key_Return) {
+            addTag();
+            return true;
+        }
+    }
+    return false;
 }

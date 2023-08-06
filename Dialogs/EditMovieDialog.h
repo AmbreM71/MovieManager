@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStandardPaths>
+#include <QKeyEvent>
 
 #include <Common.h>
 #include <Tag.h>
@@ -28,6 +29,8 @@ class EditMovieDialog : public QDialog
         QList<QString>* m_tags;
         QList<QWidget*>* m_customColumnsInputList;
         QList<QString>* m_customColumnsNameList;
+
+        bool eventFilter(QObject *obj, QEvent *event);
 
     public:
         explicit EditMovieDialog(QString ID, QWidget *parent = nullptr);
