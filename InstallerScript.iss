@@ -1,6 +1,6 @@
 
 #define MyAppName "MovieManager"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "AmbreM"
 #define MyAppExeName "MovieManager.exe"
 

@@ -244,7 +244,7 @@ void Common::setIconAccordingToTheme(QPushButton* action, QString filename) {
 }
 
 QString Common::getVersion() {
-    return "1.0.0";
+    return "1.1.0";
 }
 
 void Common::LogDatabaseError(QSqlQuery *query) {
