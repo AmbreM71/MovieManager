@@ -11,6 +11,9 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
     m_ui->TagsInput->installEventFilter(this);
 
+    m_tagsScrollArea = new TagsScrollArea(this);
+    m_ui->FormLayout->addWidget(m_tagsScrollArea, 6, 0, 1, 2);
+
     QSqlQuery movieQuery;
     if(!movieQuery.exec("SELECT Name, ReleaseYear, Rating, Poster FROM movies WHERE ID='"+*m_ID+"'"))
         Common::LogDatabaseError(&movieQuery);
@@ -108,6 +111,8 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
 
     this->setFixedSize(this->sizeHint());
 
+    QLayoutItem* spacer = m_tagsScrollArea->widget()->layout()->takeAt(m_tagsScrollArea->widget()->layout()->count()-1);
+
     QSqlQuery tagsQuery;
     if(!tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+*m_ID+"'"))
         Common::LogDatabaseError(&tagsQuery);
@@ -119,12 +124,9 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
         QObject::connect(tag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
         QObject::connect(tag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
 
-        //m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
-        QLayoutItem* spacer = m_ui->TagsWidget->layout()->takeAt(m_ui->TagsWidget->layout()->count()-1);
-        m_ui->TagsWidget->layout()->addWidget(tag);
-        m_ui->TagsWidget->layout()->addItem(spacer);
-        m_ui->TagsInput->clear();
+        m_tagsScrollArea->widget()->layout()->addWidget(tag);
     }
+    m_tagsScrollArea->widget()->layout()->addItem(spacer);
 }
 
 EditMovieDialog::~EditMovieDialog() {
@@ -169,9 +171,9 @@ void EditMovieDialog::addTag() {
         m_tags->append(m_ui->TagsInput->text());
         Tag* tag = new Tag(m_ui->TagsInput->text());
 
-        QLayoutItem* spacer = m_ui->TagsWidget->layout()->takeAt(m_ui->TagsWidget->layout()->count()-1);
-        m_ui->TagsWidget->layout()->addWidget(tag);
-        m_ui->TagsWidget->layout()->addItem(spacer);
+        QLayoutItem* spacer = m_tagsScrollArea->widget()->layout()->takeAt(m_tagsScrollArea->widget()->layout()->count()-1);
+        m_tagsScrollArea->widget()->layout()->addWidget(tag);
+        m_tagsScrollArea->widget()->layout()->addItem(spacer);
         m_ui->TagsInput->clear();
 
         QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));

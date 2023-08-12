@@ -11,11 +11,12 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     m_ui->TagsInput->installEventFilter(this);
 
     m_ui->MovieViewDateInput->setDate(QDate::currentDate());
-
     m_ui->MovieReleaseYearInput->setMaximum(QDate::currentDate().year());
     m_ui->MovieReleaseYearInput->setValue(QDate::currentDate().year());
-
     m_ui->MovieViewDateInput->setDisplayFormat(Common::Settings->value("dateFormat").toString());
+
+    m_tagsScrollArea = new TagsScrollArea(this);
+    m_ui->FormLayout->addWidget(m_tagsScrollArea, 9, 0, 1, 2);
 
     FillMovieComboBox();
 
@@ -220,9 +221,9 @@ void AddViewDialog::addTag() {
         m_tags->append(m_ui->TagsInput->text());
         Tag* tag = new Tag(m_ui->TagsInput->text());
 
-        QLayoutItem* spacer = m_ui->TagsWidget->layout()->takeAt(m_ui->TagsWidget->layout()->count()-1);
-        m_ui->TagsWidget->layout()->addWidget(tag);
-        m_ui->TagsWidget->layout()->addItem(spacer);
+        QLayoutItem* spacer = m_tagsScrollArea->widget()->layout()->takeAt(m_tagsScrollArea->widget()->layout()->count()-1);
+        m_tagsScrollArea->widget()->layout()->addWidget(tag);
+        m_tagsScrollArea->widget()->layout()->addItem(spacer);
         m_ui->TagsInput->clear();
 
         QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));

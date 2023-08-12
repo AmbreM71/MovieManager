@@ -63,23 +63,6 @@
    </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="FormLayout" columnstretch="50,0">
-     <item row="3" column="0">
-      <widget class="QLabel" name="MovieNameLabel">
-       <property name="text">
-        <string>Name</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="MovieNameInput"/>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="MovieRatingLabel">
-       <property name="text">
-        <string>Rating</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0" colspan="2">
       <widget class="QLabel" name="SelectMovieLabel">
        <property name="layoutDirection">
@@ -93,120 +76,23 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
-      <widget class="QPushButton" name="PosterButton">
+     <item row="12" column="0" colspan="2">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="MovieNameLabel">
        <property name="text">
-        <string>Select a poster</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QSpinBox" name="MovieRatingInput">
-       <property name="maximum">
-        <number>10</number>
-       </property>
-       <property name="value">
-        <number>5</number>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="MovieReleaseYearLabel">
-       <property name="text">
-        <string>Release year</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <layout class="QVBoxLayout" name="CustomColumnsLabelLayout"/>
-     </item>
-     <item row="11" column="0">
-      <widget class="QLabel" name="MovieViewDateLabel">
-       <property name="text">
-        <string>View date</string>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="1">
-      <layout class="QHBoxLayout" name="ViewDateInputLayout" stretch="100,0">
-       <item>
-        <widget class="QDateEdit" name="MovieViewDateInput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="showGroupSeparator" stdset="0">
-          <bool>false</bool>
-         </property>
-         <property name="dateTime">
-          <datetime>
-           <hour>0</hour>
-           <minute>0</minute>
-           <second>0</second>
-           <year>2022</year>
-           <month>6</month>
-           <day>8</day>
-          </datetime>
-         </property>
-         <property name="maximumDateTime">
-          <datetime>
-           <hour>23</hour>
-           <minute>59</minute>
-           <second>59</second>
-           <year>9999</year>
-           <month>12</month>
-           <day>31</day>
-          </datetime>
-         </property>
-         <property name="minimumDateTime">
-          <datetime>
-           <hour>0</hour>
-           <minute>0</minute>
-           <second>0</second>
-           <year>1899</year>
-           <month>12</month>
-           <day>2</day>
-          </datetime>
-         </property>
-         <property name="displayFormat">
-          <string>yyyy-MM-dd</string>
-         </property>
-         <property name="calendarPopup">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="UnknownViewDateCheckbox">
-         <property name="text">
-          <string>unknown</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="4" column="1">
-      <widget class="QSpinBox" name="MovieReleaseYearInput">
-       <property name="minimum">
-        <number>1870</number>
-       </property>
-       <property name="maximum">
-        <number>2000</number>
-       </property>
-       <property name="value">
-        <number>1900</number>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="0">
-      <widget class="QLabel" name="MovieViewTypeLabel">
-       <property name="text">
-        <string>View type</string>
+        <string>Name</string>
        </property>
       </widget>
      </item>
@@ -220,18 +106,19 @@
        </property>
       </widget>
      </item>
-     <item row="13" column="0" colspan="2">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+     <item row="4" column="0">
+      <widget class="QLabel" name="MovieReleaseYearLabel">
+       <property name="text">
+        <string>Release year</string>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="TagsLabel">
+       <property name="text">
+        <string>Tag(s)</string>
        </property>
-      </spacer>
+      </widget>
      </item>
      <item row="1" column="0" colspan="2">
       <widget class="QComboBox" name="ExistingMoviesComboBox">
@@ -240,26 +127,7 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
-      <layout class="QVBoxLayout" name="CustomColumnsInputLayout"/>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="PosterTextLabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Poster</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="1">
+     <item row="11" column="1">
       <layout class="QHBoxLayout" name="ViewTypeInputLayout" stretch="100,0">
        <item>
         <widget class="QComboBox" name="ViewTypeComboBox">
@@ -282,6 +150,36 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="MovieViewDateLabel">
+       <property name="text">
+        <string>View date</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QSpinBox" name="MovieReleaseYearInput">
+       <property name="minimum">
+        <number>1870</number>
+       </property>
+       <property name="maximum">
+        <number>2000</number>
+       </property>
+       <property name="value">
+        <number>1900</number>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <layout class="QVBoxLayout" name="CustomColumnsLabelLayout"/>
+     </item>
+     <item row="6" column="1">
+      <widget class="QPushButton" name="PosterButton">
+       <property name="text">
+        <string>Select a poster</string>
+       </property>
+      </widget>
      </item>
      <item row="8" column="1">
       <layout class="QHBoxLayout" name="TagsInputLayout" stretch="100,0">
@@ -306,90 +204,121 @@
        </item>
       </layout>
      </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="TagsLabel">
-       <property name="text">
-        <string>Tag(s)</string>
+     <item row="5" column="1">
+      <widget class="QSpinBox" name="MovieRatingInput">
+       <property name="maximum">
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>5</number>
        </property>
       </widget>
      </item>
-     <item row="10" column="0" colspan="2">
+     <item row="5" column="0">
+      <widget class="QLabel" name="MovieRatingLabel">
+       <property name="text">
+        <string>Rating</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="PosterTextLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Poster</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <layout class="QVBoxLayout" name="CustomColumnsInputLayout"/>
+     </item>
+     <item row="9" column="0" colspan="2">
       <widget class="Line" name="line">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="9" column="0" colspan="2">
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>45</height>
-        </size>
+     <item row="11" column="0">
+      <widget class="QLabel" name="MovieViewTypeLabel">
+       <property name="text">
+        <string>View type</string>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAsNeeded</enum>
-       </property>
-       <property name="sizeAdjustPolicy">
-        <enum>QAbstractScrollArea::AdjustIgnored</enum>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="TagsWidget">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>324</width>
-          <height>45</height>
-         </rect>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>45</height>
-         </size>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>25</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </widget>
       </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="MovieNameInput"/>
+     </item>
+     <item row="10" column="1">
+      <layout class="QHBoxLayout" name="ViewDateInputLayout" stretch="100,0">
+       <item>
+        <widget class="QDateEdit" name="MovieViewDateInput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="showGroupSeparator" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="dateTime">
+          <datetime>
+           <hour>0</hour>
+           <minute>0</minute>
+           <second>0</second>
+           <year>2022</year>
+           <month>6</month>
+           <day>7</day>
+          </datetime>
+         </property>
+         <property name="maximumDateTime">
+          <datetime>
+           <hour>23</hour>
+           <minute>59</minute>
+           <second>59</second>
+           <year>9999</year>
+           <month>12</month>
+           <day>31</day>
+          </datetime>
+         </property>
+         <property name="minimumDateTime">
+          <datetime>
+           <hour>0</hour>
+           <minute>0</minute>
+           <second>0</second>
+           <year>1899</year>
+           <month>12</month>
+           <day>1</day>
+          </datetime>
+         </property>
+         <property name="displayFormat">
+          <string>yyyy-MM-dd</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="UnknownViewDateCheckbox">
+         <property name="text">
+          <string>unknown</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

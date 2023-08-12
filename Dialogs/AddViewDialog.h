@@ -11,6 +11,7 @@
 
 #include <Common.h>
 #include <Tag.h>
+#include "TagsScrollArea.h"
 
 namespace Ui {
 class AddViewDialog;
@@ -25,6 +26,7 @@ class AddViewDialog : public QDialog
         QString m_posterPath;
         QList<QWidget*>* m_customColumnsInputList;
         QList<QString>* m_customColumnsNameList;
+        TagsScrollArea* m_tagsScrollArea;
 
         bool eventFilter(QObject *obj, QEvent *event);
 

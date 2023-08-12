@@ -9,8 +9,9 @@
 #include <QStandardPaths>
 #include <QKeyEvent>
 
-#include <Common.h>
-#include <Tag.h>
+#include "Common.h"
+#include "Tag.h"
+#include "TagsScrollArea.h"
 
 namespace Ui {
 class EditMovieDialog;
@@ -29,6 +30,7 @@ class EditMovieDialog : public QDialog
         QList<QString>* m_tags;
         QList<QWidget*>* m_customColumnsInputList;
         QList<QString>* m_customColumnsNameList;
+        TagsScrollArea* m_tagsScrollArea;
 
         bool eventFilter(QObject *obj, QEvent *event);
 

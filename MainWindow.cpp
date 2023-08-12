@@ -19,9 +19,22 @@ MainWindow::MainWindow(QApplication* app) {
     m_ui->setupUi(this);
     m_customColumnsRequestFilter = "";
 
+    m_selectedTagsScrollArea = new TagsScrollArea();
+    QLayoutItem* movieList = m_ui->MoviesLayout->takeAt(1);
+    QLayoutItem* actionLayout = m_ui->MoviesLayout->takeAt(1);
+    m_ui->MoviesLayout->addWidget(m_selectedTagsScrollArea);
+    m_ui->MoviesLayout->addItem(movieList);
+    m_ui->MoviesLayout->addItem(actionLayout);
+
+    m_movieTagsScrollArea = new TagsScrollArea();
+    m_ui->MovieInfoLayout->addWidget(m_movieTagsScrollArea, 12, 0, 1, 2);
+
+    // Expand movie's list
+    m_ui->MoviesLayout->setStretch(2,100);
+
     m_app->setWindowIcon(QIcon(":/assets/Assets/logo.png"));
 
-    m_ui->SelectedTagsScrollArea->setMaximumHeight(0);
+    m_selectedTagsScrollArea->setMaximumHeight(0);
 
     // Filters initialisation
     m_filters.sName = "";
@@ -249,8 +262,8 @@ void MainWindow::fillTable() {
         else {
             int ID = m_ui->MoviesListWidget->item(row, 2)->text().toInt();
             bool hasMovieAllFilterTags = true;
-            for(int filterTag = 0 ; filterTag < m_ui->SelectedTagsWidget->layout()->count()-1 ; filterTag++) {
-                Tag* tag = (Tag*)m_ui->SelectedTagsWidget->layout()->itemAt(filterTag)->widget();
+            for(int filterTag = 0 ; filterTag < m_selectedTagsScrollArea->widget()->layout()->count()-1 ; filterTag++) {
+                Tag* tag = (Tag*)m_selectedTagsScrollArea->widget()->layout()->itemAt(filterTag)->widget();
                 bool hasMovieFilterTag = false;
                 tagQuery.first();
                 tagQuery.previous();
@@ -308,8 +321,8 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         m_ui->ViewsLabel->setText("");
         m_ui->PosterLabel->setPixmap(QPixmap());
         m_ui->RatingLabel->setPixmap(QPixmap());
-        for(int i = m_ui->TagsWidget->layout()->count()-1 ; i >= 0 ; i--) {
-            delete m_ui->TagsWidget->layout()->itemAt(i)->widget();
+        for(int i = m_movieTagsScrollArea->widget()->layout()->count()-1 ; i >= 0 ; i--) {
+            delete m_movieTagsScrollArea->widget()->layout()->itemAt(i)->widget();
         }
         for(int i = m_ui->CustomInfosLayout->count()-1 ; i >= 0 ; i--) {
             delete m_ui->CustomInfosLayout->itemAt(i)->widget();
@@ -385,19 +398,19 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         Common::LogDatabaseError(&tagsQuery);
 
     // Clear tags from layout
-    for(int i = m_ui->TagsWidget->layout()->count()-1 ; i >= 0 ; i--) {
-        delete m_ui->TagsWidget->layout()->itemAt(i)->widget();
+    for(int i = m_movieTagsScrollArea->widget()->layout()->count()-1 ; i >= 0 ; i--) {
+        delete m_movieTagsScrollArea->widget()->layout()->itemAt(i)->widget();
     }
 
-    QLayoutItem* spacer = m_ui->TagsWidget->layout()->takeAt(m_ui->TagsWidget->layout()->count()-1);
+    QLayoutItem* spacer = m_movieTagsScrollArea->widget()->layout()->takeAt(m_movieTagsScrollArea->widget()->layout()->count()-1);
     while(tagsQuery.next()) {
         Tag* tag = new Tag(tagsQuery.value(0).toString());
 
         QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));
 
-        m_ui->TagsWidget->layout()->addWidget(tag);
+        m_movieTagsScrollArea->widget()->layout()->addWidget(tag);
     }
-    m_ui->TagsWidget->layout()->addItem(spacer);
+    m_movieTagsScrollArea->widget()->layout()->addItem(spacer);
 
     // Add custom columns informations
     QSqlQuery customColumnsQuery;
@@ -1518,13 +1531,13 @@ int MainWindow::getIndexOfMovie(int ID) {
 void MainWindow::clickedTag(Tag* tag) {
 
     // If layout was empty, height is re-adjusted to fit tags (height forced to 0 if no tags selected)
-    if(m_ui->SelectedTagsWidget->layout()->count() == 1)
-        m_ui->SelectedTagsScrollArea->setMaximumHeight(45);
+    if(m_selectedTagsScrollArea->widget()->layout()->count() == 1)
+        m_selectedTagsScrollArea->setMaximumHeight(45);
 
 
     bool isTagInLayout = false;
-    for(int i = 0 ; i < m_ui->SelectedTagsWidget->layout()->count() - 2 ; i++) {
-        Tag* t = (Tag*)m_ui->SelectedTagsWidget->layout()->itemAt(i)->widget();
+    for(int i = 0 ; i < m_selectedTagsScrollArea->widget()->layout()->count() - 2 ; i++) {
+        Tag* t = (Tag*)m_selectedTagsScrollArea->widget()->layout()->itemAt(i)->widget();
         if(QString::compare(t->text(), tag->text()) == 0) {
             isTagInLayout = true;
             break;
@@ -1536,9 +1549,9 @@ void MainWindow::clickedTag(Tag* tag) {
 
         QObject::connect(copiedTag, SIGNAL(clicked(Tag*)), this, SLOT(clickedFilterTag(Tag*)));
 
-        QLayoutItem* spacer = m_ui->SelectedTagsWidget->layout()->takeAt(m_ui->SelectedTagsWidget->layout()->count()-1);
-        m_ui->SelectedTagsWidget->layout()->addWidget(copiedTag);
-        m_ui->SelectedTagsWidget->layout()->addItem(spacer);
+        QLayoutItem* spacer = m_selectedTagsScrollArea->widget()->layout()->takeAt(m_selectedTagsScrollArea->widget()->layout()->count()-1);
+        m_selectedTagsScrollArea->widget()->layout()->addWidget(copiedTag);
+        m_selectedTagsScrollArea->widget()->layout()->addItem(spacer);
         fillTable();
     }
 
@@ -1547,8 +1560,8 @@ void MainWindow::clickedTag(Tag* tag) {
 void MainWindow::clickedFilterTag(Tag* tag) {
     delete tag;
     // Widget height forced to 0 to avoid a vertical space if no tags are selected
-    if(m_ui->SelectedTagsWidget->layout()->count() == 1)
-        m_ui->SelectedTagsScrollArea->setMaximumHeight(0);
+    if(m_selectedTagsScrollArea->widget()->layout()->count() == 1)
+        m_selectedTagsScrollArea->setMaximumHeight(0);
     fillTable();
 }
 

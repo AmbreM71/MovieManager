@@ -15,6 +15,7 @@ SOURCES += \
     Log.cpp \
     MainWindow.cpp \
     Tag.cpp \
+    TagsScrollArea.cpp \
     main.cpp
 
 HEADERS += \
@@ -36,7 +37,8 @@ HEADERS += \
     Log.h \
     MainWindow.h \
     Structures.h \
-    Tag.h
+    Tag.h \
+    TagsScrollArea.h
 
 QT += widgets \
       sql \

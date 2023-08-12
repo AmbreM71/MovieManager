@@ -27,6 +27,7 @@
 #include "Enums.h"
 #include "Tag.h"
 #include "BuildFunctions.h"
+#include "TagsScrollArea.h"
 
 #include "Dialogs/AddViewDialog.h"
 #include "Dialogs/EditViewsDialog.h"
@@ -56,6 +57,9 @@ class MainWindow : public QMainWindow {
         QLocale* m_locale;
         struct stFilters m_filters;
         QString m_customColumnsRequestFilter;
+
+        TagsScrollArea* m_selectedTagsScrollArea;
+        TagsScrollArea* m_movieTagsScrollArea;
 
 
     public:
