@@ -42,70 +42,6 @@
    </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="FormLayout">
-     <item row="2" column="1">
-      <widget class="QSpinBox" name="RatingInput">
-       <property name="maximum">
-        <number>10</number>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="6" column="0" colspan="2">
-      <layout class="QHBoxLayout" name="TagsLayout">
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="NameLabel">
-       <property name="text">
-        <string>Name</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="TagsLabel">
-       <property name="text">
-        <string>Tag(s)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="NameInput"/>
-     </item>
-     <item row="1" column="1">
-      <widget class="QSpinBox" name="ReleaseYearInput">
-       <property name="minimum">
-        <number>1870</number>
-       </property>
-       <property name="maximum">
-        <number>2000</number>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="1">
       <layout class="QHBoxLayout" name="TagsInputLayout">
        <item>
@@ -120,6 +56,39 @@
        </item>
       </layout>
      </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="NameInput"/>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="PosterButton">
+       <property name="text">
+        <string>Select a poster</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="RatingInput">
+       <property name="maximum">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <layout class="QVBoxLayout" name="CustomColumnsInputLayout"/>
+     </item>
+     <item row="7" column="0" colspan="2">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="ReleaseYearLabel">
        <property name="text">
@@ -127,10 +96,13 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="RatingLabel">
-       <property name="text">
-        <string>Rating</string>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="ReleaseYearInput">
+       <property name="minimum">
+        <number>1870</number>
+       </property>
+       <property name="maximum">
+        <number>2000</number>
        </property>
       </widget>
      </item>
@@ -141,18 +113,91 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QPushButton" name="PosterButton">
-       <property name="text">
-        <string>Select a poster</string>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="0">
       <layout class="QVBoxLayout" name="CustomColumnsLabelLayout"/>
      </item>
-     <item row="4" column="1">
-      <layout class="QVBoxLayout" name="CustomColumnsInputLayout"/>
+     <item row="5" column="0">
+      <widget class="QLabel" name="TagsLabel">
+       <property name="text">
+        <string>Tag(s)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="NameLabel">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="RatingLabel">
+       <property name="text">
+        <string>Rating</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" colspan="2">
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="TagsWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>268</width>
+          <height>45</height>
+         </rect>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
+         </size>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>265</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </widget>
      </item>
     </layout>
    </item>

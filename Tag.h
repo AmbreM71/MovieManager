@@ -3,17 +3,19 @@
 
 #include <QLabel>
 
-class Tag : public QLabel{
+class Tag : public QLabel {
 
     Q_OBJECT
 
     private:
         QString m_savedTag;
+        int m_nWidth;
 
     public:
         Tag(QString label);
         Tag(Tag* tag);
 
+        int getWidth();
         QString getSavedTag();
         void setSavedTag(QString tag);
 
@@ -27,7 +29,6 @@ class Tag : public QLabel{
 
     public slots:
         void mousePressEvent(QMouseEvent* event);
-
 
 };
 

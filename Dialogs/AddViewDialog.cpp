@@ -220,7 +220,9 @@ void AddViewDialog::addTag() {
         m_tags->append(m_ui->TagsInput->text());
         Tag* tag = new Tag(m_ui->TagsInput->text());
 
-        m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
+        QLayoutItem* spacer = m_ui->TagsWidget->layout()->takeAt(m_ui->TagsWidget->layout()->count()-1);
+        m_ui->TagsWidget->layout()->addWidget(tag);
+        m_ui->TagsWidget->layout()->addItem(spacer);
         m_ui->TagsInput->clear();
 
         QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));
@@ -244,14 +246,11 @@ void AddViewDialog::clickedTag(Tag* tag) {
 }
 
 void AddViewDialog::mouseEnteredTag(Tag* tag) {
-    int width = tag->width();
     tag->setSavedTag(tag->text());
     tag->setText("❌");
-    tag->setMinimumWidth(width);
 }
 
 void AddViewDialog::mouseLeftTag(Tag* tag) {
-    tag->setMinimumWidth(31);
     tag->setText(tag->getSavedTag());
 }
 

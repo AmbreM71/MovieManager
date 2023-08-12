@@ -65,18 +65,19 @@ QMenu::item:selected {
         border-left: 2px solid #65346d;
 }
 
-QScrollBar {
-        width: 10px;
-}
 
 QTableWidget QScrollBar {
-        width: 10px;
         height: 3px;
 }
 
 QScrollBar::handle {
         background: #666;
         min-height: 30px;
+        border-radius:5px;
+}
+
+QScrollBar::pressed {
+    background: #000;
 }
 
 QScrollBar::handle:hover, QScrollBar::handle:pressed {

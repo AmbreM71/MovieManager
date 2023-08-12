@@ -24,20 +24,6 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
 
     loadPoster(m_posterPath);
 
-    QSqlQuery tagsQuery;
-    if(!tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+*m_ID+"'"))
-        Common::LogDatabaseError(&tagsQuery);
-    while(tagsQuery.next()) {
-        m_tags->append(tagsQuery.value(0).toString());
-        Tag* tag = new Tag(tagsQuery.value(0).toString());
-
-        QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));
-        QObject::connect(tag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
-        QObject::connect(tag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
-
-        m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
-    }
-
     this->setWindowTitle(tr("Edit - %1").arg(movieQuery.value(0).toString()));
 
     m_ui->ReleaseYearInput->setMaximum(QDate::currentDate().year());
@@ -121,6 +107,24 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     }
 
     this->setFixedSize(this->sizeHint());
+
+    QSqlQuery tagsQuery;
+    if(!tagsQuery.exec("SELECT Tag FROM tags WHERE ID_Movie='"+*m_ID+"'"))
+        Common::LogDatabaseError(&tagsQuery);
+    while(tagsQuery.next()) {
+        m_tags->append(tagsQuery.value(0).toString());
+        Tag* tag = new Tag(tagsQuery.value(0).toString());
+
+        QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));
+        QObject::connect(tag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
+        QObject::connect(tag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
+
+        //m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
+        QLayoutItem* spacer = m_ui->TagsWidget->layout()->takeAt(m_ui->TagsWidget->layout()->count()-1);
+        m_ui->TagsWidget->layout()->addWidget(tag);
+        m_ui->TagsWidget->layout()->addItem(spacer);
+        m_ui->TagsInput->clear();
+    }
 }
 
 EditMovieDialog::~EditMovieDialog() {
@@ -165,7 +169,9 @@ void EditMovieDialog::addTag() {
         m_tags->append(m_ui->TagsInput->text());
         Tag* tag = new Tag(m_ui->TagsInput->text());
 
-        m_ui->TagsLayout->insertWidget(m_ui->TagsLayout->count()-1,tag,0,Qt::AlignLeft);
+        QLayoutItem* spacer = m_ui->TagsWidget->layout()->takeAt(m_ui->TagsWidget->layout()->count()-1);
+        m_ui->TagsWidget->layout()->addWidget(tag);
+        m_ui->TagsWidget->layout()->addItem(spacer);
         m_ui->TagsInput->clear();
 
         QObject::connect(tag, SIGNAL(clicked(Tag*)), this, SLOT(clickedTag(Tag*)));
@@ -190,14 +196,11 @@ void EditMovieDialog::clickedTag(Tag* tag) {
 }
 
 void EditMovieDialog::mouseEnteredTag(Tag* tag) {
-    int width = tag->width();
     tag->setSavedTag(tag->text());
     tag->setText("❌");
-    tag->setMinimumWidth(width);
 }
 
 void EditMovieDialog::mouseLeftTag(Tag* tag) {
-    tag->setMinimumWidth(31);
     tag->setText(tag->getSavedTag());
 }
 
