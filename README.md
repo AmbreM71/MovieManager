@@ -1,9 +1,6 @@
 <p align="center">
-  <img width="128" align="center" src="Assets/logo.png">
+  <img height="128" align="center" src="Assets/logo-wide.png">
 </p>
-<h1 align="center">
-    MovieManager
-</h1>
 <p align="center">
     A software to manage which movie you saw and when.
 </p>
