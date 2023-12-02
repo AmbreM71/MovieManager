@@ -1443,6 +1443,19 @@ void MainWindow::refreshTheme() {
     qApp->setStyleSheet(qss.readAll());
     qss.close();
 
+    // Pride month
+    if(QDate::currentDate().month() == 6)
+    {
+        m_ui->menubar->setStyleSheet("border-bottom: 3px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,"
+                                     "stop: 0.125 #000000,"
+                                     "stop: 0.125001 #784f17,stop: 0.25 #784f17,"
+                                     "stop: 0.25001 #fe0000,stop: 0.375 #fe0000,"
+                                     "stop: 0.375001 #ff8e01, stop: 0.5 #ff8e01,"
+                                     "stop: 0.5001 #ffee00, stop: 0.625 #ffee00,"
+                                     "stop: 0.625001 #028215, stop: 0.75 #028215,"
+                                     "stop: 0.75001 #014bff, stop: 0.875 #014bff,"
+                                     "stop: 0.875001 #8a018c, stop: 1 #8a018c);");
+    }
     Common::setIconAccordingToTheme(m_ui->ExportAct, "export.png");
     Common::setIconAccordingToTheme(m_ui->ImportAct, "import.png");
     Common::setIconAccordingToTheme(m_ui->QuitAct, "exit.png");
