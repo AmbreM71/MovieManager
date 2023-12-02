@@ -61,6 +61,8 @@ MainWindow::MainWindow(QApplication* app) {
         Common::Settings->setValue("moreLogs", false);
     if(Common::Settings->contains("dateFormat") == false)
         Common::Settings->setValue("dateFormat", "yyyy-MM-dd");
+    if(Common::Settings->contains("LastMovieOpened") == false)
+        Common::Settings->setValue("LastMovieOpened", 0);
 
     databaseConnection();
 
@@ -80,6 +82,17 @@ MainWindow::MainWindow(QApplication* app) {
     m_ui->MoviesListWidget->setColumnWidth(1,100);
     m_ui->MoviesListWidget->setColumnHidden(2, true);
 
+    // Set current row on last movie displayed before last close
+    for(int nIndex = 0; nIndex < m_ui->MoviesListWidget->rowCount(); nIndex++)
+    {
+        if(m_ui->MoviesListWidget->item(nIndex, 2)->text().toInt() == Common::Settings->value("LastMovieOpened").toInt())
+        {
+            m_ui->MoviesListWidget->setCurrentCell(nIndex, 0);
+            fillMovieInfos(Common::Settings->value("LastMovieOpened").toInt());
+            break;
+        }
+    }
+
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
     QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
@@ -89,6 +102,10 @@ MainWindow::MainWindow(QApplication* app) {
 
 MainWindow::~MainWindow() {
     delete m_ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    Common::Settings->setValue("LastMovieOpened", m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt());
 }
 
 void MainWindow::databaseConnection() {

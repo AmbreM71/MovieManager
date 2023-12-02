@@ -74,6 +74,7 @@ class MainWindow : public QMainWindow {
         void setMatrixMode(bool state);
         int getIndexOfMovie(int ID);
         int getIDOfMovie(int nIndex);
+        void closeEvent(QCloseEvent *event);
         ~MainWindow();
 
     public slots:
