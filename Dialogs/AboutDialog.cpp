@@ -29,5 +29,5 @@ int AboutDialog::instancesCount() {
 }
 
 void AboutDialog::redirectGithub() {
-    QDesktopServices::openUrl(QUrl("https://github.com/AlexM71/MovieManager", QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl("https://github.com/AmbreM71/MovieManager", QUrl::TolerantMode));
 }

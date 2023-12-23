@@ -18,6 +18,8 @@
 #include <QImage>
 #include <QSignalMapper>
 #include <QSpinBox>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 #include <cmath>
 #include <ctime>
@@ -100,6 +102,7 @@ class MainWindow : public QMainWindow {
         void on_MoviesListWidget_cellClicked(int row, int column);
         void on_MoviesListWidget_cellDoubleClicked(int row, int column);
         void on_ManageMovieViewsButton_clicked();
+        void CheckForUpdates(bool bManualTrigger = true);
 
         void clickedTag(Tag* tag);
         void clickedFilterTag(Tag* tag);

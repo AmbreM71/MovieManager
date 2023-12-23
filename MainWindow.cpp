@@ -5,10 +5,10 @@ MainWindow::MainWindow(QApplication* app) {
 
 #ifdef DEV
     m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager_Dev";
-    this->setWindowTitle("Movie Manager (DEV)");
+    this->setWindowTitle("MovieManager (DEV)");
 #else
     m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager";
-    this->setWindowTitle(tr("Movie Manager"));
+    this->setWindowTitle(tr("MovieManager"));
 #endif
 
     QDir dir(m_savepath);
@@ -92,6 +92,8 @@ MainWindow::MainWindow(QApplication* app) {
             break;
         }
     }
+
+    CheckForUpdates(false);
 
     QObject::connect(m_ui->AddViewButton, SIGNAL(clicked()), this, SLOT(addView()));
     QObject::connect(m_ui->AdvancedSearchButton, SIGNAL(clicked()), this, SLOT(openFilters()));
@@ -1361,6 +1363,7 @@ void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->ExportAct, SIGNAL(triggered()), this, SLOT(exportDB()));
     QObject::connect(m_ui->ChartAct, SIGNAL(triggered()), this, SLOT(openCharts()));
     QObject::connect(m_ui->CalendarAct, SIGNAL(triggered()), this, SLOT(openCalendar()));
+    QObject::connect(m_ui->CheckForUpdateAct, SIGNAL(triggered()), this, SLOT(CheckForUpdates()));
 }
 
 void MainWindow::on_EasterEggAct_triggered() {
@@ -1465,6 +1468,7 @@ void MainWindow::refreshTheme() {
     Common::setIconAccordingToTheme(m_ui->CalendarAct, "calendar.png");
     Common::setIconAccordingToTheme(m_ui->whatsnewAct, "github.png");
     Common::setIconAccordingToTheme(m_ui->AboutAct, "info.png");
+    Common::setIconAccordingToTheme(m_ui->CheckForUpdateAct, "download.png");
 }
 
 void MainWindow::fillGlobalStats() {
@@ -1606,3 +1610,49 @@ void MainWindow::on_MoviesListWidget_cellDoubleClicked(int row, int column) {
 void MainWindow::on_ManageMovieViewsButton_clicked() {
     editViews(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt());
 }
+
+void MainWindow::CheckForUpdates(bool bManualTrigger)
+{
+    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    QNetworkReply* reply = manager->get(QNetworkRequest(QUrl("https://api.github.com/repos/AmbreM71/MovieManager/releases/latest")));
+
+    connect(reply, &QNetworkReply::finished, [=]()
+    {
+        if(reply->error() == QNetworkReply::NoError)
+        {
+            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+            QString sLatestVersion = doc.object().value("tag_name").toString();
+            QString sCurrentVersion = Common::getVersion();
+            if(QString::compare(sCurrentVersion, sLatestVersion) != 0)
+            {
+                QMessageBox messageBox;
+                messageBox.setText(tr("A new version is available!\nLatest: %1\nCurrent: %2\n\nGo to the download page?").arg(sLatestVersion, sCurrentVersion));
+                messageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                messageBox.setDefaultButton(QMessageBox::Yes);
+                messageBox.setIcon(QMessageBox::Question);
+                if(messageBox.exec() == QMessageBox::Yes)
+                {
+                    QDesktopServices::openUrl(QUrl("https://github.com/AmbreM71/MovieManager/releases/latest", QUrl::TolerantMode));
+                }
+            }
+            else
+            {
+                if(bManualTrigger == true)
+                {
+                    QMessageBox messageBox;
+                    messageBox.setText(tr("MovieManager is up to date"));
+                    messageBox.setStandardButtons(QMessageBox::Ok);
+                    messageBox.setDefaultButton(QMessageBox::Ok);
+                    messageBox.setIcon(QMessageBox::Information);
+                    messageBox.exec();
+                }
+            }
+        }
+        else
+        {
+            Common::Log->append(tr("Unable to fetch last version: %1").arg(reply->errorString()), eLog::Error);
+        }
+    });
+}
+
+

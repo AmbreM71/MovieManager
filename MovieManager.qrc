@@ -54,5 +54,7 @@
         <file>Assets/nocover.psd</file>
         <file>Assets/stars.psd</file>
         <file>Assets/logo-wide.png</file>
+        <file>Assets/Icons/Bright/download.png</file>
+        <file>Assets/Icons/Dark/download.png</file>
     </qresource>
 </RCC>

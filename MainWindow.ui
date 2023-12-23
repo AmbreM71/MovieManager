@@ -409,6 +409,7 @@
      <string>Help</string>
     </property>
     <addaction name="whatsnewAct"/>
+    <addaction name="CheckForUpdateAct"/>
     <addaction name="AboutAct"/>
     <addaction name="EasterEggAct"/>
    </widget>
@@ -527,6 +528,11 @@
    </property>
    <property name="toolTip">
     <string notr="true">¯\_(ツ)_/¯</string>
+   </property>
+  </action>
+  <action name="CheckForUpdateAct">
+   <property name="text">
+    <string>Check for updates</string>
    </property>
   </action>
  </widget>
