@@ -13,12 +13,12 @@ Common::Common()
 }
 
 QString Common::SelectPoster(QWidget* parent) {
-    QList ValidExtensionList = {"jpg", "jpeg", "png"};
+    QList ValidExtensionList = {"jpg", "jpeg", "png", "webp"};
     QString sPath;
     bool bValidImage = false;
     while (bValidImage == false) {
         bValidImage = true;
-        sPath = QFileDialog::getOpenFileName(parent, QObject::tr("Select a picture"), QString(), QObject::tr("Image (*.png; *.jpg; *.jpeg )"));
+        sPath = QFileDialog::getOpenFileName(parent, QObject::tr("Select a picture"), QString(), QObject::tr("Image (*.png; *.jpg; *.jpeg; *.webp)"));
         if(sPath.size() <= 0)
             return "";
 
@@ -26,7 +26,7 @@ QString Common::SelectPoster(QWidget* parent) {
         sFileExt.remove(0, sPath.lastIndexOf(".")+1);
         // Test if file extension is valid
         if(ValidExtensionList.contains(sFileExt) == false) {
-            QMessageBox::critical(parent, QObject::tr("Incorrect format"), QObject::tr("Image format is incorrect\nPlease select a jpg, jpeg or png file"));
+            QMessageBox::critical(parent, QObject::tr("Incorrect format"), QObject::tr("Image format is incorrect\nValid formats: jpg, jpeg, png, webp"));
             bValidImage = false;
         }
     }
