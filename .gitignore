@@ -12,3 +12,4 @@ Makefile
 *.Release
 *.autosave
 *.db
+*.tmp
