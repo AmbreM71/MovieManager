@@ -938,25 +938,6 @@ void MainWindow::editMovie(int nMovieID) {
             }
         }
 
-
-        if(window->newPoster()) {
-            //Delete old poster
-            QSqlQuery posterQuery;
-            if(!posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";"))
-                Common::LogDatabaseError(&posterQuery);
-            posterQuery.first();
-            QFile::remove(m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
-
-            ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
-
-            GUID = QString::number(QRandomGenerator::global()->generate());
-            if(QFile::copy(window->getPosterPath(), m_savepath+"\\Posters/"+GUID+"."+ext) == false) {
-                Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2\\Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
-            }
-
-            // Add poster ID modification to the update request
-            sUpdateMovieRequest += ", Poster=\""+GUID+"."+ext+"\"";
-        }
         QSqlQuery editMovieQuery;
 
         QList<QWidget*>* customColumnsInputList = window->getCustomColumnsInputList();
@@ -984,6 +965,26 @@ void MainWindow::editMovie(int nMovieID) {
 
             }
         }
+
+        if(window->newPoster()) {
+            //Delete old poster
+            QSqlQuery posterQuery;
+            if(!posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";"))
+                Common::LogDatabaseError(&posterQuery);
+            posterQuery.first();
+            QFile::remove(m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
+
+            ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
+
+            GUID = QString::number(QRandomGenerator::global()->generate());
+            if(QFile::copy(window->getPosterPath(), m_savepath+"\\Posters/"+GUID+"."+ext) == false) {
+                Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2\\Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
+            }
+
+            // Add poster ID modification to the update request
+            sUpdateMovieRequest += ", Poster=\""+GUID+"."+ext+"\"";
+        }
+
         sUpdateMovieRequest.append(" WHERE ID=\""+ID+"\";");
 
         if(!editMovieQuery.exec(sUpdateMovieRequest)) {
