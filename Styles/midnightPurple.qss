@@ -1,18 +1,19 @@
 /*
 border :                #bbb
 background :            #111525
-pressed bg :            #333
 color :                 #fff
 hover border :          #713a7a
 disabled background :   #444
 disabled color :        #bbb
 */
 
+
 /*General*/
 QWidget {
     background-color: #111525;
     color: #fff;
     alternate-background-color: #1c273d;
+    outline: 0;
 }
 
 QWidget:disabled {
@@ -33,21 +34,20 @@ QMenuBar {
 }
 
 QMenuBar::item:selected {
-    border-bottom: 2px solid #713a7a;
+    background: rgba(255, 255, 255, 50);
 }
 
 QMenuBar::item:!selected {
-        border-bottom: 2px solid transparent;
-        padding-top: 3px;
-        padding-bottom: 3px;
-        padding-left: 6px;
-        padding-right: 6px;
+    background-color: transparent;
 }
 
 QMenuBar::item:pressed {
-        color: #fff ;
-        background: #5a2e61;
-        border-bottom: 2px solid #713a7a;
+    color: #fff ;
+    background: rgba(255, 255, 255, 50);
+}
+
+QMenu {
+    border: 1px solid grey;
 }
 
 QMenu::item {
@@ -56,13 +56,11 @@ QMenu::item {
         padding-right: 0.75em;
         padding-top: 0.25em;
         padding-bottom: 0.25em;
-        margin-bottom: 0.125em;
-        border-left: 2px solid #713a7a;
+        color: #fff;
 }
 
 QMenu::item:selected {
-        color: #fff ;
-        border-left: 2px solid #65346d;
+    background: rgba(255, 255, 255, 50);
 }
 
 QTableWidget QScrollBar {
@@ -118,7 +116,7 @@ QCheckBox::indicator:unchecked:hover {
 QComboBox {
         background-color: #111525;
         color: #fff;
-        border: 0.0625em solid #bbb;
+        border: 0.0625em solid #455971;
         border-radius: 0.10em;
         padding-bottom: 0.125em;
         padding-left: 0.25em;
@@ -141,22 +139,14 @@ QComboBox::indicator{
         selection-color: transparent;
 }
 
-QComboBox::selected {
-        background-color: #111525;
-        color: #fff;
-        border: 0.0625em solid #bbb;
-        border-radius: 0.10em;
-        padding-bottom: 0.125em;
-}
-
 QComboBox QAbstractItemView::item {
     border: 1px solid transparent;
-    background-color:#222;
+    background-color:#111525;
 }
 
 QComboBox QAbstractItemView::item:hover {
-    border: 1px solid #713a7a;
-    background-color:#333;
+    background-color:#222;
+    outline: 0;
 }
 
 QListWidget::item{
@@ -171,8 +161,9 @@ QListWidget::item:hover{
 QPushButton {
         border: 1px solid #455971;
         padding: 2px;
+        margin:1px;
         color: #fff;
-        border-radius: 2px;
+        border-radius: 3px;
         background-color: #111525;
         min-width: 82px;
 }
@@ -262,15 +253,27 @@ Tag:hover {
 
 QTabWidget::pane {
     border: 1px solid #455971;
-    padding: 10px;
-    top: -1px;
 }
+
+
 QTabBar::tab {
     background-color: #111525;
     border: 1px solid #455971;
+    border-bottom:0px;
     padding: 2px 12px 2px 12px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
 }
 
 QTabBar::tab:selected {
     color: #7f4d87;
+}
+
+QTabBar::tab:!selected {
+    margin-top: 3px;
+}
+
+QTabBar::tab:hover {
+    border: 1px solid #7f4d87;
+    border-bottom:0px;
 }
