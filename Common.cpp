@@ -12,62 +12,49 @@ Common::Common()
 
 }
 
-void Common::loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float safeRatio, QString path, QString* resultpath) {
-    QString posterPath;
-    if (path == "") {
-        bool extOK;
-        do {
-            QString temp = "";
-            extOK = true;
-            temp = QFileDialog::getOpenFileName(parent, QObject::tr("Select a picture"), QString(), QObject::tr("Image (*.png; *.jpg; *.jpeg )"));
-            QString ext = temp;
-            ext = ext.remove(0, temp.lastIndexOf(".")+1);
-            // Test if file is a jpg or a png
-            if(QString::compare(ext, "png", Qt::CaseInsensitive) != 0
-            && QString::compare(ext, "jpg", Qt::CaseInsensitive) != 0
-            && QString::compare(ext, "jpeg", Qt::CaseInsensitive) != 0
-            && temp.size() > 0) {
-                QMessageBox::critical(parent, QObject::tr("Incorrect format"), QObject::tr("Image format is incorrect\nPlease select a jpg, jpeg or png file"));
-                extOK = false;
-            }
-            else {
-                //This is to avoid spamming file selection dialog when closing dialog without selecting a file
-                if(temp.size() > 0) {
-                    posterPath = temp;
-                }
-                else {
-                    return;
-                }
-            }
-        } while (extOK == false);
-    }
-    else
-        posterPath = path;
+QString Common::SelectPoster(QWidget* parent) {
+    QList ValidExtensionList = {"jpg", "jpeg", "png"};
+    QString sPath;
+    bool bValidImage = false;
+    while (bValidImage == false) {
+        bValidImage = true;
+        sPath = QFileDialog::getOpenFileName(parent, QObject::tr("Select a picture"), QString(), QObject::tr("Image (*.png; *.jpg; *.jpeg )"));
+        if(sPath.size() <= 0)
+            return "";
 
-    if(posterPath != "") {
-        QPixmap pixmap;
-        //If no movie has no cover
-        QFileInfo imgFile(posterPath);
-        if(imgFile.exists(posterPath) && imgFile.isFile()) {
-            pixmap.load(posterPath);
+        QString sFileExt = sPath;
+        sFileExt.remove(0, sPath.lastIndexOf(".")+1);
+        // Test if file extension is valid
+        if(ValidExtensionList.contains(sFileExt) == false) {
+            QMessageBox::critical(parent, QObject::tr("Incorrect format"), QObject::tr("Image format is incorrect\nPlease select a jpg, jpeg or png file"));
+            bValidImage = false;
         }
-        else {
-            pixmap.load(":/assets/Assets/nocover.png");
-        }
-        QPixmap pm;
+    }
+    qDebug() << sPath;
+    return sPath;
+}
 
-        //If picture is too wide, poster is scaled to width to fit in UI (safe until 4:3)
-        if((float)pixmap.height()/(float)pixmap.width() < safeRatio) {
-            pm = pixmap.scaledToWidth(posterHeight/safeRatio, Qt::SmoothTransformation);
-        }
-        else {
-            pm = pixmap.scaledToHeight(posterHeight, Qt::SmoothTransformation);
-        }
-        poster->setPixmap(pm);
+void Common::DisplayPoster(QLabel* poster, int nPosterHeight, float fSafeRatio, QString sPath) {
+    QPixmap pixmap;
+    //If no movie has no cover
+    QFileInfo imgFile(sPath);
+    if(imgFile.exists(sPath) && imgFile.isFile()) {
+        pixmap.load(sPath);
     }
-    if(resultpath != nullptr) {
-        *resultpath = posterPath;
+    else {
+        pixmap.load(":/assets/Assets/nocover.png");
     }
+    QPixmap pm;
+
+    //If picture is too wide, poster is scaled to width to fit in UI
+    if((float)pixmap.height()/(float)pixmap.width() < fSafeRatio) {
+        pm = pixmap.scaledToWidth(nPosterHeight/fSafeRatio, Qt::SmoothTransformation);
+    }
+    else {
+        pm = pixmap.scaledToHeight(nPosterHeight, Qt::SmoothTransformation);
+    }
+
+    poster->setPixmap(pm);
 }
 
 void Common::ratingToStar(int rating, QLabel* ratingLabel) {

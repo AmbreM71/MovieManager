@@ -31,7 +31,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
-    QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
+    QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(SelectPoster()));
     QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
 
     //Connectors to check if input are filled to enable Ok button
@@ -162,10 +162,11 @@ void AddViewDialog::comboboxChanged() {
         posterQuery.first();
 
 #ifdef DEV
-        loadPoster(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager_Dev\\Posters\\"+posterQuery.value(0).toString());
+        QString sPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager_Dev\\Posters\\"+posterQuery.value(0).toString();
 #else
-        loadPoster(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+posterQuery.value(0).toString());
+        QString sPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+posterQuery.value(0).toString();
 #endif
+        Common::DisplayPoster(m_ui->PosterLabel, m_ui->PosterLabel->sizeHint().height(), m_ui->PosterLabel->sizeHint().height() / (float)m_ui->PosterLabel->sizeHint().width(), sPath);
     }
 }
 
@@ -211,9 +212,11 @@ void AddViewDialog::checkValid() {
     }
 }
 
-void AddViewDialog::loadPoster(QString path) {
+void AddViewDialog::SelectPoster() {
     float ratio = (float)m_ui->PosterLabel->sizeHint().height() / (float)m_ui->PosterLabel->sizeHint().width();
-    Common::loadPoster(this, m_ui->PosterLabel, m_ui->PosterLabel->sizeHint().height(), ratio, path, &m_posterPath);
+    m_posterPath = Common::SelectPoster(this);
+    if(m_posterPath != "")
+        Common::DisplayPoster(m_ui->PosterLabel, m_ui->PosterLabel->sizeHint().height(), ratio, m_posterPath);
 }
 
 void AddViewDialog::addTag() {

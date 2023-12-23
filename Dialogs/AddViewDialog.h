@@ -54,7 +54,7 @@ class AddViewDialog : public QDialog
         void toggleViewDateInput(int state);
         void toggleViewTypeInput(int state);
         void checkValid();
-        void loadPoster(QString path = "");
+        void SelectPoster();
         void addTag();
 
         void clickedTag(Tag* tag);

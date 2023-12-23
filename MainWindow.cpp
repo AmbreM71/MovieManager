@@ -360,7 +360,7 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         Common::LogDatabaseError(&posterQuery);
     posterQuery.first();
 
-    Common::loadPoster(this, m_ui->PosterLabel, 400, 1, m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
+    Common::DisplayPoster(m_ui->PosterLabel, 400, 1, m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
 
     //Fetch the number of views of the current movie
     QSqlQuery viewsQuery;
@@ -938,7 +938,6 @@ void MainWindow::editMovie(int nMovieID) {
             }
         }
 
-        QString sUpdateMovieRequest = "";
 
         if(window->newPoster()) {
             //Delete old poster
@@ -963,7 +962,7 @@ void MainWindow::editMovie(int nMovieID) {
         QList<QWidget*>* customColumnsInputList = window->getCustomColumnsInputList();
         QList<QString>* customColumnsNameList = window->getCustomColumnsNameList();
 
-        sUpdateMovieRequest = "UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
+        QString sUpdateMovieRequest = "UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
                               "\", Rating=\""+QString::number(window->getRating())+"\" ";
         for(int nColumn = 0; nColumn < customColumnsNameList->size(); nColumn++) {
             if(qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn)) != nullptr)

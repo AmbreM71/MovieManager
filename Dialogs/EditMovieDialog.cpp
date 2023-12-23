@@ -25,7 +25,8 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+movieQuery.value(3).toString();
 #endif
 
-    loadPoster(m_posterPath);
+    float ratio = (float)m_ui->PosterLabel->sizeHint().height() / (float)m_ui->PosterLabel->sizeHint().width();
+    Common::DisplayPoster(m_ui->PosterLabel, m_ui->PosterLabel->sizeHint().height(), ratio, m_posterPath);
 
     this->setWindowTitle(tr("Edit - %1").arg(movieQuery.value(0).toString()));
 
@@ -35,7 +36,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     m_ui->ReleaseYearInput->setValue(movieQuery.value(1).toInt());
     m_ui->RatingInput->setValue(movieQuery.value(2).toInt());
 
-    QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(loadPoster()));
+    QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(SelectPoster()));
     QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
 
     QSqlQuery customColumnsQuery;
@@ -157,12 +158,14 @@ int EditMovieDialog::getRating() {
     return m_ui->RatingInput->value();
 }
 
-void EditMovieDialog::loadPoster(QString path) {
-    QString tmp = m_posterPath;
-    float ratio = (float)m_ui->PosterLabel->sizeHint().height() / (float)m_ui->PosterLabel->sizeHint().width();
-    Common::loadPoster(this, m_ui->PosterLabel, m_ui->PosterLabel->sizeHint().height(), ratio, path, &m_posterPath);
-    if (QString::compare(tmp, m_posterPath) != 0) {
+void EditMovieDialog::SelectPoster() {
+    QString sNewPath = m_posterPath;
+    sNewPath = Common::SelectPoster(m_ui->PosterLabel);
+    if(QString::compare(sNewPath, m_posterPath) != 0 && sNewPath.length() != 0) {
         m_newPoster = true;
+        m_posterPath = sNewPath;
+        float ratio = (float)m_ui->PosterLabel->sizeHint().height() / (float)m_ui->PosterLabel->sizeHint().width();
+        Common::DisplayPoster(m_ui->PosterLabel, m_ui->PosterLabel->sizeHint().height(), ratio, m_posterPath);
     }
 }
 

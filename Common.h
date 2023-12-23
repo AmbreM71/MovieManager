@@ -26,7 +26,8 @@ public:
     static Log* Log;
     static QSettings* Settings;
 
-    static void loadPoster(QWidget* parent, QLabel* poster, int posterHeight, float safeRatio, QString path = "", QString* resultpath = nullptr);
+    static QString SelectPoster(QWidget* parent = nullptr);
+    static void DisplayPoster(QLabel* poster, int nPosterHeight, float fSafeRatio, QString sPath);
 
     static void ratingToStar(int rating, QLabel* ratingLabel);
 

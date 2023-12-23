@@ -49,7 +49,7 @@ class EditMovieDialog : public QDialog
         QList<QString>* getCustomColumnsNameList();
 
     public slots:
-        void loadPoster(QString path = "");
+        void SelectPoster();
         void addTag();
 
         void clickedTag(Tag* tag);
