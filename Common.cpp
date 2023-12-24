@@ -30,7 +30,6 @@ QString Common::SelectPoster(QWidget* parent) {
             bValidImage = false;
         }
     }
-    qDebug() << sPath;
     return sPath;
 }
 

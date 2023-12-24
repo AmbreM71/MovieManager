@@ -209,7 +209,9 @@ void MainWindow::fillTable() {
                                  "AND Rating BETWEEN '"+QString::number(m_filters.nMinRating)+"' AND '"+QString::number(m_filters.nMaxRating)+"'"
                                  +m_customColumnsRequestFilter;
 
-    Common::Log->append(tr("Fetching from database"), eLog::Notice);
+    if(Common::Settings->value("moreLogs").toBool() == true)
+        Common::Log->append(tr("Fetching from database..."), eLog::Notice);
+
     if(!moviesQuery.exec(sMovieQueryRequest))
         Common::LogDatabaseError(&moviesQuery);
 
@@ -239,8 +241,8 @@ void MainWindow::fillTable() {
 
         numberOfParsedMovies++;
     }
-
-    Common::Log->append(tr("Movies fetched from database: %1").arg(QString::number(numberOfParsedMovies)), eLog::Notice);
+    if(Common::Settings->value("moreLogs").toBool() == true)
+        Common::Log->append(tr("Movies fetched from database: %1").arg(QString::number(numberOfParsedMovies)), eLog::Notice);
 
     /* QUICK FILTER PART*/
 
@@ -722,8 +724,8 @@ void MainWindow::addView(int nMovieID) {
                 QString posterPath = "";
                 if(window->getPosterPath() != "") {
                     QImage poster(window->getPosterPath());
-                    if(poster.height() > 1200 || poster.width() > 1200) {
-                        Common::Log->append(tr("Image to big (%1x%2). Latencies can be felt.").arg(QString::number(poster.width()), QString::number(poster.height())), eLog::Warning);
+                    if(poster.height() * poster.width() > 2000000) {
+                        Common::Log->append(tr("Selected poster is large (%1x%2). Latencies can be felt.").arg(QString::number(poster.width()), QString::number(poster.height())), eLog::Warning);
                     }
 
                     //Processing poster moving and renaming
