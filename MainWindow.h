@@ -77,6 +77,7 @@ class MainWindow : public QMainWindow {
         int getIndexOfMovie(int ID);
         int getIDOfMovie(int nIndex);
         void closeEvent(QCloseEvent *event);
+        void deleteMovie(int nMovieID);
         ~MainWindow();
 
     public slots:
@@ -94,7 +95,7 @@ class MainWindow : public QMainWindow {
         void importDB();
         void exportDB();
         void customMenuRequested(QPoint pos);
-        void deleteMovie(int nMovieID = -1);
+        void deleteMovieConfirmation(int nMovieID = -1);
         void editMovie(int nMovieID = -1);
         void fillMovieInfos(int nMovieID = -1);
         void on_EasterEggAct_triggered();

@@ -877,6 +877,10 @@ void MainWindow::editViews(int nMovieID) {
     window->show();
     if(window->exec() == 1) {
         if (window->edited()) {
+            if(window->GetViewsCount() == 0) {
+                Common::Log->append(tr("Movie whose ID is %1 has no more views, it is removed").arg(nMovieID), eLog::Notice);
+                this->deleteMovie(nMovieID);
+            }
             fillTable();
             fillGlobalStats();
         }
@@ -1050,53 +1054,54 @@ void MainWindow::editMovie(int nMovieID) {
     }
 }
 
+void MainWindow::deleteMovieConfirmation(int nMovieID) {
+    QMessageBox::StandardButton reply = QMessageBox::question(this, tr("Remove the movie"), tr("Are you sure do you want to remove the movie? Its views will be removed."));
+    if(reply == QMessageBox::Yes)
+        deleteMovie(nMovieID);
+}
+
 void MainWindow::deleteMovie(int nMovieID) {
-    QMessageBox::StandardButton reply;
     int savedRow = 0;
-    reply = QMessageBox::question(this, tr("Remove the movie"), tr("Are you sure do you want to remove the movie? Its views will be removed."));
-    if(reply == QMessageBox::Yes) {
+    QSqlQuery deleteMovieQuery;
+    QSqlQuery deleteAssociatedViewsQuery;
+    QSqlQuery deleteAssociatedTagsQuery;
+    QSqlQuery posterQuery;
 
-        QSqlQuery deleteMovieQuery;
-        QSqlQuery deleteAssociatedViewsQuery;
-        QSqlQuery deleteAssociatedTagsQuery;
-        QSqlQuery posterQuery;
+    QString ID = QString::number(nMovieID);
+    savedRow = m_ui->MoviesListWidget->currentRow();
 
-        QString ID = QString::number(nMovieID);
-        savedRow = m_ui->MoviesListWidget->currentRow();
+    if(!posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";"))
+        Common::LogDatabaseError(&posterQuery);
 
-        if(!posterQuery.exec("SELECT Poster FROM movies WHERE ID=\""+ID+"\";"))
-            Common::LogDatabaseError(&posterQuery);
-
-        posterQuery.first();
-        QFile::remove(m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
+    posterQuery.first();
+    QFile::remove(m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
 
 
-        if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
-            Common::LogDatabaseError(&deleteMovieQuery);
-        }
-
-        if(!deleteAssociatedViewsQuery.exec("DELETE FROM views WHERE ID_Movie=\""+ID+"\";")) {
-            Common::LogDatabaseError(&deleteAssociatedViewsQuery);
-        }
-
-        if(!deleteAssociatedTagsQuery.exec("DELETE FROM tags WHERE ID_Movie=\""+ID+"\";")) {
-            Common::LogDatabaseError(&deleteAssociatedTagsQuery);
-        }
-
-        removeUnusedTags();
-        resetFilters();
-        if(savedRow == m_ui->MoviesListWidget->rowCount())
-            savedRow--;
-        if(savedRow == -1)
-            savedRow = 0;
-        m_ui->MoviesListWidget->setCurrentCell(savedRow, 0);
-
-        if(m_ui->MoviesListWidget->rowCount() == 0)
-            fillMovieInfos(-1);
-        else
-            fillMovieInfos(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt());
-        fillGlobalStats();
+    if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {
+        Common::LogDatabaseError(&deleteMovieQuery);
     }
+
+    if(!deleteAssociatedViewsQuery.exec("DELETE FROM views WHERE ID_Movie=\""+ID+"\";")) {
+        Common::LogDatabaseError(&deleteAssociatedViewsQuery);
+    }
+
+    if(!deleteAssociatedTagsQuery.exec("DELETE FROM tags WHERE ID_Movie=\""+ID+"\";")) {
+        Common::LogDatabaseError(&deleteAssociatedTagsQuery);
+    }
+
+    removeUnusedTags();
+    resetFilters();
+    if(savedRow == m_ui->MoviesListWidget->rowCount())
+        savedRow--;
+    if(savedRow == -1)
+        savedRow = 0;
+    m_ui->MoviesListWidget->setCurrentCell(savedRow, 0);
+
+    if(m_ui->MoviesListWidget->rowCount() == 0)
+        fillMovieInfos(-1);
+    else
+        fillMovieInfos(m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt());
+    fillGlobalStats();
 }
 
 void MainWindow::openFilters() {
@@ -1346,7 +1351,7 @@ void MainWindow::customMenuRequested(QPoint pos) {
     QObject::connect(editAction, SIGNAL(triggered()), editMovieSignalMapper, SLOT(map()));
 
     QSignalMapper* deleteMovieSignalMapper = new QSignalMapper();
-    QObject::connect(deleteMovieSignalMapper, SIGNAL(mappedInt(int)), this, SLOT(deleteMovie(int)));
+    QObject::connect(deleteMovieSignalMapper, SIGNAL(mappedInt(int)), this, SLOT(deleteMovieConfirmation(int)));
     deleteMovieSignalMapper->setMapping(deleteAction, nMovieID);
     QObject::connect(deleteAction, SIGNAL(triggered()), deleteMovieSignalMapper, SLOT(map()));
 

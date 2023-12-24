@@ -26,6 +26,10 @@ EditViewsDialog::~EditViewsDialog() {
     delete m_ui;
 }
 
+int EditViewsDialog::GetViewsCount() {
+    return m_ui->tableWidget->rowCount();
+}
+
 void EditViewsDialog::fillTable() {
 
     int movieListRowCount = m_ui->tableWidget->rowCount();

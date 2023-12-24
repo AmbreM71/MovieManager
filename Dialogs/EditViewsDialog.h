@@ -30,6 +30,7 @@ class EditViewsDialog : public QDialog
 
         void fillTable();
         bool edited();
+        int GetViewsCount();
 
     public slots:
         void customMenuRequested(QPoint pos);
