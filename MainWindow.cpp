@@ -107,7 +107,8 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    Common::Settings->setValue("LastMovieOpened", m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt());
+    if(m_ui->MoviesListWidget->currentRow() != -1)
+        Common::Settings->setValue("LastMovieOpened", m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt());
 }
 
 void MainWindow::databaseConnection() {
