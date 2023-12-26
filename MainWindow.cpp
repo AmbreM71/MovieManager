@@ -66,6 +66,9 @@ MainWindow::MainWindow(QApplication* app) {
 
     databaseConnection();
 
+    if(BackupDatabase() == true)
+        Common::Log->append(tr("Database backup created successfully"), eLog::Success);
+
     refreshLanguage();
     refreshTheme();
 
@@ -109,6 +112,43 @@ MainWindow::~MainWindow() {
 void MainWindow::closeEvent(QCloseEvent *event) {
     if(m_ui->MoviesListWidget->currentRow() != -1)
         Common::Settings->setValue("LastMovieOpened", m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt());
+}
+
+// Creates a backup of the database
+bool MainWindow::BackupDatabase()
+{
+    QString sTempDatabase = m_savepath + QDir::separator() + "movieDatabase.TEMP.db";
+    QString sBackupDatabase = m_savepath + QDir::separator() + "movieDatabase.BACKUP.db";
+
+    // Creates a backup of the database with suffix TEMP
+    if(QFile::copy(m_savepath + QDir::separator() + "movieDatabase.db", sTempDatabase) == false)
+    {
+        Common::Log->append(tr("Failed to create a backup of the database (error 1)"), eLog::Error);
+        return false;
+    }
+
+    // Removes the backup if exists
+    if(QFile::exists(sBackupDatabase))
+    {
+        if(QFile::remove(sBackupDatabase) == false)
+        {
+            Common::Log->append(tr("Failed to create a backup of the database (error 2)"), eLog::Error);
+            if(QFile::remove(sTempDatabase) == false)
+                Common::Log->append(tr("Failed to create a backup of the database (error 3)"), eLog::Error);
+            return false;
+        }
+    }
+
+    // Renames the backup suffix from TEMP to BACKUP
+    if(QFile::rename(sTempDatabase, sBackupDatabase) == false)
+    {
+        Common::Log->append(tr("Failed to create a backup of the database (error 4)"), eLog::Error);
+        if(QFile::remove(sTempDatabase) == false)
+            Common::Log->append(tr("Failed to create a backup of the database (error 5)"), eLog::Error);
+        return false;
+    }
+
+    return true;
 }
 
 void MainWindow::databaseConnection() {

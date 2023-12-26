@@ -68,6 +68,7 @@ class MainWindow : public QMainWindow {
 
         explicit MainWindow(QApplication* app);
         void databaseConnection();
+        bool BackupDatabase();
         void fillGlobalStats();
         void filterTable();
         void removeUnusedTags();
