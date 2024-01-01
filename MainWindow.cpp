@@ -39,7 +39,7 @@ MainWindow::MainWindow(QApplication* app) {
     // Filters initialisation
     m_filters.sName = "";
     m_filters.nMinYear = 1870;
-    m_filters.nMaxYear = 2023;
+    m_filters.nMaxYear = QDate::currentDate().year();
     m_filters.nMinRating = 0;
     m_filters.nMaxRating = 10;
 
@@ -794,7 +794,7 @@ void MainWindow::addView(int nMovieID) {
                     sRequest.append(",?");
                 }
                 sRequest.append(");");
-                
+
                 QSqlQuery insertIntoMoviesQuery;
                 insertIntoMoviesQuery.prepare(sRequest);
 
@@ -1384,7 +1384,7 @@ void MainWindow::resetFilters() {
     m_ui->ResetFiltersButton->setEnabled(false);
     m_filters.sName = "";
     m_filters.nMinYear = 1870;
-    m_filters.nMaxYear = 2023;
+    m_filters.nMaxYear = QDate::currentDate().year();
     m_filters.nMinRating = 0;
     m_filters.nMaxRating = 10;
     m_customColumnsRequestFilter = "";
@@ -1429,7 +1429,7 @@ void MainWindow::customMenuRequested(QPoint pos) {
     deleteMovieSignalMapper->setMapping(deleteAction, nMovieID);
     QObject::connect(deleteAction, SIGNAL(triggered()), deleteMovieSignalMapper, SLOT(map()));
 
-    
+
     menu->popup(m_ui->MoviesListWidget->viewport()->mapToGlobal(pos));
 }
 

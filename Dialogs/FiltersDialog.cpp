@@ -11,6 +11,7 @@ FiltersDialog::FiltersDialog(stFilters* filters, QWidget *parent) : QDialog(pare
 
     m_ui->MaxYearInput->setValue(QDate::currentDate().year());
     m_ui->MaxYearInput->setMaximum(QDate::currentDate().year());
+    m_ui->MinYearInput->setMaximum(QDate::currentDate().year());
 
     m_filters = filters;
 

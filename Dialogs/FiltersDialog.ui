@@ -43,12 +43,6 @@
        <property name="minimum">
         <number>1870</number>
        </property>
-       <property name="maximum">
-        <number>2022</number>
-       </property>
-       <property name="value">
-        <number>1900</number>
-       </property>
        <property name="displayIntegerBase">
         <number>10</number>
        </property>
@@ -82,12 +76,6 @@
       <widget class="QSpinBox" name="MaxYearInput">
        <property name="minimum">
         <number>1870</number>
-       </property>
-       <property name="maximum">
-        <number>3000</number>
-       </property>
-       <property name="value">
-        <number>2000</number>
        </property>
       </widget>
      </item>
