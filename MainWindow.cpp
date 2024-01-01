@@ -64,7 +64,11 @@ MainWindow::MainWindow(QApplication* app) {
     if(Common::Settings->contains("LastMovieOpened") == false)
         Common::Settings->setValue("LastMovieOpened", 0);
 
-    databaseConnection();
+    InitDatabase();
+    if(getDatabaseVersion() == "")
+        CreateTables();
+
+    CheckDatabaseVersion();
 
     if(BackupDatabase() == true)
         Common::Log->append(tr("Database backup created successfully"), eLog::Success);
@@ -151,7 +155,7 @@ bool MainWindow::BackupDatabase()
     return true;
 }
 
-void MainWindow::databaseConnection() {
+void MainWindow::InitDatabase() {
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(m_savepath+"/movieDatabase.db");
 
@@ -161,7 +165,10 @@ void MainWindow::databaseConnection() {
     else {
         Common::Log->append(tr("Database opened successfully"), eLog::Success);
     }
+}
 
+void MainWindow::CreateTables()
+{
     //Movies table
     QString movieDatabaseCreationString = "CREATE TABLE IF NOT EXISTS movies ("
                                    "ID          INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -225,6 +232,22 @@ void MainWindow::databaseConnection() {
 
     if(!ColumnBDQuery.exec(ColumnDatabaseCreationString)) {
         Common::LogDatabaseError(&ColumnBDQuery);
+    }
+
+    // Version Table
+    QString VersionDatabaseCreationString = "CREATE TABLE IF NOT EXISTS version ("
+                                            "Version    Text);";
+
+    QSqlQuery VersionBDQuery;
+
+    if(!VersionBDQuery.exec(VersionDatabaseCreationString)) {
+        Common::LogDatabaseError(&VersionBDQuery);
+    }
+
+    QString VersionDatabaseInsert = "INSERT INTO Version (Version) VALUES (\"1.2.0\");";
+
+    if(!VersionBDQuery.exec(VersionDatabaseInsert)) {
+        Common::LogDatabaseError(&VersionBDQuery);
     }
 }
 
@@ -1734,4 +1757,30 @@ void MainWindow::CheckForUpdates(bool bManualTrigger)
     });
 }
 
+QString MainWindow::getDatabaseVersion()
+{
+    QString sDatabaseVersion;
+    QSqlQuery getDatabaseVersion;
+    if(!getDatabaseVersion.exec("SELECT Version FROM Version"))
+        Common::LogDatabaseError(&getDatabaseVersion);
 
+    getDatabaseVersion.first();
+
+    sDatabaseVersion = getDatabaseVersion.value(0).toString();
+
+    return sDatabaseVersion;
+}
+
+void MainWindow::CheckDatabaseVersion()
+{
+    QString sDatabaseVersion = getDatabaseVersion();
+
+    // Add sql command to new versions, example
+    //
+    // if(sDatabaseVersion == "1.2.0")
+    // {
+    //      // Migrate database
+    //      sDatabaseVersion = "1.3.0"
+    // }
+    // //etc...
+}

@@ -68,7 +68,9 @@ class MainWindow : public QMainWindow {
     public:
 
         explicit MainWindow(QApplication* app);
-        void databaseConnection();
+        void InitDatabase();
+        QString getDatabaseVersion();
+        void CreateTables();
         bool BackupDatabase();
         void fillGlobalStats();
         void filterTable();
@@ -80,6 +82,7 @@ class MainWindow : public QMainWindow {
         int getIDOfMovie(int nIndex);
         void closeEvent(QCloseEvent *event);
         void deleteMovie(int nMovieID);
+        void CheckDatabaseVersion();
         ~MainWindow();
 
     public slots:
