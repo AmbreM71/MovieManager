@@ -7,6 +7,7 @@ FiltersDialog::FiltersDialog(stFilters* filters, QWidget *parent) : QDialog(pare
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/search.png"));
 
     m_customColumnsMap = new QMap<QWidget*, QString>();
+    m_customColumnsUnknownCheckBox = new QList<QCheckBox*>();
 
     m_ui->MaxYearInput->setValue(QDate::currentDate().year());
     m_ui->MaxYearInput->setMaximum(QDate::currentDate().year());
@@ -75,6 +76,11 @@ FiltersDialog::FiltersDialog(stFilters* filters, QWidget *parent) : QDialog(pare
             m_ui->FormLayout->addWidget(input, 3 + nColumnIndex, 1, 1, 3);
             m_customColumnsMap->insert(input, columnLabel->text());
         }
+        QCheckBox* unknown = new QCheckBox();
+        unknown->setText(tr("Unknown only"));
+        m_ui->FormLayout->addWidget(unknown, 3 + nColumnIndex, 4);
+        m_customColumnsUnknownCheckBox->append(unknown);
+
         nColumnIndex++;
     }
     this->adjustSize();
@@ -91,4 +97,8 @@ FiltersDialog::~FiltersDialog() {
 
 QMap<QWidget*, QString>* FiltersDialog::getCustomColumnsMap() {
     return m_customColumnsMap;
+}
+
+QList<QCheckBox*>* FiltersDialog::getCustomColumnsUnknownCheckBox() {
+    return m_customColumnsUnknownCheckBox;
 }

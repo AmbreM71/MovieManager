@@ -44,13 +44,14 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     int nCustomColumnCount = 0;
     QStringList sCustomColumnsNameList;
 
-    if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength FROM columns;"))
+    if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength, Optional FROM columns;"))
         Common::LogDatabaseError(&customColumnsQuery);
     int nColumnIndex = 0;
     while(customColumnsQuery.next()) {
         QLabel* columnLabel = new QLabel(customColumnsQuery.value(0).toString());
         m_ui->CustomColumnsLabelLayout->addWidget(columnLabel, nColumnIndex);
         m_customColumnsNameList->append(columnLabel->text());
+        QHBoxLayout* inputLayout = new QHBoxLayout();
 
         sCustomColumns.append(" \"" + customColumnsQuery.value(0).toString() + "\",");
         nCustomColumnCount++;
@@ -61,7 +62,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
             QSpinBox* input = new QSpinBox();
             input->setMinimum(customColumnsQuery.value(2).toInt());
             input->setMaximum(customColumnsQuery.value(3).toInt());
-            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            inputLayout->addWidget(input, 1);
             m_customColumnsInputList->append(input);
         }
         else if(customColumnsQuery.value(1).toInt() == 1) {
@@ -70,16 +71,31 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
             input->setMinimum(customColumnsQuery.value(2).toDouble());
             input->setMaximum(customColumnsQuery.value(3).toDouble());
             input->setDecimals(customColumnsQuery.value(4).toDouble());
-            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            inputLayout->addWidget(input, 1);
             m_customColumnsInputList->append(input);
         }
         else if(customColumnsQuery.value(1).toInt() == 2) {
             // Text
             QLineEdit* input = new QLineEdit();
             input->setMaxLength(customColumnsQuery.value(5).toInt());
-            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            inputLayout->addWidget(input, 1);
             m_customColumnsInputList->append(input);
         }
+
+        QCheckBox* unknown = new QCheckBox();
+        unknown->setText(tr("Unknown"));
+        inputLayout->addWidget(unknown,0);
+        m_customColumnsUnknownCheckBoxList.append(unknown);
+        connect(unknown, &QCheckBox::stateChanged, this, [=]() {
+            if(unknown->isChecked() == true)
+                inputLayout->itemAt(0)->widget()->setEnabled(false);
+            else
+                inputLayout->itemAt(0)->widget()->setEnabled(true);
+        });
+        if(customColumnsQuery.value(6).toBool() == false)
+            unknown->setVisible(false);
+        m_ui->CustomColumnsInputLayout->addLayout(inputLayout);
+
         nColumnIndex++;
     }
     sCustomColumns.removeLast(); // Removes the last ","
@@ -96,17 +112,26 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
         if(qobject_cast<QLineEdit*>(m_customColumnsInputList->at(nColumn)) != nullptr)
         {
             QLineEdit* input = qobject_cast<QLineEdit*>(m_customColumnsInputList->at(nColumn));
-            input->setText(customColumnsInformationsQuery.value(nColumn).toString());
+            if(customColumnsInformationsQuery.value(nColumn).toString().length() == 0)
+                m_customColumnsUnknownCheckBoxList.at(nColumn)->setChecked(true);
+            else
+                input->setText(customColumnsInformationsQuery.value(nColumn).toString());
         }
         else if(qobject_cast<QSpinBox*>(m_customColumnsInputList->at(nColumn)) != nullptr)
         {
             QSpinBox* input = qobject_cast<QSpinBox*>(m_customColumnsInputList->at(nColumn));
-            input->setValue(customColumnsInformationsQuery.value(nColumn).toInt());
+            if(customColumnsInformationsQuery.value(nColumn).toString().length() == 0)
+                m_customColumnsUnknownCheckBoxList.at(nColumn)->setChecked(true);
+            else
+                input->setValue(customColumnsInformationsQuery.value(nColumn).toInt());
         }
         else if(qobject_cast<QDoubleSpinBox*>(m_customColumnsInputList->at(nColumn)) != nullptr)
         {
             QDoubleSpinBox* input = qobject_cast<QDoubleSpinBox*>(m_customColumnsInputList->at(nColumn));
-            input->setValue(customColumnsInformationsQuery.value(nColumn).toDouble());
+            if(customColumnsInformationsQuery.value(nColumn).toString().length() == 0)
+                m_customColumnsUnknownCheckBoxList.at(nColumn)->setChecked(true);
+            else
+                input->setValue(customColumnsInformationsQuery.value(nColumn).toDouble());
         }
     }
 
@@ -217,6 +242,10 @@ QList<QString>* EditMovieDialog::getCustomColumnsNameList() {
     return m_customColumnsNameList;
 }
 
+QList<QCheckBox*> EditMovieDialog::getCustomColumnsUnknownCheckBoxList() {
+    return m_customColumnsUnknownCheckBoxList;
+}
+
 bool EditMovieDialog::eventFilter(QObject *obj, QEvent *event) {
     if (obj == m_ui->TagsInput && event->type() == QEvent::KeyPress) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
@@ -226,4 +255,13 @@ bool EditMovieDialog::eventFilter(QObject *obj, QEvent *event) {
         }
     }
     return false;
+}
+
+void EditMovieDialog::ToggleWidgetState(int state, QWidget* widget)
+{
+    if(state == 2)
+        widget->setEnabled(false);
+    else {
+        widget->setEnabled(true);
+    }
 }

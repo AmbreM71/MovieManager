@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QKeyEvent>
+#include <QCheckBox>
 
 #include "Common.h"
 #include "Tag.h"
@@ -30,6 +31,7 @@ class EditMovieDialog : public QDialog
         QList<QString>* m_tags;
         QList<QWidget*>* m_customColumnsInputList;
         QList<QString>* m_customColumnsNameList;
+        QList<QCheckBox*> m_customColumnsUnknownCheckBoxList;
         TagsScrollArea* m_tagsScrollArea;
 
         bool eventFilter(QObject *obj, QEvent *event);
@@ -47,6 +49,7 @@ class EditMovieDialog : public QDialog
         QList<QString>* getTags();
         QList<QWidget*>* getCustomColumnsInputList();
         QList<QString>* getCustomColumnsNameList();
+        QList<QCheckBox*> getCustomColumnsUnknownCheckBoxList();
 
     public slots:
         void SelectPoster();
@@ -55,6 +58,7 @@ class EditMovieDialog : public QDialog
         void clickedTag(Tag* tag);
         void mouseEnteredTag(Tag* tag);
         void mouseLeftTag(Tag* tag);
+        void ToggleWidgetState(int state, QWidget* widget);
 
 
 };

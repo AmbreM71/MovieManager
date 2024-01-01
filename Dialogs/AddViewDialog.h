@@ -26,6 +26,7 @@ class AddViewDialog : public QDialog
         QString m_posterPath;
         QList<QWidget*>* m_customColumnsInputList;
         QList<QString>* m_customColumnsNameList;
+        QList<QCheckBox*> m_customColumnsUnknownCheckBoxList;
         TagsScrollArea* m_tagsScrollArea;
 
         bool eventFilter(QObject *obj, QEvent *event);
@@ -48,6 +49,7 @@ class AddViewDialog : public QDialog
         bool isTypeUnknown();
         QList<QWidget*>* getCustomColumnsInputList();
         QList<QString>* getCustomColumnsNameList();
+        QList<QCheckBox*> getCustomColumnsUnknownCheckBoxList();
 
     public slots:
         void comboboxChanged();
@@ -56,6 +58,7 @@ class AddViewDialog : public QDialog
         void checkValid();
         void SelectPoster();
         void addTag();
+        void ToggleWidgetState(int state, QWidget* widget);
 
         void clickedTag(Tag* tag);
         void mouseEnteredTag(Tag* tag);

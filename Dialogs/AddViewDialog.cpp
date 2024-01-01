@@ -39,7 +39,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(checkValid()));
 
     QSqlQuery customColumnsQuery;
-    if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength FROM columns;"))
+    if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength, Optional FROM columns;"))
         Common::LogDatabaseError(&customColumnsQuery);
 
     int nColumnIndex = 0;
@@ -47,13 +47,14 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
         QLabel* columnLabel = new QLabel(customColumnsQuery.value(0).toString());
         m_ui->CustomColumnsLabelLayout->addWidget(columnLabel, nColumnIndex);
         m_customColumnsNameList->append(columnLabel->text());
+        QHBoxLayout* inputLayout = new QHBoxLayout();
 
         if(customColumnsQuery.value(1).toInt() == 0) {
             // Int
             QSpinBox* input = new QSpinBox();
             input->setMinimum(customColumnsQuery.value(2).toInt());
             input->setMaximum(customColumnsQuery.value(3).toInt());
-            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            inputLayout->addWidget(input,1);
             m_customColumnsInputList->append(input);
         }
         else if(customColumnsQuery.value(1).toInt() == 1) {
@@ -62,16 +63,31 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
             input->setMinimum(customColumnsQuery.value(2).toDouble());
             input->setMaximum(customColumnsQuery.value(3).toDouble());
             input->setDecimals(customColumnsQuery.value(4).toDouble());
-            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            inputLayout->addWidget(input,1);
             m_customColumnsInputList->append(input);
         }
         else if(customColumnsQuery.value(1).toInt() == 2) {
             // Text
             QLineEdit* input = new QLineEdit();
             input->setMaxLength(customColumnsQuery.value(5).toInt());
-            m_ui->CustomColumnsInputLayout->addWidget(input, nColumnIndex);
+            inputLayout->addWidget(input,1);
             m_customColumnsInputList->append(input);
         }
+
+        QCheckBox* unknown = new QCheckBox();
+        unknown->setText(tr("Unknown"));
+        inputLayout->addWidget(unknown,0);
+        m_customColumnsUnknownCheckBoxList.append(unknown);
+        connect(unknown, &QCheckBox::stateChanged, this, [=]() {
+            if(unknown->isChecked() == true)
+                inputLayout->itemAt(0)->widget()->setEnabled(false);
+            else
+                inputLayout->itemAt(0)->widget()->setEnabled(true);
+        });
+        if(customColumnsQuery.value(6).toBool() == false)
+            unknown->setVisible(false);
+        m_ui->CustomColumnsInputLayout->addLayout(inputLayout);
+
         nColumnIndex++;
     }
 
@@ -135,7 +151,9 @@ void AddViewDialog::comboboxChanged() {
         m_ui->TagsInput->setEnabled(true);
         // Set state for custom columns
         for(int nWidget = 0; nWidget < m_customColumnsInputList->size(); nWidget++) {
-            m_customColumnsInputList->at(nWidget)->setEnabled(true);
+            if(m_customColumnsUnknownCheckBoxList.at(nWidget)->isChecked() == false)
+                m_customColumnsInputList->at(nWidget)->setEnabled(true);
+            m_customColumnsUnknownCheckBoxList.at(nWidget)->setEnabled(true);
         }
 
         m_ui->PosterLabel->setText(tr("Poster"));
@@ -151,6 +169,7 @@ void AddViewDialog::comboboxChanged() {
         // Set state for custom columns
         for(int nWidget = 0; nWidget < m_customColumnsInputList->size(); nWidget++) {
             m_customColumnsInputList->at(nWidget)->setEnabled(false);
+            m_customColumnsUnknownCheckBoxList.at(nWidget)->setEnabled(false);
         }
 
         QString movieName = m_ui->ExistingMoviesComboBox->currentText().remove(m_ui->ExistingMoviesComboBox->currentText().length()-7, m_ui->ExistingMoviesComboBox->currentText().length());
@@ -185,6 +204,15 @@ void AddViewDialog::toggleViewTypeInput(int state) {
     }
     else {
         m_ui->ViewTypeComboBox->setEnabled(true);
+    }
+}
+
+void AddViewDialog::ToggleWidgetState(int state, QWidget* widget)
+{
+    if(state == 2)
+        widget->setEnabled(false);
+    else {
+        widget->setEnabled(true);
     }
 }
 
@@ -264,6 +292,10 @@ QList<QWidget*>* AddViewDialog::getCustomColumnsInputList() {
 
 QList<QString>* AddViewDialog::getCustomColumnsNameList() {
     return m_customColumnsNameList;
+}
+
+QList<QCheckBox*> AddViewDialog::getCustomColumnsUnknownCheckBoxList() {
+    return m_customColumnsUnknownCheckBoxList;
 }
 
 bool AddViewDialog::eventFilter(QObject *obj, QEvent *event) {

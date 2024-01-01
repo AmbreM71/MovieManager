@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QDate>
 #include <QSqlQuery>
+#include <QCheckBox>
 
 #include <Structures.h>
 #include <Common.h>
@@ -20,11 +21,13 @@ class FiltersDialog : public QDialog
         explicit FiltersDialog(stFilters* filters, QWidget* parent = nullptr);
         ~FiltersDialog();
         QMap<QWidget*, QString>* getCustomColumnsMap();
+        QList<QCheckBox*>* getCustomColumnsUnknownCheckBox();
 
     private:
         Ui::FiltersDialog* m_ui;
         stFilters* m_filters;
         QMap<QWidget*, QString>* m_customColumnsMap;
+        QList<QCheckBox*>* m_customColumnsUnknownCheckBox;
 };
 
 #endif // FILTERSDIALOG_H

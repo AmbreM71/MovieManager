@@ -218,7 +218,8 @@ void MainWindow::databaseConnection() {
                                          "Min           REAL,"
                                          "Max           REAL,"
                                          "Precision     INTEGER,"
-                                         "TextMaxLength INTEGER);";
+                                         "TextMaxLength INTEGER"
+                                         "Optional      INTEGER);";
 
     QSqlQuery ColumnBDQuery;
 
@@ -501,8 +502,11 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         }
         for(int nColumn = 0; nColumn < nCustomColumnCount; nColumn++)
         {
-            QLabel* label = new QLabel(QString(tr("%1: %2")).arg(sCustomColumnsNameList.at(nColumn), customColumnsInformationsQuery.value(nColumn).toString()));
-            m_ui->CustomInfosLayout->addWidget(label);
+            if(customColumnsInformationsQuery.value(nColumn).toString().length() != 0)
+            {
+                QLabel* label = new QLabel(QString(tr("%1: %2")).arg(sCustomColumnsNameList.at(nColumn), customColumnsInformationsQuery.value(nColumn).toString()));
+                m_ui->CustomInfosLayout->addWidget(label);
+            }
         }
     }
 }
@@ -780,6 +784,7 @@ void MainWindow::addView(int nMovieID) {
 
                 QList<QWidget*>* customColumnsInputList = window->getCustomColumnsInputList();
                 QList<QString>* customColumnsNameList = window->getCustomColumnsNameList();
+                QList<QCheckBox*> customColumnsUnknownCheckBoxList = window->getCustomColumnsUnknownCheckBoxList();
                 QString sRequest = "INSERT INTO movies (Name, ReleaseYear, Rating, Poster";
                 for(int nColumn = 0; nColumn < customColumnsNameList->size(); nColumn++) {
                     sRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"");
@@ -790,7 +795,7 @@ void MainWindow::addView(int nMovieID) {
                 }
                 sRequest.append(");");
                 
-		QSqlQuery insertIntoMoviesQuery;
+                QSqlQuery insertIntoMoviesQuery;
                 insertIntoMoviesQuery.prepare(sRequest);
 
                 insertIntoMoviesQuery.bindValue(0, window->getName());
@@ -798,24 +803,29 @@ void MainWindow::addView(int nMovieID) {
                 insertIntoMoviesQuery.bindValue(2, window->getRating());
                 insertIntoMoviesQuery.bindValue(3, posterPath);
                 for(int nColumn = 0; nColumn < customColumnsInputList->size(); nColumn++) {
-                    if(qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn)) != nullptr)
+                    if(customColumnsUnknownCheckBoxList.at(nColumn)->isChecked() == false)
                     {
-                        QLineEdit* input = qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn));
+                        if(qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn)) != nullptr)
+                        {
+                            QLineEdit* input = qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn));
 
-                        insertIntoMoviesQuery.bindValue(4 + nColumn, input->text());
-                    }
-                    else if(qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
-                    {
-                        QSpinBox* input = qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn));
+                            insertIntoMoviesQuery.bindValue(4 + nColumn, input->text());
+                        }
+                        else if(qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
+                        {
+                            QSpinBox* input = qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn));
 
-                        insertIntoMoviesQuery.bindValue(4 + nColumn, input->value());
-                    }
-                    else if(qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
-                    {
-                        QDoubleSpinBox* input = qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn));
+                            insertIntoMoviesQuery.bindValue(4 + nColumn, input->value());
+                        }
+                        else if(qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
+                        {
+                            QDoubleSpinBox* input = qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn));
 
-                        insertIntoMoviesQuery.bindValue(4 + nColumn, input->value());
+                            insertIntoMoviesQuery.bindValue(4 + nColumn, input->value());
+                        }
                     }
+                    else
+                        insertIntoMoviesQuery.bindValue(4 + nColumn, "");
                 }
 
                 if(!insertIntoMoviesQuery.exec()){
@@ -989,26 +999,37 @@ void MainWindow::editMovie(int nMovieID) {
 
         QList<QWidget*>* customColumnsInputList = window->getCustomColumnsInputList();
         QList<QString>* customColumnsNameList = window->getCustomColumnsNameList();
+        QList<QCheckBox*> customColumnsUnknownCheckBoxList = window->getCustomColumnsUnknownCheckBoxList();
 
         QString sUpdateMovieRequest = "UPDATE movies SET Name=\""+window->getMovieName()+"\", ReleaseYear=\""+window->getReleaseYear()+
                               "\", Rating=\""+QString::number(window->getRating())+"\" ";
         for(int nColumn = 0; nColumn < customColumnsNameList->size(); nColumn++) {
+            QString sText;
             if(qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn)) != nullptr)
             {
-                QLineEdit* input = qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn));
-                sUpdateMovieRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"=\"" + input->text() + "\"");
+                if(customColumnsUnknownCheckBoxList.at(nColumn)->isChecked() == true)
+                    sText = "";
+                else
+                    sText = qobject_cast<QLineEdit*>(customColumnsInputList->at(nColumn))->text();
+                sUpdateMovieRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"=\"" + sText + "\"");
 
             }
             else if(qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
             {
-                QSpinBox* input = qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn));
-                sUpdateMovieRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"=\"" + QString::number(input->value()) + "\"");
+                if(customColumnsUnknownCheckBoxList.at(nColumn)->isChecked() == true)
+                    sText = "";
+                else
+                    sText = QString::number(qobject_cast<QSpinBox*>(customColumnsInputList->at(nColumn))->value());
+                sUpdateMovieRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"=\"" + sText + "\"");
 
             }
             else if(qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn)) != nullptr)
             {
-                QDoubleSpinBox* input = qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn));
-                sUpdateMovieRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"=\"" + QString::number(input->value()) + "\"");
+                if(customColumnsUnknownCheckBoxList.at(nColumn)->isChecked() == true)
+                    sText = "";
+                else
+                    sText = QString::number(qobject_cast<QDoubleSpinBox*>(customColumnsInputList->at(nColumn))->value());
+                sUpdateMovieRequest.append(", \"" + customColumnsNameList->at(nColumn) + "\"=\"" + sText + "\"");
 
             }
         }
@@ -1160,6 +1181,7 @@ void MainWindow::openFilters() {
         }
 
         m_customColumnsRequestFilter = "";
+        int nColumn = 0;
         for(QString sColumn : sColumnsList) {
             QSqlQuery sColumnTypeQuery;
             if(sColumnTypeQuery.exec("SELECT Type FROM columns WHERE Name=\"" + sColumn + "\"") == false) {
@@ -1173,24 +1195,33 @@ void MainWindow::openFilters() {
                 widgetList.append(key);
             }
 
-            if(sColumnTypeQuery.value(0).toInt() == 0) { // Int
-                QSpinBox* lowValue = qobject_cast<QSpinBox*>(widgetList.at(0));
-                QSpinBox* highValue = qobject_cast<QSpinBox*>(widgetList.at(1));
-                int nLowValue = std::min(lowValue->value(), highValue->value());
-                int nHighValue = std::max(lowValue->value(), highValue->value());
-                m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" BETWEEN \"" + QString::number(nLowValue) + "\" AND \"" + QString::number(nHighValue) + "\"");
+            QList<QCheckBox*>* CustomColumnsUnknownCheckBox = window->getCustomColumnsUnknownCheckBox();
+            if(CustomColumnsUnknownCheckBox->at(nColumn)->isChecked() == false)
+            {
+                if(sColumnTypeQuery.value(0).toInt() == 0) { // Int
+                    QSpinBox* lowValue = qobject_cast<QSpinBox*>(widgetList.at(0));
+                    QSpinBox* highValue = qobject_cast<QSpinBox*>(widgetList.at(1));
+                    int nLowValue = std::min(lowValue->value(), highValue->value());
+                    int nHighValue = std::max(lowValue->value(), highValue->value());
+                    m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" BETWEEN \"" + QString::number(nLowValue) + "\" AND \"" + QString::number(nHighValue) + "\"");
+                }
+                else if(sColumnTypeQuery.value(0).toInt() == 1) { // Double
+                    QDoubleSpinBox* lowValue = qobject_cast<QDoubleSpinBox*>(widgetList.at(0));
+                    QDoubleSpinBox* highValue = qobject_cast<QDoubleSpinBox*>(widgetList.at(1));
+                    double nLowValue = std::min(lowValue->value(), highValue->value());
+                    double nHighValue = std::max(lowValue->value(), highValue->value());
+                    m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" BETWEEN \"" + QString::number(nLowValue) + "\" AND \"" + QString::number(nHighValue) + "\"");
+                }
+                else if(sColumnTypeQuery.value(0).toInt() == 2) { // Text
+                    QLineEdit* lineEdit = qobject_cast<QLineEdit*>(widgetList.at(0));
+                    m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" LIKE \"%" + lineEdit->text() + "%\"");
+                }
             }
-            else if(sColumnTypeQuery.value(0).toInt() == 1) { // Double
-                QDoubleSpinBox* lowValue = qobject_cast<QDoubleSpinBox*>(widgetList.at(0));
-                QDoubleSpinBox* highValue = qobject_cast<QDoubleSpinBox*>(widgetList.at(1));
-                double nLowValue = std::min(lowValue->value(), highValue->value());
-                double nHighValue = std::max(lowValue->value(), highValue->value());
-                m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" BETWEEN \"" + QString::number(nLowValue) + "\" AND \"" + QString::number(nHighValue) + "\"");
+            else
+            {
+                m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" = \"\"");
             }
-            else if(sColumnTypeQuery.value(0).toInt() == 2) { // Text
-                QLineEdit* lineEdit = qobject_cast<QLineEdit*>(widgetList.at(0));
-                m_customColumnsRequestFilter.append(" AND \"" + sColumn + "\" LIKE \"%" + lineEdit->text() + "%\"");
-            }
+            nColumn++;
         }
 
         delete window;

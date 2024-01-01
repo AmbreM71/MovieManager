@@ -20,6 +20,7 @@
 #include <QSpinBox>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QCheckBox>
 
 #include <cmath>
 #include <ctime>

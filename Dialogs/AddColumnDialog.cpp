@@ -56,6 +56,7 @@ AddColumnDialog::AddColumnDialog(QWidget *parent, struct stColumn* stColumnToEdi
                 m_ui->TextMaxLength->setValue(stColumnToEdit->textMaxLength);
                 break;
         }
+        m_ui->OptionalCheckBox->setChecked(stColumnToEdit->bOptional);
     }
 
     if(m_ui->NameLineEdit->text().length() == 0)
@@ -127,4 +128,5 @@ void AddColumnDialog::Validate() {
         m_stColumn.nMax = m_ui->DoubleMaxValue->value();
         m_stColumn.nPrecision = m_ui->DoubleDecimals->value();
     }
+    m_stColumn.bOptional = m_ui->OptionalCheckBox->isChecked();
 }

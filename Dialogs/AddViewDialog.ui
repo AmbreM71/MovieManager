@@ -277,7 +277,7 @@
            <second>0</second>
            <year>2022</year>
            <month>6</month>
-           <day>7</day>
+           <day>6</day>
           </datetime>
          </property>
          <property name="maximumDateTime">
@@ -296,8 +296,8 @@
            <minute>0</minute>
            <second>0</second>
            <year>1899</year>
-           <month>12</month>
-           <day>1</day>
+           <month>11</month>
+           <day>30</day>
           </datetime>
          </property>
          <property name="displayFormat">

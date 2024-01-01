@@ -57,7 +57,7 @@ void OptionsDialog::AddColumn() {
 void OptionsDialog::EditColumn(int nRow) {
     QString sName = qobject_cast<QLabel*>(m_ui->DefaultColumnGridLayout->itemAtPosition(nRow,0)->widget())->text();
     QSqlQuery columnsQuery;
-    if(!columnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength FROM columns WHERE Name = \"" + sName + "\""))
+    if(!columnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength, Optional FROM columns WHERE Name = \"" + sName + "\""))
         Common::LogDatabaseError(&columnsQuery);
     columnsQuery.first();
 
@@ -68,6 +68,7 @@ void OptionsDialog::EditColumn(int nRow) {
     stColumnToEdit.nMax = columnsQuery.value(3).toDouble();
     stColumnToEdit.nPrecision = columnsQuery.value(4).toInt();
     stColumnToEdit.textMaxLength = columnsQuery.value(5).toInt();
+    stColumnToEdit.bOptional = columnsQuery.value(6).toBool();
 
     AddColumnDialog* window = new AddColumnDialog(this, &stColumnToEdit);
     window->show();
@@ -146,25 +147,28 @@ void OptionsDialog::InsertColumnDB(struct stColumn* stColumnToInsert) {
     QSqlQuery insertColumnQuery;
     switch(stColumnToInsert->eType) {
     case eColumnType::eColumnDouble:
-        insertColumnQuery.prepare("INSERT INTO columns (Name, Type, Min, Max, Precision) VALUES (?,?,?,?,?);");
+        insertColumnQuery.prepare("INSERT INTO columns (Name, Type, Min, Max, Precision, Optional) VALUES (?,?,?,?,?,?);");
         insertColumnQuery.bindValue(0, stColumnToInsert->sName);
         insertColumnQuery.bindValue(1, stColumnToInsert->eType);
         insertColumnQuery.bindValue(2, stColumnToInsert->nMin);
         insertColumnQuery.bindValue(3, stColumnToInsert->nMax);
         insertColumnQuery.bindValue(4, stColumnToInsert->nPrecision);
+        insertColumnQuery.bindValue(5, (int)stColumnToInsert->bOptional);
         break;
     case eColumnType::eColumnInteger:
-        insertColumnQuery.prepare("INSERT INTO columns (Name, Type, Min, Max) VALUES (?,?,?,?);");
+        insertColumnQuery.prepare("INSERT INTO columns (Name, Type, Min, Max, Optional) VALUES (?,?,?,?,?);");
         insertColumnQuery.bindValue(0, stColumnToInsert->sName);
         insertColumnQuery.bindValue(1, stColumnToInsert->eType);
         insertColumnQuery.bindValue(2, stColumnToInsert->nMin);
         insertColumnQuery.bindValue(3, stColumnToInsert->nMax);
+        insertColumnQuery.bindValue(4, (int)stColumnToInsert->bOptional);
         break;
     case eColumnType::eColumnText:
-        insertColumnQuery.prepare("INSERT INTO columns (Name, Type, TextMaxLength) VALUES (?,?,?);");
+        insertColumnQuery.prepare("INSERT INTO columns (Name, Type, TextMaxLength, Optional) VALUES (?,?,?,?);");
         insertColumnQuery.bindValue(0, stColumnToInsert->sName);
         insertColumnQuery.bindValue(1, stColumnToInsert->eType);
         insertColumnQuery.bindValue(2, stColumnToInsert->textMaxLength);
+        insertColumnQuery.bindValue(3, (int)stColumnToInsert->bOptional);
         break;
     }
 

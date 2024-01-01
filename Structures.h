@@ -24,6 +24,7 @@ struct stColumn {
     double nMax;
     int nPrecision;
     int textMaxLength;
+    bool bOptional;
 };
 
 #endif // STRUCTURES_H
