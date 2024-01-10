@@ -40,6 +40,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QSpinBox" name="MinYearInput">
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::NoButtons</enum>
+       </property>
        <property name="minimum">
         <number>1870</number>
        </property>
@@ -74,6 +77,9 @@
      </item>
      <item row="1" column="3">
       <widget class="QSpinBox" name="MaxYearInput">
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::NoButtons</enum>
+       </property>
        <property name="minimum">
         <number>1870</number>
        </property>
@@ -88,6 +94,9 @@
      </item>
      <item row="2" column="1">
       <widget class="QSpinBox" name="MinRatingInput">
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::NoButtons</enum>
+       </property>
        <property name="maximum">
         <number>10</number>
        </property>
@@ -105,6 +114,9 @@
      </item>
      <item row="2" column="3">
       <widget class="QSpinBox" name="MaxRatingInput">
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::NoButtons</enum>
+       </property>
        <property name="maximum">
         <number>10</number>
        </property>

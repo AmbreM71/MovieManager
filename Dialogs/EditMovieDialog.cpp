@@ -60,6 +60,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
         if(customColumnsQuery.value(1).toInt() == 0) {
             // Int
             QSpinBox* input = new QSpinBox();
+            input->setButtonSymbols(QAbstractSpinBox::NoButtons);
             input->setMinimum(customColumnsQuery.value(2).toInt());
             input->setMaximum(customColumnsQuery.value(3).toInt());
             inputLayout->addWidget(input, 1);
@@ -68,6 +69,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
         else if(customColumnsQuery.value(1).toInt() == 1) {
             // Double
             QDoubleSpinBox* input = new QDoubleSpinBox();
+            input->setButtonSymbols(QAbstractSpinBox::NoButtons);
             input->setMinimum(customColumnsQuery.value(2).toDouble());
             input->setMaximum(customColumnsQuery.value(3).toDouble());
             input->setDecimals(customColumnsQuery.value(4).toDouble());

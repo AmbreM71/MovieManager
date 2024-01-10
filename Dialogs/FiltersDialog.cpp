@@ -34,9 +34,11 @@ FiltersDialog::FiltersDialog(stFilters* filters, QWidget *parent) : QDialog(pare
             // Int
             QSpinBox* lowValue = new QSpinBox();
             QSpinBox* highValue = new QSpinBox();
+            lowValue->setButtonSymbols(QAbstractSpinBox::NoButtons);
             lowValue->setMinimum(customColumnsQuery.value(2).toInt());
             lowValue->setMaximum(customColumnsQuery.value(3).toInt());
             lowValue->setValue(customColumnsQuery.value(2).toInt());
+            highValue->setButtonSymbols(QAbstractSpinBox::NoButtons);
             highValue->setMinimum(customColumnsQuery.value(2).toInt());
             highValue->setMaximum(customColumnsQuery.value(3).toInt());
             highValue->setValue(customColumnsQuery.value(3).toInt());
@@ -53,10 +55,12 @@ FiltersDialog::FiltersDialog(stFilters* filters, QWidget *parent) : QDialog(pare
             // Double
             QDoubleSpinBox* lowValue = new QDoubleSpinBox();
             QDoubleSpinBox* highValue = new QDoubleSpinBox();
+            lowValue->setButtonSymbols(QAbstractSpinBox::NoButtons);
             lowValue->setMinimum(customColumnsQuery.value(2).toDouble());
             lowValue->setMaximum(customColumnsQuery.value(3).toDouble());
             lowValue->setValue(customColumnsQuery.value(2).toDouble());
             lowValue->setDecimals(customColumnsQuery.value(4).toInt());
+            highValue->setButtonSymbols(QAbstractSpinBox::NoButtons);
             highValue->setMinimum(customColumnsQuery.value(2).toDouble());
             highValue->setMaximum(customColumnsQuery.value(3).toDouble());
             highValue->setValue(customColumnsQuery.value(3).toDouble());
