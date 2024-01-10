@@ -68,7 +68,7 @@ class MainWindow : public QMainWindow {
     public:
 
         explicit MainWindow(QApplication* app);
-        void InitDatabase();
+        bool InitDatabase();
         QString getDatabaseVersion();
         void CreateTables();
         bool BackupDatabase();

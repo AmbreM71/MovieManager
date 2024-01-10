@@ -64,14 +64,20 @@ MainWindow::MainWindow(QApplication* app) {
     if(Common::Settings->contains("LastMovieOpened") == false)
         Common::Settings->setValue("LastMovieOpened", 0);
 
-    InitDatabase();
-    if(getDatabaseVersion() == "")
-        CreateTables();
+    if(InitDatabase() == true)
+    {
+        if(getDatabaseVersion() == "")
+            CreateTables();
 
-    CheckDatabaseVersion();
+        CheckDatabaseVersion();
 
-    if(BackupDatabase() == true)
-        Common::Log->append(tr("Database backup created successfully"), eLog::Success);
+        if(BackupDatabase() == true)
+            Common::Log->append(tr("Database backup created successfully"), eLog::Success);
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Database error"), tr("Failed to open the database, please check for assistance"));
+    }
 
     refreshLanguage();
     refreshTheme();
@@ -155,15 +161,17 @@ bool MainWindow::BackupDatabase()
     return true;
 }
 
-void MainWindow::InitDatabase() {
+bool MainWindow::InitDatabase() {
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(m_savepath+"/movieDatabase.db");
 
     if(!m_db.open()) {
         Common::Log->append(tr("Can't open database"), eLog::Error);
+        return false;
     }
     else {
         Common::Log->append(tr("Database opened successfully"), eLog::Success);
+        return true;
     }
 }
 
