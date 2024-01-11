@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QKeyEvent>
+#include <QCompleter>
 
 #include <Common.h>
 #include <Tag.h>
@@ -28,6 +29,7 @@ class AddViewDialog : public QDialog
         QList<QString>* m_customColumnsNameList;
         QList<QCheckBox*> m_customColumnsUnknownCheckBoxList;
         TagsScrollArea* m_tagsScrollArea;
+        QStringList m_sMovieList;
 
         bool eventFilter(QObject *obj, QEvent *event);
 
@@ -35,9 +37,9 @@ class AddViewDialog : public QDialog
         explicit AddViewDialog(QWidget *parent, int nMovieID = -1);
         ~AddViewDialog();
 
-        void FillMovieComboBox();
+        QStringList GetMovieList();
 
-        QString getComboboxSelectedItem();
+        bool IsSearchedMovieAnExistingMovie();
         QString getName();
         int getReleaseYear();
         int getViewType();
@@ -50,9 +52,10 @@ class AddViewDialog : public QDialog
         QList<QWidget*>* getCustomColumnsInputList();
         QList<QString>* getCustomColumnsNameList();
         QList<QCheckBox*> getCustomColumnsUnknownCheckBoxList();
+        QString GetSearchedMovieText();
 
     public slots:
-        void comboboxChanged();
+        void MovieSearchChanged();
         void toggleViewDateInput(int state);
         void toggleViewTypeInput(int state);
         void checkValid();

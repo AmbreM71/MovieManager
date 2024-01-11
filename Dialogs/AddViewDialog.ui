@@ -69,7 +69,7 @@
         <enum>Qt::LeftToRight</enum>
        </property>
        <property name="text">
-        <string>Select a movie you already saw</string>
+        <string>Start typing a movie you already saw</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -121,11 +121,7 @@
       </widget>
      </item>
      <item row="1" column="0" colspan="2">
-      <widget class="QComboBox" name="ExistingMoviesComboBox">
-       <property name="focusPolicy">
-        <enum>Qt::NoFocus</enum>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="ExistingMoviesLineEdit"/>
      </item>
      <item row="11" column="1">
       <layout class="QHBoxLayout" name="ViewTypeInputLayout" stretch="100,0">
@@ -283,7 +279,7 @@
            <second>0</second>
            <year>2022</year>
            <month>6</month>
-           <day>5</day>
+           <day>4</day>
           </datetime>
          </property>
          <property name="maximumDateTime">
@@ -303,7 +299,7 @@
            <second>0</second>
            <year>1899</year>
            <month>11</month>
-           <day>29</day>
+           <day>28</day>
           </datetime>
          </property>
          <property name="displayFormat">

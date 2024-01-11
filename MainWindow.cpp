@@ -778,7 +778,7 @@ void MainWindow::addView(int nMovieID) {
         QString movieYear;
 
         //Add the new movie to the movies table
-        if(window->getComboboxSelectedItem() == "") {
+        if(window->IsSearchedMovieAnExistingMovie() == false) {
 
             movieName = window->getName();
             movieYear = QString::number(window->getReleaseYear());
@@ -866,8 +866,8 @@ void MainWindow::addView(int nMovieID) {
             }
         }
         else {
-            movieName = window->getComboboxSelectedItem().remove(window->getComboboxSelectedItem().length()-7, window->getComboboxSelectedItem().length());
-            movieYear = window->getComboboxSelectedItem().remove(0, window->getComboboxSelectedItem().length()-4);
+            movieName = window->GetSearchedMovieText().remove(window->GetSearchedMovieText().length()-7, window->GetSearchedMovieText().length());
+            movieYear = window->GetSearchedMovieText().remove(0, window->GetSearchedMovieText().length()-4);
         }
 
         //Add the view to the views table

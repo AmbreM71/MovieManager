@@ -18,7 +18,10 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     m_tagsScrollArea = new TagsScrollArea(this);
     m_ui->FormLayout->addWidget(m_tagsScrollArea, 9, 0, 1, 2);
 
-    FillMovieComboBox();
+    m_sMovieList = GetMovieList();
+    QCompleter* pCompleter = new QCompleter(m_sMovieList, this);
+    pCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    m_ui->ExistingMoviesLineEdit->setCompleter(pCompleter);
 
     m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
@@ -28,7 +31,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
 
 
 
-    QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(comboboxChanged()));
+    QObject::connect(m_ui->ExistingMoviesLineEdit, SIGNAL(textChanged(QString)), this, SLOT(MovieSearchChanged()));
     QObject::connect(m_ui->UnknownViewDateCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewDateInput(int)));
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
     QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(SelectPoster()));
@@ -36,7 +39,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
 
     //Connectors to check if input are filled to enable Ok button
     QObject::connect(m_ui->MovieNameInput, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
-    QObject::connect(m_ui->ExistingMoviesComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(checkValid()));
+    QObject::connect(m_ui->ExistingMoviesLineEdit, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
 
     QSqlQuery customColumnsQuery;
     if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength, Optional FROM columns;"))
@@ -99,7 +102,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
         if(!moviesQuery.exec("SELECT Name, ReleaseYear FROM movies WHERE ID = '" + QString::number(nMovieID) + "';"))
             Common::LogDatabaseError(&moviesQuery);
         moviesQuery.first();
-        m_ui->ExistingMoviesComboBox->setCurrentIndex(m_ui->ExistingMoviesComboBox->findText(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString()));
+        m_ui->ExistingMoviesLineEdit->setText(moviesQuery.value(0).toString() + " - " + moviesQuery.value(1).toString());
     }
 
     this->setFixedSize(this->sizeHint());
@@ -109,18 +112,26 @@ AddViewDialog::~AddViewDialog() {
     delete m_ui;
 }
 
-void AddViewDialog::FillMovieComboBox() {
-    m_ui->ExistingMoviesComboBox->addItem("");
+QStringList AddViewDialog::GetMovieList() {
+    QStringList sMovieList;
     QSqlQuery moviesQuery;
     if(!moviesQuery.exec("SELECT Name, ReleaseYear FROM movies ORDER BY Name ASC;"))
         Common::LogDatabaseError(&moviesQuery);
     while(moviesQuery.next()) {
-        m_ui->ExistingMoviesComboBox->addItem(moviesQuery.value(0).toString()+" - "+moviesQuery.value(1).toString());
+        QString sMovie = moviesQuery.value(0).toString() + " - " + moviesQuery.value(1).toString();
+        sMovieList << sMovie;
     }
+    return sMovieList;
+
 }
 
-QString AddViewDialog::getComboboxSelectedItem() {
-    return m_ui->ExistingMoviesComboBox->currentText();
+bool AddViewDialog::IsSearchedMovieAnExistingMovie() {
+    return m_sMovieList.contains(m_ui->ExistingMoviesLineEdit->text());
+}
+
+QString AddViewDialog::GetSearchedMovieText()
+{
+    return m_ui->ExistingMoviesLineEdit->text();
 }
 
 QString AddViewDialog::getName() {
@@ -142,9 +153,9 @@ int AddViewDialog::getRating() {
     return m_ui->MovieRatingInput->value();
 }
 
-void AddViewDialog::comboboxChanged() {
-    //If no movie is selected in combobox
-    if(m_ui->ExistingMoviesComboBox->currentText() == "") {
+void AddViewDialog::MovieSearchChanged() {
+    if(m_sMovieList.contains(m_ui->ExistingMoviesLineEdit->text()) == false)
+    {
         m_ui->MovieNameInput->setEnabled(true);
         m_ui->MovieReleaseYearInput->setEnabled(true);
         m_ui->MovieRatingInput->setEnabled(true);
@@ -174,8 +185,8 @@ void AddViewDialog::comboboxChanged() {
             m_customColumnsUnknownCheckBoxList.at(nWidget)->setEnabled(false);
         }
 
-        QString movieName = m_ui->ExistingMoviesComboBox->currentText().remove(m_ui->ExistingMoviesComboBox->currentText().length()-7, m_ui->ExistingMoviesComboBox->currentText().length());
-        QString movieYear = m_ui->ExistingMoviesComboBox->currentText().remove(0, m_ui->ExistingMoviesComboBox->currentText().length()-4);
+        QString movieName = m_ui->ExistingMoviesLineEdit->text().remove(m_ui->ExistingMoviesLineEdit->text().length()-7, m_ui->ExistingMoviesLineEdit->text().length());
+        QString movieYear = m_ui->ExistingMoviesLineEdit->text().remove(0, m_ui->ExistingMoviesLineEdit->text().length()-4);
 
         QSqlQuery posterQuery;
         if(!posterQuery.exec("SELECT Poster FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear='"+movieYear+"'"))
@@ -229,7 +240,7 @@ bool AddViewDialog::isTypeUnknown() {
 
 void AddViewDialog::checkValid() {
     //If movie isn't selected in combobox
-    if(m_ui->ExistingMoviesComboBox->currentIndex() == 0) {
+    if(m_sMovieList.contains(m_ui->ExistingMoviesLineEdit->text()) == false) {
         if(m_ui->MovieNameInput->text() == "") {
             m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         }
