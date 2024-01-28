@@ -101,7 +101,7 @@ void EditViewsDialog::deleteView() {
 void EditViewsDialog::editView() {
 
     QString viewDate;
-    int viewType;
+    enum eViewType viewType;
     QString viewID = m_ui->tableWidget->item(m_ui->tableWidget->currentRow(),0)->text();
 
     EditViewDialog* window = new EditViewDialog(m_ui->tableWidget, this);
@@ -118,7 +118,7 @@ void EditViewsDialog::editView() {
         if(window->isTypeUnknown()) {
             viewType = eViewType::Unknown;
         }
-        if(!editMovieQuery.exec("UPDATE views SET ViewDate=\""+viewDate+"\", ViewType=\""+QString::number(viewType)+"\" WHERE ID=\""+viewID+"\";"))
+        if(!editMovieQuery.exec("UPDATE views SET ViewDate=\""+viewDate+"\", ViewType=\""+QString::number((int)viewType)+"\" WHERE ID=\""+viewID+"\";"))
             Common::LogDatabaseError(&editMovieQuery);
 
         fillTable();

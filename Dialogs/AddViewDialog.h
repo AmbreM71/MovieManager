@@ -43,7 +43,7 @@ class AddViewDialog : public QDialog
         bool IsSearchedMovieAnExistingMovie();
         QString getName();
         int getReleaseYear();
-        int getViewType();
+        enum eViewType getViewType();
         QDate getViewDate();
         QString getPosterPath();
         int getRating();

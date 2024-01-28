@@ -43,7 +43,7 @@ void LogDialog::fillList() {
                 m_ui->listWidget->item(i)->setForeground(*brush);
                 break;
             case eLog::Notice:
-                if (Common::Settings->value("theme").toInt() == eTheme::Classic) {
+                if(Common::Settings->value("theme").toInt() == (int)eTheme::Classic) {
                     color->setRgb(0,0,0);
                 }
                 else {

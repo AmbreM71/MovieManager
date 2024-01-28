@@ -37,16 +37,16 @@ EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(p
         m_ui->ViewDateInput->setDate(QDate(year, month, day));
     }
 
-    for(int viewType = 0 ; viewType < eViewType::MaxViewType ; viewType++) {
+    for(int viewType = 0 ; viewType < (int)eViewType::MaxViewType ; viewType++) {
         m_ui->ViewTypeInput->addItem(Common::viewTypeToQString((enum eViewType)viewType));
     }
 
-    int viewType = Common::QStringToViewType(table->item(table->currentRow(),2)->text());
+    enum eViewType viewType = Common::QStringToViewType(table->item(table->currentRow(),2)->text());
     if(viewType == eViewType::Unknown) {
         m_ui->UnknownViewTypeInput->setChecked(true);
     }
     else {
-        m_ui->ViewTypeInput->setCurrentText(Common::viewTypeToQString((enum eViewType)viewType));
+        m_ui->ViewTypeInput->setCurrentText(Common::viewTypeToQString(viewType));
     }
 }
 
@@ -58,7 +58,7 @@ QDate EditViewDialog::getViewDate() {
     return m_ui->ViewDateInput->date();
 }
 
-int EditViewDialog::getViewType() {
+enum eViewType EditViewDialog::getViewType() {
     return Common::QStringToViewType(m_ui->ViewTypeInput->currentText());
 }
 

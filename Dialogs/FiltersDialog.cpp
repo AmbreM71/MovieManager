@@ -6,29 +6,29 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
     m_ui->setupUi(this);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/search.png"));
 
-    CustomColumnLineEdit* LowReleaseYear = new CustomColumnLineEdit(eColumnType::eColumnInteger);
+    CustomColumnLineEdit* LowReleaseYear = new CustomColumnLineEdit(eColumnType::Integer);
     LowReleaseYear->setLabel("ReleaseYear");
     LowReleaseYear->setMin(1870);
     LowReleaseYear->setMax(QDate::currentDate().year());
     m_ui->FormLayout->addWidget(LowReleaseYear, 1, 2);
 
-    CustomColumnLineEdit* HighReleaseYear = new CustomColumnLineEdit(eColumnType::eColumnInteger);
+    CustomColumnLineEdit* HighReleaseYear = new CustomColumnLineEdit(eColumnType::Integer);
     HighReleaseYear->setLabel("ReleaseYear");
     HighReleaseYear->setMin(1870);
     HighReleaseYear->setMax(QDate::currentDate().year());
     m_ui->FormLayout->addWidget(HighReleaseYear, 1, 4);
 
-    CustomColumnLineEdit* LowRating = new CustomColumnLineEdit(eColumnType::eColumnInteger);
+    CustomColumnLineEdit* LowRating = new CustomColumnLineEdit(eColumnType::Integer);
     LowRating->setLabel("Rating");
     LowRating->setMax(10);
     m_ui->FormLayout->addWidget(LowRating, 2, 2);
 
-    CustomColumnLineEdit* HighRating = new CustomColumnLineEdit(eColumnType::eColumnInteger);
+    CustomColumnLineEdit* HighRating = new CustomColumnLineEdit(eColumnType::Integer);
     HighRating->setLabel("Rating");
     HighRating->setMax(10);
     m_ui->FormLayout->addWidget(HighRating, 2, 4);
 
-    FilterComboBox* ReleaseYearCombobox = new FilterComboBox(eColumnType::eColumnInteger);
+    FilterComboBox* ReleaseYearCombobox = new FilterComboBox(eColumnType::Integer);
     ReleaseYearCombobox->insertItem((int)eCombobox::None, "");
     ReleaseYearCombobox->insertItem((int)eCombobox::And, "AND");
     ReleaseYearCombobox->insertItem((int)eCombobox::Or, "OR");
@@ -39,7 +39,7 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
     ReleaseYearCombobox->ToggleWidgetState(0);
     m_filters.append(ReleaseYearCombobox);
 
-    FilterComboBox* RatingCombobox = new FilterComboBox(eColumnType::eColumnInteger);
+    FilterComboBox* RatingCombobox = new FilterComboBox(eColumnType::Integer);
     RatingCombobox->insertItem((int)eCombobox::None, "");
     RatingCombobox->insertItem((int)eCombobox::And, "AND");
     RatingCombobox->insertItem((int)eCombobox::Or, "OR");
@@ -140,7 +140,7 @@ QString FiltersDialog::FiltersToSQLRequest()
         else if(combobox->currentIndex() == (int)eCombobox::Or)
             sRequest += "OR ";
 
-        if(combobox->getColumnType() == eColumnType::eColumnInteger || combobox->getColumnType() == eColumnType::eColumnDouble)
+        if(combobox->getColumnType() == eColumnType::Integer || combobox->getColumnType() == eColumnType::Double)
         {
             QString sColumnName = combobox->getWidgetAt(0)->getLabel();
             QString sColumnLowValue = combobox->getWidgetAt(0)->text();
@@ -153,7 +153,7 @@ QString FiltersDialog::FiltersToSQLRequest()
 
             sRequest += QString("\"%1\" BETWEEN %2 AND %3 ").arg(sColumnName, sColumnLowValue, sColumnHighValue);
         }
-        else if(combobox->getColumnType() == eColumnType::eColumnText)
+        else if(combobox->getColumnType() == eColumnType::Text)
         {
             QString sColumnName = combobox->getWidgetAt(0)->getLabel();
             QString sColumnValue = combobox->getWidgetAt(0)->text();
@@ -205,7 +205,7 @@ void FiltersDialog::SQLRequestToFilters(QString sRequest)
 
             combobox->setCurrentIndex((int)eCombo);
 
-            if(combobox->getColumnType() == eColumnType::eColumnInteger || combobox->getColumnType() == eColumnType::eColumnDouble)
+            if(combobox->getColumnType() == eColumnType::Integer || combobox->getColumnType() == eColumnType::Double)
             {
                 CustomColumnLineEdit* lowInput = combobox->getWidgetAt(0);
                 CustomColumnLineEdit* highInput = combobox->getWidgetAt(1);
@@ -216,7 +216,7 @@ void FiltersDialog::SQLRequestToFilters(QString sRequest)
                 lowInput->setText(sListText.at(2));
                 highInput->setText(sListText.at(4));
             }
-            else if(combobox->getColumnType() == eColumnType::eColumnText)
+            else if(combobox->getColumnType() == eColumnType::Text)
             {
                 CustomColumnLineEdit* input = combobox->getWidgetAt(0);
 

@@ -853,7 +853,7 @@ void MainWindow::addView(int nMovieID) {
         int nNewMovie = viewedMovieIDQuery.value(0).toInt();
 
         QString ViewDate;
-        int ViewType;
+        enum eViewType ViewType;
 
         if(window->isDateUnknown()) {
             ViewDate = "?";
@@ -871,7 +871,7 @@ void MainWindow::addView(int nMovieID) {
 
         insertIntoViewsQuery.bindValue(0, nNewMovie);
         insertIntoViewsQuery.bindValue(1, ViewDate);
-        insertIntoViewsQuery.bindValue(2, ViewType);
+        insertIntoViewsQuery.bindValue(2, (int)ViewType);
 
         if(!insertIntoViewsQuery.exec()){
             Common::LogDatabaseError(&insertIntoViewsQuery);
@@ -1400,7 +1400,7 @@ void MainWindow::refreshLanguage() {
     bool successLoad = false;
     QString path;
 
-    switch(Common::Settings->value("language").toInt()) {
+    switch((enum eLanguage)Common::Settings->value("language").toInt()) {
         case eLanguage::English :
             path = ":/localisations/Localisation/MovieManager_en_US.qm";
             m_locale = new QLocale(QLocale::English);
@@ -1426,7 +1426,7 @@ void MainWindow::refreshLanguage() {
 void MainWindow::refreshTheme() {
     QString path;
 
-    switch(Common::Settings->value("theme").toInt()) {
+    switch((enum eTheme)Common::Settings->value("theme").toInt()) {
         case eTheme::Classic:
             path = ":/styles/Styles/classic.qss";
             break;

@@ -99,13 +99,13 @@ void CustomColumnLineEdit::Check()
     {
         switch(m_eType)
         {
-        case eColumnType::eColumnText:
+        case eColumnType::Text:
             bTextValid = CheckText(sText);
             break;
-        case eColumnType::eColumnInteger:
+        case eColumnType::Integer:
             bTextValid = CheckInteger(sText);
             break;
-        case eColumnType::eColumnDouble:
+        case eColumnType::Double:
             bTextValid = CheckDouble(sText);
             break;
         }
@@ -125,13 +125,13 @@ void CustomColumnLineEdit::CheckForOutline(QString sText)
     {
         switch(m_eType)
         {
-        case eColumnType::eColumnText:
+        case eColumnType::Text:
             bTextValid = CheckText(sText);
             break;
-        case eColumnType::eColumnInteger:
+        case eColumnType::Integer:
             bTextValid = CheckInteger(sText);
             break;
-        case eColumnType::eColumnDouble:
+        case eColumnType::Double:
             bTextValid = CheckDouble(sText);
             break;
         }

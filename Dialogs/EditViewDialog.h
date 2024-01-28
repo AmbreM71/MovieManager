@@ -23,7 +23,7 @@ class EditViewDialog : public QDialog {
         ~EditViewDialog();
 
         QDate getViewDate();
-        int getViewType();
+        enum eViewType getViewType();
         bool isDateUnknown();
         bool isTypeUnknown();
 

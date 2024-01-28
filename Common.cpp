@@ -202,11 +202,11 @@ enum eViewType Common::QStringToViewType(QString type) {
 
 QString Common::ColumnTypeToQString(enum eColumnType type) {
     switch(type) {
-        case eColumnType::eColumnDouble:
+        case eColumnType::Double:
             return QObject::tr("Precise integer");
-        case eColumnType::eColumnInteger:
+        case eColumnType::Integer:
             return QObject::tr("Integer");
-        case eColumnType::eColumnText:
+        case eColumnType::Text:
             return QObject::tr("Text");
     }
 }

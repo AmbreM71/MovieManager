@@ -75,8 +75,8 @@ int ChartsDialog::instancesCount() {
     return instances;
 }
 
-void ChartsDialog::setDisplayedChart(int chart) {
-    switch((enum eChart) chart) {
+void ChartsDialog::setDisplayedChart(enum eChart eChart) {
+    switch(eChart) {
         case eChart::ViewedByMovieYear :
             chartView->setChart(movieYearChart);
             break;

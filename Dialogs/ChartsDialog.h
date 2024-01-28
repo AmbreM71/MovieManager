@@ -63,7 +63,7 @@ class ChartsDialog : public QDialog {
         int calculateChartTickInterval(int maxValue);
 
     public slots:
-        void setDisplayedChart(int chart);
+        void setDisplayedChart(enum eChart eChart);
 
 };
 

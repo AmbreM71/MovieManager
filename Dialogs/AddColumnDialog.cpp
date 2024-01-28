@@ -38,20 +38,20 @@ AddColumnDialog::AddColumnDialog(QWidget *parent, struct stColumn* stColumnToEdi
         m_ui->IntPropertiesWidget->setVisible(false);
 
         m_ui->NameLineEdit->setText(stColumnToEdit->sName);
-        m_ui->TypeComboBox->setCurrentIndex(stColumnToEdit->eType);
+        m_ui->TypeComboBox->setCurrentIndex((int)stColumnToEdit->eType);
         switch(stColumnToEdit->eType) {
-            case eColumnInteger:
+            case eColumnType::Integer:
                 m_ui->IntPropertiesWidget->setVisible(true);
                 m_ui->IntMinValue->setValue(stColumnToEdit->nMin);
                 m_ui->IntMaxValue->setValue(stColumnToEdit->nMax);
                 break;
-            case eColumnDouble:
+            case eColumnType::Double:
                 m_ui->DoublePropertiesWidget->setVisible(true);
                 m_ui->DoubleMinValue->setValue(stColumnToEdit->nMin);
                 m_ui->DoubleMaxValue->setValue(stColumnToEdit->nMax);
                 m_ui->DoubleDecimals->setValue(stColumnToEdit->nPrecision);
                 break;
-            case eColumnText:
+            case eColumnType::Text:
                 m_ui->TextPropertiesWidget->setVisible(true);
                 m_ui->TextMaxLength->setValue(stColumnToEdit->textMaxLength);
                 break;
@@ -114,16 +114,16 @@ void AddColumnDialog::IsColumnValid() {
 void AddColumnDialog::Validate() {
     m_stColumn.sName = m_ui->NameLineEdit->text();
     if(QString::compare(m_ui->TypeComboBox->currentText(), tr("Integer")) == 0) {
-        m_stColumn.eType = eColumnType::eColumnInteger;
+        m_stColumn.eType = eColumnType::Integer;
         m_stColumn.nMin = m_ui->IntMinValue->value();
         m_stColumn.nMax = m_ui->IntMaxValue->value();
     }
     else if(QString::compare(m_ui->TypeComboBox->currentText(), tr("Text")) == 0) {
-        m_stColumn.eType = eColumnType::eColumnText;
+        m_stColumn.eType = eColumnType::Text;
         m_stColumn.textMaxLength = m_ui->TextMaxLength->value();
     }
     else {
-        m_stColumn.eType = eColumnType::eColumnDouble;
+        m_stColumn.eType = eColumnType::Double;
         m_stColumn.nMin = m_ui->DoubleMinValue->value();
         m_stColumn.nMax = m_ui->DoubleMaxValue->value();
         m_stColumn.nPrecision = m_ui->DoubleDecimals->value();

@@ -1,19 +1,19 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-enum eTheme {
+enum class eTheme {
     Classic,
     Dark,
     OLED,
     MidnightPurple
 };
 
-enum eLanguage {
+enum class eLanguage {
     English,
     French
 };
 
-enum eLog {
+enum class eLog {
     Notice,
     Success,
     Warning,
@@ -21,7 +21,7 @@ enum eLog {
 };
 
 // Changing the order will break databases
-enum eViewType {
+enum class eViewType {
     Bluray = 0,
     Television = 1,
     Cinema = 2,
@@ -36,16 +36,16 @@ enum eViewType {
     MaxViewType = 11
 };
 
-enum eChart {
+enum class eChart {
     ViewedByMovieYear,
     ViewedByType,
     ViewedByYear
 };
 
-enum eColumnType {
-    eColumnInteger = 0,
-    eColumnDouble = 1,
-    eColumnText = 2
+enum class eColumnType {
+    Integer = 0,
+    Double = 1,
+    Text = 2
 };
 
 #endif // ENUMS_H

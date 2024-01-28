@@ -7,8 +7,8 @@ OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent) {
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/settings.png"));
 
     // Set current settings values
-    m_ui->ThemeCombobox->setCurrentIndex((enum eTheme)Common::Settings->value("theme").toInt());
-    m_ui->LanguageCombobox->setCurrentIndex((enum eLanguage)Common::Settings->value("language").toInt());
+    m_ui->ThemeCombobox->setCurrentIndex(Common::Settings->value("theme").toInt());
+    m_ui->LanguageCombobox->setCurrentIndex(Common::Settings->value("language").toInt());
     m_ui->MatrixModeCheckbox->setChecked(Common::Settings->value("matrixMode").toBool());
     m_ui->QuickSearchCaseCheckbox->setChecked(Common::Settings->value("quickSearchCaseSensitive").toBool());
     m_ui->MoreLogsCheckbox->setChecked(Common::Settings->value("moreLogs").toBool());
@@ -36,8 +36,8 @@ OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent) {
 }
 
 OptionsDialog::~OptionsDialog() {
-    Common::Settings->setValue("language", (enum eLanguage)m_ui->LanguageCombobox->currentIndex());
-    Common::Settings->setValue("theme", (enum eTheme)m_ui->ThemeCombobox->currentIndex());
+    Common::Settings->setValue("language", m_ui->LanguageCombobox->currentIndex());
+    Common::Settings->setValue("theme", m_ui->ThemeCombobox->currentIndex());
     Common::Settings->setValue("matrixMode", m_ui->MatrixModeCheckbox->isChecked());
     Common::Settings->setValue("quickSearchCaseSensitive", m_ui->QuickSearchCaseCheckbox->isChecked());
     Common::Settings->setValue("moreLogs", m_ui->MoreLogsCheckbox->isChecked());
@@ -146,27 +146,27 @@ void OptionsDialog::InsertColumnQt(QString sName, enum eColumnType eType, int nR
 void OptionsDialog::InsertColumnDB(struct stColumn* stColumnToInsert) {
     QSqlQuery insertColumnQuery;
     switch(stColumnToInsert->eType) {
-    case eColumnType::eColumnDouble:
+    case eColumnType::Double:
         insertColumnQuery.prepare("INSERT INTO columns (Name, Type, Min, Max, Precision, Optional) VALUES (?,?,?,?,?,?);");
         insertColumnQuery.bindValue(0, stColumnToInsert->sName);
-        insertColumnQuery.bindValue(1, stColumnToInsert->eType);
+        insertColumnQuery.bindValue(1, (int)stColumnToInsert->eType);
         insertColumnQuery.bindValue(2, stColumnToInsert->nMin);
         insertColumnQuery.bindValue(3, stColumnToInsert->nMax);
         insertColumnQuery.bindValue(4, stColumnToInsert->nPrecision);
         insertColumnQuery.bindValue(5, (int)stColumnToInsert->bOptional);
         break;
-    case eColumnType::eColumnInteger:
+    case eColumnType::Integer:
         insertColumnQuery.prepare("INSERT INTO columns (Name, Type, Min, Max, Optional) VALUES (?,?,?,?,?);");
         insertColumnQuery.bindValue(0, stColumnToInsert->sName);
-        insertColumnQuery.bindValue(1, stColumnToInsert->eType);
+        insertColumnQuery.bindValue(1, (int)stColumnToInsert->eType);
         insertColumnQuery.bindValue(2, stColumnToInsert->nMin);
         insertColumnQuery.bindValue(3, stColumnToInsert->nMax);
         insertColumnQuery.bindValue(4, (int)stColumnToInsert->bOptional);
         break;
-    case eColumnType::eColumnText:
+    case eColumnType::Text:
         insertColumnQuery.prepare("INSERT INTO columns (Name, Type, TextMaxLength, Optional) VALUES (?,?,?,?);");
         insertColumnQuery.bindValue(0, stColumnToInsert->sName);
-        insertColumnQuery.bindValue(1, stColumnToInsert->eType);
+        insertColumnQuery.bindValue(1, (int)stColumnToInsert->eType);
         insertColumnQuery.bindValue(2, stColumnToInsert->textMaxLength);
         insertColumnQuery.bindValue(3, (int)stColumnToInsert->bOptional);
         break;

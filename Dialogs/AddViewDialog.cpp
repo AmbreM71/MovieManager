@@ -24,7 +24,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
 
     m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    for(int viewType = 0 ; viewType < eViewType::MaxViewType ; viewType++) {
+    for(int viewType = 0 ; viewType < (int)eViewType::MaxViewType ; viewType++) {
         m_ui->ViewTypeComboBox->addItem(Common::viewTypeToQString((enum eViewType)viewType));
     }
 
@@ -115,7 +115,7 @@ QString AddViewDialog::getName() {
 int AddViewDialog::getReleaseYear() {
     return m_ui->MovieReleaseYearInput->text().toInt();
 }
-int AddViewDialog::getViewType() {
+enum eViewType AddViewDialog::getViewType() {
     return Common::QStringToViewType(m_ui->ViewTypeComboBox->currentText());
 }
 QDate AddViewDialog::getViewDate() {
