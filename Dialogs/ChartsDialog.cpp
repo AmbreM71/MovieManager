@@ -35,7 +35,7 @@ ChartsDialog::ChartsDialog(QWidget *parent) : QDialog(parent) {
     setViewedByYearChart();
 
     m_selectedChart = eChart::ViewedByMovieYear; // Set default chart
-    setDisplayedChart(m_selectedChart);
+    setDisplayedChart((int)m_selectedChart);
 
     chartView->setRenderHint(QPainter::Antialiasing);
 
@@ -75,7 +75,9 @@ int ChartsDialog::instancesCount() {
     return instances;
 }
 
-void ChartsDialog::setDisplayedChart(enum eChart eChart) {
+void ChartsDialog::setDisplayedChart(int nChart) {
+
+    enum eChart eChart = (enum eChart)nChart;
     switch(eChart) {
         case eChart::ViewedByMovieYear :
             chartView->setChart(movieYearChart);
