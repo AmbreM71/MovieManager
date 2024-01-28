@@ -9,22 +9,17 @@
         <translation>À propos de MovieManager</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="49"/>
-        <source>MovieManager</source>
-        <translation>MovieManager</translation>
-    </message>
-    <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="91"/>
+        <location filename="../Dialogs/AboutDialog.ui" line="60"/>
         <source>GitHub</source>
         <translation>GitHub</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="98"/>
+        <location filename="../Dialogs/AboutDialog.ui" line="74"/>
         <source>A manager for the movies you saw</source>
         <translation>Un gestionnaire pour les films que vous avez vus</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AboutDialog.ui" line="105"/>
+        <location filename="../Dialogs/AboutDialog.ui" line="46"/>
         <source>Developped by AmbreM</source>
         <translation>Développé par Ambre</translation>
     </message>
@@ -47,61 +42,66 @@
         <translation>Ajouter une colonne</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="53"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="253"/>
         <source>Max length</source>
         <translation>Longueur maximale</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="131"/>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="177"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="125"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="188"/>
         <source>Min value</source>
         <translation>Valeur minimale</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="138"/>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="191"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="132"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="205"/>
         <source>Max value</source>
         <translation>Valeur maximale</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="221"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="172"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="293"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="311"/>
         <source>Changing name or type will erase column data</source>
         <translation>Changer le nom ou le type effacera les données de la colonne</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="145"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="139"/>
         <source>Number of decimals</source>
         <translation>Nombre de décimales</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="236"/>
-        <location filename="../Dialogs/AddColumnDialog.cpp" line="82"/>
-        <location filename="../Dialogs/AddColumnDialog.cpp" line="115"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="59"/>
+        <location filename="../Dialogs/AddColumnDialog.cpp" line="83"/>
+        <location filename="../Dialogs/AddColumnDialog.cpp" line="116"/>
         <source>Integer</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="241"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="64"/>
         <source>Precise integer</source>
         <translation>Nombre à virgule</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="246"/>
-        <location filename="../Dialogs/AddColumnDialog.cpp" line="85"/>
-        <location filename="../Dialogs/AddColumnDialog.cpp" line="120"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="69"/>
+        <location filename="../Dialogs/AddColumnDialog.cpp" line="86"/>
+        <location filename="../Dialogs/AddColumnDialog.cpp" line="121"/>
         <source>Text</source>
         <translation>Texte</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddColumnDialog.ui" line="254"/>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="228"/>
         <location filename="../Dialogs/AddColumnDialog.cpp" line="23"/>
         <source>Name</source>
         <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddColumnDialog.ui" line="318"/>
+        <source>Optional</source>
+        <translation>Optionel</translation>
     </message>
     <message>
         <location filename="../Dialogs/AddColumnDialog.cpp" line="23"/>
@@ -128,12 +128,37 @@
     </message>
     <message>
         <location filename="../Dialogs/AddViewDialog.ui" line="72"/>
-        <source>Select a movie you already saw</source>
-        <translation>Sélectionnez un film que vous avez vus</translation>
+        <source>Start typing a movie you already saw</source>
+        <translation>Recherchez un film déjà vu</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="148"/>
-        <location filename="../Dialogs/AddViewDialog.ui" line="314"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="95"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Name&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nom&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddViewDialog.ui" line="112"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Release year&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Année de sortie&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddViewDialog.ui" line="153"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;View date&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date de visionnage&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddViewDialog.ui" line="222"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rating&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Note&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddViewDialog.ui" line="255"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;View type&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Type de visionnage&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddViewDialog.ui" line="144"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="316"/>
         <source>unknown</source>
         <translation>inconnu</translation>
     </message>
@@ -143,31 +168,16 @@
         <translation>Libellé(s)</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="95"/>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-    <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="157"/>
-        <source>View date</source>
-        <translation>Date de visionnage</translation>
-    </message>
-    <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="201"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="200"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
         <location filename="../Dialogs/AddViewDialog.ui" line="57"/>
-        <location filename="../Dialogs/AddViewDialog.ui" line="233"/>
-        <location filename="../Dialogs/AddViewDialog.cpp" line="141"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="235"/>
+        <location filename="../Dialogs/AddViewDialog.cpp" line="145"/>
         <source>Poster</source>
         <translation>Affiche</translation>
-    </message>
-    <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="220"/>
-        <source>Rating</source>
-        <translation>Note</translation>
     </message>
     <message>
         <location filename="../Dialogs/AddViewDialog.ui" line="102"/>
@@ -175,24 +185,19 @@
         <translation>ou ajoutez un nouveau film</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="253"/>
-        <source>View type</source>
-        <translation>Type de visionnage</translation>
-    </message>
-    <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="112"/>
-        <source>Release year</source>
-        <translation>Année de sortie</translation>
-    </message>
-    <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="304"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="306"/>
         <source>yyyy-MM-dd</source>
         <translation>yyyy-MM-dd</translation>
     </message>
     <message>
-        <location filename="../Dialogs/AddViewDialog.ui" line="180"/>
+        <location filename="../Dialogs/AddViewDialog.ui" line="179"/>
         <source>Select a poster</source>
         <translation>Sélectionner une affiche</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/AddViewDialog.cpp" line="51"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;%1&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;%1&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -318,45 +323,50 @@
 <context>
     <name>EditMovieDialog</name>
     <message>
-        <location filename="../Dialogs/EditMovieDialog.ui" line="82"/>
+        <location filename="../Dialogs/EditMovieDialog.ui" line="88"/>
         <source>Tag(s)</source>
         <translation>Libellé(s)</translation>
     </message>
     <message>
-        <location filename="../Dialogs/EditMovieDialog.ui" line="124"/>
+        <location filename="../Dialogs/EditMovieDialog.ui" line="130"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../Dialogs/EditMovieDialog.ui" line="75"/>
-        <source>Rating</source>
-        <translation>Note</translation>
-    </message>
-    <message>
         <location filename="../Dialogs/EditMovieDialog.ui" line="36"/>
-        <location filename="../Dialogs/EditMovieDialog.ui" line="112"/>
+        <location filename="../Dialogs/EditMovieDialog.ui" line="118"/>
         <source>Poster</source>
         <translation>Affiche</translation>
     </message>
     <message>
-        <location filename="../Dialogs/EditMovieDialog.ui" line="133"/>
+        <location filename="../Dialogs/EditMovieDialog.ui" line="48"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Name&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nom&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/EditMovieDialog.ui" line="81"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rating&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Note&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/EditMovieDialog.ui" line="95"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Release year&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Année de sortie&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/EditMovieDialog.ui" line="139"/>
         <source>Select a poster</source>
         <translation>Sélectionner une affiche</translation>
-    </message>
-    <message>
-        <location filename="../Dialogs/EditMovieDialog.ui" line="89"/>
-        <source>Release year</source>
-        <translation>Année de sortie</translation>
-    </message>
-    <message>
-        <location filename="../Dialogs/EditMovieDialog.ui" line="48"/>
-        <source>Name</source>
-        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../Dialogs/EditMovieDialog.cpp" line="30"/>
         <source>Edit - %1</source>
         <translation>Modifier - %1</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/EditMovieDialog.cpp" line="55"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;%1&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;%1&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -411,12 +421,12 @@
         <translation>Vues - %1</translation>
     </message>
     <message>
-        <location filename="../Dialogs/EditViewsDialog.cpp" line="68"/>
+        <location filename="../Dialogs/EditViewsDialog.cpp" line="72"/>
         <source>Edit</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../Dialogs/EditViewsDialog.cpp" line="71"/>
+        <location filename="../Dialogs/EditViewsDialog.cpp" line="75"/>
         <source>Delete</source>
         <translation>Suprrimer</translation>
     </message>
@@ -429,27 +439,31 @@
         <translation>Filtres</translation>
     </message>
     <message>
-        <location filename="../Dialogs/FiltersDialog.ui" line="67"/>
-        <location filename="../Dialogs/FiltersDialog.ui" line="111"/>
-        <location filename="../Dialogs/FiltersDialog.cpp" line="44"/>
-        <location filename="../Dialogs/FiltersDialog.cpp" line="65"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="55"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="72"/>
+        <location filename="../Dialogs/FiltersDialog.cpp" line="98"/>
         <source>and</source>
         <translation>et</translation>
     </message>
     <message>
-        <location filename="../Dialogs/FiltersDialog.ui" line="60"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="65"/>
         <source>Released between</source>
         <translation>Sortie entre</translation>
     </message>
     <message>
-        <location filename="../Dialogs/FiltersDialog.ui" line="77"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="41"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../Dialogs/FiltersDialog.ui" line="97"/>
+        <location filename="../Dialogs/FiltersDialog.ui" line="48"/>
         <source>Rating between</source>
         <translation>Note entre</translation>
+    </message>
+    <message>
+        <location filename="../Dialogs/FiltersDialog.cpp" line="71"/>
+        <source>%1 between</source>
+        <translation>%1 entre</translation>
     </message>
 </context>
 <context>
@@ -482,7 +496,7 @@
     </message>
     <message>
         <location filename="../MainWindow.ui" line="148"/>
-        <location filename="../MainWindow.cpp" line="67"/>
+        <location filename="../MainWindow.cpp" line="78"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
@@ -498,7 +512,7 @@
     </message>
     <message>
         <location filename="../MainWindow.ui" line="168"/>
-        <location filename="../MainWindow.cpp" line="1302"/>
+        <location filename="../MainWindow.cpp" line="1324"/>
         <source>Add a view</source>
         <translation>Ajouter un visionnage</translation>
     </message>
@@ -528,176 +542,221 @@
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="417"/>
+        <location filename="../MainWindow.ui" line="418"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="425"/>
-        <location filename="../MainWindow.cpp" line="1305"/>
+        <location filename="../MainWindow.ui" line="426"/>
+        <location filename="../MainWindow.cpp" line="1327"/>
         <source>Edit</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="440"/>
+        <location filename="../MainWindow.ui" line="441"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="452"/>
+        <location filename="../MainWindow.ui" line="453"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="461"/>
+        <location filename="../MainWindow.ui" line="462"/>
         <source>Log</source>
         <translation>Log</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="473"/>
+        <location filename="../MainWindow.ui" line="474"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="482"/>
-        <location filename="../MainWindow.cpp" line="487"/>
-        <location filename="../MainWindow.cpp" line="494"/>
+        <location filename="../MainWindow.ui" line="483"/>
+        <location filename="../MainWindow.cpp" line="577"/>
+        <location filename="../MainWindow.cpp" line="584"/>
         <source>Import</source>
         <translation>Importer</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="491"/>
-        <location filename="../MainWindow.cpp" line="581"/>
+        <location filename="../MainWindow.ui" line="492"/>
+        <location filename="../MainWindow.cpp" line="671"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="500"/>
+        <location filename="../MainWindow.ui" line="501"/>
         <source>Charts</source>
         <translation>Graphiques</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="509"/>
+        <location filename="../MainWindow.ui" line="510"/>
         <source>What&apos;s new?</source>
         <translation>Quoi de neuf?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="518"/>
+        <location filename="../MainWindow.ui" line="519"/>
         <source>Calendar</source>
         <translation>Calendrier</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="11"/>
-        <source>Movie Manager</source>
-        <translation>Movie Manager</translation>
+        <location filename="../MainWindow.ui" line="535"/>
+        <source>Check for updates</source>
+        <translation>Vérifier les mises à jour</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="67"/>
+        <location filename="../MainWindow.cpp" line="78"/>
         <source>Release year</source>
         <translation>Année de sortie</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="96"/>
+        <location filename="../MainWindow.cpp" line="162"/>
         <source>Can&apos;t open database</source>
         <translation>Impossible d&apos;ouvrir la base de données</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="99"/>
+        <location filename="../MainWindow.cpp" line="166"/>
         <source>Database opened successfully</source>
         <translation>Base de données ouverte avec succès</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="190"/>
-        <source>Fetching from database</source>
-        <translation>Récupération depuis la base de donnée</translation>
-    </message>
-    <message>
-        <location filename="../MainWindow.cpp" line="221"/>
+        <location filename="../MainWindow.cpp" line="309"/>
         <source>Movies fetched from database: %1</source>
         <translation>Films récupérés depuis la base de donnée : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="287"/>
-        <location filename="../MainWindow.cpp" line="1279"/>
+        <location filename="../MainWindow.cpp" line="375"/>
+        <location filename="../MainWindow.cpp" line="1306"/>
         <source>Movies: %1</source>
         <translation>Films : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="313"/>
+        <location filename="../MainWindow.cpp" line="401"/>
         <source>Select a movie to see its informations</source>
         <translation>Sélectionnez un film pour voir ses informations</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="349"/>
+        <location filename="../MainWindow.cpp" line="436"/>
         <source>Viewed %1 time(s)</source>
         <translation>Vu %1 fois</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="358"/>
+        <location filename="../MainWindow.cpp" line="445"/>
         <source>First view: ?</source>
         <translation>Premier visionnage : ?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="361"/>
+        <location filename="../MainWindow.cpp" line="448"/>
         <source>First view: %1</source>
         <translation>Premier visionnage : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="370"/>
+        <location filename="../MainWindow.cpp" line="457"/>
         <source>Last view: ?</source>
         <translation>Dernier visonnage : ?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="373"/>
+        <location filename="../MainWindow.cpp" line="460"/>
         <source>Last view: %1</source>
         <translation>Dernier visionnage : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="439"/>
+        <location filename="../MainWindow.cpp" line="528"/>
         <source>%1: %2</source>
         <translation>%1 : %2</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="481"/>
+        <location filename="../MainWindow.cpp" line="571"/>
         <source>Following tags are no longer used, they&apos;re deleted: %1</source>
         <translation>Les tags suivants ne sont plus utilisées, ils sont supprimés : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="487"/>
-        <location filename="../MainWindow.cpp" line="581"/>
+        <location filename="../MainWindow.cpp" line="577"/>
+        <location filename="../MainWindow.cpp" line="671"/>
         <source>JSON (*.json)</source>
         <translation>JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="491"/>
-        <location filename="../MainWindow.cpp" line="586"/>
+        <location filename="../MainWindow.cpp" line="581"/>
+        <location filename="../MainWindow.cpp" line="676"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="494"/>
+        <location filename="../MainWindow.cpp" line="584"/>
         <source>This operation will remove all actual views, do you want to continue?</source>
         <translation>Cette opération va supprimer toutes les vues, voulez-vous continuer ?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="695"/>
-        <location filename="../MainWindow.cpp" line="886"/>
+        <location filename="../MainWindow.cpp" line="785"/>
+        <location filename="../MainWindow.cpp" line="964"/>
         <source>Movie already exists</source>
         <translation>Film déja existant</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="695"/>
+        <location filename="../MainWindow.cpp" line="785"/>
         <source>There is already a movie with this name and release year, the view will be added to this one</source>
         <translation>Il y a déjà un film avec ce nom et cette année de sortie, les vues seront ajoutés à ce dernier</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="704"/>
-        <source>Image to big (%1x%2). Latencies can be felt.</source>
-        <translation>Image trop grosse (%1x%2). Des latences peuvent apparaitre.</translation>
+        <location filename="../MainWindow.cpp" line="11"/>
+        <source>MovieManager</source>
+        <translation>MovieManager</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="711"/>
-        <location filename="../MainWindow.cpp" line="933"/>
+        <location filename="../MainWindow.cpp" line="68"/>
+        <source>Database backup created successfully</source>
+        <translation>Copie de la base de donnée créée</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="72"/>
+        <source>Database error</source>
+        <translation>Erreur de la base de donnée</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="72"/>
+        <source>Failed to open the database, please check for assistance</source>
+        <translation>Impossible d&apos;ouvrir la base de données,contacter le support pour obtenir de l&apos;aide</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="129"/>
+        <source>Failed to create a backup of the database (error 1)</source>
+        <translation>Erreur lors de la copie de la base de données (erreur 1)</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="138"/>
+        <source>Failed to create a backup of the database (error 2)</source>
+        <translation>Erreur lors de la copie de la base de données (erreur 2)</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="140"/>
+        <source>Failed to create a backup of the database (error 3)</source>
+        <translation>Erreur lors de la copie de la base de données (erreur 3)</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="148"/>
+        <source>Failed to create a backup of the database (error 4)</source>
+        <translation>Erreur lors de la copie de la base de données (erreur 4)</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="150"/>
+        <source>Failed to create a backup of the database (error 5)</source>
+        <translation>Erreur lors de la copie de la base de données (erreur 5)</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="277"/>
+        <source>Fetching from database...</source>
+        <translation>Récupération depuis la base de données...</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="794"/>
+        <source>Selected poster is large (%1x%2). Latencies can be felt.</source>
+        <translation>L&apos;affiche sélectionnée est large (%1x%2). Des latences peuvent être ressenties.</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="801"/>
+        <location filename="../MainWindow.cpp" line="1023"/>
         <source>Error while copying poster,
 Original path: %1
 Destination path: %2\Posters/%3.%4</source>
@@ -706,104 +765,132 @@ Chemin original : %1
 Chemin de destination : %2\Posters/%3.%4</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="886"/>
+        <location filename="../MainWindow.cpp" line="933"/>
+        <source>Movie whose ID is %1 has no more views, it is removed</source>
+        <translation>Le film dont l&apos;ID est %1 n&apos;a plus de vues, suppression du film</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="964"/>
         <source>There is already a movie with this name and release year, views will be combined, do you want to continue?</source>
         <translation>Il y a déjà un film avec ce nom et cette année de sortie, les vues seront ajoutés à ce dernier, voulez-vous continuer ?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="888"/>
+        <location filename="../MainWindow.cpp" line="966"/>
         <source>Merging of the following movies&apos; ID: %1 and %2</source>
         <translation>Fusion des films d&apos;ID suivants : %1 et %2</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1034"/>
+        <location filename="../MainWindow.cpp" line="1096"/>
         <source>Remove the movie</source>
         <translation>Supprimer le film</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1034"/>
+        <location filename="../MainWindow.cpp" line="1096"/>
         <source>Are you sure do you want to remove the movie? Its views will be removed.</source>
         <translation>Êtes-vous sur de vouloir supprimer ce film ? Ses vues associées seront supprimés.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1141"/>
+        <location filename="../MainWindow.cpp" line="1168"/>
         <source>Log already open</source>
         <translation>Log déja ouvert</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1154"/>
+        <location filename="../MainWindow.cpp" line="1181"/>
         <source>About window already open</source>
         <translation>Fenêtre A Propos déjà ouverte</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1167"/>
+        <location filename="../MainWindow.cpp" line="1194"/>
         <source>News window already open</source>
         <translation>Fenêtre Nouveautés déjà ouverte</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1243"/>
+        <location filename="../MainWindow.cpp" line="1270"/>
         <source>Column %1 successfully dropped from movies table</source>
         <translation>Colonne %1 supprimée de la table movies avec succès</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1267"/>
+        <location filename="../MainWindow.cpp" line="1294"/>
         <source>Unknown column type, can&apos;t add column %1 to movies table</source>
         <translation>Type de colonne inconnu, impossible d&apos;ajouter la colonne %1 à la table movies</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1274"/>
+        <location filename="../MainWindow.cpp" line="1301"/>
         <source>Column %1 successfully added to movies table</source>
         <translation>Colonne %1 ajoutée à la table movies avec succès</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1308"/>
+        <location filename="../MainWindow.cpp" line="1330"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1397"/>
+        <location filename="../MainWindow.cpp" line="1420"/>
         <source>Unable to load translation</source>
         <translation>Impossible de charger la traduction</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1484"/>
+        <location filename="../MainWindow.cpp" line="1521"/>
         <source>Discovered this year: %1</source>
         <translation>Découvert cette année : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1485"/>
+        <location filename="../MainWindow.cpp" line="1522"/>
         <source>Views count: %1</source>
         <translation>Nombre total de visionnage : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1486"/>
+        <location filename="../MainWindow.cpp" line="1523"/>
         <source>Average views: %1</source>
         <translation>Nombre moyen de vues : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1487"/>
+        <location filename="../MainWindow.cpp" line="1524"/>
         <source>Average viewed movie&apos;s year: %1</source>
         <translation>Année moyenne des films vus : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1488"/>
+        <location filename="../MainWindow.cpp" line="1525"/>
         <source>Viewed this year: %1</source>
         <translation>Vus cette année : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1489"/>
+        <location filename="../MainWindow.cpp" line="1526"/>
         <source>Average rating: %1</source>
         <translation>Note moyenne : %1</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1501"/>
+        <location filename="../MainWindow.cpp" line="1538"/>
         <source>Charts window already open</source>
         <translation>Fenêtre Graphiques déjà ouverte</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="1514"/>
+        <location filename="../MainWindow.cpp" line="1551"/>
         <source>Calendar already open</source>
         <translation>Fenêtre Calendrier déjà ouverte</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="1629"/>
+        <source>A new version is available!
+Latest: %1
+Current: %2
+
+Go to the download page?</source>
+        <translation>Une nouvelle version est disponible !
+Dernière : %1
+Actuelle : %2
+
+Accéder à la page de téléchargements ?</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="1643"/>
+        <source>MovieManager is up to date</source>
+        <translation>MovieManager est à jour</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="1653"/>
+        <source>Unable to fetch last version: %1</source>
+        <translation>Impossible de récupérer la dernière version : %1</translation>
     </message>
 </context>
 <context>
@@ -963,7 +1050,7 @@ Chemin de destination : %2\Posters/%3.%4</translation>
         <translation>Plus de logs</translation>
     </message>
     <message>
-        <location filename="../Dialogs/OptionsDialog.cpp" line="122"/>
+        <location filename="../Dialogs/OptionsDialog.cpp" line="123"/>
         <source>Edit</source>
         <translation>Modifier</translation>
     </message>
@@ -971,110 +1058,110 @@ Chemin de destination : %2\Posters/%3.%4</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../Common.cpp" line="22"/>
+        <location filename="../Common.cpp" line="21"/>
         <source>Select a picture</source>
         <translation>Sélectionner une affiche</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="22"/>
-        <source>Image (*.png; *.jpg; *.jpeg )</source>
-        <translation>Image (*.png; *.jpg; *.jpeg )</translation>
-    </message>
-    <message>
-        <location filename="../Common.cpp" line="30"/>
+        <location filename="../Common.cpp" line="29"/>
         <source>Incorrect format</source>
         <translation>Format incorrect</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="30"/>
-        <source>Image format is incorrect
-Please select a jpg, jpeg or png file</source>
-        <translation>Le format d&apos;image est incorrect
-Sélectionnez un fichier au format jpg, jpeg ou png</translation>
+        <location filename="../Common.cpp" line="21"/>
+        <source>Image (*.png; *.jpg; *.jpeg; *.webp)</source>
+        <translation>Image (*.png; *.jpg; *.jpeg; *.webp)</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="139"/>
-        <location filename="../Common.cpp" line="179"/>
+        <location filename="../Common.cpp" line="29"/>
+        <source>Image format is incorrect
+Valid formats: jpg, jpeg, png, webp</source>
+        <translation>Le format d&apos;image est incorrect
+Format valides : jpg, jpeg, png, webp</translation>
+    </message>
+    <message>
+        <location filename="../Common.cpp" line="125"/>
+        <location filename="../Common.cpp" line="165"/>
         <source>Blu-Ray</source>
         <translation>Blu-Ray</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="142"/>
-        <location filename="../Common.cpp" line="182"/>
+        <location filename="../Common.cpp" line="128"/>
+        <location filename="../Common.cpp" line="168"/>
         <source>TV</source>
         <translation>Télévision</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="145"/>
-        <location filename="../Common.cpp" line="185"/>
+        <location filename="../Common.cpp" line="131"/>
+        <location filename="../Common.cpp" line="171"/>
         <source>Cinema</source>
         <translation>Cinéma</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="148"/>
-        <location filename="../Common.cpp" line="188"/>
+        <location filename="../Common.cpp" line="134"/>
+        <location filename="../Common.cpp" line="174"/>
         <source>Cinema (replay)</source>
         <translation>Cinéma (reprise)</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="151"/>
-        <location filename="../Common.cpp" line="191"/>
+        <location filename="../Common.cpp" line="137"/>
+        <location filename="../Common.cpp" line="177"/>
         <source>DVD</source>
         <translation>DVD</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="154"/>
-        <location filename="../Common.cpp" line="194"/>
+        <location filename="../Common.cpp" line="140"/>
+        <location filename="../Common.cpp" line="180"/>
         <source>Streaming</source>
         <translation>Streaming</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="157"/>
-        <location filename="../Common.cpp" line="197"/>
+        <location filename="../Common.cpp" line="143"/>
+        <location filename="../Common.cpp" line="183"/>
         <source>Download</source>
         <translation>Téléchargement</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="160"/>
-        <location filename="../Common.cpp" line="200"/>
+        <location filename="../Common.cpp" line="146"/>
+        <location filename="../Common.cpp" line="186"/>
         <source>VHS</source>
         <translation>VHS</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="163"/>
-        <location filename="../Common.cpp" line="203"/>
+        <location filename="../Common.cpp" line="149"/>
+        <location filename="../Common.cpp" line="189"/>
         <source>Other physical support</source>
         <translation>Autre format physique</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="166"/>
-        <location filename="../Common.cpp" line="206"/>
+        <location filename="../Common.cpp" line="152"/>
+        <location filename="../Common.cpp" line="192"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="169"/>
-        <location filename="../Common.cpp" line="209"/>
+        <location filename="../Common.cpp" line="155"/>
+        <location filename="../Common.cpp" line="195"/>
         <source>Blu-Ray 4K</source>
         <translation>Blu-Ray 4K</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="220"/>
+        <location filename="../Common.cpp" line="206"/>
         <source>Precise integer</source>
         <translation>Nombre à virgule</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="222"/>
+        <location filename="../Common.cpp" line="208"/>
         <source>Integer</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="224"/>
+        <location filename="../Common.cpp" line="211"/>
         <source>Text</source>
         <translation>Texte</translation>
     </message>
     <message>
-        <location filename="../Common.cpp" line="251"/>
+        <location filename="../Common.cpp" line="252"/>
         <source>Database error: %1
 Query: %2</source>
         <translation>Erreur de base de donnée : %1
