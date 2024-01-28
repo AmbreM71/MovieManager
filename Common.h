@@ -41,6 +41,7 @@ public:
 
     static void setIconAccordingToTheme(QAction* object, QString filename);
     static void setIconAccordingToTheme(QPushButton* object, QString filename);
+    static bool isThemeBright(enum eTheme);
 
     static QString getVersion();
 

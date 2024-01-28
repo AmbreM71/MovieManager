@@ -112,7 +112,7 @@ MainWindow::~MainWindow() {
     delete m_ui;
 }
 
-void MainWindow::closeEvent(QCloseEvent *event) {
+void MainWindow::closeEvent([[maybe_unused]] QCloseEvent* event ) {
     if(m_ui->MoviesListWidget->currentRow() != -1)
         Common::Settings->setValue("LastMovieOpened", m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt());
 }
@@ -1599,11 +1599,11 @@ void MainWindow::clickedFilterTag(Tag* tag) {
     fillTable();
 }
 
-void MainWindow::on_MoviesListWidget_cellClicked(int row, int column) {
+void MainWindow::on_MoviesListWidget_cellClicked(int row, [[maybe_unused]] int column) {
     fillMovieInfos(m_ui->MoviesListWidget->item(row,2)->text().toInt());
 }
 
-void MainWindow::on_MoviesListWidget_cellDoubleClicked(int row, int column) {
+void MainWindow::on_MoviesListWidget_cellDoubleClicked(int row, [[maybe_unused]] int column) {
     editViews(m_ui->MoviesListWidget->item(row,2)->text().toInt());
 }
 

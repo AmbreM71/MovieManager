@@ -207,12 +207,13 @@ QString Common::ColumnTypeToQString(enum eColumnType type) {
         case eColumnType::Integer:
             return QObject::tr("Integer");
         case eColumnType::Text:
+        default:
             return QObject::tr("Text");
     }
 }
 
 void Common::setIconAccordingToTheme(QAction* action, QString filename) {
-    if((enum eTheme)Common::Settings->value("theme").toInt() == eTheme::Classic) {
+    if(isThemeBright((enum eTheme)Common::Settings->value("theme").toInt())) {
         action->setIcon(QIcon(":/assets/Assets/Icons/Dark/"+filename));
     }
     else {
@@ -221,11 +222,25 @@ void Common::setIconAccordingToTheme(QAction* action, QString filename) {
 }
 
 void Common::setIconAccordingToTheme(QPushButton* action, QString filename) {
-    if((enum eTheme)Common::Settings->value("theme").toInt() == eTheme::Classic) {
+    if(isThemeBright((enum eTheme)Common::Settings->value("theme").toInt())) {
         action->setIcon(QIcon(":/assets/Assets/Icons/Dark/"+filename));
     }
     else {
         action->setIcon(QIcon(":/assets/Assets/Icons/Bright/"+filename));
+    }
+}
+
+bool Common::isThemeBright(enum eTheme eTheme)
+{
+    switch(eTheme)
+    {
+        case eTheme::Dark:
+        case eTheme::MidnightPurple:
+        case eTheme::OLED:
+            return false;
+        case eTheme::Classic:
+        default:
+            return true;
     }
 }
 
@@ -237,3 +252,4 @@ void Common::LogDatabaseError(QSqlQuery *query) {
     QString sLog = QObject::tr("Database error: %1\nQuery: %2").arg(query->lastError().text(), query->executedQuery());
     Common::Log->append(sLog, eLog::Error);
 }
+
