@@ -26,7 +26,7 @@ SetupIconFile={#DevFolder}\Assets\logo.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-OutputBaseFilename=MovieManager_Installer
+OutputBaseFilename=MovieManager_{#MyAppVersion}_Installer
 PrivilegesRequired=admin
 OutputDir={#BuildFolder}/installer
 
