@@ -45,7 +45,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="NameLabel">
        <property name="text">
-        <string>Name</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Name&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -78,7 +78,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="RatingLabel">
        <property name="text">
-        <string>Rating</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rating&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -92,7 +92,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="ReleaseYearLabel">
        <property name="text">
-        <string>Release year</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Release year&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>

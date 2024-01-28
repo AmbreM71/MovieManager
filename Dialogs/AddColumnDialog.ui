@@ -98,6 +98,9 @@
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="2" column="1">
        <widget class="QDoubleSpinBox" name="DoubleMinValue">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
         <property name="maximum">
          <double>65535.000000000000000</double>
         </property>
@@ -105,6 +108,9 @@
       </item>
       <item row="2" column="3">
        <widget class="QDoubleSpinBox" name="DoubleMaxValue">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
         <property name="maximum">
          <double>99999.000000000000000</double>
         </property>
@@ -136,6 +142,9 @@
       </item>
       <item row="0" column="2" colspan="2">
        <widget class="QSpinBox" name="DoubleDecimals">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
         <property name="minimum">
          <number>1</number>
         </property>
@@ -182,6 +191,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QSpinBox" name="IntMinValue">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
         <property name="maximum">
          <number>65535</number>
         </property>
@@ -196,6 +208,9 @@
       </item>
       <item row="0" column="3">
        <widget class="QSpinBox" name="IntMaxValue">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
         <property name="maximum">
          <number>999999999</number>
         </property>
@@ -241,6 +256,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QSpinBox" name="TextMaxLength">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
         <property name="minimum">
          <number>1</number>
         </property>
@@ -294,7 +312,7 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
+   <item row="9" column="0" colspan="2">
     <widget class="QCheckBox" name="OptionalCheckBox">
      <property name="text">
       <string>Optional</string>

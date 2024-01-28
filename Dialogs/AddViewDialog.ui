@@ -92,7 +92,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="MovieNameLabel">
        <property name="text">
-        <string>Name</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Name&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -109,7 +109,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="MovieReleaseYearLabel">
        <property name="text">
-        <string>Release year</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Release year&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -150,7 +150,7 @@
      <item row="10" column="0">
       <widget class="QLabel" name="MovieViewDateLabel">
        <property name="text">
-        <string>View date</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;View date&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -219,7 +219,7 @@
      <item row="5" column="0">
       <widget class="QLabel" name="MovieRatingLabel">
        <property name="text">
-        <string>Rating</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rating&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -252,7 +252,7 @@
      <item row="11" column="0">
       <widget class="QLabel" name="MovieViewTypeLabel">
        <property name="text">
-        <string>View type</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;View type&lt;span style=&quot; color:#dd0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -279,7 +279,7 @@
            <second>0</second>
            <year>2022</year>
            <month>6</month>
-           <day>4</day>
+           <day>3</day>
           </datetime>
          </property>
          <property name="maximumDateTime">
@@ -299,7 +299,7 @@
            <second>0</second>
            <year>1899</year>
            <month>11</month>
-           <day>28</day>
+           <day>27</day>
           </datetime>
          </property>
          <property name="displayFormat">

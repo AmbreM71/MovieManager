@@ -1,5 +1,6 @@
 SOURCES += \
     Common.cpp \
+    CustomColumnLineEdit.cpp \
     Dialogs/AboutDialog.cpp \
     Dialogs/AddColumnDialog.cpp \
     Dialogs/AddViewDialog.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 HEADERS += \
     BuildFunctions.h \
     Common.h \
+    CustomColumnLineEdit.h \
     Dialogs/AboutDialog.h \
     Dialogs/AddColumnDialog.h \
     Dialogs/AddViewDialog.h \

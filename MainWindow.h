@@ -58,7 +58,6 @@ class MainWindow : public QMainWindow {
         QTranslator m_translator;
         QString m_savepath = "";
         QLocale* m_locale;
-        struct stFilters m_filters;
         QString m_customColumnsRequestFilter;
 
         TagsScrollArea* m_selectedTagsScrollArea;

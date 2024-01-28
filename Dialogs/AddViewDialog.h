@@ -10,9 +10,10 @@
 #include <QKeyEvent>
 #include <QCompleter>
 
-#include <Common.h>
-#include <Tag.h>
+#include "Common.h"
+#include "Tag.h"
 #include "TagsScrollArea.h"
+#include "CustomColumnLineEdit.h"
 
 namespace Ui {
 class AddViewDialog;
@@ -21,15 +22,15 @@ class AddViewDialog;
 class AddViewDialog : public QDialog
 {
     Q_OBJECT
+
     private:
         Ui::AddViewDialog* m_ui;
         QList<QString>* m_tags;
         QString m_posterPath;
-        QList<QWidget*>* m_customColumnsInputList;
-        QList<QString>* m_customColumnsNameList;
-        QList<QCheckBox*> m_customColumnsUnknownCheckBoxList;
+        QList<CustomColumnLineEdit*>* m_customColumnInputList;
         TagsScrollArea* m_tagsScrollArea;
         QStringList m_sMovieList;
+        int m_customColumnCount;
 
         bool eventFilter(QObject *obj, QEvent *event);
 
@@ -49,10 +50,9 @@ class AddViewDialog : public QDialog
         QList<QString>* getTags();
         bool isDateUnknown();
         bool isTypeUnknown();
-        QList<QWidget*>* getCustomColumnsInputList();
-        QList<QString>* getCustomColumnsNameList();
-        QList<QCheckBox*> getCustomColumnsUnknownCheckBoxList();
+        CustomColumnLineEdit* getCustomColumnInputAt(int nIndex);
         QString GetSearchedMovieText();
+        int getCustomColumnCount();
 
     public slots:
         void MovieSearchChanged();
@@ -61,7 +61,6 @@ class AddViewDialog : public QDialog
         void checkValid();
         void SelectPoster();
         void addTag();
-        void ToggleWidgetState(int state, QWidget* widget);
 
         void clickedTag(Tag* tag);
         void mouseEnteredTag(Tag* tag);
