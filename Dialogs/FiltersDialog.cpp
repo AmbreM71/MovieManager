@@ -30,8 +30,8 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
 
     FilterComboBox* ReleaseYearCombobox = new FilterComboBox(eColumnType::Integer);
     ReleaseYearCombobox->insertItem((int)eCombobox::None, "");
-    ReleaseYearCombobox->insertItem((int)eCombobox::And, "AND");
-    ReleaseYearCombobox->insertItem((int)eCombobox::Or, "OR");
+    ReleaseYearCombobox->insertItem((int)eCombobox::And, tr("AND"));
+    ReleaseYearCombobox->insertItem((int)eCombobox::Or, tr("OR"));
     m_ui->FormLayout->addWidget(ReleaseYearCombobox, 1, 0);
     ReleaseYearCombobox->AddRelatedInput(LowReleaseYear);
     ReleaseYearCombobox->AddRelatedInput(HighReleaseYear);
@@ -41,8 +41,8 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
 
     FilterComboBox* RatingCombobox = new FilterComboBox(eColumnType::Integer);
     RatingCombobox->insertItem((int)eCombobox::None, "");
-    RatingCombobox->insertItem((int)eCombobox::And, "AND");
-    RatingCombobox->insertItem((int)eCombobox::Or, "OR");
+    RatingCombobox->insertItem((int)eCombobox::And, tr("AND"));
+    RatingCombobox->insertItem((int)eCombobox::Or, tr("OR"));
     m_ui->FormLayout->addWidget(RatingCombobox, 2, 0);
     RatingCombobox->AddRelatedInput(LowRating);
     RatingCombobox->AddRelatedInput(HighRating);
@@ -58,8 +58,8 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
     while(customColumnsQuery.next()) {
         FilterComboBox* combobox = new FilterComboBox((enum eColumnType)customColumnsQuery.value(1).toInt());
         combobox->insertItem((int)eCombobox::None, "");
-        combobox->insertItem((int)eCombobox::And, "AND");
-        combobox->insertItem((int)eCombobox::Or, "OR");
+        combobox->insertItem((int)eCombobox::And, tr("AND"));
+        combobox->insertItem((int)eCombobox::Or, tr("OR"));
         m_ui->FormLayout->addWidget(combobox, 3 + nColumnIndex, 0);
 
         m_filters.append(combobox);

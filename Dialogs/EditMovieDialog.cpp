@@ -19,9 +19,9 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     movieQuery.first();
 
 #ifdef DEV
-    m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager_Dev\\Posters\\"+movieQuery.value(3).toString();
+    m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "MovieManager_Dev" + QDir::separator() + "Posters" + QDir::separator() + movieQuery.value(3).toString();
 #else
-    m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+movieQuery.value(3).toString();
+    m_posterPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "MovieManager" + QDir::separator() + "Posters" + QDir::separator() + movieQuery.value(3).toString();
 #endif
 
     float ratio = (float)m_ui->PosterLabel->sizeHint().height() / (float)m_ui->PosterLabel->sizeHint().width();

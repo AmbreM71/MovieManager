@@ -4,10 +4,10 @@
 MainWindow::MainWindow(QApplication* app) {
 
 #ifdef DEV
-    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager_Dev";
+    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "MovieManager_Dev";
     this->setWindowTitle("MovieManager (DEV)");
 #else
-    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager";
+    m_savepath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "MovieManager";
     this->setWindowTitle(tr("MovieManager"));
 #endif
 
@@ -156,7 +156,7 @@ bool MainWindow::BackupDatabase()
 
 bool MainWindow::InitDatabase() {
     m_db = QSqlDatabase::addDatabase("QSQLITE");
-    m_db.setDatabaseName(m_savepath+"/movieDatabase.db");
+    m_db.setDatabaseName(m_savepath + QDir::separator() + "movieDatabase.db");
 
     if(!m_db.open()) {
         Common::Log->append(tr("Can't open database"), eLog::Error);
@@ -414,7 +414,7 @@ void MainWindow::fillMovieInfos(int nMovieID) {
     movieQuery.first();
 
     m_ui->MovieTitleLabel->setText(movieQuery.value(0).toString());
-    Common::DisplayPoster(m_ui->PosterLabel, 400, 1, m_savepath+"\\Posters\\"+movieQuery.value(1).toString());
+    Common::DisplayPoster(m_ui->PosterLabel, 400, 1, m_savepath + QDir::separator() + "Posters" + QDir::separator() + movieQuery.value(1).toString());
 
     //Fetch the number of views of the current movie
     QSqlQuery viewsQuery;
@@ -786,8 +786,8 @@ void MainWindow::addView(int nMovieID) {
                     //Processing poster moving and renaming
                     QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
                     QString GUID = QString::number(QRandomGenerator::global()->generate());
-                    if(QFile::copy(window->getPosterPath(), m_savepath+"\\Posters/"+GUID+"."+ext) == false) {
-                        Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2\\Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
+                    if(QFile::copy(window->getPosterPath(), m_savepath + QDir::separator() + "Posters" + QDir::separator() + GUID + "." + ext) == false) {
+                        Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2/Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
                     }
                     posterPath = GUID+"."+ext;
                 }
@@ -964,7 +964,7 @@ void MainWindow::editMovie(int nMovieID) {
                         Common::LogDatabaseError(&MoviePosterToDeleteQuery);
 
                     MoviePosterToDeleteQuery.first();
-                    QFile::remove(m_savepath+"\\Posters\\"+MoviePosterToDeleteQuery.value(0).toString());
+                    QFile::remove(m_savepath + QDir::separator() + "Posters" + QDir::separator() + MoviePosterToDeleteQuery.value(0).toString());
 
                     QSqlQuery deleteMovieQuery;
                     if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\""))
@@ -1008,8 +1008,8 @@ void MainWindow::editMovie(int nMovieID) {
             ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
 
             GUID = QString::number(QRandomGenerator::global()->generate());
-            if(QFile::copy(window->getPosterPath(), m_savepath+"\\Posters/"+GUID+"."+ext) == false) {
-                Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2\\Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
+            if(QFile::copy(window->getPosterPath(), m_savepath + QDir::separator() + "Posters" + QDir::separator() + GUID + "." + ext) == false) {
+                Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2/Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
             }
 
             // Add poster ID modification to the update request
@@ -1101,7 +1101,7 @@ void MainWindow::deleteMovie(int nMovieID) {
         Common::LogDatabaseError(&posterQuery);
 
     posterQuery.first();
-    QFile::remove(m_savepath+"\\Posters\\"+posterQuery.value(0).toString());
+    QFile::remove(m_savepath + QDir::separator() + "Posters" + QDir::separator() + posterQuery.value(0).toString());
 
 
     if(!deleteMovieQuery.exec("DELETE FROM movies WHERE ID=\""+ID+"\";")) {

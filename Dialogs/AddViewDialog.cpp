@@ -166,9 +166,9 @@ void AddViewDialog::MovieSearchChanged() {
         posterQuery.first();
 
 #ifdef DEV
-        QString sPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager_Dev\\Posters\\"+posterQuery.value(0).toString();
+        QString sPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "MovieManager_Dev" + QDir::separator() + "Posters" + QDir::separator() + posterQuery.value(0).toString();
 #else
-        QString sPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\MovieManager\\Posters\\"+posterQuery.value(0).toString();
+        QString sPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "MovieManager" + QDir::separator() + "Posters" + QDir::separator() + posterQuery.value(0).toString();
 #endif
         Common::DisplayPoster(m_ui->PosterLabel, m_ui->PosterLabel->sizeHint().height(), m_ui->PosterLabel->sizeHint().height() / (float)m_ui->PosterLabel->sizeHint().width(), sPath);
     }

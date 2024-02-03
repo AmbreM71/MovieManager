@@ -157,7 +157,7 @@ QString Common::viewTypeToQString(enum eViewType type) {
     else {
         qDebug() << "Error";
         //Log(QObject::tr("Unknown view type"), Error);
-        return "Unknown";
+        return QObject::tr("Unknown");
     }
 }
 
