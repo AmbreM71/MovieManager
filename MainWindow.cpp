@@ -314,59 +314,49 @@ void MainWindow::fillTable() {
     if(!tagQuery.exec("SELECT * FROM tags;"))
         Common::LogDatabaseError(&tagQuery);
 
-    QString filter = m_ui->QuickSearchLineEdit->text();
-    QChar cellChar, filterChar;
-    int cellsNotCorrespondingToFilter;
-    for(int row = 0 ; row < m_ui->MoviesListWidget->rowCount() ; row++) {
-        cellsNotCorrespondingToFilter = 0;
-        for(int column = 0 ; column < m_ui->MoviesListWidget->columnCount()-1 ; column++) {
-            QString cellText = m_ui->MoviesListWidget->item(row, column)->text();
-            if(filter.length() <= cellText.length()) {
-                for(int filterIndex = 0 ; filterIndex < filter.length() ; filterIndex++) {
-                        cellChar = cellText.at(filterIndex);
-                        filterChar = filter.at(filterIndex);
-                        if(!Common::Settings->value("quickSearchCaseSensitive").toBool()) {
-                            cellChar = cellChar.toLower();
-                            filterChar = filterChar.toLower();
-                        }
-                        if(cellChar != filterChar) {
-                            cellsNotCorrespondingToFilter++;
-                            break;
-                        }
-                    }
-                }
-            else {
-                cellsNotCorrespondingToFilter++;
+    QString sFilter = m_ui->QuickSearchLineEdit->text();
+    for(int row = 0 ; row < m_ui->MoviesListWidget->rowCount() ; row++)
+    {
+        bool bRowValid = false;
+        // Check for quick search text
+        for(int column = 0 ; column < m_ui->MoviesListWidget->columnCount()-1 ; column++)
+        {
+            QString sCell = m_ui->MoviesListWidget->item(row, column)->text();
+            enum Qt::CaseSensitivity eCase = Common::Settings->value("quickSearchCaseSensitive").toBool() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+            if(sCell.contains(sFilter, eCase) == true)
+            {
+                bRowValid = true;
+                break;
             }
         }
-        //If no cell in the line corresponds to the search
-        if(cellsNotCorrespondingToFilter == m_ui->MoviesListWidget->columnCount()-1) {
-            m_ui->MoviesListWidget->hideRow(row);
-        }
-        //If cell correspond to the quick search, check if tags filter correspond
-        else {
-            int ID = m_ui->MoviesListWidget->item(row, 2)->text().toInt();
-            bool hasMovieAllFilterTags = true;
-            for(int filterTag = 0 ; filterTag < m_selectedTagsScrollArea->widget()->layout()->count()-1 ; filterTag++) {
-                Tag* tag = (Tag*)m_selectedTagsScrollArea->widget()->layout()->itemAt(filterTag)->widget();
-                bool hasMovieFilterTag = false;
+
+        // Check for selected tags
+        if(bRowValid == true)
+        {
+            int nID = m_ui->MoviesListWidget->item(row, 2)->text().toInt();
+            for(int nFilterTag = 0 ; nFilterTag < m_selectedTagsScrollArea->widget()->layout()->count()-1 ; nFilterTag++) {
+                Tag* tag = (Tag*)m_selectedTagsScrollArea->widget()->layout()->itemAt(nFilterTag)->widget();
+                bool bHasMovieFilterTag = false;
                 tagQuery.first();
                 tagQuery.previous();
                 while(tagQuery.next()) {
-                    if(tagQuery.value(0).toInt() == ID && QString::compare(tagQuery.value(1).toString(), tag->text()) == 0) {
-                        hasMovieFilterTag = true;
+                    if(tagQuery.value(0).toInt() == nID && QString::compare(tagQuery.value(1).toString(), tag->text()) == 0) {
+                        bHasMovieFilterTag = true;
                         break;
                     }
                 }
-                if(hasMovieFilterTag == false) {
-                    hasMovieAllFilterTags = false;
+                if(bHasMovieFilterTag == false) {
+                    bRowValid = false;
                     break;
                 }
             }
-            if(hasMovieAllFilterTags == false) {
-                m_ui->MoviesListWidget->hideRow(row);
-            }
         }
+
+        if(bRowValid == true && m_ui->MoviesListWidget->isVisible() == false)
+            m_ui->MoviesListWidget->showRow(row);
+        else if(bRowValid == false && m_ui->MoviesListWidget->isVisible() == true)
+            m_ui->MoviesListWidget->hideRow(row);
     }
 
     m_ui->MoviesListWidget->blockSignals(false);
@@ -386,7 +376,6 @@ void MainWindow::fillTable() {
 
         nMovieID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt();
     }
-
 
     fillMovieInfos(nMovieID);
 }
