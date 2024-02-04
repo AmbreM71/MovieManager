@@ -279,7 +279,7 @@
            <second>0</second>
            <year>2022</year>
            <month>6</month>
-           <day>3</day>
+           <day>2</day>
           </datetime>
          </property>
          <property name="maximumDateTime">
@@ -299,7 +299,7 @@
            <second>0</second>
            <year>1899</year>
            <month>11</month>
-           <day>27</day>
+           <day>26</day>
           </datetime>
          </property>
          <property name="displayFormat">
@@ -327,6 +327,7 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>ExistingMoviesLineEdit</tabstop>
   <tabstop>MovieNameInput</tabstop>
   <tabstop>MovieReleaseYearInput</tabstop>
   <tabstop>MovieRatingInput</tabstop>

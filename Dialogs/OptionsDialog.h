@@ -20,6 +20,7 @@ class OptionsDialog : public QDialog
         Ui::OptionsDialog* m_ui;
         QSignalMapper* m_editColumnSignalMapper;
         QSignalMapper* m_deleteColumnSignalMapper;
+        QWidget* pPreviousWidget; // Used for tabulation order
 
     public:
         explicit OptionsDialog(QWidget* parent = nullptr);

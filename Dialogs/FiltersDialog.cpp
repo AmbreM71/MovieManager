@@ -50,6 +50,16 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
     RatingCombobox->ToggleWidgetState(0);
     m_filters.append(RatingCombobox);
 
+
+    QWidget::setTabOrder(m_ui->NameInput, ReleaseYearCombobox);
+    QWidget::setTabOrder(ReleaseYearCombobox, LowReleaseYear);
+    QWidget::setTabOrder(LowReleaseYear, HighReleaseYear);
+    QWidget::setTabOrder(HighReleaseYear, RatingCombobox);
+    QWidget::setTabOrder(RatingCombobox, LowRating);
+    QWidget::setTabOrder(LowRating, HighRating);
+
+    QWidget* pPreviousWidget = HighRating; // Used for tabulation order
+
     //m_ui->FormLayout
     QSqlQuery customColumnsQuery;
     if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength, Optional FROM columns;"))
@@ -62,6 +72,8 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
         combobox->insertItem((int)eCombobox::Or, tr("OR"));
         m_ui->FormLayout->addWidget(combobox, 3 + nColumnIndex, 0);
 
+        QWidget::setTabOrder(pPreviousWidget, combobox);
+
         m_filters.append(combobox);
 
         QObject::connect(combobox, SIGNAL(currentIndexChanged(int)), combobox, SLOT(ToggleWidgetState(int)));
@@ -72,8 +84,9 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
 
         m_ui->FormLayout->addWidget(columnLabel, 3 + nColumnIndex, 1);
 
-        if(customColumnsQuery.value(1).toInt() == 0 || customColumnsQuery.value(1).toInt() == 1) {
-            // Int
+        if(customColumnsQuery.value(1).toInt() == (int)eColumnType::Integer
+        || customColumnsQuery.value(1).toInt() == (int)eColumnType::Double)
+        {
             CustomColumnLineEdit* LowInput = new CustomColumnLineEdit((enum eColumnType)customColumnsQuery.value(1).toInt());
             LowInput->setLabel(customColumnsQuery.value(0).toString());
             LowInput->setMin(customColumnsQuery.value(2).toDouble());
@@ -95,12 +108,17 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
 
             m_ui->FormLayout->addWidget(LowInput, 3 + nColumnIndex, 2);
             m_ui->FormLayout->addWidget(HighInput, 3 + nColumnIndex, 4);
+
+            QWidget::setTabOrder(combobox, LowInput);
+            QWidget::setTabOrder(LowInput, HighInput);
+            pPreviousWidget = HighInput;
+
             QLabel* andLabel = new QLabel(tr("and"));
             andLabel->setAlignment(Qt::AlignCenter);
             m_ui->FormLayout->addWidget(andLabel, 3 + nColumnIndex, 3);
         }
-        else if(customColumnsQuery.value(1).toInt() == 2) {
-            // Text
+        else if(customColumnsQuery.value(1).toInt() == (int)eColumnType::Text)
+        {
             CustomColumnLineEdit* input = new CustomColumnLineEdit((enum eColumnType)customColumnsQuery.value(1).toInt());
             input->setLabel(customColumnsQuery.value(0).toString());
             input->setMin(customColumnsQuery.value(2).toDouble());
@@ -111,7 +129,12 @@ FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent
 
             combobox->AddRelatedInput(input);
 
+
+            pPreviousWidget = input;
+
             m_ui->FormLayout->addWidget(input, 3 + nColumnIndex, 2, 1, 3);
+
+            QWidget::setTabOrder(combobox, input);
         }
         nColumnIndex++;
 

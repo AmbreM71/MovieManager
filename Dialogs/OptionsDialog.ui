@@ -69,7 +69,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="GeneralTab">
       <attribute name="title">
@@ -388,6 +388,21 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>LanguageCombobox</tabstop>
+  <tabstop>ThemeCombobox</tabstop>
+  <tabstop>DateFormatCombobox</tabstop>
+  <tabstop>MatrixModeCheckbox</tabstop>
+  <tabstop>MoreLogsCheckbox</tabstop>
+  <tabstop>QuickSearchCaseCheckbox</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>PosterButton</tabstop>
+  <tabstop>ReleaseYearButton</tabstop>
+  <tabstop>NameButton</tabstop>
+  <tabstop>RatingButton</tabstop>
+  <tabstop>AddColumnButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

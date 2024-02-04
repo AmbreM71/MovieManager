@@ -48,6 +48,8 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength, Optional FROM columns;"))
         Common::LogDatabaseError(&customColumnsQuery);
 
+    QWidget* pPreviousWidget = m_ui->PosterButton; // Used for tabulation order
+
     int nColumnIndex = 0;
     while(customColumnsQuery.next()) {
         QLabel* columnLabel = new QLabel(customColumnsQuery.value(0).toString());
@@ -55,15 +57,18 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
             columnLabel->setText(tr("<html><head/><body><p>%1<span style=\" color:#dd0000;\">*</span></p></body></html>").arg(customColumnsQuery.value(0).toString()));
 
         m_ui->CustomColumnsLabelLayout->addWidget(columnLabel, nColumnIndex);
-        QHBoxLayout* inputLayout = new QHBoxLayout();
 
         sCustomColumns.append(" \"" + customColumnsQuery.value(0).toString() + "\",");
         nCustomColumnCount++;
 
         // Text
         CustomColumnLineEdit* input = new CustomColumnLineEdit((enum eColumnType)customColumnsQuery.value(1).toInt());
-        inputLayout->addWidget(input, 1);
+        m_ui->CustomColumnsInputLayout->addWidget(input);
         m_customColumnInputList->append(input);
+
+        QWidget::setTabOrder(pPreviousWidget, input);
+        pPreviousWidget = input;
+
         QObject::connect(input, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
 
         input->setLabel(customColumnsQuery.value(0).toString());
@@ -73,11 +78,10 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
         input->setTextMaxLength(customColumnsQuery.value(5).toInt());
         input->setOptional(customColumnsQuery.value(6).toBool());
 
-        m_ui->CustomColumnsInputLayout->addLayout(inputLayout);
-
         nColumnIndex++;
     }
 
+    QWidget::setTabOrder(pPreviousWidget, m_ui->TagsInput);
     sCustomColumns.removeLast(); // Removes the last ","
 
     m_customColumnCount = nColumnIndex;

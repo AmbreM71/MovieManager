@@ -44,6 +44,8 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     if(!customColumnsQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength, Optional FROM columns;"))
         Common::LogDatabaseError(&customColumnsQuery);
 
+    QWidget* pPreviousWidget = m_ui->PosterButton; // Used for tabulation order
+
     int nColumnIndex = 0;
     while(customColumnsQuery.next()) {
         QLabel* columnLabel = new QLabel(customColumnsQuery.value(0).toString());
@@ -56,6 +58,9 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
         CustomColumnLineEdit* input = new CustomColumnLineEdit((enum eColumnType)customColumnsQuery.value(1).toInt());
         m_customColumnInputList->append(input);
         m_ui->CustomColumnsInputLayout->addWidget(input);
+
+        QWidget::setTabOrder(pPreviousWidget, input);
+        pPreviousWidget = input;
 
         QObject::connect(input, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
 
@@ -70,6 +75,10 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     }
 
     m_customColumnCount = nColumnIndex;
+
+
+
+    QWidget::setTabOrder(pPreviousWidget, m_ui->TagsInput);
 
     // If a movie is preselected when calling the dialog
     if(nMovieID != -1) {

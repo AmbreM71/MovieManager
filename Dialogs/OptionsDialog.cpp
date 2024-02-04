@@ -6,6 +6,8 @@ OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent) {
     m_ui->setupUi(this);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/settings.png"));
 
+    pPreviousWidget = m_ui->RatingButton;
+
     // Set current settings values
     m_ui->ThemeCombobox->setCurrentIndex(Common::Settings->value("theme").toInt());
     m_ui->LanguageCombobox->setCurrentIndex(Common::Settings->value("language").toInt());
@@ -29,6 +31,9 @@ OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent) {
         InsertColumnQt(columnsQuery.value(0).toString(), (enum eColumnType)columnsQuery.value(1).toInt(), 4 + nRow);
         nRow++;
     }
+
+    QWidget::setTabOrder(pPreviousWidget, m_ui->AddColumnButton);
+
     QObject::connect(m_editColumnSignalMapper, SIGNAL(mappedInt(int)), this, SLOT(EditColumn(int)));
     QObject::connect(m_deleteColumnSignalMapper, SIGNAL(mappedInt(int)), this, SLOT(RemoveColumn(int)));
 
@@ -130,6 +135,11 @@ void OptionsDialog::InsertColumnQt(QString sName, enum eColumnType eType, int nR
 
     pActionsLayout->addWidget(editButton);
     pActionsLayout->addWidget(deleteButton);
+
+    QWidget::setTabOrder(pPreviousWidget, editButton);
+    QWidget::setTabOrder(editButton, deleteButton);
+    pPreviousWidget = deleteButton;
+
 
     m_ui->DefaultColumnGridLayout->addWidget(NameLabel, nRow, 0);
     m_ui->DefaultColumnGridLayout->addWidget(TypeLabel, nRow, 1);
