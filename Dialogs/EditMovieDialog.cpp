@@ -126,6 +126,8 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     pTagCompleter->setCaseSensitivity(Qt::CaseInsensitive);
     m_ui->TagsInput->setCompleter(pTagCompleter);
 
+    QObject::connect(m_ui->TagsInput, SIGNAL(textChanged(QString)), this, SLOT(CheckTag(QString)));
+
     checkValid();
 }
 
@@ -236,7 +238,7 @@ int EditMovieDialog::getCustomColumnCount() {
 bool EditMovieDialog::eventFilter(QObject *obj, QEvent *event) {
     if (obj == m_ui->TagsInput && event->type() == QEvent::KeyPress) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
-        if(key->key() == Qt::Key_Return) {
+        if(key->key() == Qt::Key_Return && m_ui->TagsAddButton->isEnabled() == true) {
             addTag();
             return true;
         }
@@ -264,4 +266,12 @@ void EditMovieDialog::checkValid()
     }
 
     m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(bIsValid);
+}
+
+void EditMovieDialog::CheckTag(QString sTag)
+{
+    if(m_tags->contains(sTag) == true)
+        m_ui->TagsAddButton->setEnabled(false);
+    else
+        m_ui->TagsAddButton->setEnabled(true);
 }

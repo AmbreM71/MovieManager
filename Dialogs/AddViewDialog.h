@@ -63,6 +63,7 @@ class AddViewDialog : public QDialog
         void checkValid();
         void SelectPoster();
         void addTag();
+        void CheckTag(QString sTag);
 
         void clickedTag(Tag* tag);
         void mouseEnteredTag(Tag* tag);

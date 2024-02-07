@@ -56,6 +56,7 @@ class EditMovieDialog : public QDialog
         void SelectPoster();
         void addTag();
         void checkValid();
+        void CheckTag(QString sTag);
 
         void clickedTag(Tag* tag);
         void mouseEnteredTag(Tag* tag);

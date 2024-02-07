@@ -40,6 +40,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     QObject::connect(m_ui->UnknownViewTypeCheckbox, SIGNAL(stateChanged(int)), this, SLOT(toggleViewTypeInput(int)));
     QObject::connect(m_ui->PosterButton, SIGNAL(clicked()), this, SLOT(SelectPoster()));
     QObject::connect(m_ui->TagsAddButton, SIGNAL(clicked()), this, SLOT(addTag()));
+    QObject::connect(m_ui->TagsInput, SIGNAL(textChanged(QString)), this, SLOT(CheckTag(QString)));
 
     //Connectors to check if input are filled to enable Ok button
     QObject::connect(m_ui->MovieNameInput, SIGNAL(textChanged(QString)), this, SLOT(checkValid()));
@@ -288,6 +289,8 @@ void AddViewDialog::clickedTag(Tag* tag) {
     }
 
     delete tag;
+
+    CheckTag(m_ui->TagsInput->text());
 }
 
 void AddViewDialog::mouseEnteredTag(Tag* tag) {
@@ -313,10 +316,18 @@ int AddViewDialog::getCustomColumnCount() {
 bool AddViewDialog::eventFilter(QObject *obj, QEvent *event) {
     if (obj == m_ui->TagsInput && event->type() == QEvent::KeyPress) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
-        if(key->key() == Qt::Key_Return) {
+        if(key->key() == Qt::Key_Return && m_ui->TagsAddButton->isEnabled() == true) {
             addTag();
             return true;
         }
     }
     return false;
+}
+
+void AddViewDialog::CheckTag(QString sTag)
+{
+    if(m_tags->contains(sTag) == true)
+        m_ui->TagsAddButton->setEnabled(false);
+    else
+        m_ui->TagsAddButton->setEnabled(true);
 }
