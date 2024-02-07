@@ -514,7 +514,16 @@ void MainWindow::fillMovieInfos(int nMovieID) {
         {
             if(customColumnsInformationsQuery.value(nColumn).toString().length() != 0)
             {
-                QLabel* label = new QLabel(QString(tr("%1: %2")).arg(sCustomColumnsNameList.at(nColumn), customColumnsInformationsQuery.value(nColumn).toString()));
+                QString sValue = customColumnsInformationsQuery.value(nColumn).toString();
+                bool bIsIntger;
+                int nValue = sValue.toInt(&bIsIntger);
+                bool bIsDouble;
+                double fValue = sValue.toDouble(&bIsDouble);
+                if(bIsIntger == true)
+                    sValue = m_locale->toString(nValue);
+                else if(bIsDouble == true)
+                    sValue = m_locale->toString(fValue);
+                QLabel* label = new QLabel(QString(tr("%1: %2")).arg(sCustomColumnsNameList.at(nColumn), sValue));
                 m_ui->CustomInfosLayout->addWidget(label);
             }
         }
