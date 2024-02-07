@@ -1568,7 +1568,7 @@ void MainWindow::clickedTag(Tag* tag) {
 
 
     bool isTagInLayout = false;
-    for(int i = 0 ; i < m_selectedTagsScrollArea->widget()->layout()->count() - 2 ; i++) {
+    for(int i = 0 ; i < m_selectedTagsScrollArea->widget()->layout()->count() - 1 ; i++) {
         Tag* t = (Tag*)m_selectedTagsScrollArea->widget()->layout()->itemAt(i)->widget();
         if(QString::compare(t->text(), tag->text()) == 0) {
             isTagInLayout = true;
