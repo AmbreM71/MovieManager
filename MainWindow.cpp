@@ -1580,13 +1580,23 @@ void MainWindow::clickedTag(Tag* tag) {
         Tag* copiedTag = new Tag(tag);
 
         QObject::connect(copiedTag, SIGNAL(clicked(Tag*)), this, SLOT(clickedFilterTag(Tag*)));
+        QObject::connect(copiedTag, SIGNAL(mouseEnter(Tag*)), this, SLOT(mouseEnteredTag(Tag*)));
+        QObject::connect(copiedTag, SIGNAL(mouseLeave(Tag*)), this, SLOT(mouseLeftTag(Tag*)));
 
         QLayoutItem* spacer = m_selectedTagsScrollArea->widget()->layout()->takeAt(m_selectedTagsScrollArea->widget()->layout()->count()-1);
         m_selectedTagsScrollArea->widget()->layout()->addWidget(copiedTag);
         m_selectedTagsScrollArea->widget()->layout()->addItem(spacer);
         fillTable();
     }
+}
 
+void MainWindow::mouseEnteredTag(Tag* tag) {
+    tag->setSavedTag(tag->text());
+    tag->setText("❌");
+}
+
+void MainWindow::mouseLeftTag(Tag* tag) {
+    tag->setText(tag->getSavedTag());
 }
 
 void MainWindow::clickedFilterTag(Tag* tag) {
