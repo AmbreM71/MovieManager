@@ -55,6 +55,7 @@ QMenu::item:selected {
 
 QTableWidget QScrollBar {
         height: 3px;
+        width:10px;
 }
 
 QScrollBar::handle {
