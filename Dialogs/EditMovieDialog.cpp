@@ -121,7 +121,25 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     }
     m_tagsScrollArea->widget()->layout()->addItem(spacer);
 
+    m_sTagList = GetTagsList();
+    QCompleter* pTagCompleter = new QCompleter(m_sTagList, this);
+    pTagCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    m_ui->TagsInput->setCompleter(pTagCompleter);
+
     checkValid();
+}
+
+QStringList EditMovieDialog::GetTagsList()
+{
+    QStringList sTagsList;
+    QSqlQuery tagsQuery;
+    if(!tagsQuery.exec("SELECT Tag FROM tags ORDER BY Tag ASC;"))
+        Common::LogDatabaseError(&tagsQuery);
+    while(tagsQuery.next()) {
+        QString sTag = tagsQuery.value(0).toString();
+        sTagsList << sTag;
+    }
+    return sTagsList;
 }
 
 EditMovieDialog::~EditMovieDialog() {

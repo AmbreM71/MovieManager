@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QKeyEvent>
+#include <QCompleter>
 
 #include "Common.h"
 #include "Tag.h"
@@ -32,6 +33,7 @@ class EditMovieDialog : public QDialog
         QList<CustomColumnLineEdit*>* m_customColumnInputList;
         TagsScrollArea* m_tagsScrollArea;
         int m_customColumnCount;
+        QStringList m_sTagList;
 
         bool eventFilter(QObject *obj, QEvent *event);
 
@@ -48,6 +50,7 @@ class EditMovieDialog : public QDialog
         QList<QString>* getTags();
         CustomColumnLineEdit* getCustomColumnInputAt(int nIndex);
         int getCustomColumnCount();
+        QStringList GetTagsList();
 
     public slots:
         void SelectPoster();

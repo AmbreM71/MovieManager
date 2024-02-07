@@ -30,6 +30,7 @@ class AddViewDialog : public QDialog
         QList<CustomColumnLineEdit*>* m_customColumnInputList;
         TagsScrollArea* m_tagsScrollArea;
         QStringList m_sMovieList;
+        QStringList m_sTagList;
         int m_customColumnCount;
 
         bool eventFilter(QObject *obj, QEvent *event);
@@ -39,6 +40,7 @@ class AddViewDialog : public QDialog
         ~AddViewDialog();
 
         QStringList GetMovieList();
+        QStringList GetTagsList();
 
         bool IsSearchedMovieAnExistingMovie();
         QString getName();

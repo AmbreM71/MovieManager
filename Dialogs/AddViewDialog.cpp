@@ -18,9 +18,14 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     m_ui->FormLayout->addWidget(m_tagsScrollArea, 9, 0, 1, 2);
 
     m_sMovieList = GetMovieList();
-    QCompleter* pCompleter = new QCompleter(m_sMovieList, this);
-    pCompleter->setCaseSensitivity(Qt::CaseInsensitive);
-    m_ui->ExistingMoviesLineEdit->setCompleter(pCompleter);
+    QCompleter* pMovieCompleter = new QCompleter(m_sMovieList, this);
+    pMovieCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    m_ui->ExistingMoviesLineEdit->setCompleter(pMovieCompleter);
+
+    m_sTagList = GetTagsList();
+    QCompleter* pTagCompleter = new QCompleter(m_sTagList, this);
+    pTagCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    m_ui->TagsInput->setCompleter(pTagCompleter);
 
     m_ui->ButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
@@ -96,7 +101,8 @@ AddViewDialog::~AddViewDialog() {
     delete m_ui;
 }
 
-QStringList AddViewDialog::GetMovieList() {
+QStringList AddViewDialog::GetMovieList()
+{
     QStringList sMovieList;
     QSqlQuery moviesQuery;
     if(!moviesQuery.exec("SELECT Name, ReleaseYear FROM movies ORDER BY Name ASC;"))
@@ -106,7 +112,19 @@ QStringList AddViewDialog::GetMovieList() {
         sMovieList << sMovie;
     }
     return sMovieList;
+}
 
+QStringList AddViewDialog::GetTagsList()
+{
+    QStringList sTagsList;
+    QSqlQuery tagsQuery;
+    if(!tagsQuery.exec("SELECT Tag FROM tags ORDER BY Tag ASC;"))
+        Common::LogDatabaseError(&tagsQuery);
+    while(tagsQuery.next()) {
+        QString sTag = tagsQuery.value(0).toString();
+        sTagsList << sTag;
+    }
+    return sTagsList;
 }
 
 bool AddViewDialog::IsSearchedMovieAnExistingMovie() {
