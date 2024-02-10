@@ -245,7 +245,7 @@ bool Common::isThemeBright(enum eTheme eTheme)
 }
 
 QString Common::getVersion() {
-    return "1.2.0";
+    return "1.2.1";
 }
 
 void Common::LogDatabaseError(QSqlQuery *query) {

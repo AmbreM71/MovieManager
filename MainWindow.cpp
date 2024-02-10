@@ -226,7 +226,7 @@ void MainWindow::CreateTables()
                                          "Min           REAL,"
                                          "Max           REAL,"
                                          "Precision     INTEGER,"
-                                         "TextMaxLength INTEGER"
+                                         "TextMaxLength INTEGER, "
                                          "Optional      INTEGER);";
 
     QSqlQuery ColumnBDQuery;
@@ -245,7 +245,7 @@ void MainWindow::CreateTables()
         Common::LogDatabaseError(&VersionBDQuery);
     }
 
-    QString VersionDatabaseInsert = "INSERT INTO Version (Version) VALUES (\"1.2.0\");";
+    QString VersionDatabaseInsert = "INSERT INTO Version (Version) VALUES (\"1.2.1\");";
 
     if(!VersionBDQuery.exec(VersionDatabaseInsert)) {
         Common::LogDatabaseError(&VersionBDQuery);
@@ -1689,9 +1689,9 @@ void MainWindow::CheckDatabaseVersion()
 
         if(!query.exec("DELETE FROM version;"))
             Common::LogDatabaseError(&query);
-        if(!query.exec("INSERT INTO Version (Version) VALUES (\"1.3.0\");"))
+        if(!query.exec("INSERT INTO Version (Version) VALUES (\"1.2.1\");"))
             Common::LogDatabaseError(&query);
-        sDatabaseVersion = "1.3.0";
-        Common::Log->append(tr("Database Migrated from version 1.2.0 to 1.3.0"), eLog::Success);
+        sDatabaseVersion = "1.2.1";
+        Common::Log->append(tr("Database Migrated from version 1.2.0 to 1.2.1"), eLog::Success);
     }
 }
