@@ -123,7 +123,8 @@ QStringList AddViewDialog::GetTagsList()
         Common::LogDatabaseError(&tagsQuery);
     while(tagsQuery.next()) {
         QString sTag = tagsQuery.value(0).toString();
-        sTagsList << sTag;
+        if(sTagsList.contains(sTag) == false)
+            sTagsList << sTag;
     }
     return sTagsList;
 }
