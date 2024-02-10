@@ -32,7 +32,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent) {
         nRow++;
     }
 
-    QWidget::setTabOrder(pPreviousWidget, m_ui->AddColumnButton);
+    //QWidget::setTabOrder(pPreviousWidget, m_ui->AddColumnButton);
 
     QObject::connect(m_editColumnSignalMapper, SIGNAL(mappedInt(int)), this, SLOT(EditColumn(int)));
     QObject::connect(m_deleteColumnSignalMapper, SIGNAL(mappedInt(int)), this, SLOT(RemoveColumn(int)));
@@ -136,9 +136,9 @@ void OptionsDialog::InsertColumnQt(QString sName, enum eColumnType eType, int nR
     pActionsLayout->addWidget(editButton);
     pActionsLayout->addWidget(deleteButton);
 
-    QWidget::setTabOrder(pPreviousWidget, editButton);
-    QWidget::setTabOrder(editButton, deleteButton);
-    pPreviousWidget = deleteButton;
+    //QWidget::setTabOrder(pPreviousWidget, editButton);
+    //QWidget::setTabOrder(editButton, deleteButton);
+    //pPreviousWidget = deleteButton;
 
 
     m_ui->DefaultColumnGridLayout->addWidget(NameLabel, nRow, 0);
